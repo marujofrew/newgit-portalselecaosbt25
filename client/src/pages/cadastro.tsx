@@ -27,6 +27,7 @@ export default function Cadastro() {
   const [quantidadeVagas, setQuantidadeVagas] = useState(17);
   const [loadingStep, setLoadingStep] = useState(0);
   const [showProgressiveData, setShowProgressiveData] = useState<Partial<CepData>>({});
+  const [showCostInfo, setShowCostInfo] = useState(false);
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -257,9 +258,65 @@ export default function Cadastro() {
                     Existem {quantidadeVagas} vagas disponíveis
                   </span>
                 </div>
-                <button className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200">
+                <button 
+                  onClick={() => setShowCostInfo(true)}
+                  className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200"
+                >
                   Continuar Cadastro
                 </button>
+              </div>
+            )}
+
+            {showCostInfo && (
+              <div className="mt-6 p-6 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-center mb-4">
+                  <i className="fas fa-money-bill-wave text-green-600 mr-2 text-xl"></i>
+                  <h3 className="font-bold text-green-800 text-lg">Informações Importantes sobre Custos</h3>
+                </div>
+                
+                <div className="space-y-4 text-black">
+                  <div className="bg-white p-4 rounded-lg border-l-4 border-green-500">
+                    <h4 className="font-semibold mb-2 text-green-700">
+                      <i className="fas fa-check-circle mr-2"></i>
+                      CUSTOS TOTALMENTE CUSTEADOS
+                    </h4>
+                    <p className="text-sm">
+                      <strong>CUSTOS DE TRANSPORTE E HOSPEDAGEM SÃO CUSTEADOS PELA EMISSORA</strong>
+                    </p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-lg border-l-4 border-blue-500">
+                    <h4 className="font-semibold mb-2 text-blue-700">
+                      <i className="fas fa-gift mr-2"></i>
+                      AJUDA DE CUSTO GARANTIDA
+                    </h4>
+                    <p className="text-sm">
+                      <strong>AO CADASTRO SER CONCLUÍDO, VOCÊ RECEBERÁ UM VALOR DE R$ 1.700,00 COMO AJUDA DE CUSTO PARA DESLOCAMENTO</strong>
+                    </p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-lg border-l-4 border-purple-500">
+                    <h4 className="font-semibold mb-2 text-purple-700">
+                      <i className="fas fa-home mr-2"></i>
+                      HOSPEDAGEM INCLUSA
+                    </h4>
+                    <p className="text-sm">
+                      <strong>HOSPEDAGEM PARA O ADULTO RESPONSÁVEL E CRIANÇA DENTRO DA EMISSORA!</strong>
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mt-6 flex gap-3">
+                  <button 
+                    onClick={() => setShowCostInfo(false)}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200"
+                  >
+                    Voltar
+                  </button>
+                  <button className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200 font-semibold">
+                    Prosseguir com Cadastro
+                  </button>
+                </div>
               </div>
             )}
 
