@@ -269,32 +269,20 @@ export default function Cadastro() {
 
             {showCostInfo && (
               <div className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
-                <h3 className="font-bold text-black text-lg mb-4">Informações sobre Custos</h3>
+                <h3 className="text-black text-lg mb-4">Informações sobre Custos</h3>
                 
                 <div className="space-y-4 text-black">
                   <p className="text-sm leading-relaxed">
-                    <strong>CUSTOS DE TRANSPORTE E HOSPEDAGEM SÃO CUSTEADOS PELA EMISSORA.</strong>
+                    Custos de transporte e hospedagem são custeados pela emissora.
                   </p>
                   
                   <p className="text-sm leading-relaxed">
-                    <strong>AO CADASTRO SER CONCLUÍDO, VOCÊ RECEBERÁ UM VALOR DE R$ 1.700,00 COMO AJUDA DE CUSTO PARA DESLOCAMENTO.</strong>
+                    Ao cadastro ser concluído, você receberá um valor de R$ 1.700,00 como ajuda de custo para deslocamento.
                   </p>
                   
                   <p className="text-sm leading-relaxed">
-                    <strong>HOSPEDAGEM PARA O ADULTO RESPONSÁVEL E CRIANÇA DENTRO DA EMISSORA!</strong>
+                    Hospedagem para o adulto responsável e criança dentro da emissora.
                   </p>
-                </div>
-                
-                <div className="mt-6 flex gap-3">
-                  <button 
-                    onClick={() => setShowCostInfo(false)}
-                    className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200"
-                  >
-                    Voltar
-                  </button>
-                  <button className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200 font-semibold">
-                    Prosseguir com Cadastro
-                  </button>
                 </div>
               </div>
             )}
