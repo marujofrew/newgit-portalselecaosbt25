@@ -36,6 +36,7 @@ export default function Cadastro() {
   const [sexo, setSexo] = useState("");
   const [loadingCpf, setLoadingCpf] = useState(false);
   const [cpfStep, setCpfStep] = useState(0);
+  const [grauParentesco, setGrauParentesco] = useState("");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -512,6 +513,27 @@ export default function Cadastro() {
                       <option value="">Selecione o sexo</option>
                       <option value="masculino">Masculino</option>
                       <option value="feminino">Feminino</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Grau de Parentesco com a Criança:
+                    </label>
+                    <select
+                      value={grauParentesco}
+                      onChange={(e) => setGrauParentesco(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Selecione o grau de parentesco</option>
+                      <option value="pai">Pai</option>
+                      <option value="mae">Mãe</option>
+                      <option value="avo">Avô</option>
+                      <option value="ava">Avó</option>
+                      <option value="tio">Tio</option>
+                      <option value="tia">Tia</option>
+                      <option value="tutor">Tutor Legal</option>
+                      <option value="responsavel">Responsável Legal</option>
                     </select>
                   </div>
                 </div>
