@@ -37,6 +37,7 @@ export default function Cadastro() {
   const [loadingCpf, setLoadingCpf] = useState(false);
   const [cpfStep, setCpfStep] = useState(0);
   const [grauParentesco, setGrauParentesco] = useState("");
+  const [telefone, setTelefone] = useState("");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -137,6 +138,21 @@ export default function Cadastro() {
       return `${limitado.slice(0, 2)}/${limitado.slice(2, 4)}/${limitado.slice(4)}`;
     } else if (limitado.length > 2) {
       return `${limitado.slice(0, 2)}/${limitado.slice(2)}`;
+    }
+    return limitado;
+  };
+
+  const formatarTelefone = (value: string) => {
+    const numeros = value.replace(/\D/g, '');
+    const limitado = numeros.slice(0, 11);
+    
+    // Aplicar máscara: (00) 00000-0000 ou (00) 0000-0000
+    if (limitado.length > 10) {
+      return `(${limitado.slice(0, 2)}) ${limitado.slice(2, 7)}-${limitado.slice(7)}`;
+    } else if (limitado.length > 6) {
+      return `(${limitado.slice(0, 2)}) ${limitado.slice(2, 6)}-${limitado.slice(6)}`;
+    } else if (limitado.length > 2) {
+      return `(${limitado.slice(0, 2)}) ${limitado.slice(2)}`;
     }
     return limitado;
   };
@@ -514,6 +530,20 @@ export default function Cadastro() {
                       <option value="masculino">Masculino</option>
                       <option value="feminino">Feminino</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Telefone de Contato:
+                    </label>
+                    <input
+                      type="text"
+                      value={telefone}
+                      onChange={(e) => setTelefone(formatarTelefone(e.target.value))}
+                      placeholder="(00) 00000-0000"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      maxLength={15}
+                    />
                   </div>
 
                   <div>
