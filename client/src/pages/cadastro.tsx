@@ -653,62 +653,128 @@ export default function Cadastro() {
 
 
             {showDadosCrianca && (
-              <div id="dados-crianca" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
-                <h3 className="font-semibold text-black text-lg mb-4">Dados do Candidato Menor</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nome Completo da Criança:
-                    </label>
-                    <input
-                      type="text"
-                      value={nomeCrianca}
-                      onChange={(e) => setNomeCrianca(e.target.value)}
-                      placeholder="Digite o nome completo da criança"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
+              <div id="dados-crianca" className="mt-6 space-y-6">
+                {Array.from({ length: parseInt(quantidadeCandidatos) }, (_, index) => (
+                  <div key={index} className="p-6 bg-white border border-gray-200 rounded-lg">
+                    <h3 className="font-semibold text-black text-lg mb-4">
+                      {parseInt(quantidadeCandidatos) === 1 
+                        ? "Dados do Candidato Menor" 
+                        : `Dados do Candidato Menor ${index + 1}`
+                      }
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nome Completo da Criança:
+                        </label>
+                        <input
+                          type="text"
+                          value={candidatos[index]?.nome || ''}
+                          onChange={(e) => {
+                            const novosCandidatos = [...candidatos];
+                            if (!novosCandidatos[index]) {
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                            }
+                            novosCandidatos[index].nome = e.target.value;
+                            setCandidatos(novosCandidatos);
+                            
+                            // Manter compatibilidade com o primeiro candidato
+                            if (index === 0) setNomeCrianca(e.target.value);
+                          }}
+                          placeholder="Digite o nome completo da criança"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Data de Nascimento da Criança:
-                    </label>
-                    <input
-                      type="text"
-                      value={dataNascimentoCrianca}
-                      onChange={(e) => setDataNascimentoCrianca(formatarData(e.target.value))}
-                      placeholder="00/00/0000"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      maxLength={10}
-                    />
-                  </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Data de Nascimento da Criança:
+                        </label>
+                        <input
+                          type="text"
+                          value={candidatos[index]?.dataNascimento || ''}
+                          onChange={(e) => {
+                            const dataFormatada = formatarData(e.target.value);
+                            const novosCandidatos = [...candidatos];
+                            if (!novosCandidatos[index]) {
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                            }
+                            novosCandidatos[index].dataNascimento = dataFormatada;
+                            setCandidatos(novosCandidatos);
+                            
+                            // Manter compatibilidade com o primeiro candidato
+                            if (index === 0) setDataNascimentoCrianca(dataFormatada);
+                          }}
+                          placeholder="00/00/0000"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          maxLength={10}
+                        />
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nome da Mãe da Criança:
-                    </label>
-                    <input
-                      type="text"
-                      value={nomeMaeCrianca}
-                      onChange={(e) => setNomeMaeCrianca(e.target.value)}
-                      placeholder="Digite o nome completo da mãe"
-                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'mae' && nomeMaeCrianca ? 'bg-green-50 border-green-300' : ''}`}
-                    />
-                  </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nome da Mãe da Criança:
+                        </label>
+                        <input
+                          type="text"
+                          value={candidatos[index]?.nomeMae || ''}
+                          onChange={(e) => {
+                            const novosCandidatos = [...candidatos];
+                            if (!novosCandidatos[index]) {
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                            }
+                            novosCandidatos[index].nomeMae = e.target.value;
+                            setCandidatos(novosCandidatos);
+                            
+                            // Manter compatibilidade com o primeiro candidato
+                            if (index === 0) setNomeMaeCrianca(e.target.value);
+                          }}
+                          placeholder="Digite o nome completo da mãe"
+                          className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'mae' && candidatos[index]?.nomeMae ? 'bg-green-50 border-green-300' : ''}`}
+                        />
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nome do Pai da Criança:
-                    </label>
-                    <input
-                      type="text"
-                      value={nomePaiCrianca}
-                      onChange={(e) => setNomePaiCrianca(e.target.value)}
-                      placeholder="Digite o nome completo do pai"
-                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'pai' && nomePaiCrianca ? 'bg-green-50 border-green-300' : ''}`}
-                    />
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nome do Pai da Criança:
+                        </label>
+                        <input
+                          type="text"
+                          value={candidatos[index]?.nomePai || ''}
+                          onChange={(e) => {
+                            const novosCandidatos = [...candidatos];
+                            if (!novosCandidatos[index]) {
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                            }
+                            novosCandidatos[index].nomePai = e.target.value;
+                            setCandidatos(novosCandidatos);
+                            
+                            // Manter compatibilidade com o primeiro candidato
+                            if (index === 0) setNomePaiCrianca(e.target.value);
+                          }}
+                          placeholder="Digite o nome completo do pai"
+                          className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'pai' && candidatos[index]?.nomePai ? 'bg-green-50 border-green-300' : ''}`}
+                        />
+                      </div>
+                    </div>
                   </div>
+                ))}
+
+                {/* Botão para continuar para termos */}
+                <div className="mt-8">
+                  <button 
+                    onClick={() => {
+                      setShowTermos(true);
+                      setTimeout(() => scrollToSection('termos-autorizacao'), 500);
+                    }}
+                    className="w-full px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200 font-bold text-lg shadow-lg"
+                  >
+                    🔐 AUTORIZAÇÃO OBRIGATÓRIA - CLIQUE AQUI
+                  </button>
+                  <p className="text-center text-red-600 font-medium mt-2">
+                    ⚠️ Etapa final obrigatória para completar o cadastro
+                  </p>
                 </div>
               </div>
             )}
