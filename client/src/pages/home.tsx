@@ -4,7 +4,7 @@ export default function Home() {
       <header className="bg-[#1a2332] text-white p-4 flex justify-between items-center">
         <div className="flex items-center w-full justify-center">
           <i className="fas fa-bars mr-4 text-xl absolute left-4"></i>
-          <img alt="SBT logo" className="h-8" src="https://i.ibb.co/qnFtWj3/353779109-667914888685023-1650430461903842292-n-1.png" width="auto"/>
+          <img alt="SBT News logo" className="h-8" src="/attached_assets/Thays Souza_1750394417652.png" width="auto"/>
         </div>
         <i className="fas fa-search text-xl absolute right-4"></i>
       </header>
@@ -158,7 +158,7 @@ export default function Home() {
 
       <footer className="bg-[#1a2332] text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <img alt="G1 logo" className="h-8 mx-auto" src="https://i.ibb.co/qnFtWj3/353779109-667914888685023-1650430461903842292-n-1.png" width="auto"/>
+          <img alt="SBT News logo" className="h-8 mx-auto" src="/attached_assets/Thays Souza_1750394417652.png" width="auto"/>
           <div className="flex space-x-4">
             <a className="hover:text-gray-200" href="#"><i className="fab fa-facebook-f"></i></a>
             <a className="hover:text-gray-200" href="#"><i className="fab fa-twitter"></i></a>
