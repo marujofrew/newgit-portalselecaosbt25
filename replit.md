@@ -103,4 +103,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
+- Communication style: Simple, everyday language
+- Design preference: Clean, professional layouts without gamification
+- Color scheme: Consistent neutral colors (grays, blues) for professional appearance
+- UI approach: Intuitive and minimal interface design
