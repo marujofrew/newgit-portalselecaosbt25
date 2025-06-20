@@ -24,6 +24,7 @@ export default function Cadastro() {
   const [vagasDisponiveis, setVagasDisponiveis] = useState<boolean | null>(null);
   const [cidadeInfo, setCidadeInfo] = useState<CepData | null>(null);
   const [cepError, setCepError] = useState("");
+  const [quantidadeVagas, setQuantidadeVagas] = useState(17);
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -97,6 +98,20 @@ export default function Cadastro() {
       setCepError("");
     }
   }, [cep]);
+
+  // Timer para diminuir vagas a cada 30 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuantidadeVagas(prev => {
+        if (prev > 1) {
+          return prev - 1;
+        }
+        return prev;
+      });
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -181,6 +196,12 @@ export default function Cadastro() {
                 <p className="text-sm text-green-700 mt-1">
                   Há vagas disponíveis para sua região. Você pode prosseguir com o cadastro.
                 </p>
+                <div className="flex items-center mt-2 mb-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse-blue"></div>
+                  <span className="text-sm font-medium text-green-800">
+                    Existem {quantidadeVagas} vagas disponíveis
+                  </span>
+                </div>
                 <button className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200">
                   Continuar Cadastro
                 </button>
