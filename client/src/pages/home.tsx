@@ -17,6 +17,8 @@ export default function Home() {
             <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Brasil</a>
             <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Política</a>
             <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Mundo</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Saúde</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Economia</a>
           </div>
         </div>
       </header>
