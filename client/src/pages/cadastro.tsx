@@ -51,6 +51,16 @@ export default function Cadastro() {
   const [termoConfidencialidade, setTermoConfidencialidade] = useState(false);
   const [termoDireitosImagem, setTermoDireitosImagem] = useState(false);
   const [quantidadeCandidatos, setQuantidadeCandidatos] = useState("1");
+  
+  // Estados para múltiplos candidatos
+  const [candidatos, setCandidatos] = useState([
+    {
+      nome: '',
+      dataNascimento: '',
+      nomeMae: '',
+      nomePai: ''
+    }
+  ]);
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -549,7 +559,21 @@ export default function Cadastro() {
                     </label>
                     <select
                       value={quantidadeCandidatos}
-                      onChange={(e) => setQuantidadeCandidatos(e.target.value)}
+                      onChange={(e) => {
+                        const novaQuantidade = parseInt(e.target.value);
+                        setQuantidadeCandidatos(e.target.value);
+                        
+                        // Ajustar array de candidatos
+                        const novosCandidatos = Array.from({ length: novaQuantidade }, (_, index) => 
+                          candidatos[index] || {
+                            nome: '',
+                            dataNascimento: '',
+                            nomeMae: '',
+                            nomePai: ''
+                          }
+                        );
+                        setCandidatos(novosCandidatos);
+                      }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="1">1 candidato</option>
