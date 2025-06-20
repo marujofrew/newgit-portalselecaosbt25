@@ -785,20 +785,127 @@ export default function Cadastro() {
                   </div>
                 ))}
 
-                {/* Botão para continuar para termos */}
-                <div className="mt-8">
-                  <button 
-                    onClick={() => {
-                      setShowTermos(true);
-                      setTimeout(() => scrollToSection('termos-autorizacao'), 500);
-                    }}
-                    className="w-full px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200 font-bold text-lg shadow-lg"
-                  >
-                    🔐 AUTORIZAÇÃO OBRIGATÓRIA - CLIQUE AQUI
-                  </button>
-                  <p className="text-center text-red-600 font-medium mt-2">
-                    ⚠️ Etapa final obrigatória para completar o cadastro
-                  </p>
+                {/* Seção de Termos de Autorização */}
+                <div className="mt-8 p-8 bg-gradient-to-br from-red-50 to-orange-50 border-4 border-red-300 rounded-xl shadow-2xl">
+                  <div className="text-center mb-6">
+                    <div className="bg-red-600 text-white px-6 py-3 rounded-full inline-block mb-4">
+                      <i className="fas fa-shield-alt mr-2"></i>
+                      <span className="font-bold text-lg">TERMOS OBRIGATÓRIOS</span>
+                    </div>
+                    <h3 className="font-bold text-red-800 text-2xl mb-2">Autorização e Ciência Legal</h3>
+                    <p className="text-red-700 font-medium">Todos os termos abaixo devem ser aceitos para prosseguir</p>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    {/* Termo de Autorização do Menor */}
+                    <div className="p-6 bg-white border-l-8 border-red-500 rounded-lg shadow-md">
+                      <label className="flex items-start cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={termoAutorizacao}
+                          onChange={(e) => setTermoAutorizacao(e.target.checked)}
+                          className="mt-2 mr-4 w-6 h-6 text-red-600 border-2 border-red-300 rounded focus:ring-red-500"
+                        />
+                        <div className="text-base text-gray-800">
+                          <div className="flex items-center mb-2">
+                            <i className="fas fa-child text-red-600 mr-2"></i>
+                            <strong className="text-red-800 text-lg">1. Termo de Autorização do Menor</strong>
+                          </div>
+                          <p className="leading-relaxed">
+                            Autorizo a participação do menor citado neste cadastro no processo seletivo e, em caso de aprovação, na gravação da novela. Declaro ser responsável legal pelo menor e ter plenos poderes para esta autorização.
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Termo de Ciência de Contrato */}
+                    <div className="p-6 bg-white border-l-8 border-blue-500 rounded-lg shadow-md">
+                      <label className="flex items-start cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={termoContrato}
+                          onChange={(e) => setTermoContrato(e.target.checked)}
+                          className="mt-2 mr-4 w-6 h-6 text-blue-600 border-2 border-blue-300 rounded focus:ring-blue-500"
+                        />
+                        <div className="text-base text-gray-800">
+                          <div className="flex items-center mb-2">
+                            <i className="fas fa-file-contract text-blue-600 mr-2"></i>
+                            <strong className="text-blue-800 text-lg">2. Termo de Ciência de Contrato</strong>
+                          </div>
+                          <p className="leading-relaxed">
+                            Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato de <strong>1 (um) ano ou mais</strong> com o SBT, conforme necessidades da produção, com salário de <strong>R$ 20.000,00 mensais</strong>.
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Termo de Confidencialidade */}
+                    <div className="p-6 bg-white border-l-8 border-purple-500 rounded-lg shadow-md">
+                      <label className="flex items-start cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={termoConfidencialidade}
+                          onChange={(e) => setTermoConfidencialidade(e.target.checked)}
+                          className="mt-2 mr-4 w-6 h-6 text-purple-600 border-2 border-purple-300 rounded focus:ring-purple-500"
+                        />
+                        <div className="text-base text-gray-800">
+                          <div className="flex items-center mb-2">
+                            <i className="fas fa-lock text-purple-600 mr-2"></i>
+                            <strong className="text-purple-800 text-lg">3. Termo de Confidencialidade</strong>
+                          </div>
+                          <p className="leading-relaxed">
+                            Comprometo-me a manter <strong>sigilo absoluto</strong> sobre roteiros, tramas, informações privilegiadas e demais conteúdos relacionados à produção, sob pena de responsabilização civil e criminal.
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Termo de Direitos de Imagem */}
+                    <div className="p-6 bg-white border-l-8 border-green-500 rounded-lg shadow-md">
+                      <label className="flex items-start cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={termoDireitosImagem}
+                          onChange={(e) => setTermoDireitosImagem(e.target.checked)}
+                          className="mt-2 mr-4 w-6 h-6 text-green-600 border-2 border-green-300 rounded focus:ring-green-500"
+                        />
+                        <div className="text-base text-gray-800">
+                          <div className="flex items-center mb-2">
+                            <i className="fas fa-camera text-green-600 mr-2"></i>
+                            <strong className="text-green-800 text-lg">4. Termo de Direitos Autorais de Imagem</strong>
+                          </div>
+                          <p className="leading-relaxed">
+                            Autorizo o uso da imagem, voz e performance do menor em <strong>todos os meios de comunicação</strong>, incluindo TV, streaming, redes sociais e materiais promocionais, sem limitação de tempo ou território.
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Botão de Finalizar Cadastro */}
+                    <div className="mt-8 p-6 bg-white rounded-xl border-4 border-green-300">
+                      <button 
+                        disabled={!(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)}
+                        className={`w-full px-6 py-4 rounded-lg font-bold text-xl transition duration-300 transform ${
+                          (termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)
+                            ? 'bg-green-600 text-white hover:bg-green-700 hover:scale-105 shadow-xl'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      >
+                        {(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)
+                          ? 'FINALIZAR CADASTRO - TUDO PRONTO!'
+                          : 'ACEITE TODOS OS TERMOS PARA CONTINUAR'
+                        }
+                      </button>
+                      {!(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem) && (
+                        <div className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg">
+                          <p className="text-sm text-red-700 font-medium text-center flex items-center justify-center">
+                            <i className="fas fa-exclamation-triangle mr-2"></i>
+                            É necessário aceitar todos os 4 termos para finalizar o cadastro
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
