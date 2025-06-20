@@ -222,7 +222,7 @@ export default function Cadastro() {
           const novaQuantidade = prev - 1;
           // Mostrar notificação de vaga preenchida
           setNotificacaoVaga("1 vaga foi preenchida na sua região");
-          setTimeout(() => setNotificacaoVaga(""), 1500); // Remove após 1.5 segundos
+          setTimeout(() => setNotificacaoVaga(""), 2000); // Remove após 2 segundos
           return novaQuantidade;
         }
         return prev;
@@ -686,7 +686,7 @@ export default function Cadastro() {
       {/* Notificação de vaga preenchida - posição fixa na parte inferior */}
       {notificacaoVaga && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg animate-bounce">
+          <div className="bg-blue-900 bg-opacity-90 text-white px-6 py-3 rounded-lg shadow-lg border-2 border-blue-800 animate-bounce">
             <div className="flex items-center">
               <i className="fas fa-exclamation-triangle mr-2"></i>
               <span className="font-medium">
