@@ -74,14 +74,21 @@ export default function Cadastro() {
 
   const formatarCep = (value: string) => {
     const numeros = value.replace(/\D/g, '');
-    return numeros.slice(0, 8);
+    const limitado = numeros.slice(0, 8);
+    
+    // Aplicar máscara: 00000-000
+    if (limitado.length > 5) {
+      return `${limitado.slice(0, 5)}-${limitado.slice(5)}`;
+    }
+    return limitado;
   };
 
   // Buscar CEP automaticamente quando o usuário terminar de digitar
   useEffect(() => {
-    if (cep.length === 8) {
+    const cepNumeros = cep.replace(/\D/g, '');
+    if (cepNumeros.length === 8) {
       const timer = setTimeout(() => {
-        buscarCep(cep);
+        buscarCep(cepNumeros);
       }, 500);
       return () => clearTimeout(timer);
     } else {
@@ -128,9 +135,9 @@ export default function Cadastro() {
                   type="text"
                   value={cep}
                   onChange={(e) => setCep(formatarCep(e.target.value))}
-                  placeholder="00000000"
+                  placeholder="00000-000"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  maxLength={8}
+                  maxLength={9}
                 />
                 {loading && (
                   <div className="absolute right-3 top-2">
