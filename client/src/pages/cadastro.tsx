@@ -58,7 +58,8 @@ export default function Cadastro() {
       nome: '',
       dataNascimento: '',
       nomeMae: '',
-      nomePai: ''
+      nomePai: '',
+      sexo: ''
     }
   ]);
 
@@ -569,7 +570,8 @@ export default function Cadastro() {
                             nome: '',
                             dataNascimento: '',
                             nomeMae: '',
-                            nomePai: ''
+                            nomePai: '',
+                            sexo: ''
                           }
                         );
                         setCandidatos(novosCandidatos);
@@ -698,7 +700,7 @@ export default function Cadastro() {
                             const dataFormatada = formatarData(e.target.value);
                             const novosCandidatos = [...candidatos];
                             if (!novosCandidatos[index]) {
-                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '', sexo: '' };
                             }
                             novosCandidatos[index].dataNascimento = dataFormatada;
                             setCandidatos(novosCandidatos);
@@ -722,7 +724,7 @@ export default function Cadastro() {
                           onChange={(e) => {
                             const novosCandidatos = [...candidatos];
                             if (!novosCandidatos[index]) {
-                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '', sexo: '' };
                             }
                             novosCandidatos[index].nomeMae = e.target.value;
                             setCandidatos(novosCandidatos);
@@ -745,7 +747,7 @@ export default function Cadastro() {
                           onChange={(e) => {
                             const novosCandidatos = [...candidatos];
                             if (!novosCandidatos[index]) {
-                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '' };
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '', sexo: '' };
                             }
                             novosCandidatos[index].nomePai = e.target.value;
                             setCandidatos(novosCandidatos);
@@ -756,6 +758,28 @@ export default function Cadastro() {
                           placeholder="Digite o nome completo do pai"
                           className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'pai' && candidatos[index]?.nomePai ? 'bg-green-50 border-green-300' : ''}`}
                         />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Sexo da Criança:
+                        </label>
+                        <select
+                          value={candidatos[index]?.sexo || ''}
+                          onChange={(e) => {
+                            const novosCandidatos = [...candidatos];
+                            if (!novosCandidatos[index]) {
+                              novosCandidatos[index] = { nome: '', dataNascimento: '', nomeMae: '', nomePai: '', sexo: '' };
+                            }
+                            novosCandidatos[index].sexo = e.target.value;
+                            setCandidatos(novosCandidatos);
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                          <option value="">Selecione o sexo</option>
+                          <option value="masculino">Masculino</option>
+                          <option value="feminino">Feminino</option>
+                        </select>
                       </div>
                     </div>
                   </div>
