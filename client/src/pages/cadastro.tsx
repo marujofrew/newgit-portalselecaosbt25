@@ -383,16 +383,16 @@ export default function Cadastro() {
             )}
 
             {vagasDisponiveis === true && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <div className="flex items-center">
-                  <i className="fas fa-check-circle text-red-500 mr-2"></i>
-                  <h3 className="font-medium text-red-800">Ótimas notícias!</h3>
+                  <i className="fas fa-check-circle text-green-500 mr-2"></i>
+                  <h3 className="font-medium text-black">Ótimas notícias!</h3>
                 </div>
-                <p className="text-sm text-red-700 mt-1">
+                <p className="text-sm text-black mt-1">
                   Há vagas disponíveis para sua região. Você pode prosseguir com o cadastro.
                 </p>
                 <div className="flex items-center mt-2 mb-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse-blue"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse-blue"></div>
                   <span className="text-sm font-medium text-black">
                     Existem {quantidadeVagas} vagas disponíveis
                   </span>
