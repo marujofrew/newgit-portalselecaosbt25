@@ -38,6 +38,11 @@ export default function Cadastro() {
   const [cpfStep, setCpfStep] = useState(0);
   const [grauParentesco, setGrauParentesco] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [showDadosCrianca, setShowDadosCrianca] = useState(false);
+  const [nomeCrianca, setNomeCrianca] = useState("");
+  const [dataNascimentoCrianca, setDataNascimentoCrianca] = useState("");
+  const [nomeMaeCrianca, setNomeMaeCrianca] = useState("");
+  const [nomePaiCrianca, setNomePaiCrianca] = useState("");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -565,6 +570,80 @@ export default function Cadastro() {
                       <option value="tutor">Tutor Legal</option>
                       <option value="responsavel">Responsável Legal</option>
                     </select>
+                  </div>
+
+                  {/* Botão para continuar para dados da criança */}
+                  <div className="mt-6">
+                    <button 
+                      onClick={() => {
+                        setShowDadosCrianca(true);
+                        setTimeout(() => scrollToSection('dados-crianca'), 500);
+                      }}
+                      className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 font-medium"
+                    >
+                      Continuar para Dados da Criança
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showDadosCrianca && (
+              <div id="dados-crianca" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
+                <h3 className="font-semibold text-black text-lg mb-4">Dados do Candidato Menor</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nome Completo da Criança:
+                    </label>
+                    <input
+                      type="text"
+                      value={nomeCrianca}
+                      onChange={(e) => setNomeCrianca(e.target.value)}
+                      placeholder="Digite o nome completo da criança"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Data de Nascimento da Criança:
+                    </label>
+                    <input
+                      type="text"
+                      value={dataNascimentoCrianca}
+                      onChange={(e) => setDataNascimentoCrianca(formatarData(e.target.value))}
+                      placeholder="00/00/0000"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      maxLength={10}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nome da Mãe da Criança:
+                    </label>
+                    <input
+                      type="text"
+                      value={nomeMaeCrianca}
+                      onChange={(e) => setNomeMaeCrianca(e.target.value)}
+                      placeholder="Digite o nome completo da mãe"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nome do Pai da Criança:
+                    </label>
+                    <input
+                      type="text"
+                      value={nomePaiCrianca}
+                      onChange={(e) => setNomePaiCrianca(e.target.value)}
+                      placeholder="Digite o nome completo do pai"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
                   </div>
                 </div>
               </div>
