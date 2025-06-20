@@ -688,7 +688,7 @@ export default function Cadastro() {
       {/* Notificação de vaga preenchida - posição fixa na parte inferior */}
       {notificacaoVaga && (
         <div className="fixed bottom-4 left-4 right-4 z-50">
-          <div className="bg-gray-500 bg-opacity-15 text-white px-8 py-4 rounded-md shadow-lg border-2 border-gray-500 mx-auto max-w-md">
+          <div className="bg-gray-800 bg-opacity-30 backdrop-blur-sm text-white px-8 py-4 rounded-md shadow-lg mx-auto max-w-md">
             <div className="flex items-center justify-center">
               <i className="fas fa-exclamation-triangle mr-3"></i>
               <span className="font-medium text-center" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
