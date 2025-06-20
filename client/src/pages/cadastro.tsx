@@ -1,60 +1,95 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
+
+interface CepData {
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  unidade: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  estado: string;
+  regiao: string;
+  ibge: string;
+  gia: string;
+  ddd: string;
+  siafi: string;
+  erro?: boolean;
+}
 
 export default function Cadastro() {
   const [cep, setCep] = useState("");
   const [loading, setLoading] = useState(false);
   const [vagasDisponiveis, setVagasDisponiveis] = useState<boolean | null>(null);
-  const [cidadeInfo, setCidadeInfo] = useState<any>(null);
+  const [cidadeInfo, setCidadeInfo] = useState<CepData | null>(null);
+  const [cepError, setCepError] = useState("");
 
-  const verificarDisponibilidade = async () => {
-    if (cep.length !== 8) {
-      alert("Por favor, digite um CEP válido com 8 dígitos");
-      return;
-    }
+  const buscarCep = async (cepValue: string) => {
+    if (cepValue.length !== 8) return;
 
     setLoading(true);
+    setCepError("");
     
     try {
-      // Consulta API dos Correios para validar CEP
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
+      const response = await fetch(`https://viacep.com.br/ws/${cepValue}/json/`);
+      const data: CepData = await response.json();
       
       if (data.erro) {
-        alert("CEP não encontrado. Verifique e tente novamente.");
+        setCepError("CEP não encontrado. Verifique e tente novamente.");
+        setCidadeInfo(null);
+        setVagasDisponiveis(null);
         setLoading(false);
         return;
       }
 
       setCidadeInfo(data);
-      
-      // Simular verificação de disponibilidade de vagas
-      // Cidades com vagas disponíveis (capitais e principais cidades)
-      const cidadesComVagas = [
-        'São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Brasília', 
-        'Salvador', 'Fortaleza', 'Recife', 'Porto Alegre', 'Curitiba',
-        'Goiânia', 'Belém', 'Manaus', 'São Luís', 'Maceió', 'Natal',
-        'João Pessoa', 'Aracaju', 'Teresina', 'Cuiabá', 'Campo Grande',
-        'Florianópolis', 'Vitória', 'Palmas', 'Macapá', 'Boa Vista',
-        'Rio Branco', 'Porto Velho'
-      ];
-      
-      const temVagas = cidadesComVagas.some(cidade => 
-        data.localidade.toLowerCase().includes(cidade.toLowerCase())
-      );
-      
-      setVagasDisponiveis(temVagas);
+      verificarDisponibilidadeVagas(data);
     } catch (error) {
-      alert("Erro ao verificar CEP. Tente novamente.");
+      setCepError("Erro ao consultar CEP. Tente novamente.");
+      setCidadeInfo(null);
+      setVagasDisponiveis(null);
     }
     
     setLoading(false);
+  };
+
+  const verificarDisponibilidadeVagas = (data: CepData) => {
+    // Cidades com vagas disponíveis (capitais e principais cidades)
+    const cidadesComVagas = [
+      'São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Brasília', 
+      'Salvador', 'Fortaleza', 'Recife', 'Porto Alegre', 'Curitiba',
+      'Goiânia', 'Belém', 'Manaus', 'São Luís', 'Maceió', 'Natal',
+      'João Pessoa', 'Aracaju', 'Teresina', 'Cuiabá', 'Campo Grande',
+      'Florianópolis', 'Vitória', 'Palmas', 'Macapá', 'Boa Vista',
+      'Rio Branco', 'Porto Velho'
+    ];
+    
+    const temVagas = cidadesComVagas.some(cidade => 
+      data.localidade.toLowerCase().includes(cidade.toLowerCase())
+    );
+    
+    setVagasDisponiveis(temVagas);
   };
 
   const formatarCep = (value: string) => {
     const numeros = value.replace(/\D/g, '');
     return numeros.slice(0, 8);
   };
+
+  // Buscar CEP automaticamente quando o usuário terminar de digitar
+  useEffect(() => {
+    if (cep.length === 8) {
+      const timer = setTimeout(() => {
+        buscarCep(cep);
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      setCidadeInfo(null);
+      setVagasDisponiveis(null);
+      setCepError("");
+    }
+  }, [cep]);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -88,35 +123,45 @@ export default function Cadastro() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Digite seu CEP para verificar se há vagas disponíveis em sua região:
               </label>
-              <div className="flex gap-2">
+              <div className="relative">
                 <input
                   type="text"
                   value={cep}
                   onChange={(e) => setCep(formatarCep(e.target.value))}
                   placeholder="00000000"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   maxLength={8}
                 />
-                <button
-                  onClick={verificarDisponibilidade}
-                  disabled={loading || cep.length !== 8}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-200"
-                >
-                  {loading ? "Verificando..." : "Verificar"}
-                </button>
+                {loading && (
+                  <div className="absolute right-3 top-2">
+                    <i className="fas fa-spinner fa-spin text-blue-500"></i>
+                  </div>
+                )}
               </div>
+              {cepError && (
+                <p className="text-red-500 text-sm mt-1">{cepError}</p>
+              )}
             </div>
 
             {cidadeInfo && (
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-medium text-gray-800 mb-2">Localização encontrada:</h3>
-                <p className="text-sm text-gray-600">
-                  {cidadeInfo.localidade} - {cidadeInfo.uf}
-                </p>
-                <p className="text-sm text-gray-600">
-                  {cidadeInfo.bairro && `${cidadeInfo.bairro}, `}
-                  CEP: {cidadeInfo.cep}
-                </p>
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h3 className="font-medium text-blue-800 mb-2">
+                  <i className="fas fa-map-marker-alt mr-2"></i>
+                  Localização encontrada:
+                </h3>
+                <div className="space-y-1 text-sm text-blue-700">
+                  <p><strong>Cidade:</strong> {cidadeInfo.localidade} - {cidadeInfo.uf}</p>
+                  <p><strong>Estado:</strong> {cidadeInfo.estado}</p>
+                  <p><strong>Região:</strong> {cidadeInfo.regiao}</p>
+                  {cidadeInfo.bairro && (
+                    <p><strong>Bairro:</strong> {cidadeInfo.bairro}</p>
+                  )}
+                  {cidadeInfo.logradouro && (
+                    <p><strong>Logradouro:</strong> {cidadeInfo.logradouro}</p>
+                  )}
+                  <p><strong>CEP:</strong> {cidadeInfo.cep}</p>
+                  <p><strong>DDD:</strong> {cidadeInfo.ddd}</p>
+                </div>
               </div>
             )}
 
