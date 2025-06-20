@@ -188,7 +188,7 @@ export default function Cadastro() {
             )}
 
             {vagasDisponiveis === true && (
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <div className="flex items-center">
                   <i className="fas fa-check-circle text-green-500 mr-2"></i>
                   <h3 className="font-medium text-green-800">Ótimas notícias!</h3>
