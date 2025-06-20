@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div className="bg-gray-100">
-      <header className="bg-[#1a2332] text-white p-4 flex justify-between items-center">
+      <header className="bg-[#041e41] text-white p-4 flex justify-between items-center">
         <div className="flex items-center w-full justify-center">
           <i className="fas fa-bars mr-4 text-xl absolute left-4"></i>
           <img alt="SBT News logo" className="h-8" src="/attached_assets/Thays Souza_1750394417652.png" width="auto"/>
@@ -156,7 +156,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-[#1a2332] text-white p-4">
+      <footer className="bg-[#041e41] text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
           <img alt="SBT News logo" className="h-8 mx-auto" src="/attached_assets/Thays Souza_1750394417652.png" width="auto"/>
           <div className="flex space-x-4">
