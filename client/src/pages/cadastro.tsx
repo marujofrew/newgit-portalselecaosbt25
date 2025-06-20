@@ -545,6 +545,26 @@ export default function Cadastro() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Quantos candidatos deseja inscrever? *
+                    </label>
+                    <select
+                      value={quantidadeCandidatos}
+                      onChange={(e) => setQuantidadeCandidatos(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="1">1 candidato</option>
+                      <option value="2">2 candidatos</option>
+                      <option value="3">3 candidatos</option>
+                      <option value="4">4 candidatos</option>
+                      <option value="5">5 candidatos</option>
+                    </select>
+                    <p className="text-xs text-gray-600 mt-1">
+                      * Cada candidato precisará de cadastro individual
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Telefone de Contato:
                     </label>
                     <input
