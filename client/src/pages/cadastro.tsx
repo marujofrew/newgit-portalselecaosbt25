@@ -44,6 +44,7 @@ export default function Cadastro() {
   const [nomeMaeCrianca, setNomeMaeCrianca] = useState("");
   const [nomePaiCrianca, setNomePaiCrianca] = useState("");
   const [notificacaoVaga, setNotificacaoVaga] = useState("");
+  const [cidadeConsultada, setCidadeConsultada] = useState(false);
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -81,6 +82,7 @@ export default function Cadastro() {
           if (i === steps.length - 1) {
             setCidadeInfo(data);
             verificarDisponibilidadeVagas(data);
+            setCidadeConsultada(true);
             setLoading(false);
           }
         }, (i + 1) * 1000);
@@ -218,9 +220,9 @@ export default function Cadastro() {
   useEffect(() => {
     const interval = setInterval(() => {
       setQuantidadeVagas(prev => {
-        if (prev > 1) {
+        if (prev > 1 && cidadeConsultada) {
           const novaQuantidade = prev - 1;
-          // Mostrar notificação de vaga preenchida
+          // Mostrar notificação de vaga preenchida apenas se cidade foi consultada
           setNotificacaoVaga("1 vaga foi preenchida na sua região");
           setTimeout(() => setNotificacaoVaga(""), 2000); // Remove após 2 segundos
           return novaQuantidade;
@@ -230,7 +232,7 @@ export default function Cadastro() {
     }, 30000); // 30 segundos
 
     return () => clearInterval(interval);
-  }, []);
+  }, [cidadeConsultada]);
 
   // Auto scroll para formulário após 4 segundos quando cost info aparecer
   useEffect(() => {
@@ -686,10 +688,10 @@ export default function Cadastro() {
       {/* Notificação de vaga preenchida - posição fixa na parte inferior */}
       {notificacaoVaga && (
         <div className="fixed bottom-4 left-4 right-4 z-50">
-          <div className="bg-gray-700 bg-opacity-70 text-white px-8 py-4 rounded-md shadow-lg border-2 border-gray-600 animate-bounce mx-auto max-w-md">
+          <div className="bg-gradient-to-r from-gray-400 to-gray-600 text-white px-8 py-4 rounded-md shadow-lg border-2 border-gray-500 animate-bounce mx-auto max-w-md">
             <div className="flex items-center justify-center">
               <i className="fas fa-exclamation-triangle mr-3"></i>
-              <span className="font-medium text-center">
+              <span className="font-medium text-center" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
                 {notificacaoVaga}
               </span>
             </div>
