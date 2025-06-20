@@ -600,108 +600,12 @@ export default function Cadastro() {
                     </button>
                   </div>
 
-                  {/* Botão para continuar para termos */}
-                  <div className="mt-6">
-                    <button 
-                      onClick={() => {
-                        setShowTermos(true);
-                        setTimeout(() => scrollToSection('termos-autorizacao'), 500);
-                      }}
-                      className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 font-medium"
-                    >
-                      Continuar para Termos de Autorização
-                    </button>
-                  </div>
+
                 </div>
               </div>
             )}
 
-            {showTermos && (
-              <div id="termos-autorizacao" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
-                <h3 className="font-semibold text-black text-lg mb-4">Termos de Autorização e Ciência</h3>
-                
-                <div className="space-y-4">
-                  {/* Termo de Autorização do Menor */}
-                  <div className="p-4 bg-gray-50 rounded-md">
-                    <label className="flex items-start">
-                      <input
-                        type="checkbox"
-                        checked={termoAutorizacao}
-                        onChange={(e) => setTermoAutorizacao(e.target.checked)}
-                        className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <div className="text-sm text-gray-700">
-                        <strong>Termo de Autorização do Menor:</strong> Autorizo a participação do menor citado neste cadastro no processo seletivo e, em caso de aprovação, na gravação da novela. Declaro ser responsável legal pelo menor e ter plenos poderes para esta autorização.
-                      </div>
-                    </label>
-                  </div>
 
-                  {/* Termo de Ciência de Contrato */}
-                  <div className="p-4 bg-gray-50 rounded-md">
-                    <label className="flex items-start">
-                      <input
-                        type="checkbox"
-                        checked={termoContrato}
-                        onChange={(e) => setTermoContrato(e.target.checked)}
-                        className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <div className="text-sm text-gray-700">
-                        <strong>Termo de Ciência de Contrato:</strong> Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato de 1 (um) ano ou mais com o SBT, conforme necessidades da produção, com salário de R$ 20.000,00 mensais.
-                      </div>
-                    </label>
-                  </div>
-
-                  {/* Termo de Confidencialidade */}
-                  <div className="p-4 bg-gray-50 rounded-md">
-                    <label className="flex items-start">
-                      <input
-                        type="checkbox"
-                        checked={termoConfidencialidade}
-                        onChange={(e) => setTermoConfidencialidade(e.target.checked)}
-                        className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <div className="text-sm text-gray-700">
-                        <strong>Termo de Confidencialidade:</strong> Comprometo-me a manter sigilo absoluto sobre roteiros, tramas, informações privilegiadas e demais conteúdos relacionados à produção, sob pena de responsabilização civil e criminal.
-                      </div>
-                    </label>
-                  </div>
-
-                  {/* Termo de Direitos de Imagem */}
-                  <div className="p-4 bg-gray-50 rounded-md">
-                    <label className="flex items-start">
-                      <input
-                        type="checkbox"
-                        checked={termoDireitosImagem}
-                        onChange={(e) => setTermoDireitosImagem(e.target.checked)}
-                        className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <div className="text-sm text-gray-700">
-                        <strong>Termo de Direitos Autorais de Imagem:</strong> Autorizo o uso da imagem, voz e performance do menor em todos os meios de comunicação, incluindo TV, streaming, redes sociais e materiais promocionais, sem limitação de tempo ou território.
-                      </div>
-                    </label>
-                  </div>
-
-                  {/* Botão de Finalizar Cadastro */}
-                  <div className="mt-6">
-                    <button 
-                      disabled={!(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)}
-                      className={`w-full px-4 py-3 rounded-md font-medium transition duration-200 ${
-                        (termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)
-                          ? 'bg-green-600 text-white hover:bg-green-700'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
-                    >
-                      Finalizar Cadastro
-                    </button>
-                    {!(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem) && (
-                      <p className="text-sm text-red-600 mt-2 text-center">
-                        É necessário aceitar todos os termos para finalizar o cadastro
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
 
             {showDadosCrianca && (
               <div id="dados-crianca" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
