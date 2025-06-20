@@ -30,6 +30,10 @@ export default function Cadastro() {
   const [showCostInfo, setShowCostInfo] = useState(false);
   const [showFormulario, setShowFormulario] = useState(false);
   const [cpf, setCpf] = useState("");
+  const [nome, setNome] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [nomeMae, setNomeMae] = useState("");
+  const [sexo, setSexo] = useState("");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -117,6 +121,19 @@ export default function Cadastro() {
       return `${limitado.slice(0, 3)}.${limitado.slice(3, 6)}.${limitado.slice(6)}`;
     } else if (limitado.length > 3) {
       return `${limitado.slice(0, 3)}.${limitado.slice(3)}`;
+    }
+    return limitado;
+  };
+
+  const formatarData = (value: string) => {
+    const numeros = value.replace(/\D/g, '');
+    const limitado = numeros.slice(0, 8);
+    
+    // Aplicar máscara: 00/00/0000
+    if (limitado.length > 4) {
+      return `${limitado.slice(0, 2)}/${limitado.slice(2, 4)}/${limitado.slice(4)}`;
+    } else if (limitado.length > 2) {
+      return `${limitado.slice(0, 2)}/${limitado.slice(2)}`;
     }
     return limitado;
   };
@@ -354,6 +371,61 @@ export default function Cadastro() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       maxLength={14}
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nome Completo:
+                    </label>
+                    <input
+                      type="text"
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
+                      placeholder="Digite o nome completo"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Data de Nascimento:
+                    </label>
+                    <input
+                      type="text"
+                      value={dataNascimento}
+                      onChange={(e) => setDataNascimento(formatarData(e.target.value))}
+                      placeholder="00/00/0000"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      maxLength={10}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nome da Mãe:
+                    </label>
+                    <input
+                      type="text"
+                      value={nomeMae}
+                      onChange={(e) => setNomeMae(e.target.value)}
+                      placeholder="Digite o nome completo da mãe"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Sexo:
+                    </label>
+                    <select
+                      value={sexo}
+                      onChange={(e) => setSexo(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Selecione o sexo</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="feminino">Feminino</option>
+                    </select>
                   </div>
                 </div>
               </div>
