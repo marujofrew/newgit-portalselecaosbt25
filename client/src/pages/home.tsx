@@ -1,24 +1,25 @@
 export default function Home() {
   return (
     <div className="bg-gray-100">
-      <header className="bg-[#041e41] text-white p-4 flex justify-between items-center">
-        <div className="flex items-center w-full justify-center">
-          <i className="fas fa-bars mr-4 text-xl absolute left-4"></i>
+      <header className="bg-[#041e41] text-white">
+        <div className="p-4 flex justify-between items-center">
+          <i className="fas fa-bars text-xl"></i>
           <img alt="SBT News logo" className="h-8" src="/attached_assets/Thays Souza_1750394417652.png" width="auto"/>
+          <i className="fas fa-search text-xl"></i>
         </div>
-        <i className="fas fa-search text-xl absolute right-4"></i>
+        
+        <div className="px-4 pb-4">
+          <div className="flex space-x-2 overflow-x-auto">
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap flex items-center" href="#">
+              <i className="fas fa-play mr-2 text-sm"></i>
+              Vídeos
+            </a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Brasil</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Política</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Mundo</a>
+          </div>
+        </div>
       </header>
-      
-      <nav className="bg-white shadow-md p-2 overflow-x-auto whitespace-nowrap">
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Edição Especial</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Vídeos</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Podcasts</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Brasil</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Mundo</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Política</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Economia</a>
-        <a className="text-gray-600 px-3 py-2 inline-block" href="#">Tecnologia</a>
-      </nav>
 
       <main className="container mx-auto p-4 max-w-4xl">
         <article className="bg-white p-6 mb-4 rounded-lg shadow-md">
