@@ -51,6 +51,12 @@ export default function Cadastro() {
   const [termoConfidencialidade, setTermoConfidencialidade] = useState(false);
   const [termoDireitosImagem, setTermoDireitosImagem] = useState(false);
   const [quantidadeCandidatos, setQuantidadeCandidatos] = useState("1");
+  const [termosExpandidos, setTermosExpandidos] = useState({
+    autorizacao: false,
+    contrato: false,
+    confidencialidade: false,
+    direitos: false
+  });
   
   // Estados para múltiplos candidatos
   const [candidatos, setCandidatos] = useState([
@@ -793,74 +799,114 @@ export default function Cadastro() {
                   <div className="space-y-4">
                     {/* Termo de Autorização do Menor */}
                     <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
-                      <label className="flex items-start cursor-pointer">
+                      <div className="flex items-start">
                         <input
                           type="checkbox"
                           checked={termoAutorizacao}
                           onChange={(e) => setTermoAutorizacao(e.target.checked)}
                           className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <div className="text-sm text-gray-700">
+                        <div className="flex-1 text-sm text-gray-700">
                           <strong className="text-gray-800">Termo de Autorização do Menor</strong>
                           <p className="mt-1 leading-relaxed">
-                            Autorizo a participação do menor citado neste cadastro no processo seletivo e, em caso de aprovação, na gravação da novela. Declaro ser responsável legal pelo menor e ter plenos poderes para esta autorização.
+                            {termosExpandidos.autorizacao 
+                              ? "Autorizo a participação do menor citado neste cadastro no processo seletivo e, em caso de aprovação, na gravação da novela. Declaro ser responsável legal pelo menor e ter plenos poderes para esta autorização."
+                              : "Autorizo a participação do menor citado neste cadastro no processo seletivo..."
+                            }
                           </p>
+                          <button
+                            type="button"
+                            onClick={() => setTermosExpandidos(prev => ({ ...prev, autorizacao: !prev.autorizacao }))}
+                            className="text-blue-600 hover:text-blue-800 text-xs mt-1 font-medium"
+                          >
+                            {termosExpandidos.autorizacao ? 'Ver menos' : 'Ver mais'}
+                          </button>
                         </div>
-                      </label>
+                      </div>
                     </div>
 
                     {/* Termo de Ciência de Contrato */}
                     <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
-                      <label className="flex items-start cursor-pointer">
+                      <div className="flex items-start">
                         <input
                           type="checkbox"
                           checked={termoContrato}
                           onChange={(e) => setTermoContrato(e.target.checked)}
                           className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <div className="text-sm text-gray-700">
+                        <div className="flex-1 text-sm text-gray-700">
                           <strong className="text-gray-800">Termo de Ciência de Contrato</strong>
                           <p className="mt-1 leading-relaxed">
-                            Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato de 1 (um) ano ou mais com o SBT, conforme necessidades da produção, com salário de R$ 20.000,00 mensais.
+                            {termosExpandidos.contrato 
+                              ? "Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato de 1 (um) ano ou mais com o SBT, conforme necessidades da produção, com salário de R$ 20.000,00 mensais."
+                              : "Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato..."
+                            }
                           </p>
+                          <button
+                            type="button"
+                            onClick={() => setTermosExpandidos(prev => ({ ...prev, contrato: !prev.contrato }))}
+                            className="text-blue-600 hover:text-blue-800 text-xs mt-1 font-medium"
+                          >
+                            {termosExpandidos.contrato ? 'Ver menos' : 'Ver mais'}
+                          </button>
                         </div>
-                      </label>
+                      </div>
                     </div>
 
                     {/* Termo de Confidencialidade */}
                     <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
-                      <label className="flex items-start cursor-pointer">
+                      <div className="flex items-start">
                         <input
                           type="checkbox"
                           checked={termoConfidencialidade}
                           onChange={(e) => setTermoConfidencialidade(e.target.checked)}
                           className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <div className="text-sm text-gray-700">
+                        <div className="flex-1 text-sm text-gray-700">
                           <strong className="text-gray-800">Termo de Confidencialidade</strong>
                           <p className="mt-1 leading-relaxed">
-                            Comprometo-me a manter sigilo absoluto sobre roteiros, tramas, informações privilegiadas e demais conteúdos relacionados à produção, sob pena de responsabilização civil e criminal.
+                            {termosExpandidos.confidencialidade 
+                              ? "Comprometo-me a manter sigilo absoluto sobre roteiros, tramas, informações privilegiadas e demais conteúdos relacionados à produção, sob pena de responsabilização civil e criminal."
+                              : "Comprometo-me a manter sigilo absoluto sobre roteiros, tramas..."
+                            }
                           </p>
+                          <button
+                            type="button"
+                            onClick={() => setTermosExpandidos(prev => ({ ...prev, confidencialidade: !prev.confidencialidade }))}
+                            className="text-blue-600 hover:text-blue-800 text-xs mt-1 font-medium"
+                          >
+                            {termosExpandidos.confidencialidade ? 'Ver menos' : 'Ver mais'}
+                          </button>
                         </div>
-                      </label>
+                      </div>
                     </div>
 
                     {/* Termo de Direitos de Imagem */}
                     <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
-                      <label className="flex items-start cursor-pointer">
+                      <div className="flex items-start">
                         <input
                           type="checkbox"
                           checked={termoDireitosImagem}
                           onChange={(e) => setTermoDireitosImagem(e.target.checked)}
                           className="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <div className="text-sm text-gray-700">
+                        <div className="flex-1 text-sm text-gray-700">
                           <strong className="text-gray-800">Termo de Direitos Autorais de Imagem</strong>
                           <p className="mt-1 leading-relaxed">
-                            Autorizo o uso da imagem, voz e performance do menor em todos os meios de comunicação, incluindo TV, streaming, redes sociais e materiais promocionais, sem limitação de tempo ou território.
+                            {termosExpandidos.direitos 
+                              ? "Autorizo o uso da imagem, voz e performance do menor em todos os meios de comunicação, incluindo TV, streaming, redes sociais e materiais promocionais, sem limitação de tempo ou território."
+                              : "Autorizo o uso da imagem, voz e performance do menor em todos os meios..."
+                            }
                           </p>
+                          <button
+                            type="button"
+                            onClick={() => setTermosExpandidos(prev => ({ ...prev, direitos: !prev.direitos }))}
+                            className="text-blue-600 hover:text-blue-800 text-xs mt-1 font-medium"
+                          >
+                            {termosExpandidos.direitos ? 'Ver menos' : 'Ver mais'}
+                          </button>
                         </div>
-                      </label>
+                      </div>
                     </div>
 
                     {/* Botão de Finalizar Cadastro */}
