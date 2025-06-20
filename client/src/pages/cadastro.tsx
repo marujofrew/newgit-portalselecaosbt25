@@ -557,7 +557,17 @@ export default function Cadastro() {
                     </label>
                     <select
                       value={grauParentesco}
-                      onChange={(e) => setGrauParentesco(e.target.value)}
+                      onChange={(e) => {
+                        const novoGrau = e.target.value;
+                        setGrauParentesco(novoGrau);
+                        
+                        // Preencher automaticamente os campos da criança baseado no grau de parentesco
+                        if (novoGrau === 'pai' && nome) {
+                          setNomePaiCrianca(nome);
+                        } else if (novoGrau === 'mae' && nome) {
+                          setNomeMaeCrianca(nome);
+                        }
+                      }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">Selecione o grau de parentesco</option>
@@ -629,7 +639,7 @@ export default function Cadastro() {
                       value={nomeMaeCrianca}
                       onChange={(e) => setNomeMaeCrianca(e.target.value)}
                       placeholder="Digite o nome completo da mãe"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'mae' && nomeMaeCrianca ? 'bg-green-50 border-green-300' : ''}`}
                     />
                   </div>
 
@@ -642,7 +652,7 @@ export default function Cadastro() {
                       value={nomePaiCrianca}
                       onChange={(e) => setNomePaiCrianca(e.target.value)}
                       placeholder="Digite o nome completo do pai"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'pai' && nomePaiCrianca ? 'bg-green-50 border-green-300' : ''}`}
                     />
                   </div>
                 </div>
