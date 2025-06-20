@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div className="bg-gray-100">
-      <header className="bg-[#006EFF] text-white p-4 flex justify-between items-center">
+      <header className="bg-[#1a2332] text-white p-4 flex justify-between items-center">
         <div className="flex items-center w-full justify-center">
           <i className="fas fa-bars mr-4 text-xl absolute left-4"></i>
           <img alt="SBT logo" className="h-8" src="https://i.ibb.co/qnFtWj3/353779109-667914888685023-1650430461903842292-n-1.png" width="auto"/>
@@ -156,7 +156,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-[#006EFF] text-white p-4">
+      <footer className="bg-[#1a2332] text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
           <img alt="G1 logo" className="h-8 mx-auto" src="https://i.ibb.co/qnFtWj3/353779109-667914888685023-1650430461903842292-n-1.png" width="auto"/>
           <div className="flex space-x-4">
