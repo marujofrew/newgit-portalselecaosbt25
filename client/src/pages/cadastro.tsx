@@ -198,7 +198,7 @@ export default function Cadastro() {
                   <i className="fas fa-map-marker-alt mr-2"></i>
                   {loading ? "Carregando localização..." : "Localização encontrada:"}
                 </h3>
-                <div className="space-y-1 text-sm text-blue-700">
+                <div className="space-y-1 text-sm text-black">
                   {loadingStep >= 1 && (
                     <>
                       <p><strong>CEP:</strong> {showProgressiveData.cep}</p>
