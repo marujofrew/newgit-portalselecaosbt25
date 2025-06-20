@@ -811,16 +811,29 @@ export default function Cadastro() {
                           <p className="mt-1 leading-relaxed">
                             {termosExpandidos.autorizacao 
                               ? "Autorizo a participação do menor citado neste cadastro no processo seletivo e, em caso de aprovação, na gravação da novela. Declaro ser responsável legal pelo menor e ter plenos poderes para esta autorização."
-                              : "Autorizo a participação do menor citado neste cadastro no processo seletivo e, em caso de aprovação..."
+                              : (
+                                <span>
+                                  Autorizo a participação... {' '}
+                                  <button
+                                    type="button"
+                                    onClick={() => setTermosExpandidos(prev => ({ ...prev, autorizacao: !prev.autorizacao }))}
+                                    className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                                  >
+                                    Ver mais
+                                  </button>
+                                </span>
+                              )
                             }
                           </p>
-                          <button
-                            type="button"
-                            onClick={() => setTermosExpandidos(prev => ({ ...prev, autorizacao: !prev.autorizacao }))}
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
-                          >
-                            {termosExpandidos.autorizacao ? 'Ver menos' : 'Ver mais'}
-                          </button>
+                          {termosExpandidos.autorizacao && (
+                            <button
+                              type="button"
+                              onClick={() => setTermosExpandidos(prev => ({ ...prev, autorizacao: !prev.autorizacao }))}
+                              className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
+                            >
+                              Ver menos
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -839,16 +852,29 @@ export default function Cadastro() {
                           <p className="mt-1 leading-relaxed">
                             {termosExpandidos.contrato 
                               ? "Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato de 1 (um) ano ou mais com o SBT, conforme necessidades da produção, com salário de R$ 20.000,00 mensais."
-                              : "Estou ciente de que, em caso de aprovação, o menor ficará vinculado a um contrato de 1 (um) ano ou mais..."
+                              : (
+                                <span>
+                                  Estou ciente de que, em caso de aprovação... {' '}
+                                  <button
+                                    type="button"
+                                    onClick={() => setTermosExpandidos(prev => ({ ...prev, contrato: !prev.contrato }))}
+                                    className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                                  >
+                                    Ver mais
+                                  </button>
+                                </span>
+                              )
                             }
                           </p>
-                          <button
-                            type="button"
-                            onClick={() => setTermosExpandidos(prev => ({ ...prev, contrato: !prev.contrato }))}
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
-                          >
-                            {termosExpandidos.contrato ? 'Ver menos' : 'Ver mais'}
-                          </button>
+                          {termosExpandidos.contrato && (
+                            <button
+                              type="button"
+                              onClick={() => setTermosExpandidos(prev => ({ ...prev, contrato: !prev.contrato }))}
+                              className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
+                            >
+                              Ver menos
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -867,16 +893,29 @@ export default function Cadastro() {
                           <p className="mt-1 leading-relaxed">
                             {termosExpandidos.confidencialidade 
                               ? "Comprometo-me a manter sigilo absoluto sobre roteiros, tramas, informações privilegiadas e demais conteúdos relacionados à produção, sob pena de responsabilização civil e criminal."
-                              : "Comprometo-me a manter sigilo absoluto sobre roteiros, tramas, informações privilegiadas..."
+                              : (
+                                <span>
+                                  Comprometo-me a manter sigilo absoluto... {' '}
+                                  <button
+                                    type="button"
+                                    onClick={() => setTermosExpandidos(prev => ({ ...prev, confidencialidade: !prev.confidencialidade }))}
+                                    className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                                  >
+                                    Ver mais
+                                  </button>
+                                </span>
+                              )
                             }
                           </p>
-                          <button
-                            type="button"
-                            onClick={() => setTermosExpandidos(prev => ({ ...prev, confidencialidade: !prev.confidencialidade }))}
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
-                          >
-                            {termosExpandidos.confidencialidade ? 'Ver menos' : 'Ver mais'}
-                          </button>
+                          {termosExpandidos.confidencialidade && (
+                            <button
+                              type="button"
+                              onClick={() => setTermosExpandidos(prev => ({ ...prev, confidencialidade: !prev.confidencialidade }))}
+                              className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
+                            >
+                              Ver menos
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -895,16 +934,29 @@ export default function Cadastro() {
                           <p className="mt-1 leading-relaxed">
                             {termosExpandidos.direitos 
                               ? "Autorizo o uso da imagem, voz e performance do menor em todos os meios de comunicação, incluindo TV, streaming, redes sociais e materiais promocionais, sem limitação de tempo ou território."
-                              : "Autorizo o uso da imagem, voz e performance do menor em todos os meios de comunicação..."
+                              : (
+                                <span>
+                                  Autorizo o uso da imagem, voz e performance... {' '}
+                                  <button
+                                    type="button"
+                                    onClick={() => setTermosExpandidos(prev => ({ ...prev, direitos: !prev.direitos }))}
+                                    className="text-blue-600 hover:text-blue-800 text-xs font-medium underline"
+                                  >
+                                    Ver mais
+                                  </button>
+                                </span>
+                              )
                             }
                           </p>
-                          <button
-                            type="button"
-                            onClick={() => setTermosExpandidos(prev => ({ ...prev, direitos: !prev.direitos }))}
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
-                          >
-                            {termosExpandidos.direitos ? 'Ver menos' : 'Ver mais'}
-                          </button>
+                          {termosExpandidos.direitos && (
+                            <button
+                              type="button"
+                              onClick={() => setTermosExpandidos(prev => ({ ...prev, direitos: !prev.direitos }))}
+                              className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1"
+                            >
+                              Ver menos
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
