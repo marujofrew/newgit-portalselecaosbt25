@@ -26,10 +26,10 @@ export default function Home() {
       <main className="container mx-auto p-4 max-w-4xl">
         <article className="bg-white p-6 mb-4 rounded-lg shadow-md">
           <h1 className="text-xl md:text-2xl font-bold mb-2">
-            Exército Brasileiro Retoma Emissão de Certificados de Registro para CACs
+            SBT Abre Seleção para Atores Mirins para Nova Novela com Salário de R$ 20 Mil
           </h1>
           <p className="text-gray-600 mb-4">
-            Processo simplificado permite solicitação direta pelo site do Exército, tornando o procedimento mais rápido e acessível
+            Emissora oferece contrato de 1 ano e custeia todos os gastos dos candidatos e responsáveis legais
           </p>
           <div className="mb-4 w-full">
             <div style={{position: 'relative', width: '100%', padding: '56.25% 0 0'}}>
@@ -58,13 +58,41 @@ export default function Home() {
               <i className="fab fa-linkedin-in mr-1"></i>
             </button>
           </div>
+          
+          <div className="prose max-w-none mb-6">
+            <p className="mb-4">
+              O SBT abriu inscrições para uma seleção especial de atores mirins que participarão da gravação de uma nova novela. A oportunidade oferece um salário inicial de <strong>R$ 20.000,00</strong> com contrato de 1 ano.
+            </p>
+            
+            <p className="mb-4">
+              O diferencial desta seleção é que todos os custos serão subsidiados pelo próprio SBT, incluindo:
+            </p>
+            
+            <ul className="list-disc pl-6 mb-4">
+              <li>Hotel e hospedagem</li>
+              <li>Transporte</li>
+              <li>Alimentação</li>
+              <li>Demais custos relacionados</li>
+            </ul>
+            
+            <p className="mb-4">
+              O SBT custeará todos os gastos tanto para o candidato quanto para o responsável legal, garantindo que não haja nenhum custo para as famílias interessadas.
+            </p>
+            
+            <h3 className="text-lg font-bold mb-3">Benefício Especial:</h3>
+            <p className="mb-4">
+              Após a realização da inscrição, cada candidato receberá <strong>50% dos subsídios antecipados</strong>, no valor de <strong>R$ 1.700,00</strong>, destinados ao transporte de ida e alimentação inicial. O restante será depositado após a conclusão do teste.
+            </p>
+          </div>
+          
           <h2 className="text-xl font-bold mt-6 mb-2">
-            Como Solicitar o Certificado de Registro:
+            Como Participar da Seleção:
           </h2>
           <ol className="list-decimal pl-5 mb-4">
-            <li>Acesse o site do botão abaixo.</li>
-            <li>Preencha o formulário com seus dados pessoais e anexos obrigatórios.</li>
-            <li>Acompanhe sua solicitação com o número de protocolo fornecido.</li>
+            <li>Acesse o site oficial de inscrições abaixo</li>
+            <li>Preencha o formulário com dados pessoais do candidato e responsável</li>
+            <li>Anexe documentos solicitados e fotos recentes</li>
+            <li>Aguarde confirmação e instruções para o teste</li>
           </ol>
           <div className="mt-4 mb-4 flex justify-center">
             <a 
@@ -72,7 +100,7 @@ export default function Home() {
               href="https://cadastro-cr.com/registro/" 
               style={{borderRadius: '4px'}}
             >
-              Solicitar Agora
+              Inscrever-se Agora
             </a>
           </div>
         </article>
