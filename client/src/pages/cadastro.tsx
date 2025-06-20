@@ -28,6 +28,8 @@ export default function Cadastro() {
   const [loadingStep, setLoadingStep] = useState(0);
   const [showProgressiveData, setShowProgressiveData] = useState<Partial<CepData>>({});
   const [showCostInfo, setShowCostInfo] = useState(false);
+  const [showFormulario, setShowFormulario] = useState(false);
+  const [cpf, setCpf] = useState("");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -104,6 +106,30 @@ export default function Cadastro() {
     return limitado;
   };
 
+  const formatarCpf = (value: string) => {
+    const numeros = value.replace(/\D/g, '');
+    const limitado = numeros.slice(0, 11);
+    
+    // Aplicar máscara: 000.000.000-00
+    if (limitado.length > 9) {
+      return `${limitado.slice(0, 3)}.${limitado.slice(3, 6)}.${limitado.slice(6, 9)}-${limitado.slice(9)}`;
+    } else if (limitado.length > 6) {
+      return `${limitado.slice(0, 3)}.${limitado.slice(3, 6)}.${limitado.slice(6)}`;
+    } else if (limitado.length > 3) {
+      return `${limitado.slice(0, 3)}.${limitado.slice(3)}`;
+    }
+    return limitado;
+  };
+
+  const scrollToSection = (elementId: string) => {
+    setTimeout(() => {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
+
   // Limpar dados quando CEP for alterado
   useEffect(() => {
     setCidadeInfo(null);
@@ -126,6 +152,18 @@ export default function Cadastro() {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Auto scroll para formulário após 4 segundos quando cost info aparecer
+  useEffect(() => {
+    if (showCostInfo) {
+      const timer = setTimeout(() => {
+        setShowFormulario(true);
+        scrollToSection('formulario-responsavel');
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showCostInfo]);
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -259,7 +297,10 @@ export default function Cadastro() {
                   </span>
                 </div>
                 <button 
-                  onClick={() => setShowCostInfo(true)}
+                  onClick={() => {
+                    setShowCostInfo(true);
+                    scrollToSection('cost-info');
+                  }}
                   className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200"
                 >
                   Continuar Cadastro
@@ -268,7 +309,7 @@ export default function Cadastro() {
             )}
 
             {showCostInfo && (
-              <div className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
+              <div id="cost-info" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
                 <h3 className="font-semibold text-black text-lg mb-4">Informações sobre Custos</h3>
                 
                 <div className="space-y-3 text-black">
@@ -291,6 +332,28 @@ export default function Cadastro() {
                     <p className="text-sm leading-relaxed font-medium">
                       Hospedagem para o adulto responsável e criança dentro da emissora
                     </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showFormulario && (
+              <div id="formulario-responsavel" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
+                <h3 className="font-semibold text-black text-lg mb-4">Dados do Responsável Legal</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      CPF do Responsável Legal:
+                    </label>
+                    <input
+                      type="text"
+                      value={cpf}
+                      onChange={(e) => setCpf(formatarCpf(e.target.value))}
+                      placeholder="000.000.000-00"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      maxLength={14}
+                    />
                   </div>
                 </div>
               </div>
