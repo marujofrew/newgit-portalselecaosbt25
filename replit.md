@@ -90,10 +90,16 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Migrations**: `npm run db:push` using Drizzle Kit
 - **Connection**: Environment variable `DATABASE_URL`
 
+## Recent Changes
+
+- **Sistema de múltiplos candidatos implementado**: Formulário agora suporta de 1 a 5 candidatos com seções dinâmicas
+- **Seção de termos de autorização criada**: 4 termos obrigatórios com design destacado em vermelho/laranja
+- **Notificações de vagas aprimoradas**: Cor azul escuro com 50% opacidade e efeito backdrop-blur
+- **Fluxo completo funcional**: CEP → Vagas → Custos → Responsável → Candidato(s) → Termos
+
 ## Changelog
 
-Changelog:
-- June 20, 2025. Initial setup
+- June 20, 2025: Sistema de cadastro SBT completo com múltiplos candidatos e termos legais
 
 ## User Preferences
 
