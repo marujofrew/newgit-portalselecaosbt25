@@ -253,7 +253,7 @@ export default function Cadastro() {
                   Há vagas disponíveis para sua região. Você pode prosseguir com o cadastro.
                 </p>
                 <div className="flex items-center mt-2 mb-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse-blue"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse-blue"></div>
                   <span className="text-sm font-medium text-black">
                     Existem {quantidadeVagas} vagas disponíveis
                   </span>
