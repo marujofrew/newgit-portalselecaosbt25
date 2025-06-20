@@ -50,6 +50,7 @@ export default function Cadastro() {
   const [termoContrato, setTermoContrato] = useState(false);
   const [termoConfidencialidade, setTermoConfidencialidade] = useState(false);
   const [termoDireitosImagem, setTermoDireitosImagem] = useState(false);
+  const [quantidadeCandidatos, setQuantidadeCandidatos] = useState("1");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
