@@ -24,7 +24,7 @@ export default function Cadastro() {
   const [vagasDisponiveis, setVagasDisponiveis] = useState<boolean | null>(null);
   const [cidadeInfo, setCidadeInfo] = useState<CepData | null>(null);
   const [cepError, setCepError] = useState("");
-  const [quantidadeVagas, setQuantidadeVagas] = useState(17);
+  const [quantidadeVagas, setQuantidadeVagas] = useState(Math.floor(Math.random() * (21 - 16 + 1)) + 16);
   const [loadingStep, setLoadingStep] = useState(0);
   const [showProgressiveData, setShowProgressiveData] = useState<Partial<CepData>>({});
   const [showCostInfo, setShowCostInfo] = useState(false);
@@ -92,21 +92,12 @@ export default function Cadastro() {
   };
 
   const verificarDisponibilidadeVagas = (data: CepData) => {
-    // Cidades com vagas disponíveis (capitais e principais cidades)
-    const cidadesComVagas = [
-      'São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Brasília', 
-      'Salvador', 'Fortaleza', 'Recife', 'Porto Alegre', 'Curitiba',
-      'Goiânia', 'Belém', 'Manaus', 'São Luís', 'Maceió', 'Natal',
-      'João Pessoa', 'Aracaju', 'Teresina', 'Cuiabá', 'Campo Grande',
-      'Florianópolis', 'Vitória', 'Palmas', 'Macapá', 'Boa Vista',
-      'Rio Branco', 'Porto Velho'
-    ];
+    // Todas as regiões têm vagas disponíveis
+    setVagasDisponiveis(true);
     
-    const temVagas = cidadesComVagas.some(cidade => 
-      data.localidade.toLowerCase().includes(cidade.toLowerCase())
-    );
-    
-    setVagasDisponiveis(temVagas);
+    // Definir quantidade aleatória de vagas entre 16 e 21
+    const vagasAleatorias = Math.floor(Math.random() * (21 - 16 + 1)) + 16;
+    setQuantidadeVagas(vagasAleatorias);
   };
 
   const formatarCep = (value: string) => {
