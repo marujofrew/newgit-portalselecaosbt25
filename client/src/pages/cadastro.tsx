@@ -271,7 +271,7 @@ export default function Cadastro() {
           <Link href="/">
             <i className="fas fa-arrow-left text-xl"></i>
           </Link>
-          <img alt="SBT logo" className="h-8" src="/attached_assets/sbt_logo.png" width="auto"/>
+          <img alt="SBT logo" className="h-12" src="/attached_assets/sbt_logo.png" width="auto"/>
           <div className="w-6"></div>
         </div>
       </header>
