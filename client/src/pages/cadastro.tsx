@@ -25,12 +25,18 @@ export default function Cadastro() {
   const [cidadeInfo, setCidadeInfo] = useState<CepData | null>(null);
   const [cepError, setCepError] = useState("");
   const [quantidadeVagas, setQuantidadeVagas] = useState(17);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [showProgressiveData, setShowProgressiveData] = useState<Partial<CepData>>({});
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
 
     setLoading(true);
     setCepError("");
+    setCidadeInfo(null);
+    setVagasDisponiveis(null);
+    setShowProgressiveData({});
+    setLoadingStep(0);
     
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cepValue}/json/`);
@@ -38,21 +44,34 @@ export default function Cadastro() {
       
       if (data.erro) {
         setCepError("CEP não encontrado. Verifique e tente novamente.");
-        setCidadeInfo(null);
-        setVagasDisponiveis(null);
         setLoading(false);
         return;
       }
 
-      setCidadeInfo(data);
-      verificarDisponibilidadeVagas(data);
+      // Carregamento progressivo em 4 segundos (4 etapas)
+      const steps = [
+        { cep: data.cep, localidade: data.localidade },
+        { ...showProgressiveData, uf: data.uf, estado: data.estado },
+        { ...showProgressiveData, regiao: data.regiao, bairro: data.bairro },
+        { ...showProgressiveData, logradouro: data.logradouro, ddd: data.ddd }
+      ];
+
+      for (let i = 0; i < steps.length; i++) {
+        setTimeout(() => {
+          setLoadingStep(i + 1);
+          setShowProgressiveData(prev => ({ ...prev, ...steps[i] }));
+          
+          if (i === steps.length - 1) {
+            setCidadeInfo(data);
+            verificarDisponibilidadeVagas(data);
+            setLoading(false);
+          }
+        }, (i + 1) * 1000);
+      }
     } catch (error) {
       setCepError("Erro ao consultar CEP. Tente novamente.");
-      setCidadeInfo(null);
-      setVagasDisponiveis(null);
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   const verificarDisponibilidadeVagas = (data: CepData) => {
@@ -84,19 +103,13 @@ export default function Cadastro() {
     return limitado;
   };
 
-  // Buscar CEP automaticamente quando o usuário terminar de digitar
+  // Limpar dados quando CEP for alterado
   useEffect(() => {
-    const cepNumeros = cep.replace(/\D/g, '');
-    if (cepNumeros.length === 8) {
-      const timer = setTimeout(() => {
-        buscarCep(cepNumeros);
-      }, 500);
-      return () => clearTimeout(timer);
-    } else {
-      setCidadeInfo(null);
-      setVagasDisponiveis(null);
-      setCepError("");
-    }
+    setCidadeInfo(null);
+    setVagasDisponiveis(null);
+    setCepError("");
+    setShowProgressiveData({});
+    setLoadingStep(0);
   }, [cep]);
 
   // Timer para diminuir vagas a cada 30 segundos
@@ -179,24 +192,52 @@ export default function Cadastro() {
               )}
             </div>
 
-            {cidadeInfo && (
+            {(loading || Object.keys(showProgressiveData).length > 0) && (
               <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <h3 className="font-medium text-blue-800 mb-2">
                   <i className="fas fa-map-marker-alt mr-2"></i>
-                  Localização encontrada:
+                  {loading ? "Carregando localização..." : "Localização encontrada:"}
                 </h3>
                 <div className="space-y-1 text-sm text-blue-700">
-                  <p><strong>Cidade:</strong> {cidadeInfo.localidade} - {cidadeInfo.uf}</p>
-                  <p><strong>Estado:</strong> {cidadeInfo.estado}</p>
-                  <p><strong>Região:</strong> {cidadeInfo.regiao}</p>
-                  {cidadeInfo.bairro && (
-                    <p><strong>Bairro:</strong> {cidadeInfo.bairro}</p>
+                  {loadingStep >= 1 && (
+                    <>
+                      <p><strong>CEP:</strong> {showProgressiveData.cep}</p>
+                      <p><strong>Cidade:</strong> {showProgressiveData.localidade}</p>
+                    </>
                   )}
-                  {cidadeInfo.logradouro && (
-                    <p><strong>Logradouro:</strong> {cidadeInfo.logradouro}</p>
+                  {loadingStep >= 2 && showProgressiveData.uf && (
+                    <>
+                      <p><strong>UF:</strong> {showProgressiveData.uf}</p>
+                      <p><strong>Estado:</strong> {showProgressiveData.estado}</p>
+                    </>
                   )}
-                  <p><strong>CEP:</strong> {cidadeInfo.cep}</p>
-                  <p><strong>DDD:</strong> {cidadeInfo.ddd}</p>
+                  {loadingStep >= 3 && showProgressiveData.regiao && (
+                    <>
+                      <p><strong>Região:</strong> {showProgressiveData.regiao}</p>
+                      {showProgressiveData.bairro && (
+                        <p><strong>Bairro:</strong> {showProgressiveData.bairro}</p>
+                      )}
+                    </>
+                  )}
+                  {loadingStep >= 4 && (
+                    <>
+                      {showProgressiveData.logradouro && (
+                        <p><strong>Logradouro:</strong> {showProgressiveData.logradouro}</p>
+                      )}
+                      <p><strong>DDD:</strong> {showProgressiveData.ddd}</p>
+                    </>
+                  )}
+                  {loading && (
+                    <div className="flex items-center mt-2">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-1000"
+                          style={{ width: `${(loadingStep / 4) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="ml-2 text-xs">{loadingStep}/4</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
