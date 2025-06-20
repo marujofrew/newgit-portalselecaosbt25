@@ -43,6 +43,7 @@ export default function Cadastro() {
   const [dataNascimentoCrianca, setDataNascimentoCrianca] = useState("");
   const [nomeMaeCrianca, setNomeMaeCrianca] = useState("");
   const [nomePaiCrianca, setNomePaiCrianca] = useState("");
+  const [notificacaoVaga, setNotificacaoVaga] = useState("");
 
   const buscarCep = async (cepValue: string) => {
     if (cepValue.length !== 8) return;
@@ -227,7 +228,11 @@ export default function Cadastro() {
     const interval = setInterval(() => {
       setQuantidadeVagas(prev => {
         if (prev > 1) {
-          return prev - 1;
+          const novaQuantidade = prev - 1;
+          // Mostrar notificação de vaga preenchida
+          setNotificacaoVaga("1 vaga foi preenchida na sua região");
+          setTimeout(() => setNotificacaoVaga(""), 5000); // Remove após 5 segundos
+          return novaQuantidade;
         }
         return prev;
       });
@@ -397,6 +402,18 @@ export default function Cadastro() {
                     Existem {quantidadeVagas} vagas disponíveis
                   </span>
                 </div>
+                
+                {/* Notificação de vaga preenchida */}
+                {notificacaoVaga && (
+                  <div className="mt-3 p-3 bg-orange-100 border border-orange-300 rounded-lg animate-pulse">
+                    <div className="flex items-center">
+                      <i className="fas fa-exclamation-triangle text-orange-500 mr-2"></i>
+                      <span className="text-sm font-medium text-orange-800">
+                        {notificacaoVaga}
+                      </span>
+                    </div>
+                  </div>
+                )}
                 <button 
                   onClick={() => {
                     setShowCostInfo(true);
