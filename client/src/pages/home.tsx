@@ -97,7 +97,7 @@ export default function Home() {
           <div className="mt-4 mb-4 flex justify-center">
             <a 
               className="bg-blue-500 text-white px-4 py-2 rounded text-sm font-bold inline-block hover:bg-blue-600 transition duration-300" 
-              href="/cadastro" 
+              href="/loading" 
               style={{borderRadius: '4px'}}
             >
               Inscrever-se Agora
