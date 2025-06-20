@@ -29,24 +29,12 @@ export default function Home() {
             Processo simplificado permite solicitação direta pelo site do Exército, tornando o procedimento mais rápido e acessível
           </p>
           <div className="mb-4 w-full">
-            <div id="vid_67cb3f384bf91ecd96870cfa" style={{position: 'relative', width: '100%', padding: '56.25% 0 0'}}>
+            <div style={{position: 'relative', width: '100%', padding: '56.25% 0 0'}}>
               <img 
-                id="thumb_67cb3f384bf91ecd96870cfa" 
-                src="https://images.converteai.net/7c86a210-1740-4336-b02c-1f5e9f65fc06/players/67cb3f384bf91ecd96870cfa/thumbnail.jpg" 
+                src="/attached_assets/elenco-caverna-encantada_6687_1750391560158.jpeg" 
                 style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} 
-                alt="thumbnail"
+                alt="Elenco da Caverna Encantada"
               />
-              <div 
-                id="backdrop_67cb3f384bf91ecd96870cfa" 
-                style={{
-                  WebkitBackdropFilter: 'blur(5px)',
-                  backdropFilter: 'blur(5px)',
-                  position: 'absolute',
-                  top: 0,
-                  height: '100%',
-                  width: '100%'
-                }}
-              ></div>
             </div>
           </div>
           <div className="mb-4 text-sm text-gray-500">
