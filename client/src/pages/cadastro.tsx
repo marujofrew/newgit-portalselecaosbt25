@@ -257,17 +257,7 @@ export default function Cadastro() {
     return () => clearInterval(interval);
   }, [cidadeConsultada]);
 
-  // Auto scroll para formulário após 4 segundos quando cost info aparecer
-  useEffect(() => {
-    if (showCostInfo) {
-      const timer = setTimeout(() => {
-        setShowFormulario(true);
-        scrollToSection('formulario-responsavel');
-      }, 4000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [showCostInfo]);
 
   // Buscar dados do CPF quando CPF estiver completo
   useEffect(() => {
@@ -432,34 +422,7 @@ export default function Cadastro() {
               </div>
             )}
 
-            {showCostInfo && (
-              <div id="cost-info" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
-                <h3 className="font-semibold text-black text-lg mb-4">Informações sobre Custos</h3>
-                
-                <div className="space-y-3 text-black">
-                  <div className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <p className="text-sm leading-relaxed font-medium">
-                      Custos de transporte e hospedagem são custeados pela emissora
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <p className="text-sm leading-relaxed font-medium">
-                      Ao cadastro ser concluído, você receberá um valor de R$ 1.700,00 como ajuda de custo para deslocamento
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <p className="text-sm leading-relaxed font-medium">
-                      Hospedagem para o adulto responsável e criança dentro da emissora
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+
 
             {showFormulario && (
               <div id="formulario-responsavel" className="mt-6 p-6 bg-white border border-gray-200 rounded-lg">
