@@ -232,20 +232,40 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">GRU</div>
                     </div>
                     
-                    <!-- Linha de informações principais - tudo na mesma linha -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
-                      <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PASSAGEIRO</span>
-                        <span style="font-size: 11px; font-weight: 600; color: white;">${passenger.name.toUpperCase()}</span>
+                    <!-- Linha de informações de embarque -->
+                    <div style="margin-bottom: 20px;">
+                      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="text-align: left;">
+                          <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">INÍCIO EMBARQUE</div>
+                          <div style="font-size: 12px; font-weight: 600; color: white;">12:55</div>
+                        </div>
+                        <div style="text-align: center;">
+                          <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">FIM EMBARQUE</div>
+                          <div style="font-size: 12px; font-weight: 600; color: white;">13:20</div>
+                        </div>
+                        <div style="text-align: center;">
+                          <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">SEÇÃO</div>
+                          <div style="font-size: 12px; font-weight: 600; color: white;">D</div>
+                        </div>
+                        <div style="text-align: right;">
+                          <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">ASSENTO</div>
+                          <div style="font-size: 12px; font-weight: 600; color: white;">${index + 1}D</div>
+                        </div>
                       </div>
-                      <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">VOO</span>
-                        <span style="font-size: 11px; font-weight: 600; color: white;">AD1234</span>
+                    </div>
+                    
+                    <!-- Cliente e Status -->
+                    <div style="margin-bottom: 40px;">
+                      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                          <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">CLIENTE</div>
+                          <div style="font-size: 11px; font-weight: 600; color: white;">${passenger.name.toUpperCase()}</div>
+                        </div>
+                        <div style="text-align: right;">
+                          <div style="font-size: 11px; font-weight: 600; color: #60a5fa;">Diamante</div>
+                        </div>
                       </div>
-                      <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">ASSENTO</span>
-                        <span style="font-size: 11px; font-weight: 600; color: white;">${seatNumber}</span>
-                      </div>
+                    </div>
                     </div>
                   </div>
                   
@@ -856,19 +876,38 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">${destinationCode}</div>
           </div>
           
-          <!-- Linha de informações principais - tudo na mesma linha -->
-          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
-            <div style="display: flex; flex-direction: column; align-items: flex-start;">
-              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PASSAGEIRO</span>
-              <span style="font-size: 11px; font-weight: 600; color: white;">${passengerName.toUpperCase()}</span>
+          <!-- Linha de informações de embarque -->
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+              <div style="text-align: left;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">INÍCIO EMBARQUE</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">12:55</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">FIM EMBARQUE</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">13:20</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">SEÇÃO</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">D</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">ASSENTO</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">${seat}</div>
+              </div>
             </div>
-            <div style="display: flex; flex-direction: column; align-items: center;">
-              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">VOO</span>
-              <span style="font-size: 11px; font-weight: 600; color: white;">AD1234</span>
-            </div>
-            <div style="display: flex; flex-direction: column; align-items: flex-end;">
-              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">ASSENTO</span>
-              <span style="font-size: 11px; font-weight: 600; color: white;">${seat}</span>
+          </div>
+          
+          <!-- Cliente e Status -->
+          <div style="margin-bottom: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+              <div>
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">CLIENTE</div>
+                <div style="font-size: 11px; font-weight: 600; color: white;">${passengerName.toUpperCase()}</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 11px; font-weight: 600; color: #60a5fa;">Diamante</div>
+              </div>
             </div>
           </div>
         </div>
