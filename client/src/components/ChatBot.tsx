@@ -310,14 +310,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage(`🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+                addMessage(`🔸 Opção 1: ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
                 
                 // Mensagem 3
                 setTimeout(() => {
                   setIsTyping(true);
                   setTimeout(() => {
                     setIsTyping(false);
-                    addMessage(`🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
+                    addMessage(`🔸 Opção 2: ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
                     
                     // Mensagem 4
                     setTimeout(() => {
@@ -392,7 +392,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                <p className="text-sm whitespace-pre-line">{message.text}</p>
+                <p className="text-sm whitespace-pre-line" dangerouslySetInnerHTML={{
+                  __html: message.text
+                    .replace(/Opção 1:/g, '<strong>Opção 1:</strong>')
+                    .replace(/Opção 2:/g, '<strong>Opção 2:</strong>')
+                }} />
                 <span className="text-xs opacity-70 mt-1 block">
                   {message.timestamp.toLocaleTimeString('pt-BR', { 
                     hour: '2-digit', 
