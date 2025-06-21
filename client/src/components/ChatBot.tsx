@@ -607,19 +607,35 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'baggage-option':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
           botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
-          nextStep = 'hotel';
+          nextStep = 'pix-payment';
           showOptions = false;
           
-          // Continuar para hotel após confirmar bagagem
+          // Enviar informações sobre pagamento PIX
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-              setShowQuickOptions(true);
-              setCurrentStep('hotel');
-            }, 6000);
-          }, 2000);
+              addMessage("Vou te enviar a chave PIX copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Nosso chat irá se encerrar automaticamente em 5 minutos se não houver retorno. Realize o pagamento e volte antes de 5 minutos para evitar de recomeçar o cadastro do início.", 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('pix-payment');
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
         } else if (messageToSend.toLowerCase().includes('não') || messageToSend.toLowerCase().includes('nao') || messageToSend.toLowerCase().includes('sem bagagem')) {
           botResponse = "Entendido! As passagens serão apenas com bagagem de mão.";
           nextStep = 'hotel';
@@ -633,10 +649,58 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
               setShowQuickOptions(true);
               setCurrentStep('hotel');
-            }, 6000);
-          }, 2000);
+            }, 5000);
+          }, 5000);
         } else {
           botResponse = "Por favor, escolha se deseja adicionar o kit bagagem ou não.";
+          showOptions = true;
+        }
+        break;
+
+      case 'pix-payment':
+        if (messageToSend.toLowerCase().includes('ok') && messageToSend.toLowerCase().includes('pagamento')) {
+          botResponse = "Ok, vou realizar o pagamento e volto rapidamente.";
+          nextStep = 'pix-key';
+          showOptions = false;
+          
+          // Enviar chave PIX
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("**Chave PIX Copia e Cola:**", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage(`
+                    <div style="background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 16px; margin: 10px 0; font-family: monospace;">
+                      <div style="font-weight: bold; color: #007bff; margin-bottom: 8px;">💳 PIX - R$ 29,90</div>
+                      <div style="background: white; padding: 12px; border-radius: 4px; border: 1px solid #dee2e6; word-break: break-all; font-size: 12px;">
+                        00020126580014BR.GOV.BCB.PIX013636303639-3034-4d42-b7a7-9e6c8f1a5b2c0208BAGAGEM520400005303986540529.905802BR5925SBT PRODUCOES ARTISTICAS6009SAO PAULO62070503***6304A8B9
+                      </div>
+                      <div style="margin-top: 8px; font-size: 12px; color: #6c757d;">
+                        🔸 Copie e cole no seu app de pagamento<br/>
+                        🔸 Valor: R$ 29,90<br/>
+                        🔸 Beneficiário: SBT Produções
+                      </div>
+                    </div>
+                  `, 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Estou te aguardando! ⏰", 'bot');
+                    }, 5000);
+                  }, 2000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+        } else {
+          botResponse = "Por favor, confirme se vai realizar o pagamento.";
           showOptions = true;
         }
         break;
@@ -1033,7 +1097,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'transport':
         return ['Avião', 'Ônibus'];
       case 'baggage-option':
-        return ['Sim, adicionar kit bagagem (R$ 29,90)', 'Não, sem bagagem'];
+        return ['Sim, adicionar kit', 'Não, sem bagagem'];
+      case 'pix-payment':
+        return ['Ok, vou realizar o pagamento e volto rapidamente'];
       case 'flight-confirmation':
         return ['Opção 1', 'Opção 2'];
       case 'hotel':

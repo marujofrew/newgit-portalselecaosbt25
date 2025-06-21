@@ -100,6 +100,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Sistema de bagagens implementado**: Oferta especial kit bagagem SBT-Azul por R$ 29,90 (de R$ 279,90) após escolha de voos
 - **Delays de digitação padronizados**: 5 segundos entre todas as mensagens para ritmo consistente
 - **Mensagens de bagagem humanizadas**: Sequência natural com valor R$ 29,90 em negrito e texto otimizado sobre bagagens
+- **Sistema de pagamento PIX implementado**: Fluxo completo com chave PIX, aviso de 5 minutos e instruções de pagamento para bagagem
 - **Assentos sequenciais implementados**: Responsável e candidatos ficam em assentos adjacentes (1D, 2D, 3D, 4D...) na mesma fileira, letra D fixa
 - **Dados sincronizados implementados**: Data real do voo baseada na opção escolhida no chat, cidade/aeroporto do CEP preenchido, horários de embarque calculados (25min antes), nomes dos cadastrados
 - **Seção de embarque padronizada**: Todos os elementos em linha única horizontal com espaçamento uniforme de 8px, layout flex com justify-space-between
