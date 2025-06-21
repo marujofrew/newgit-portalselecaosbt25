@@ -52,70 +52,76 @@ export default function CartaoPreview() {
           boxShadow: '0 12px 32px rgba(0,0,0,0.4)'
         }}>
           
-          {/* Header - Logo e Data/Voo na mesma linha */}
+          {/* Header - Layout oficial */}
           <div style={{
             display: 'flex', 
-            alignItems: 'center', 
+            alignItems: 'flex-start', 
             justifyContent: 'space-between', 
-            marginBottom: '25px'
+            marginBottom: '20px'
           }}>
-            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '28px', width: 'auto' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', fontWeight: '700', color: 'white' }}>
-              <span>07/12/21</span>
-              <span>2768</span>
+            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '32px', width: 'auto' }} />
+            <div style={{ textAlign: 'right', fontSize: '11px', color: '#94a3b8' }}>
+              <div style={{ marginBottom: '8px' }}>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>DATA</div>
+                <div style={{ fontSize: '12px', fontWeight: '700', color: 'white' }}>07/12/21</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>VOO</div>
+                <div style={{ fontSize: '12px', fontWeight: '700', color: 'white' }}>2768</div>
+              </div>
             </div>
           </div>
           
           {/* Aeroportos */}
-          <div style={{ marginBottom: '30px' }}>
+          <div style={{ marginBottom: '25px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>RECIFE</div>
-                <div style={{ fontSize: '48px', fontWeight: '700', lineHeight: '1', color: 'white' }}>REC</div>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>RECIFE</div>
+                <div style={{ fontSize: '56px', fontWeight: '900', lineHeight: '1', color: 'white' }}>REC</div>
               </div>
               
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 20px' }}>
-                <div style={{ fontSize: '24px', color: '#60a5fa' }}>✈</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 15px' }}>
+                <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>
               </div>
               
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>SÃO PAULO - GUARULHOS</div>
-                <div style={{ fontSize: '48px', fontWeight: '700', lineHeight: '1', color: 'white' }}>GRU</div>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>SÃO PAULO - GUARULHOS</div>
+                <div style={{ fontSize: '56px', fontWeight: '900', lineHeight: '1', color: 'white' }}>GRU</div>
               </div>
             </div>
           </div>
           
-          {/* Informações de embarque - Layout do print */}
+          {/* Linha de informações de embarque */}
           <div style={{ marginBottom: '25px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '20px' }}>
-              <div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>INÍCIO EMBARQUE</div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>12:55</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '15px' }}>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>INÍCIO EMBARQUE</div>
+                <div style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>12:55</div>
               </div>
-              <div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>FIM EMBARQUE</div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>13:20</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>FIM EMBARQUE</div>
+                <div style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>13:20</div>
               </div>
-              <div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>SEÇÃO</div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>D</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>SEÇÃO</div>
+                <div style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>D</div>
               </div>
-              <div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>ASSENTO</div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>1D</div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>ASSENTO</div>
+                <div style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>1D</div>
               </div>
             </div>
           </div>
           
           {/* Cliente e Status */}
-          <div style={{ marginBottom: '40px' }}>
+          <div style={{ marginBottom: '50px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>CLIENTE</div>
-                <div style={{ fontSize: '14px', fontWeight: '700', color: 'white' }}>PRISCILA BRISIGHELLO</div>
+                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>CLIENTE</div>
+                <div style={{ fontSize: '13px', fontWeight: '700', color: 'white' }}>PRISCILA BRISIGHELLO</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '14px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
               </div>
             </div>
           </div>
