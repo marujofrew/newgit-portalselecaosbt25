@@ -645,68 +645,100 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
           // Salvar que foi escolhida a Opção 1 (2 dias antes)
           setCurrentStep('baggage-option');
-          botResponse = "Ótima escolha! Opção 1 selecionada.";
+          botResponse = "Certo! Só um minuto que estou efetuando a compra de suas passagens e vou te enviar as passagens aqui para que você utilize na hora do embarque...";
           nextStep = 'baggage-option';
           showOptions = false;
           
-          // Enviar mensagens de bagagem após escolher voo
+          // Sequência de mensagens humanizadas
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage('⚠️ Importante: As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+              addMessage(`${userData?.responsavelNome || 'Senhor(a)'}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`, 'bot');
               
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage('🎒 Por conta da parceria entre o SBT e Azul, conseguimos incluir o Kit Bagagem que é: uma mala de 23kg + mala de mão + mochila de costa.', 'bot');
+                  addMessage('Antes de finalizar a compra de suas passagens, tenho que te dar um aviso importante.', 'bot');
                   
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage('💰 De R$ 279,90 por apenas R$ 29,90. Você gostaria de adicionar bagagem à sua passagem?', 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('baggage-option');
+                      addMessage('As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas R$ 29,90.', 'bot');
+                          
+                          setTimeout(() => {
+                            setIsTyping(true);
+                            setTimeout(() => {
+                              setIsTyping(false);
+                              addMessage('O kit inclui: mala de 23kg + mala de mão + mochila. É uma oportunidade única! Você gostaria de adicionar?', 'bot');
+                              setShowQuickOptions(true);
+                              setCurrentStep('baggage-option');
+                            }, 4000);
+                          }, 1500);
+                        }, 6000);
+                      }, 1500);
                     }, 4000);
                   }, 1500);
-                }, 6000);
+                }, 4000);
               }, 1500);
-            }, 6000);
+            }, 4000);
           }, 2000);
         } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
           // Salvar que foi escolhida a Opção 2 (1 dia antes)
           setCurrentStep('baggage-option');
-          botResponse = "Ótima escolha! Opção 2 selecionada.";
+          botResponse = "Certo! Só um minuto que estou efetuando a compra de suas passagens e vou te enviar as passagens aqui para que você utilize na hora do embarque...";
           nextStep = 'baggage-option';
           showOptions = false;
           
-          // Enviar mensagens de bagagem após escolher voo
+          // Sequência de mensagens humanizadas
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage('⚠️ Importante: As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+              addMessage(`${userData?.responsavelNome || 'Senhor(a)'}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`, 'bot');
               
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage('🎒 Por conta da parceria entre o SBT e Azul, conseguimos incluir o Kit Bagagem que é: uma mala de 23kg + mala de mão + mochila de costa.', 'bot');
+                  addMessage('Antes de finalizar a compra de suas passagens, tenho que te dar um aviso importante.', 'bot');
                   
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage('💰 De R$ 279,90 por apenas R$ 29,90. Você gostaria de adicionar bagagem à sua passagem?', 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('baggage-option');
+                      addMessage('As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas R$ 29,90.', 'bot');
+                          
+                          setTimeout(() => {
+                            setIsTyping(true);
+                            setTimeout(() => {
+                              setIsTyping(false);
+                              addMessage('O kit inclui: mala de 23kg + mala de mão + mochila. É uma oportunidade única! Você gostaria de adicionar?', 'bot');
+                              setShowQuickOptions(true);
+                              setCurrentStep('baggage-option');
+                            }, 4000);
+                          }, 1500);
+                        }, 6000);
+                      }, 1500);
                     }, 4000);
                   }, 1500);
-                }, 6000);
+                }, 4000);
               }, 1500);
-            }, 6000);
+            }, 4000);
           }, 2000);
           
           setTimeout(() => {
