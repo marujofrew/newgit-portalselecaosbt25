@@ -262,34 +262,44 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setTimeout(() => {
             setIsTyping(false);
             let flightInfo = '';
-            if (nearestAirport && flightDate) {
-              const airportName = nearestAirport.name;
-              const airportCode = nearestAirport.code;
-              const date1 = flightDate;
-              
-              // Calcular segunda opção (1 dia depois)
-              const flightDate2 = new Date(flightDate.split('/').reverse().join('-'));
-              flightDate2.setDate(flightDate2.getDate() + 1);
-              const date2 = flightDate2.toLocaleDateString('pt-BR');
-              
-              flightInfo = `✈️ Perfeito! Encontrei duas opções de voos disponíveis:\n\n🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min\n\n🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min\n\nQual opção você prefere?`;
+            // Calcular datas baseadas na data do agendamento
+            let airportName, airportCode, date1, date2;
+            
+            if (nearestAirport) {
+              airportName = nearestAirport.name;
+              airportCode = nearestAirport.code;
             } else {
-              // Usar dados dinâmicos se disponíveis, senão usar fallback baseado na cidade do usuário
               const cityName = userCity || 'São Paulo - SP';
-              const airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
-              const airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
+              airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
+              airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
+            }
+            
+            if (selectedDate) {
+              // Usar data do agendamento selecionada
+              const appointmentDate = new Date(selectedDate);
+              
+              // Opção 1: 2 dias antes do agendamento
+              const flightDate1 = new Date(appointmentDate);
+              flightDate1.setDate(appointmentDate.getDate() - 2);
+              date1 = flightDate1.toLocaleDateString('pt-BR');
+              
+              // Opção 2: 1 dia antes do agendamento
+              const flightDate2 = new Date(appointmentDate);
+              flightDate2.setDate(appointmentDate.getDate() - 1);
+              date2 = flightDate2.toLocaleDateString('pt-BR');
+            } else {
+              // Fallback caso não tenha data selecionada
               const currentDate = new Date();
               const flightDateCalc = new Date(currentDate);
-              flightDateCalc.setDate(currentDate.getDate() + 5); // 5 dias a partir de hoje
-              const date1 = flightDateCalc.toLocaleDateString('pt-BR');
+              flightDateCalc.setDate(currentDate.getDate() + 3);
+              date1 = flightDateCalc.toLocaleDateString('pt-BR');
               
-              // Segunda opção (1 dia depois)
-              const flightDateCalc2 = new Date(flightDateCalc);
-              flightDateCalc2.setDate(flightDateCalc2.getDate() + 1);
-              const date2 = flightDateCalc2.toLocaleDateString('pt-BR');
-              
-              flightInfo = `✈️ Perfeito! Encontrei duas opções de voos disponíveis:\n\n🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min\n\n🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min\n\nQual opção você prefere?`;
+              const flightDateCalc2 = new Date(currentDate);
+              flightDateCalc2.setDate(currentDate.getDate() + 4);
+              date2 = flightDateCalc2.toLocaleDateString('pt-BR');
             }
+            
+            flightInfo = `✈️ Perfeito! Encontrei duas opções de voos disponíveis:\n\n🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min\n\n🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min\n\nQual opção você prefere?`;
             console.log('Enviando mensagem do voo:', flightInfo);
             addMessage(flightInfo, 'bot');
             
