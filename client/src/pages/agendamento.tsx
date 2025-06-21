@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
+import ChatBot from '@/components/ChatBot';
 
 export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
   const [observacoes, setObservacoes] = useState('');
+  const [chatBotOpen, setChatBotOpen] = useState(false);
 
   // Gerar 4 datas disponíveis no próximo mês
   const gerarDatasDisponiveis = () => {
@@ -50,9 +52,7 @@ export default function Agendamento() {
 
   const confirmarAgendamento = () => {
     if (dataSelecionada && horarioSelecionado) {
-      alert('Agendamento confirmado! Você receberá um e-mail com todas as informações.');
-      // Aqui você pode redirecionar para uma página de confirmação
-      window.location.href = '/confirmacao';
+      setChatBotOpen(true);
     }
   };
 
@@ -167,6 +167,12 @@ export default function Agendamento() {
           </div>
         </div>
       </div>
+
+      {/* Chat Bot */}
+      <ChatBot 
+        isOpen={chatBotOpen} 
+        onClose={() => setChatBotOpen(false)} 
+      />
     </main>
   );
 }
