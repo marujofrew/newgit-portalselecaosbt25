@@ -98,7 +98,10 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Seção de custos removida**: Informações sobre custos foram removidas do fluxo de cadastro
 - **Termos com formato compacto**: "Texto... Ver mais" inline para economia de espaço
 - **Página de agendamento criada**: Nova página para seleção de data e horário do teste
-- **Chat bot implementado**: Assistente virtual para organizar passagens e hospedagem após agendamento
+- **Chat bot implementado**: Assistente virtual Rebeca para organizar passagens e hospedagem após agendamento
+- **Sistema de localização**: Captura cidade real do CEP preenchido e usa no chat bot
+- **Opções interativas**: Botões clicáveis para respostas rápidas em todas as perguntas
+- **Indicador de digitação**: Simulação de 4 segundos antes de cada resposta
 - **Fluxo completo**: CEP → Vagas → Responsável → Candidato(s) → Termos → Agendamento → Chat Bot
 
 ## Changelog
