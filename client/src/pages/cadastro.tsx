@@ -104,6 +104,12 @@ export default function Cadastro() {
           
           if (i === steps.length - 1) {
             setCidadeInfo(data);
+            // Salvar dados da cidade no localStorage para o chat bot
+            localStorage.setItem('userCityData', JSON.stringify({
+              cidade: data.localidade,
+              uf: data.uf,
+              estado: data.estado
+            }));
             verificarDisponibilidadeVagas(data);
             setCidadeConsultada(true);
             setLoading(false);

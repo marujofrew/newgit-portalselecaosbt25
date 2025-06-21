@@ -36,8 +36,8 @@ export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
 
   const botResponses = {
     transport: {
-      aviao: `Perfeito! Voo é mais rápido. Vejo que você está em ${userCity || '[CIDADE]'}. Vou buscar os melhores voos saindo desta cidade para São Paulo.`,
-      onibus: `Ótima escolha! Ônibus é confortável. Vejo que você está em ${userCity || '[CIDADE]'}. Vou verificar as rotas disponíveis desta cidade para São Paulo.`
+      aviao: `Perfeito! Voo é mais rápido. Vejo que você está em ${userCity}. Vou buscar os melhores voos saindo desta cidade para São Paulo.`,
+      onibus: `Ótima escolha! Ônibus é confortável. Vejo que você está em ${userCity}. Vou verificar as rotas disponíveis desta cidade para São Paulo.`
     },
     city: {
       response: "Excelente! Agora sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo? O hotel próximo aos estúdios facilita o deslocamento, enquanto o do centro oferece mais opções de lazer."
