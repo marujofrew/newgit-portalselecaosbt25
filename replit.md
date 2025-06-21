@@ -95,7 +95,9 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Sistema de múltiplos candidatos implementado**: Formulário agora suporta de 1 a 5 candidatos com seções dinâmicas
 - **Seção de termos de autorização criada**: 4 termos obrigatórios com design destacado em vermelho/laranja
 - **Notificações de vagas aprimoradas**: Cor azul escuro com 50% opacidade e efeito backdrop-blur
-- **Fluxo completo funcional**: CEP → Vagas → Custos → Responsável → Candidato(s) → Termos
+- **Seção de custos removida**: Informações sobre custos foram removidas do fluxo de cadastro
+- **Termos com formato compacto**: "Texto... Ver mais" inline para economia de espaço
+- **Fluxo simplificado**: CEP → Vagas → Responsável → Candidato(s) → Termos
 
 ## Changelog
 

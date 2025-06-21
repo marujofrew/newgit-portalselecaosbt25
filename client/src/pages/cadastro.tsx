@@ -27,7 +27,7 @@ export default function Cadastro() {
   const [quantidadeVagas, setQuantidadeVagas] = useState(Math.floor(Math.random() * (21 - 16 + 1)) + 16);
   const [loadingStep, setLoadingStep] = useState(0);
   const [showProgressiveData, setShowProgressiveData] = useState<Partial<CepData>>({});
-  const [showCostInfo, setShowCostInfo] = useState(false);
+
   const [showFormulario, setShowFormulario] = useState(false);
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
@@ -422,8 +422,8 @@ export default function Cadastro() {
 
                 <button 
                   onClick={() => {
-                    setShowCostInfo(true);
-                    scrollToSection('cost-info');
+                    setShowFormulario(true);
+                    scrollToSection('formulario-responsavel');
                   }}
                   className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200"
                 >
