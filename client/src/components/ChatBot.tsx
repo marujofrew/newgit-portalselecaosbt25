@@ -201,9 +201,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   <!-- Header - Layout oficial -->
                   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
                     <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 24px; width: auto;" />
-                    <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 600; color: white;">
-                      <span>${new Date().toLocaleDateString('pt-BR')}</span>
-                      <span>2768</span>
+                    <div style="display: flex; align-items: flex-start; gap: 16px; text-align: center;">
+                      <div>
+                        <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">DATA</div>
+                        <div style="font-size: 11px; font-weight: 600; color: white;">${new Date().toLocaleDateString('pt-BR')}</div>
+                      </div>
+                      <div>
+                        <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">VOO</div>
+                        <div style="font-size: 11px; font-weight: 600; color: white;">2768</div>
+                      </div>
                     </div>
                   </div>
                   
@@ -818,9 +824,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         <!-- Header - Layout oficial -->
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
           <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 24px; width: auto;" />
-          <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 600; color: white;">
-            <span>${flightDate.toLocaleDateString('pt-BR')}</span>
-            <span>2768</span>
+          <div style="display: flex; align-items: flex-start; gap: 16px; text-align: center;">
+            <div>
+              <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">DATA</div>
+              <div style="font-size: 11px; font-weight: 600; color: white;">${flightDate.toLocaleDateString('pt-BR')}</div>
+            </div>
+            <div>
+              <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">VOO</div>
+              <div style="font-size: 11px; font-weight: 600; color: white;">2768</div>
+            </div>
           </div>
         </div>
         

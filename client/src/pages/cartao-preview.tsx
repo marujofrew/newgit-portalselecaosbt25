@@ -60,9 +60,15 @@ export default function CartaoPreview() {
             marginBottom: '18px'
           }}>
             <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '24px', width: 'auto' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '11px', fontWeight: '600', color: 'white' }}>
-              <span>07/12/21</span>
-              <span>2768</span>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', textAlign: 'center' }}>
+              <div>
+                <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>DATA</div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>07/12/21</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>VOO</div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>2768</div>
+              </div>
             </div>
           </div>
           
