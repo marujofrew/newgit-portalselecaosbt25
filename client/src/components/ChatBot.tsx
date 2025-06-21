@@ -141,9 +141,11 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
         {/* Header */}
         <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
-              <span className="text-blue-600 font-bold text-sm">SBT</span>
-            </div>
+            <img 
+              src="attached_assets/telemarketing_reproduz_1750494256177.jpg"
+              alt="Assistente"
+              className="w-8 h-8 rounded-full object-cover mr-3"
+            />
             <div>
               <h3 className="font-semibold">Assistente SBT</h3>
               <p className="text-xs text-blue-100">Ajuda com viagem</p>
