@@ -23,23 +23,22 @@ export default function BoardingPassPreview() {
           padding: '24px 24px 20px 24px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{
-              fontSize: '32px',
-              fontWeight: '700',
-              color: '#60a5fa',
-              fontFamily: 'Arial, sans-serif',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              Azul
-              <div style={{
-                width: '24px',
-                height: '20px',
-                background: 'linear-gradient(45deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6)',
-                borderRadius: '4px'
-              }}></div>
-            </div>
+            <img 
+              src="/azul-logo.png" 
+              style={{ height: '40px', width: 'auto', filter: 'brightness(0) invert(1)' }} 
+              alt="Azul"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/azul-logo.svg';
+                target.style.filter = 'none';
+                target.onerror = () => {
+                  target.style.display = 'none';
+                  const fallback = document.createElement('div');
+                  fallback.innerHTML = '<span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>';
+                  target.parentNode?.appendChild(fallback);
+                };
+              }}
+            />
           </div>
           <div style={{
             textAlign: 'right',
