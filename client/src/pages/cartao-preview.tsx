@@ -1,4 +1,25 @@
+import React, { useState, useEffect } from 'react';
+
 export default function CartaoPreview() {
+  const [qrCodeURL, setQrCodeURL] = useState<string>('');
+
+  useEffect(() => {
+    const generateQR = async () => {
+      const { generateQRCode, generateBoardingPassData } = await import('../utils/qrcode');
+      const boardingData = generateBoardingPassData(
+        'PRISCILA BRISIGHELLO',
+        '2768',
+        '1D',
+        '07/12/21',
+        'REC',
+        'GRU'
+      );
+      const qrURL = await generateQRCode(boardingData);
+      setQrCodeURL(qrURL);
+    };
+    
+    generateQR();
+  }, []);
   const samplePassenger = {
     name: "JOÃO SILVA SANTOS",
     seatNumber: "15D"
