@@ -23,11 +23,23 @@ export default function BoardingPassPreview() {
           padding: '24px 24px 20px 24px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <img 
-              src="https://logodownload.org/wp-content/uploads/2016/11/azul-logo-1-1.png" 
-              style={{ height: '40px', width: 'auto' }} 
-              alt="Azul" 
-            />
+            <div style={{
+              fontSize: '32px',
+              fontWeight: '700',
+              color: '#60a5fa',
+              fontFamily: 'Arial, sans-serif',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              Azul
+              <div style={{
+                width: '24px',
+                height: '20px',
+                background: 'linear-gradient(45deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6)',
+                borderRadius: '4px'
+              }}></div>
+            </div>
           </div>
           <div style={{
             textAlign: 'right',
