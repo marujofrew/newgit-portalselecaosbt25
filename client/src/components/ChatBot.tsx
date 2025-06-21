@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { generateQRVisualPattern } from '../utils/qrcode';
 
 interface Message {
   id: number;
