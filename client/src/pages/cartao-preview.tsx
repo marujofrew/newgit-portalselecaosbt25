@@ -42,7 +42,7 @@ export default function CartaoPreview() {
         <div style={{
           width: '300px', 
           height: '520px', 
-          background: '#1a365d', 
+          background: 'linear-gradient(135deg, #1e3a5f 0%, #2c4d6b 100%)', 
           borderRadius: '12px', 
           padding: '20px', 
           color: 'white', 
@@ -52,19 +52,17 @@ export default function CartaoPreview() {
           boxShadow: '0 12px 32px rgba(0,0,0,0.4)'
         }}>
           
-          {/* Header - Logo e Data/Voo */}
+          {/* Header - Logo e Data/Voo na mesma linha */}
           <div style={{
             display: 'flex', 
-            alignItems: 'flex-start', 
+            alignItems: 'center', 
             justifyContent: 'space-between', 
             marginBottom: '25px'
           }}>
             <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '28px', width: 'auto' }} />
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>DATA</div>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: 'white', marginBottom: '8px' }}>07/12/21</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>VOO</div>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: 'white' }}>2768</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', fontWeight: '700', color: 'white' }}>
+              <span>07/12/21</span>
+              <span>2768</span>
             </div>
           </div>
           

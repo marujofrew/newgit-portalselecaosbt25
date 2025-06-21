@@ -196,14 +196,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   </button>
                 </div>
                 
-                <div style="width: 320px; height: 500px; background: linear-gradient(135deg, #003d82 0%, #0052a3 100%); border-radius: 8px; padding: 20px; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+                <div style="width: 300px; height: 520px; background: linear-gradient(135deg, #1e3a5f 0%, #2c4d6b 100%); border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
                   
-                  <!-- PRIMEIRA PARTE: Header com logo e boarding pass -->
-                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px;">
-                    <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 32px; width: auto;" />
-                    <div style="text-align: right;">
-                      <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">BOARDING PASS</div>
-                      <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">CARTÃO DE EMBARQUE</div>
+                  <!-- Header - Logo e Data/Voo na mesma linha -->
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
+                    <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 28px; width: auto;" />
+                    <div style="display: flex; align-items: center; gap: 16px; font-size: 12px; font-weight: 700; color: white;">
+                      <span>${new Date().toLocaleDateString('pt-BR')}</span>
+                      <span>2768</span>
                     </div>
                   </div>
                   
@@ -813,14 +813,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 
     return `
-      <div style="width: 320px; height: 500px; background: linear-gradient(135deg, #003d82 0%, #0052a3 100%); border-radius: 8px; padding: 20px; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+      <div style="width: 300px; height: 520px; background: linear-gradient(135deg, #1e3a5f 0%, #2c4d6b 100%); border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
         
-        <!-- PRIMEIRA PARTE: Header com logo e boarding pass -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px;">
-          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 32px; width: auto;" />
-          <div style="text-align: right;">
-            <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">BOARDING PASS</div>
-            <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">CARTÃO DE EMBARQUE</div>
+        <!-- Header - Logo e Data/Voo na mesma linha -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
+          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 28px; width: auto;" />
+          <div style="display: flex; align-items: center; gap: 16px; font-size: 12px; font-weight: 700; color: white;">
+            <span>${flightDate.toLocaleDateString('pt-BR')}</span>
+            <span>2768</span>
           </div>
         </div>
         
