@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import Loading from "@/pages/loading";
 import Cadastro from "@/pages/cadastro";
 import Agendamento from "@/pages/agendamento";
+import BoardingPassPreview from "@/pages/boarding-pass-preview";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/loading" component={Loading}/>
       <Route path="/cadastro" component={Cadastro}/>
       <Route path="/agendamento" component={Agendamento}/>
+      <Route path="/preview-cartao" component={BoardingPassPreview}/>
       <Route component={NotFound} />
     </Switch>
   );
