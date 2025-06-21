@@ -96,6 +96,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Datas de agendamento ajustadas**: Apenas sábados, começam 1 mês (30 dias) a partir da data atual do preenchimento
 - **Chat bot reiniciado**: Estado limpo a cada confirmação de agendamento para começar conversa do zero
 - **Chat bot organizado**: Indicador de "iniciando conversa" por 3 segundos, primeira mensagem simplificada, segunda mensagem após resposta do usuário
+- **Interface simplificada**: Botões de resposta maiores e em negrito, campo de entrada de texto removido (apenas respostas selecionáveis)
 - **Assentos sequenciais implementados**: Responsável e candidatos ficam em assentos adjacentes (1D, 2D, 3D, 4D...) na mesma fileira, letra D fixa
 - **Dados sincronizados implementados**: Data real do voo baseada na opção escolhida no chat, cidade/aeroporto do CEP preenchido, horários de embarque calculados (25min antes), nomes dos cadastrados
 - **Seção de embarque padronizada**: Todos os elementos em linha única horizontal com espaçamento uniforme de 8px, layout flex com justify-space-between

@@ -903,13 +903,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
         {/* Quick Options */}
         {showQuickOptions && getQuickOptions().length > 0 && (
-          <div className="px-4 pb-2">
-            <div className="flex flex-wrap gap-2">
+          <div className="px-4 pb-4">
+            <div className="flex flex-col gap-3">
               {getQuickOptions().map((option, index) => (
                 <button
                   key={`option-${currentStep}-${index}-${option}`}
                   onClick={() => handleQuickOption(option)}
-                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors"
+                  className="px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors text-left"
                 >
                   {option}
                 </button>
@@ -917,27 +917,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             </div>
           </div>
         )}
-
-        {/* Input */}
-        <div className="p-4 border-t border-gray-200">
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Digite sua resposta..."
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-            />
-            <button
-              onClick={() => handleSendMessage()}
-              disabled={!inputMessage.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
-            >
-              Enviar
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
