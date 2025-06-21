@@ -409,17 +409,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             </div>
           </div>
           <div style="text-align: right; flex: 1;">
-            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 4px; text-transform: uppercase;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 4px; text-transform: uppercase;">SÃO PAULO</div>
             <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1;">GRU</div>
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 20px; margin-bottom: 24px;">
-          <div style="text-align: center;">
+        <div style="display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; gap: 0; padding: 0 20px; margin-bottom: 24px;">
+          <div style="text-align: left;">
             <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">INÍCIO EMBARQUE</div>
             <div style="font-size: 12px; font-weight: 700; color: white;">${boardingTime}</div>
           </div>
-          <div style="text-align: center;">
+          <div style="text-align: left;">
             <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">FIM EMBARQUE</div>
             <div style="font-size: 12px; font-weight: 700; color: white;">${departureTime}</div>
           </div>
