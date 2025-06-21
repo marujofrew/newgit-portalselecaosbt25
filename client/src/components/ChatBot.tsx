@@ -160,7 +160,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'transport':
         return ['Avião', 'Ônibus'];
       case 'flight-confirmation':
-        return ['Opção 1', 'Opção 2'];
+        return ['**Opção 1**', '**Opção 2**'];
       case 'hotel':
         return ['Hotel próximo aos estúdios', 'Hotel no centro'];
       case 'people':
@@ -299,14 +299,39 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               date2 = flightDateCalc2.toLocaleDateString('pt-BR');
             }
             
-            flightInfo = `✈️ Perfeito! Encontrei duas opções de voos disponíveis:\n\n🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min\n\n🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min\n\nQual opção você prefere?`;
-            console.log('Enviando mensagem do voo:', flightInfo);
-            addMessage(flightInfo, 'bot');
+            // Enviar mensagens sequenciais
+            console.log('Enviando mensagens do voo em sequência');
             
-            // Adicionar opções de resposta após alguns segundos
+            // Mensagem 1
+            addMessage('✈️ Perfeito! Encontrei duas opções de voos disponíveis:', 'bot');
+            
+            // Mensagem 2
             setTimeout(() => {
-              setShowQuickOptions(true);
-              setCurrentStep('flight-confirmation');
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                addMessage(`🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+                
+                // Mensagem 3
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    addMessage(`🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
+                    
+                    // Mensagem 4
+                    setTimeout(() => {
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage('Qual opção você prefere?', 'bot');
+                        setShowQuickOptions(true);
+                        setCurrentStep('flight-confirmation');
+                      }, 2000);
+                    }, 1000);
+                  }, 2000);
+                }, 1000);
+              }, 2000);
             }, 1000);
           }, 3000);
         }, 2000);
