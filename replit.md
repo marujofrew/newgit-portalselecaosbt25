@@ -92,6 +92,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## Recent Changes
 
+- **Assentos sequenciais implementados**: Responsável e candidatos ficam em assentos adjacentes (1D, 2D, 3D, 4D...) na mesma fileira, letra D fixa
 - **Dados sincronizados implementados**: Data real do voo baseada na opção escolhida no chat, cidade/aeroporto do CEP preenchido, horários de embarque calculados (25min antes), nomes dos cadastrados
 - **Seção de embarque padronizada**: Todos os elementos em linha única horizontal com espaçamento uniforme de 8px, layout flex com justify-space-between
 - **Layout compacto implementado**: Todas as informações em linha única, fontes reduzidas (8px labels, 12px valores), largura aumentada (400px), bordas menos arredondadas (8px)

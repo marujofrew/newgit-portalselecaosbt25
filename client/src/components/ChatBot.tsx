@@ -278,7 +278,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setIsTyping(true);
       setTimeout(() => {
         setIsTyping(false);
-        const responsavelFile = createBoardingPassFile(responsavelData.nome || 'RESPONSÁVEL', true);
+        const responsavelFile = createBoardingPassFile(responsavelData.nome || 'RESPONSÁVEL', true, 0);
         addMessage(responsavelFile, 'bot');
         
         candidatos.forEach((candidato: any, index: number) => {
@@ -286,7 +286,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              const candidatoFile = createBoardingPassFile(candidato.nome || `CANDIDATO ${index + 1}`, false);
+              const candidatoFile = createBoardingPassFile(candidato.nome || `CANDIDATO ${index + 1}`, false, index + 1);
               addMessage(candidatoFile, 'bot');
             }, 2000);
           }, (index + 1) * 3000);
@@ -295,11 +295,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }, 1000);
   };
 
-  const createBoardingPassFile = (passengerName: string, isAdult: boolean) => {
+  const createBoardingPassFile = (passengerName: string, isAdult: boolean, seatIndex: number) => {
     const passId = `pass-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const seatNumber = `${seatIndex + 1}D`; // 1D, 2D, 3D, 4D...
     
     return `
-      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openBoardingPass && window.openBoardingPass('${passId}', '${passengerName}', ${isAdult})" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openBoardingPass && window.openBoardingPass('${passId}', '${passengerName}', ${isAdult}, '${seatNumber}')" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
             ✈️
@@ -309,7 +310,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               Cartão de Embarque - ${passengerName}
             </div>
             <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
-              Voo AD2768 • ${isAdult ? 'Adulto' : 'Menor'} • Assento 1D
+              Voo AD2768 • ${isAdult ? 'Adulto' : 'Menor'} • Assento ${seatNumber}
             </div>
             <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
               📱 Clique para visualizar e salvar
@@ -325,7 +326,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   const createBoardingPassHTML = (passengerName: string, isAdult: boolean) => {
     // Recuperar dados salvos no localStorage
-    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+    const responsavelInfo = JSON.parse(localStorage.getItem('responsavelData') || '{}');
     const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{}');
     
     // Usar a data específica da opção de voo escolhida pelo usuário
@@ -458,7 +459,20 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
     
     const flightNumber = `AD2768`;
-    const seat = isAdult ? `1A` : `1${String.fromCharCode(66 + Math.floor(Math.random() * 4))}`; // 1B, 1C, 1D, 1E para crianças
+    // Recuperar índice do assento do localStorage ou determinar baseado no nome
+    let seatIndex = 0;
+    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+    const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+    
+    if (passengerName === responsavelInfo.nome) {
+      seatIndex = 0; // Responsável sempre no assento 1D
+    } else {
+      // Encontrar índice do candidato
+      const candidatoIndex = candidatos.findIndex((c: any) => c.nome === passengerName);
+      seatIndex = candidatoIndex >= 0 ? candidatoIndex + 1 : 1;
+    }
+    
+    const seat = `${seatIndex + 1}D`; // 1D, 2D, 3D, 4D...
     const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 
     return `
