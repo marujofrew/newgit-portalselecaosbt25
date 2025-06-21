@@ -28,6 +28,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [flightDate, setFlightDate] = useState<string>('');
   const [lastModalState, setLastModalState] = useState<{type: string, data: any} | null>(null);
   const [conversationStarted, setConversationStarted] = useState(false);
+  const [showPaymentStatus, setShowPaymentStatus] = useState(false);
+  const [paymentTimer, setPaymentTimer] = useState(120);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const botResponses = {
@@ -685,23 +688,28 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   
                   // Aguardando confirmação de pagamento
                   setTimeout(() => {
-                    addMessage(`
-                      <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 16px; margin: 10px 0; text-align: center;">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: #856404;">
-                          <div style="width: 24px; height: 24px; border: 3px solid #ffc107; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                          <span style="font-weight: bold;">Aguardando confirmação do pagamento...</span>
-                        </div>
-                        <style>
-                          @keyframes spin {
-                            0% { transform: rotate(0deg); }
-                            100% { transform: rotate(360deg); }
-                          }
-                        </style>
-                      </div>
-                    `, 'bot');
+                    setShowPaymentStatus(true);
+                    setPaymentTimer(120); // 2 minutos
+                    
+                    // Timer para contar regressivo
+                    const timer = setInterval(() => {
+                      setPaymentTimer((prev) => {
+                        if (prev <= 1) {
+                          clearInterval(timer);
+                          // Após 2 minutos sem pagamento
+                          addMessage("Oi, vamos continuar seu cadastro?", 'bot');
+                          setShowQuickOptions(true);
+                          setCurrentStep('payment-timeout');
+                          return 0;
+                        }
+                        return prev - 1;
+                      });
+                    }, 1000);
                     
                     // Simular confirmação após 10 segundos (será substituído pelo gateway real)
                     setTimeout(() => {
+                      setPaymentConfirmed(true);
+                      clearInterval(timer);
                       addMessage("✅ Seu pagamento foi confirmado! Vamos continuar?", 'bot');
                       setShowQuickOptions(true);
                       setCurrentStep('payment-confirmed');
@@ -719,8 +727,28 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'payment-confirmed':
         if (messageToSend.toLowerCase().includes('sim') && messageToSend.toLowerCase().includes('continuar')) {
-          botResponse = "Perfeito! Agora vamos organizar sua hospedagem.";
+          setShowPaymentStatus(false); // Remove o campo amarelo
+          botResponse = "Estou realizando o pagamento das suas passagens, já te envio o cartão de embarque.";
           nextStep = 'hotel';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Para sua estadia em São Paulo, temos duas opções de hotel:", 'bot');
+              setShowQuickOptions(true);
+              setCurrentStep('hotel');
+            }, 5000);
+          }, 5000);
+        }
+        break;
+
+      case 'payment-timeout':
+        if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('continuar')) {
+          setShowPaymentStatus(false); // Remove o campo amarelo
+          botResponse = "Como não identifiquei o pagamento, irei cancelar o seu adicional de bagagem e finalizar a compra de suas passagens, ok?";
+          nextStep = 'payment-cancelled';
           showOptions = false;
           
           setTimeout(() => {
@@ -1132,6 +1160,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Ok, vou realizar o pagamento e volto rapidamente'];
       case 'payment-confirmed':
         return ['Sim, vamos continuar!'];
+      case 'payment-timeout':
+        return ['Sim, continuar cadastro'];
       case 'flight-confirmation':
         return ['Opção 1', 'Opção 2'];
       case 'hotel':
@@ -1151,27 +1181,41 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg w-full max-w-md h-[600px] flex flex-col">
         {/* Header */}
-        <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <img 
-                src="attached_assets/telemarketing_reproduz_1750494256177.jpg"
-                alt="Rebeca"
-                className="w-10 h-10 rounded-full object-cover mr-3"
-              />
-              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+        <div className="bg-blue-600 text-white rounded-t-lg">
+          <div className="p-4 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <img 
+                  src="attached_assets/telemarketing_reproduz_1750494256177.jpg"
+                  alt="Rebeca"
+                  className="w-10 h-10 rounded-full object-cover mr-3"
+                />
+                <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+              </div>
+              <div>
+                <h3 className="font-semibold">Rebeca - Assistente SBT</h3>
+                <p className="text-xs text-blue-100">Ajuda com viagem</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold">Rebeca - Assistente SBT</h3>
-              <p className="text-xs text-blue-100">Ajuda com viagem</p>
-            </div>
+            <button
+              onClick={onClose}
+              className="text-white hover:text-gray-200 text-xl"
+            >
+              ×
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="text-white hover:text-gray-200 text-xl"
-          >
-            ×
-          </button>
+          
+          {showPaymentStatus && (
+            <div className="bg-yellow-100 border-t-2 border-yellow-400 px-4 py-3 text-yellow-800">
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-yellow-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="font-medium">Aguardando retorno</span>
+              </div>
+              <div className="text-center text-yellow-700 text-sm mt-1">
+                Tempo de inatividade: {Math.floor(paymentTimer / 60)}:{(paymentTimer % 60).toString().padStart(2, '0')}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Messages */}
