@@ -568,7 +568,7 @@ export default function Cadastro() {
                           </div>
                           <div className="ml-3">
                             <h4 className="text-green-800 font-semibold text-sm">
-                              🎉 Você ganhou 50% de desconto na inscrição!
+                              Você ganhou 50% de desconto na inscrição!
                             </h4>
                             <p className="text-green-700 text-xs mt-1">
                               Por trazer {quantidadeCandidatos} candidatos ao teste, você recebe desconto especial na taxa de inscrição.
