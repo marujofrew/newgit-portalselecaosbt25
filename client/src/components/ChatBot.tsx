@@ -64,7 +64,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const modalHTML = `
         <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);">
           <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; position: relative;">
-            <button onclick="window.closeBoardingPass()" style="position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">×</button>
+
             
             <div style="text-align: center; margin-bottom: 20px;">
               <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 18px;">Cartão de Embarque</h2>
@@ -74,11 +74,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             ${createBoardingPassHTML(passengerName, isAdult)}
             
             <div style="text-align: center; margin-top: 20px;">
-              <button onclick="window.saveBoardingPass('${passengerName}', 'AD2768')" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-right: 10px;">
+              <button onclick="window.saveBoardingPass('${passengerName}', 'AD2768')" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
                 💾 Salvar Cartão
-              </button>
-              <button onclick="window.closeBoardingPass()" style="background: #6b7280; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
-                Fechar
               </button>
             </div>
           </div>
