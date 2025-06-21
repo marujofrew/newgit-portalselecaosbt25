@@ -76,27 +76,38 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const restoreState = () => {
     const savedState = localStorage.getItem('chatBotState');
     if (savedState) {
-      const state = JSON.parse(savedState);
-      setMessages(state.messages || []);
-      setCurrentStep(state.currentStep || 'welcome');
-      setShowQuickOptions(state.showQuickOptions || false);
-      setNearestAirport(state.nearestAirport || null);
-      setFlightDate(state.flightDate || '');
-      setLastModalState(state.lastModalState || null);
-      
-      // Se havia um modal aberto, reabrir após um delay
-      if (state.lastModalState && state.lastModalState.type === 'boardingPass') {
-        setTimeout(() => {
-          if ((window as any).openBoardingPass) {
-            (window as any).openBoardingPass(
-              state.lastModalState.data.passId,
-              state.lastModalState.data.passengerName,
-              state.lastModalState.data.isAdult
-            );
-          }
-        }, 1000);
+      try {
+        const state = JSON.parse(savedState);
+        setMessages(state.messages || []);
+        setCurrentStep(state.currentStep || 'welcome');
+        setShowQuickOptions(state.showQuickOptions || false);
+        setNearestAirport(state.nearestAirport || null);
+        setFlightDate(state.flightDate || '');
+        setLastModalState(state.lastModalState || null);
+        
+        console.log('Estado restaurado:', state);
+        
+        // Se havia um modal aberto, reabrir automaticamente
+        if (state.lastModalState && state.lastModalState.type === 'boardingPass') {
+          console.log('Reabrindo modal do cartão de embarque');
+          setTimeout(() => {
+            if ((window as any).openBoardingPass) {
+              (window as any).openBoardingPass(
+                state.lastModalState.data.passId,
+                state.lastModalState.data.passengerName,
+                state.lastModalState.data.isAdult
+              );
+            }
+          }, 500);
+        }
+        
+        return true; // Estado foi restaurado
+      } catch (error) {
+        console.error('Erro ao restaurar estado:', error);
+        return false;
       }
     }
+    return false; // Nenhum estado para restaurar
   };
 
   // Salvar estado automaticamente quando houver mudanças
@@ -195,18 +206,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Calcular aeroporto mais próximo quando o componente abrir
   useEffect(() => {
-    if (isOpen && userData?.cep && !nearestAirport) {
-      findNearestAirportFromCEP();
+    if (isOpen) {
+      // Primeiro, tentar restaurar estado salvo
+      const stateRestored = restoreState();
+      
+      // Se não restaurou estado e há dados do usuário, iniciar conversa
+      if (!stateRestored && userData?.cep && !nearestAirport) {
+        findNearestAirportFromCEP();
+      }
+      
+      // Se não restaurou estado e é primeira vez, iniciar conversa
+      if (!stateRestored && messages.length === 1 && messages[0].text === "Iniciando conversa...") {
+        startInitialConversation();
+      }
     }
+    
     if (selectedDate) {
       calculateFlightDate();
     }
-    
-    // Iniciar conversa quando o chat abrir
-    if (isOpen && messages.length === 1 && messages[0].text === "Iniciando conversa...") {
-      startInitialConversation();
-    }
-  }, [isOpen, userData, selectedDate, messages]);
+  }, [isOpen, userData, selectedDate]);
 
   const startInitialConversation = () => {
     setTimeout(() => {
