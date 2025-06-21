@@ -7,6 +7,7 @@ export default function Agendamento() {
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
   const [observacoes, setObservacoes] = useState('');
   const [chatBotOpen, setChatBotOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   
   // Recuperar dados da cidade do localStorage
   const getUserCity = () => {
@@ -79,7 +80,11 @@ export default function Agendamento() {
 
   const confirmarAgendamento = () => {
     if (dataSelecionada && horarioSelecionado) {
-      setChatBotOpen(true);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setChatBotOpen(true);
+      }, 3000);
     }
   };
 
