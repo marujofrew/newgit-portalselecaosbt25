@@ -380,7 +380,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const ticketCode = `NF2NPC - 94`;
 
     return `
-      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 16px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 320px; height: 520px; overflow: hidden; box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);">
+      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 8px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 400px; height: 520px; overflow: hidden; box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);">
         
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 20px 20px;">
           <div style="display: flex; align-items: center;">
@@ -416,30 +416,30 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 20px; margin-bottom: 24px;">
           <div style="text-align: center;">
-            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">INÍCIO EMBARQUE</div>
-            <div style="font-size: 14px; font-weight: 700; color: white;">${boardingTime}</div>
+            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">INÍCIO EMBARQUE</div>
+            <div style="font-size: 12px; font-weight: 700; color: white;">${boardingTime}</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">FIM EMBARQUE</div>
-            <div style="font-size: 14px; font-weight: 700; color: white;">${departureTime}</div>
+            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">FIM EMBARQUE</div>
+            <div style="font-size: 12px; font-weight: 700; color: white;">${departureTime}</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SEÇÃO</div>
-            <div style="font-size: 14px; font-weight: 700; color: white;">D</div>
+            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">SEÇÃO</div>
+            <div style="font-size: 12px; font-weight: 700; color: white;">D</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">ASSENTO</div>
-            <div style="font-size: 14px; font-weight: 700; color: white;">${seat}</div>
+            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">ASSENTO</div>
+            <div style="font-size: 12px; font-weight: 700; color: white;">${seat}</div>
           </div>
         </div>
         
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 24px;">
-          <div>
-            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">CLIENTE</div>
-            <div style="font-size: 14px; font-weight: 700; color: white;">${passengerName.toUpperCase()}</div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">CLIENTE</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">${passengerName.toUpperCase()}</span>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 14px; font-weight: 700; color: #60a5fa;">
+            <div style="font-size: 12px; font-weight: 700; color: #60a5fa;">
               Diamante
             </div>
           </div>

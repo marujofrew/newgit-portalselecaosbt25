@@ -3,13 +3,13 @@ export default function BoardingPassPreview() {
     return (
       <div style={{
         background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
-        borderRadius: '20px',
+        borderRadius: '8px',
         padding: '0',
         color: 'white',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         margin: '10px auto',
         position: 'relative',
-        width: '320px',
+        width: '400px',
         height: '520px',
         overflow: 'hidden',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
@@ -116,57 +116,53 @@ export default function BoardingPassPreview() {
           display: 'grid',
           gridTemplateColumns: '1fr 1fr 1fr 1fr',
           gap: '0',
-          padding: '0 24px',
-          marginBottom: '32px'
+          padding: '0 20px',
+          marginBottom: '24px'
         }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              fontSize: '11px',
+              fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600',
-              marginBottom: '8px'
+              fontWeight: '600'
             }}>INÍCIO EMBARQUE</div>
             <div style={{
-              fontSize: '18px',
+              fontSize: '12px',
               fontWeight: '700',
               color: 'white'
             }}>12:55</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              fontSize: '11px',
+              fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600',
-              marginBottom: '8px'
+              fontWeight: '600'
             }}>FIM EMBARQUE</div>
             <div style={{
-              fontSize: '18px',
+              fontSize: '12px',
               fontWeight: '700',
               color: 'white'
             }}>13:20</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              fontSize: '11px',
+              fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600',
-              marginBottom: '8px'
+              fontWeight: '600'
             }}>SEÇÃO</div>
             <div style={{
-              fontSize: '18px',
+              fontSize: '12px',
               fontWeight: '700',
               color: 'white'
             }}>D</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              fontSize: '11px',
+              fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600',
-              marginBottom: '8px'
+              fontWeight: '600'
             }}>ASSENTO</div>
             <div style={{
-              fontSize: '18px',
+              fontSize: '12px',
               fontWeight: '700',
               color: 'white'
             }}>1D</div>
@@ -178,25 +174,24 @@ export default function BoardingPassPreview() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '0 24px',
-          marginBottom: '40px'
+          padding: '0 20px',
+          marginBottom: '24px'
         }}>
-          <div>
-            <div style={{
-              fontSize: '11px',
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{
+              fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600',
-              marginBottom: '8px'
-            }}>CLIENTE</div>
-            <div style={{
-              fontSize: '18px',
+              fontWeight: '600'
+            }}>CLIENTE</span>
+            <span style={{
+              fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>PRISCILA BRISIGHELLO</div>
+            }}>PRISCILA BRISIGHELLO</span>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{
-              fontSize: '18px',
+              fontSize: '12px',
               fontWeight: '700',
               color: '#60a5fa'
             }}>
