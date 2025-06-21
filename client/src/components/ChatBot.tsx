@@ -157,6 +157,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (setLastModalState) {
         setLastModalState(null);
       }
+      // Limpar funções de navegação
+      delete (window as any).prevCard;
+      delete (window as any).nextCard;
+      delete (window as any).downloadStackedCards;
     };
 
     (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
@@ -278,23 +282,29 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
     const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
     
+    // Criar array com todos os passageiros
+    const passengers = [];
+    if (responsavelData.nome) {
+      passengers.push({
+        name: responsavelData.nome,
+        type: 'Responsável'
+      });
+    }
+    candidatos.forEach((candidato: any, index: number) => {
+      if (candidato.nome) {
+        passengers.push({
+          name: candidato.nome,
+          type: `Candidato ${index + 1}`
+        });
+      }
+    });
+
     setTimeout(() => {
       setIsTyping(true);
       setTimeout(() => {
         setIsTyping(false);
-        const responsavelFile = createBoardingPassFile(responsavelData.nome || 'RESPONSÁVEL', true, 0);
-        addMessage(responsavelFile, 'bot');
-        
-        candidatos.forEach((candidato: any, index: number) => {
-          setTimeout(() => {
-            setIsTyping(true);
-            setTimeout(() => {
-              setIsTyping(false);
-              const candidatoFile = createBoardingPassFile(candidato.nome || `CANDIDATO ${index + 1}`, false, index + 1);
-              addMessage(candidatoFile, 'bot');
-            }, 2000);
-          }, (index + 1) * 3000);
-        });
+        const unifiedFile = createUnifiedBoardingPassFile(passengers);
+        addMessage(unifiedFile, 'bot');
       }, 2000);
     }, 1000);
   };
@@ -328,7 +338,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     `;
   };
 
-  const createBoardingPassHTML = (passengerName: string, isAdult: boolean) => {
+  const createBoardingPassHTML = (passengerName: string, isAdult: boolean, seatNumber?: string) => {
     // Recuperar dados salvos no localStorage
     const responsavelInfo = JSON.parse(localStorage.getItem('responsavelData') || '{}');
     const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{}');
