@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { generateQRCode, generateBoardingPassData } from '../utils/qrcode';
 
 interface Message {
   id: number;
