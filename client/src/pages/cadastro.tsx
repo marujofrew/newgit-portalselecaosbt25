@@ -568,7 +568,7 @@ export default function Cadastro() {
                           </div>
                           <div className="ml-2">
                             <span className="text-green-800 font-medium text-xs">
-                              50% de desconto na inscrição • {quantidadeCandidatos} candidatos
+                              O SBT oferece 50% de desconto na inscrição • {quantidadeCandidatos} candidatos
                             </span>
                           </div>
                         </div>
