@@ -57,19 +57,19 @@ export default function BoardingPassPreview() {
           padding: '0 24px',
           marginBottom: '32px'
         }}>
-          <div style={{ textAlign: 'left' }}>
+          <div style={{ textAlign: 'center', flex: 1 }}>
             <div style={{
               fontSize: '12px',
               color: '#94a3b8',
               fontWeight: '600',
               marginBottom: '6px'
-            }}>RECIFE</div>
+            }}>GOIÂNIA</div>
             <div style={{
               fontSize: '48px',
               fontWeight: '700',
               letterSpacing: '1px',
               color: 'white'
-            }}>REC</div>
+            }}>GYN</div>
           </div>
           <div style={{
             display: 'flex',
@@ -79,11 +79,12 @@ export default function BoardingPassPreview() {
             height: '60px',
             background: 'rgba(96, 165, 250, 0.1)',
             borderRadius: '50%',
-            margin: '0 20px'
+            margin: '0 20px',
+            flexShrink: 0
           }}>
             <div style={{ fontSize: '24px', color: '#60a5fa' }}>✈</div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div style={{ textAlign: 'center', flex: 1 }}>
             <div style={{
               fontSize: '12px',
               color: '#94a3b8',

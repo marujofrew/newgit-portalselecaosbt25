@@ -342,9 +342,36 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
     }
     
-    const cityName = userCity || 'Goiânia';
-    const originCode = cityName.includes('Goiânia') ? 'REC' : 'REC';
-    const originCity = cityName.includes('Goiânia') ? 'RECIFE' : 'RECIFE';
+    // Usar aeroporto real encontrado pelo sistema
+    let originCode = 'GRU';
+    let originCity = 'SÃO PAULO';
+    
+    if (nearestAirport) {
+      originCode = nearestAirport.code;
+      originCity = nearestAirport.city.toUpperCase();
+    } else if (userCity) {
+      // Mapear cidades para aeroportos reais
+      const cityLower = userCity.toLowerCase();
+      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
+        originCode = 'GYN';
+        originCity = 'GOIÂNIA';
+      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
+        originCode = 'BSB';
+        originCity = 'BRASÍLIA';
+      } else if (cityLower.includes('recife')) {
+        originCode = 'REC';
+        originCity = 'RECIFE';
+      } else if (cityLower.includes('salvador')) {
+        originCode = 'SSA';
+        originCity = 'SALVADOR';
+      } else if (cityLower.includes('belo horizonte')) {
+        originCode = 'CNF';
+        originCity = 'BELO HORIZONTE';
+      } else if (cityLower.includes('rio de janeiro')) {
+        originCode = 'GIG';
+        originCity = 'RIO DE JANEIRO';
+      }
+    }
     
     const boardingTime = '12:55';
     const departureTime = '13:20';
@@ -368,14 +395,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         </div>
         
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 32px;">
-          <div style="text-align: left;">
+          <div style="text-align: center; flex: 1;">
             <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">${originCity}</div>
             <div style="font-size: 48px; font-weight: 700; letter-spacing: 1px; color: white;">${originCode}</div>
           </div>
-          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(96, 165, 250, 0.1); border-radius: 50%; margin: 0 20px;">
+          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(96, 165, 250, 0.1); border-radius: 50%; margin: 0 20px; flex-shrink: 0;">
             <div style="font-size: 24px; color: #60a5fa;">✈</div>
           </div>
-          <div style="text-align: right;">
+          <div style="text-align: center; flex: 1;">
             <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SÃO PAULO - GUARULHOS</div>
             <div style="font-size: 48px; font-weight: 700; letter-spacing: 1px; color: white;">GRU</div>
           </div>
