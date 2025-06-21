@@ -21,20 +21,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Olá! Parabéns pelo agendamento confirmado! 🎉 Agora vou te ajudar com os próximos passos para sua viagem aos estúdios do SBT.",
-      sender: 'bot',
-      timestamp: new Date()
-    },
-    {
-      id: 2,
-      text: "O SBT irá custear suas passagens e hospedagem. Para isso, preciso de algumas informações. Você prefere viajar de avião ou ônibus?",
+      text: "Iniciando conversa...",
       sender: 'bot',
       timestamp: new Date()
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [currentStep, setCurrentStep] = useState('transport');
-  const [showQuickOptions, setShowQuickOptions] = useState(true);
+  const [showQuickOptions, setShowQuickOptions] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
   const [flightDate, setFlightDate] = useState<string>('');
@@ -72,7 +66,45 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (selectedDate) {
       calculateFlightDate();
     }
-  }, [isOpen, userData, selectedDate]);
+    
+    // Iniciar conversa quando o chat abrir
+    if (isOpen && messages.length === 1 && messages[0].text === "Iniciando conversa...") {
+      startInitialConversation();
+    }
+  }, [isOpen, userData, selectedDate, messages]);
+
+  const startInitialConversation = () => {
+    setTimeout(() => {
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        const welcomeMessage: Message = {
+          id: Date.now() + Math.random(),
+          text: "Olá! Parabéns pelo agendamento confirmado! 🎉 Agora vou te ajudar com os próximos passos para sua viagem aos estúdios do SBT.",
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+        
+        // Segunda mensagem após mais alguns segundos
+        setTimeout(() => {
+          setIsTyping(true);
+          const typingTime = Math.floor(Math.random() * 2000) + 2000; // 2-4 segundos
+          setTimeout(() => {
+            setIsTyping(false);
+            const secondMessage: Message = {
+              id: Date.now() + Math.random(),
+              text: "O SBT irá custear suas passagens e hospedagem. Para isso, preciso de algumas informações. Você prefere viajar de avião ou ônibus?",
+              sender: 'bot',
+              timestamp: new Date()
+            };
+            setMessages(prev => [...prev, secondMessage]);
+            setShowQuickOptions(true);
+          }, typingTime);
+        }, 1000);
+      }, Math.floor(Math.random() * 2000) + 2000); // 2-4 segundos
+    }, 2000);
+  };
 
   const findNearestAirportFromCEP = async () => {
     if (!userData?.cep) return;
@@ -147,7 +179,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     setIsTyping(true);
     setShowQuickOptions(false);
     
-    // Processar resposta do bot baseado no step atual com delay de 4 segundos
+    // Processar resposta do bot baseado no step atual com delay variável de 2-4 segundos
+    const typingTime = Math.floor(Math.random() * 2000) + 2000; // 2-4 segundos aleatórios
     setTimeout(() => {
       setIsTyping(false);
       let botResponse = '';
@@ -208,13 +241,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       // Se foi escolhido avião, enviar informação sobre o voo após mais 3 segundos
       if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
         setTimeout(() => {
-          if (nearestAirport && flightDate) {
-            const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
-            addMessage(flightInfo, 'bot');
-          }
-        }, 3000);
+          setIsTyping(true);
+          const flightTypingTime = Math.floor(Math.random() * 2000) + 2000; // 2-4 segundos
+          setTimeout(() => {
+            setIsTyping(false);
+            if (nearestAirport && flightDate) {
+              const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
+              addMessage(flightInfo, 'bot');
+            }
+          }, flightTypingTime);
+        }, 1000);
       }
-    }, 4000);
+    }, typingTime);
 
     setInputMessage('');
   };
