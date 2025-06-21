@@ -92,6 +92,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## Recent Changes
 
+- **Logo oficial da Azul implementada**: Cartões de embarque agora usam a logo oficial fornecida pelo usuário
 - **Sistema de estado persistente implementado**: Chat bot salva automaticamente progresso e restaura posição exata após atualizações
 - **Cartões de embarque redesenhados**: Layout idêntico ao modelo original da Azul com logo oficial, QR codes reais e dados dinâmicos
 - **Modal de cartões como arquivos**: Cartões aparecem como arquivos clicáveis com visualização em modal

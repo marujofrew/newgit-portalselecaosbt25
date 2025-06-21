@@ -24,19 +24,15 @@ export default function BoardingPassPreview() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <img 
-              src="/azul-logo.png" 
-              style={{ height: '40px', width: 'auto', filter: 'brightness(0) invert(1)' }} 
+              src="/azul-logo-oficial.png" 
+              style={{ height: '40px', width: 'auto' }} 
               alt="Azul"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = '/azul-logo.svg';
-                target.style.filter = 'none';
-                target.onerror = () => {
-                  target.style.display = 'none';
-                  const fallback = document.createElement('div');
-                  fallback.innerHTML = '<span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>';
-                  target.parentNode?.appendChild(fallback);
-                };
+                target.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.innerHTML = '<span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>';
+                target.parentNode?.appendChild(fallback);
               }}
             />
           </div>

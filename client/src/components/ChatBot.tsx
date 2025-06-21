@@ -343,7 +343,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 20px 24px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="/azul-logo.png" style="height: 40px; width: auto; filter: brightness(0) invert(1);" alt="Azul" onerror="this.src='/azul-logo.svg'; this.style.filter='none'; this.onerror=function(){this.style.display='none'; this.parentNode.innerHTML='<span style=\\'font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;\\'>Azul</span>';}" />
+            <img src="/azul-logo-oficial.png" style="height: 40px; width: auto;" alt="Azul" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\\'font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;\\'>Azul</span>'" />
           </div>
           <div style="text-align: right; font-size: 12px; color: #94a3b8; line-height: 1.4;">
             <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
