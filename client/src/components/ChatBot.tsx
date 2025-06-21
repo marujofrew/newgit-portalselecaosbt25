@@ -160,7 +160,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'transport':
         return ['Avião', 'Ônibus'];
       case 'flight-confirmation':
-        return ['Sim, confirmar passagens', 'Não, buscar outras opções'];
+        return ['Opção 1', 'Opção 2'];
       case 'hotel':
         return ['Hotel próximo aos estúdios', 'Hotel no centro'];
       case 'people':
@@ -203,15 +203,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           break;
           
         case 'flight-confirmation':
-          if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('confirmar')) {
-            botResponse = "Excelente! Suas passagens foram confirmadas. Você receberá um e-mail em até 24 horas com todos os detalhes do voo. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?";
+          if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
+            botResponse = "Perfeito! Voo da manhã selecionado (08:30). Suas passagens foram confirmadas e você receberá um e-mail em até 24 horas com todos os detalhes. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?";
+            nextStep = 'hotel';
+            showOptions = true;
+          } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
+            botResponse = "Excelente! Voo da tarde selecionado (14:45). Suas passagens foram confirmadas e você receberá um e-mail em até 24 horas com todos os detalhes. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?";
             nextStep = 'hotel';
             showOptions = true;
           } else {
-            botResponse = "Sem problemas! Vou buscar outras opções de voo para você. Por favor, aguarde...";
-            // Poderia implementar lógica para buscar outras opções
-            nextStep = 'city';
-            showOptions = false;
+            botResponse = "Por favor, selecione uma das opções de voo disponíveis.";
+            showOptions = true;
           }
           break;
           
@@ -261,7 +263,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(false);
             let flightInfo = '';
             if (nearestAirport && flightDate) {
-              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nPosso confirmar essas passagens para esse voo?`;
+              const airportName = nearestAirport.name;
+              const airportCode = nearestAirport.code;
+              const date1 = flightDate;
+              
+              // Calcular segunda opção (1 dia depois)
+              const flightDate2 = new Date(flightDate.split('/').reverse().join('-'));
+              flightDate2.setDate(flightDate2.getDate() + 1);
+              const date2 = flightDate2.toLocaleDateString('pt-BR');
+              
+              flightInfo = `✈️ Perfeito! Encontrei duas opções de voos disponíveis:\n\n🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min\n\n🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min\n\nQual opção você prefere?`;
             } else {
               // Usar dados dinâmicos se disponíveis, senão usar fallback baseado na cidade do usuário
               const cityName = userCity || 'São Paulo - SP';
@@ -270,9 +281,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               const currentDate = new Date();
               const flightDateCalc = new Date(currentDate);
               flightDateCalc.setDate(currentDate.getDate() + 5); // 5 dias a partir de hoje
-              const dateString = flightDateCalc.toLocaleDateString('pt-BR');
+              const date1 = flightDateCalc.toLocaleDateString('pt-BR');
               
-              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${airportName} (${airportCode}) com destino a São Paulo no dia ${dateString}. \n\nPosso confirmar essas passagens para esse voo?`;
+              // Segunda opção (1 dia depois)
+              const flightDateCalc2 = new Date(flightDateCalc);
+              flightDateCalc2.setDate(flightDateCalc2.getDate() + 1);
+              const date2 = flightDateCalc2.toLocaleDateString('pt-BR');
+              
+              flightInfo = `✈️ Perfeito! Encontrei duas opções de voos disponíveis:\n\n🔸 **Opção 1:** ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min\n\n🔸 **Opção 2:** ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min\n\nQual opção você prefere?`;
             }
             console.log('Enviando mensagem do voo:', flightInfo);
             addMessage(flightInfo, 'bot');
