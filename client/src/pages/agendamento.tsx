@@ -36,15 +36,50 @@ export default function Agendamento() {
     return null;
   };
 
-  // Gerar 4 datas disponíveis no próximo mês
+  // Gerar datas disponíveis começando a partir de 1 mês da data atual
   const gerarDatasDisponiveis = () => {
+    const datas = [];
+    const hoje = new Date();
+    
+    // Começar exatamente 1 mês (30 dias) a partir de hoje
+    const dataInicio = new Date(hoje);
+    dataInicio.setDate(hoje.getDate() + 30);
+    
+    // Gerar 20 datas disponíveis (apenas dias úteis) a partir da data de início
+    let diasAdicionados = 0;
+    let contador = 0;
+    
+    while (diasAdicionados < 20 && contador < 50) { // Limite de segurança
+      const data = new Date(dataInicio);
+      data.setDate(dataInicio.getDate() + contador);
+      
+      // Só adicionar dias úteis (segunda a sexta)
+      if (data.getDay() !== 0 && data.getDay() !== 6) {
+        datas.push({
+          valor: data.toISOString().split('T')[0],
+          texto: data.toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })
+        });
+        diasAdicionados++;
+      }
+      contador++;
+    }
+    
+    return datas;
+  };
+
+  // Função temporária para manter compatibilidade
+  const gerarDatasDisponiveisOld = () => {
     const datas = [];
     const hoje = new Date();
     const umMesAFrente = new Date(hoje);
     umMesAFrente.setMonth(hoje.getMonth() + 1);
     
-    // Definir 4 datas específicas no próximo mês (espaçadas ao longo do mês)
-    const diasDoMes = [5, 12, 19, 26]; // Dias 5, 12, 19 e 26 do próximo mês
+    const diasDoMes = [5, 12, 19, 26];
     
     diasDoMes.forEach(dia => {
       const data = new Date(umMesAFrente.getFullYear(), umMesAFrente.getMonth(), dia);

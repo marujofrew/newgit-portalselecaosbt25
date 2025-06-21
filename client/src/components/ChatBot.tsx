@@ -240,6 +240,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (!isOpen) {
       setConversationStarted(false);
     }
+    
+    // Configurar função global para gerar cartões
+    if (typeof window !== 'undefined') {
+      window.generateAndShowBoardingPasses = () => {
+        generateBoardingPasses();
+      };
+    }
   }, [isOpen, userData, userCity, selectedDate]);
 
   const findNearestAirportFromCEP = async () => {
