@@ -543,6 +543,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         break;
 
       case 'hotel':
+      case 'hotel-option1':
+      case 'hotel-option2':
         if (messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estúdios')) {
           botResponse = botResponses.hotel.proximos;
         } else if (messageToSend.toLowerCase().includes('centro')) {
