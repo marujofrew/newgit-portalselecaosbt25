@@ -97,7 +97,8 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Notificações de vagas aprimoradas**: Cor azul escuro com 50% opacidade e efeito backdrop-blur
 - **Seção de custos removida**: Informações sobre custos foram removidas do fluxo de cadastro
 - **Termos com formato compacto**: "Texto... Ver mais" inline para economia de espaço
-- **Fluxo simplificado**: CEP → Vagas → Responsável → Candidato(s) → Termos
+- **Página de agendamento criada**: Nova página para seleção de data e horário do teste
+- **Fluxo completo**: CEP → Vagas → Responsável → Candidato(s) → Termos → Agendamento
 
 ## Changelog
 

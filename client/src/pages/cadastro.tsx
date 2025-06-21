@@ -946,6 +946,12 @@ export default function Cadastro() {
                     <div className="mt-6 pt-4 border-t border-gray-200">
                       <button 
                         disabled={!(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)}
+                        onClick={() => {
+                          if (termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem) {
+                            // Redirecionar para página de agendamento
+                            window.location.href = '/agendamento';
+                          }
+                        }}
                         className={`w-full px-4 py-3 rounded-md font-medium transition duration-200 ${
                           (termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)
                             ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -953,7 +959,7 @@ export default function Cadastro() {
                         }`}
                       >
                         {(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)
-                          ? 'Finalizar Cadastro'
+                          ? 'Continuar Cadastro'
                           : 'Aceite todos os termos para continuar'
                         }
                       </button>
