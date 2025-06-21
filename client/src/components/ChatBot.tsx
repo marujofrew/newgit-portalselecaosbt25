@@ -213,9 +213,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Pronto! Suas passagens foram confirmadas. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-                setShowQuickOptions(true);
-                setCurrentStep('hotel');
+                addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
+                
+                // Após alguns segundos, continuar para hospedagem
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+                    setShowQuickOptions(true);
+                    setCurrentStep('hotel');
+                  }, 2000);
+                }, 2000);
               }, 3000);
             }, 2000);
           } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
@@ -228,9 +237,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Pronto! Suas passagens foram confirmadas. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-                setShowQuickOptions(true);
-                setCurrentStep('hotel');
+                addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
+                
+                // Após alguns segundos, continuar para hospedagem
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+                    setShowQuickOptions(true);
+                    setCurrentStep('hotel');
+                  }, 2000);
+                }, 2000);
               }, 3000);
             }, 2000);
           } else {
