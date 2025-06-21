@@ -57,7 +57,7 @@ export default function Agendamento() {
           {/* Header */}
           <div className="text-center mb-8">
             <img 
-              src="/attached_assets/sbt_logo.png" 
+              src="attached_assets/sbt_logo.png" 
               alt="SBT Logo" 
               className="h-16 mx-auto mb-4"
             />
