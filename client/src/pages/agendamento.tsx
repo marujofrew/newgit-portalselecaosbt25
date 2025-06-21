@@ -114,13 +114,22 @@ export default function Agendamento() {
   ];
 
   const confirmarAgendamento = () => {
-    if (dataSelecionada && horarioSelecionado) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setChatBotOpen(true);
-      }, 3000);
+    if (!dataSelecionada || !horarioSelecionado) {
+      alert('Por favor, selecione uma data e horário.');
+      return;
     }
+
+    setLoading(true);
+    
+    // Salvar dados do agendamento
+    localStorage.setItem('selectedDate', dataSelecionada);
+    localStorage.setItem('selectedTime', horarioSelecionado);
+    
+    // Abrir o chat bot imediatamente após confirmação
+    setTimeout(() => {
+      setLoading(false);
+      setChatBotOpen(true);
+    }, 1000);
   };
 
   // Função para scroll automático para o botão de confirmar
