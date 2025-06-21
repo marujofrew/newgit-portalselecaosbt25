@@ -427,9 +427,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 <button
                   key={`option-${currentStep}-${index}-${option}`}
                   onClick={() => handleQuickOption(option)}
-                  className={`px-3 py-2 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors ${
-                    currentStep === 'flight-confirmation' ? 'font-bold' : ''
-                  }`}
+                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors"
                 >
                   {option}
                 </button>
