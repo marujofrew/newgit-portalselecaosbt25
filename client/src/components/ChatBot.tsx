@@ -215,20 +215,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   
                   <!-- SEGUNDA PARTE: Aeroportos e informações principais -->
                   <div style="margin-bottom: 25px;">
-                    <!-- Aeroportos origem e destino -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                      <div style="text-align: left;">
-                        <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">GRU</div>
-                        <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">SÃO PAULO</div>
+                    <!-- Nomes das cidades em uma linha -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                      <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">RECIFE</div>
+                      <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">SAO PAULO - GUARULHOS</div>
+                    </div>
+                    
+                    <!-- Códigos dos aeroportos alinhados -->
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">REC</div>
+                      
+                      <div style="display: flex; align-items: center; justify-content: center; margin: 0 15px;">
+                        <div style="font-size: 20px; color: #60a5fa;">✈</div>
                       </div>
-                      <div style="display: flex; flex-direction: column; align-items: center; flex: 1; margin: 0 20px;">
-                        <div style="font-size: 20px; margin-bottom: 5px;">✈</div>
-                        <div style="font-size: 8px; color: #b3d1ff; font-weight: 500;">DOM 15 DEZ</div>
-                      </div>
-                      <div style="text-align: right;">
-                        <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">GRU</div>
-                        <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">SÃO PAULO</div>
-                      </div>
+                      
+                      <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">GRU</div>
                     </div>
                     
                     <!-- Linha de informações principais - tudo na mesma linha -->
@@ -838,20 +839,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         <!-- SEGUNDA PARTE: Aeroportos e informações principais -->
         <div style="margin-bottom: 25px;">
-          <!-- Aeroportos origem e destino -->
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <div style="text-align: left;">
-              <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">${originCode}</div>
-              <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">${originCity}</div>
+          <!-- Nomes das cidades em uma linha -->
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">${originCity.toUpperCase()}</div>
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">${destinationCity.toUpperCase()}</div>
+          </div>
+          
+          <!-- Códigos dos aeroportos alinhados -->
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">${originCode}</div>
+            
+            <div style="display: flex; align-items: center; justify-content: center; margin: 0 15px;">
+              <div style="font-size: 20px; color: #60a5fa;">✈</div>
             </div>
-            <div style="display: flex; flex-direction: column; align-items: center; flex: 1; margin: 0 20px;">
-              <div style="font-size: 20px; margin-bottom: 5px;">✈</div>
-              <div style="font-size: 8px; color: #b3d1ff; font-weight: 500;">${flightDate.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' }).toUpperCase()}</div>
-            </div>
-            <div style="text-align: right;">
-              <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">GRU</div>
-              <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">SÃO PAULO</div>
-            </div>
+            
+            <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">${destinationCode}</div>
           </div>
           
           <!-- Linha de informações principais - tudo na mesma linha -->

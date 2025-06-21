@@ -74,20 +74,21 @@ export default function CartaoPreview() {
           
           {/* Aeroportos */}
           <div style={{ marginBottom: '25px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>RECIFE</div>
-                <div style={{ fontSize: '56px', fontWeight: '900', lineHeight: '1', color: 'white' }}>REC</div>
-              </div>
+            {/* Nomes das cidades em uma linha */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>RECIFE</div>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>SAO PAULO - GUARULHOS</div>
+            </div>
+            
+            {/* Códigos dos aeroportos alinhados */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>REC</div>
               
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 15px' }}>
                 <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>
               </div>
               
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>SÃO PAULO - GUARULHOS</div>
-                <div style={{ fontSize: '56px', fontWeight: '900', lineHeight: '1', color: 'white' }}>GRU</div>
-              </div>
+              <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>GRU</div>
             </div>
           </div>
           
