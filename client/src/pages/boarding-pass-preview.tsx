@@ -1,6 +1,53 @@
 export default function BoardingPassPreview() {
-  const createBoardingPassHTML = () => {
-    return (
+  // Recuperar dados reais salvos
+  const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{"nome": "PASSAGEIRO EXEMPLO"}');
+  const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{"localidade": "São Paulo"}');
+  const selectedDate = localStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0];
+  
+  // Calcular data do voo (2 dias antes do agendamento por padrão)
+  const appointmentDate = new Date(selectedDate);
+  const flightDate = new Date(appointmentDate);
+  flightDate.setDate(appointmentDate.getDate() - 2);
+  
+  // Horário padrão
+  const flightTime = '13:20';
+  const boardingTime = '12:55';
+  
+  // Determinar aeroporto baseado na cidade
+  let originCode = 'GRU';
+  let originCity = 'SÃO PAULO';
+  
+  if (cidadeInfo.localidade) {
+    const cityLower = cidadeInfo.localidade.toLowerCase();
+    if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
+      originCode = 'GYN';
+      originCity = 'GOIÂNIA';
+    } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
+      originCode = 'BSB';
+      originCity = 'BRASÍLIA';
+    } else if (cityLower.includes('recife')) {
+      originCode = 'REC';
+      originCity = 'RECIFE';
+    } else if (cityLower.includes('salvador')) {
+      originCode = 'SSA';
+      originCity = 'SALVADOR';
+    } else if (cityLower.includes('belo horizonte')) {
+      originCode = 'CNF';
+      originCity = 'BELO HORIZONTE';
+    } else if (cityLower.includes('rio de janeiro')) {
+      originCode = 'GIG';
+      originCity = 'RIO DE JANEIRO';
+    } else {
+      originCity = cidadeInfo.localidade.toUpperCase();
+    }
+  }
+  
+  const passengerName = responsavelData.nome || 'PASSAGEIRO EXEMPLO';
+  const flightNumber = 'AD2768';
+  const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div style={{
         background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
         borderRadius: '8px',
@@ -45,11 +92,11 @@ export default function BoardingPassPreview() {
           }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontWeight: '600', marginBottom: '2px' }}>DATA</div>
-              <div style={{ fontWeight: '700', color: 'white', fontSize: '12px' }}>{new Date().toLocaleDateString('pt-BR')}</div>
+              <div style={{ fontWeight: '700', color: 'white', fontSize: '12px' }}>{flightDate.toLocaleDateString('pt-BR')}</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontWeight: '600', marginBottom: '2px' }}>VOO</div>
-              <div style={{ fontWeight: '700', color: 'white', fontSize: '12px' }}>2768</div>
+              <div style={{ fontWeight: '700', color: 'white', fontSize: '12px' }}>{flightNumber}</div>
             </div>
           </div>
         </div>
@@ -68,13 +115,13 @@ export default function BoardingPassPreview() {
               fontWeight: '600',
               marginBottom: '4px',
               textTransform: 'uppercase'
-            }}>GOIÂNIA</div>
+            }}>{originCity}</div>
             <div style={{
               fontSize: '28px',
               fontWeight: '700',
               color: 'white',
               lineHeight: '1'
-            }}>GYN</div>
+            }}>{originCode}</div>
           </div>
           <div style={{
             display: 'flex',
@@ -190,7 +237,7 @@ export default function BoardingPassPreview() {
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>PRISCILA BRISIGHELLO</span>
+            }}>{passengerName.toUpperCase()}</span>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{
@@ -217,53 +264,31 @@ export default function BoardingPassPreview() {
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
           }}>
             <img 
-              src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=NF2NPC-94-AZUL-PRISCILABRISIGHELLO-2768" 
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${ticketCode}-AZUL-${passengerName.replace(/\s+/g, '')}-${flightNumber}-${flightDate.toLocaleDateString('pt-BR').replace(/\//g, '')}`}
               style={{ width: '160px', height: '160px', display: 'block' }} 
               alt="QR Code" 
             />
           </div>
         </div>
         
-        {/* Código do ticket */}
+        {/* Localizador */}
         <div style={{
           textAlign: 'center',
-          fontSize: '14px',
-          fontWeight: '700',
-          color: '#94a3b8',
-          padding: '0 24px 24px 24px'
+          padding: '0 20px',
+          marginBottom: '16px'
         }}>
-          NF2NPC - 94
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-md mx-auto">
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-          <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">
-            Preview - Cartão de Embarque
-          </h1>
-          <p className="text-gray-600 text-center mb-4">
-            Cartão de embarque com logo oficial da Azul
-          </p>
-        </div>
-        
-        <div className="flex justify-center">
-          {createBoardingPassHTML()}
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-lg mt-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">Características:</h2>
-          <ul className="text-sm text-gray-600 space-y-2">
-            <li>✓ Logo oficial da Azul</li>
-            <li>✓ QR code dinâmico real</li>
-            <li>✓ Design idêntico ao original</li>
-            <li>✓ Dados personalizados do passageiro</li>
-            <li>✓ Gradiente azul escuro profissional</li>
-            <li>✓ Layout responsivo e moderno</li>
-          </ul>
+          <div style={{
+            fontSize: '10px',
+            color: '#94a3b8',
+            fontWeight: '600',
+            marginBottom: '4px'
+          }}>LOCALIZADOR</div>
+          <div style={{
+            fontSize: '14px',
+            fontWeight: '700',
+            color: 'white',
+            letterSpacing: '2px'
+          }}>{ticketCode}</div>
         </div>
       </div>
     </div>

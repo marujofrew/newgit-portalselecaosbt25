@@ -533,8 +533,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="text-align: center; font-size: 12px; font-weight: 700; color: #94a3b8; padding: 0 20px 20px 20px;">
-          ${ticketCode}
+        <div style="text-align: center; padding: 0 20px; margin-bottom: 16px;">
+          <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">LOCALIZADOR</div>
+          <div style="font-size: 14px; font-weight: 700; color: white; letter-spacing: 2px;">${ticketCode}</div>
         </div>
       </div>
     `;
