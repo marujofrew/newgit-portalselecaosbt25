@@ -604,6 +604,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
         break;
 
+      case 'baggage-option':
+        if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
+          botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90. Agora vou mostrar as opções de voo com bagagem incluída:";
+          nextStep = 'flight-confirmation';
+          showOptions = true;
+        } else if (messageToSend.toLowerCase().includes('não') || messageToSend.toLowerCase().includes('nao') || messageToSend.toLowerCase().includes('sem bagagem')) {
+          botResponse = "Entendido! As passagens serão apenas com bagagem de mão. Agora vou mostrar as opções de voo:";
+          nextStep = 'flight-confirmation';
+          showOptions = true;
+        } else {
+          botResponse = "Por favor, escolha se deseja adicionar o kit bagagem ou não.";
+          showOptions = true;
+        }
+        break;
+
       case 'flight-confirmation':
         if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
           // Salvar que foi escolhida a Opção 1 (2 dias antes)
@@ -779,9 +794,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          addMessage('Qual opção você prefere?', 'bot');
-                          setShowQuickOptions(true);
-                          setCurrentStep('flight-confirmation');
+                          addMessage('⚠️ Importante: As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+                          
+                          setTimeout(() => {
+                            setIsTyping(true);
+                            setTimeout(() => {
+                              setIsTyping(false);
+                              addMessage('🎒 Por conta da parceria entre o SBT e Azul, conseguimos incluir o Kit Bagagem que é: uma mala de 23kg + mala de mão + mochila de costa.', 'bot');
+                              
+                              setTimeout(() => {
+                                setIsTyping(true);
+                                setTimeout(() => {
+                                  setIsTyping(false);
+                                  addMessage('💰 De R$ 279,90 por apenas R$ 29,90. Você gostaria de adicionar bagagem à sua passagem?', 'bot');
+                                  setShowQuickOptions(true);
+                                  setCurrentStep('baggage-option');
+                                }, 2000);
+                              }, 1500);
+                            }, 2000);
+                          }, 1500);
                         }, 2000);
                       }, 1000);
                     }, 2000);
@@ -810,6 +841,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     switch (currentStep) {
       case 'transport':
         return ['Avião', 'Ônibus'];
+      case 'baggage-option':
+        return ['Sim, adicionar kit bagagem (R$ 29,90)', 'Não, sem bagagem'];
       case 'flight-confirmation':
         return ['Opção 1', 'Opção 2'];
       case 'hotel':
