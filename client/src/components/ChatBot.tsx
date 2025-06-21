@@ -58,6 +58,42 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    // Adicionar função global para salvar cartões de embarque
+    (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
+      // Criar elemento temporário para download
+      const element = document.createElement('a');
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Cartão de Embarque - ${passengerName}</title>
+          <style>
+            body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+            .boarding-pass { max-width: 400px; margin: 0 auto; }
+          </style>
+        </head>
+        <body>
+          <div class="boarding-pass">
+            ${createBoardingPassHTML(passengerName, true)}
+          </div>
+        </body>
+        </html>
+      `;
+      
+      const file = new Blob([htmlContent], { type: 'text/html' });
+      element.href = URL.createObjectURL(file);
+      element.download = `cartao-embarque-${passengerName.toLowerCase().replace(/\s+/g, '-')}.html`;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    };
+
+    return () => {
+      delete (window as any).saveBoardingPass;
+    };
+  }, []);
+
   // Calcular aeroporto mais próximo quando o componente abrir
   useEffect(() => {
     if (isOpen && userData?.cep && !nearestAirport) {
@@ -139,6 +175,116 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const generateBoardingPasses = () => {
+    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+    const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+    
+    // Gerar cartão do responsável primeiro
+    setTimeout(() => {
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        const responsavelPass = createBoardingPassHTML(responsavelData.nome || 'RESPONSÁVEL', true);
+        addMessage(responsavelPass, 'bot');
+        
+        // Gerar cartões dos candidatos
+        candidatos.forEach((candidato: any, index: number) => {
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              const candidatoPass = createBoardingPassHTML(candidato.nome || `CANDIDATO ${index + 1}`, false);
+              addMessage(candidatoPass, 'bot');
+            }, 2000);
+          }, (index + 1) * 3000);
+        });
+      }, 2000);
+    }, 1000);
+  };
+
+  const createBoardingPassHTML = (passengerName: string, isAdult: boolean) => {
+    const flightDate = selectedDate ? new Date(selectedDate) : new Date();
+    const departureDate = new Date(flightDate);
+    departureDate.setDate(flightDate.getDate() - (currentStep.includes('1') ? 2 : 1));
+    
+    const cityName = userCity || 'Goiânia';
+    const originCode = cityName.includes('Goiânia') ? 'GYN' : 'CGH';
+    const originCity = cityName.includes('Goiânia') ? 'GOIÂNIA' : cityName.split(' - ')[0].toUpperCase();
+    
+    const boardingTime = currentStep.includes('1') ? '12:55' : '14:15';
+    const departureTime = currentStep.includes('1') ? '13:20' : '14:45';
+    const flightNumber = `AD${Math.floor(Math.random() * 1000) + 2000}`;
+    const seat = `${Math.floor(Math.random() * 30) + 1}${String.fromCharCode(65 + Math.floor(Math.random() * 6))}`;
+    const ticketCode = `${Array.from({length: 6}, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join('')}`;
+
+    return `
+      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); border-radius: 12px; padding: 20px; color: white; font-family: 'Segoe UI', sans-serif; margin: 10px 0; position: relative; max-width: 350px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div style="font-size: 24px; font-weight: bold; color: #60a5fa;">Azul ✈</div>
+          <div style="text-align: right; font-size: 12px; opacity: 0.8;">
+            <div>DATA: ${departureDate.toLocaleDateString('pt-BR')}</div>
+            <div>VOO: ${flightNumber}</div>
+          </div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+          <div>
+            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 2px;">${originCity}</div>
+            <div style="font-size: 32px; font-weight: bold;">${originCode}</div>
+          </div>
+          <div style="font-size: 32px; color: #60a5fa;">✈</div>
+          <div style="text-align: right;">
+            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 2px;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 32px; font-weight: bold;">GRU</div>
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; font-size: 12px;">
+          <div>
+            <div style="opacity: 0.8;">INÍCIO EMBARQUE</div>
+            <div style="font-size: 16px; font-weight: bold;">${boardingTime}</div>
+          </div>
+          <div>
+            <div style="opacity: 0.8;">FIM EMBARQUE</div>
+            <div style="font-size: 16px; font-weight: bold;">${departureTime}</div>
+          </div>
+          <div>
+            <div style="opacity: 0.8;">SEÇÃO</div>
+            <div style="font-size: 16px; font-weight: bold;">D</div>
+          </div>
+          <div>
+            <div style="opacity: 0.8;">ASSENTO</div>
+            <div style="font-size: 16px; font-weight: bold;">${seat}</div>
+          </div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+          <div>
+            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 2px;">CLIENTE</div>
+            <div style="font-size: 16px; font-weight: bold;">${passengerName.toUpperCase()}</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="background: #60a5fa; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
+              ${isAdult ? 'Adulto' : 'Menor'}
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: flex; justify-content: center; background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+          <div style="width: 120px; height: 120px; background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ3aGl0ZSIvPgo8cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjI2IiB5PSIxMCIgd2lkdGg9IjgiIGhlaWdodD0iOCIgZmlsbD0iYmxhY2siLz4KPHN2Zz4K') center/contain no-repeat; border: 2px solid #e5e7eb;"></div>
+        </div>
+        
+        <div style="text-align: center; font-size: 12px; font-weight: bold; opacity: 0.8;">
+          ${ticketCode} - ${Math.floor(Math.random() * 100)}
+        </div>
+        
+        <button onclick="window.saveBoardingPass && window.saveBoardingPass('${passengerName}', '${flightNumber}')" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 10px; border-radius: 15px; font-size: 10px; cursor: pointer;">
+          💾 Salvar
+        </button>
+      </div>
+    `;
+  };
+
   const addMessage = (text: string, sender: 'bot' | 'user') => {
     const newMessage: Message = {
       id: Date.now() + Math.random(), // Use timestamp + random to ensure uniqueness
@@ -215,6 +361,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(false);
                 addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
                 
+                // Enviar cartões de embarque
+                setTimeout(() => {
+                  generateBoardingPasses();
+                }, 2000);
+                
                 // Após alguns segundos, continuar para hospedagem
                 setTimeout(() => {
                   setIsTyping(true);
@@ -224,8 +375,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     setShowQuickOptions(true);
                     setCurrentStep('hotel');
                   }, 2000);
-                }, 2000);
-              }, 3000);
+                }, 6000);
+              }, 5000);
             }, 2000);
           } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
             botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
@@ -239,6 +390,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(false);
                 addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
                 
+                // Enviar cartões de embarque
+                setTimeout(() => {
+                  generateBoardingPasses();
+                }, 2000);
+                
                 // Após alguns segundos, continuar para hospedagem
                 setTimeout(() => {
                   setIsTyping(true);
@@ -248,8 +404,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     setShowQuickOptions(true);
                     setCurrentStep('hotel');
                   }, 2000);
-                }, 2000);
-              }, 3000);
+                }, 6000);
+              }, 5000);
             }, 2000);
           } else {
             botResponse = "Por favor, selecione uma das opções de voo disponíveis.";
@@ -432,11 +588,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                <p className="text-sm whitespace-pre-line" dangerouslySetInnerHTML={{
-                  __html: message.text
-                    .replace(/Opção 1:/g, '<strong>Opção 1:</strong>')
-                    .replace(/Opção 2:/g, '<strong>Opção 2:</strong>')
-                }} />
+                {message.text.includes('<div style=') ? (
+                  <div dangerouslySetInnerHTML={{ __html: message.text }} />
+                ) : (
+                  <p className="text-sm whitespace-pre-line" dangerouslySetInnerHTML={{
+                    __html: message.text
+                      .replace(/Opção 1:/g, '<strong>Opção 1:</strong>')
+                      .replace(/Opção 2:/g, '<strong>Opção 2:</strong>')
+                  }} />
+                )}
                 <span className="text-xs opacity-70 mt-1 block">
                   {message.timestamp.toLocaleTimeString('pt-BR', { 
                     hour: '2-digit', 
