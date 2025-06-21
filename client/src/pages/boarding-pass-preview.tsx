@@ -53,20 +53,20 @@ export default function BoardingPassPreview() {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          padding: '0 30px',
-          marginBottom: '40px'
+          padding: '0 24px',
+          marginBottom: '28px'
         }}>
-          <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ textAlign: 'center', width: '100px' }}>
             <div style={{
-              fontSize: '12px',
+              fontSize: '10px',
               color: '#94a3b8',
               fontWeight: '600',
-              marginBottom: '8px'
+              marginBottom: '6px'
             }}>GOIÂNIA</div>
             <div style={{
-              fontSize: '52px',
+              fontSize: '40px',
               fontWeight: '700',
-              letterSpacing: '2px',
+              letterSpacing: '1px',
               color: 'white',
               lineHeight: '1'
             }}>GYN</div>
@@ -76,31 +76,31 @@ export default function BoardingPassPreview() {
             alignItems: 'center',
             justifyContent: 'center',
             flex: 1,
-            margin: '0 30px'
+            margin: '0 20px'
           }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '70px',
-              height: '70px',
+              width: '50px',
+              height: '50px',
               background: 'rgba(96, 165, 250, 0.15)',
               borderRadius: '50%'
             }}>
-              <div style={{ fontSize: '28px', color: '#60a5fa' }}>✈</div>
+              <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>
             </div>
           </div>
-          <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ textAlign: 'center', width: '100px' }}>
             <div style={{
-              fontSize: '12px',
+              fontSize: '10px',
               color: '#94a3b8',
               fontWeight: '600',
-              marginBottom: '8px'
+              marginBottom: '6px'
             }}>SÃO PAULO - GUARULHOS</div>
             <div style={{
-              fontSize: '52px',
+              fontSize: '40px',
               fontWeight: '700',
-              letterSpacing: '2px',
+              letterSpacing: '1px',
               color: 'white',
               lineHeight: '1'
             }}>GRU</div>
@@ -205,18 +205,18 @@ export default function BoardingPassPreview() {
         <div style={{
           display: 'flex',
           justifyContent: 'center',
-          marginBottom: '24px',
-          padding: '0 24px'
+          marginBottom: '16px',
+          padding: '0 20px'
         }}>
           <div style={{
             background: 'white',
-            padding: '24px',
-            borderRadius: '16px',
+            padding: '16px',
+            borderRadius: '12px',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
           }}>
             <img 
-              src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=NF2NPC-94-AZUL-PRISCILABRISIGHELLO-2768" 
-              style={{ width: '160px', height: '160px', display: 'block' }} 
+              src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=NF2NPC-94-AZUL-PRISCILABRISIGHELLO-2768" 
+              style={{ width: '120px', height: '120px', display: 'block' }} 
               alt="QR Code" 
             />
           </div>
@@ -225,10 +225,10 @@ export default function BoardingPassPreview() {
         {/* Código do ticket */}
         <div style={{
           textAlign: 'center',
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: '700',
           color: '#94a3b8',
-          padding: '0 24px 24px 24px'
+          padding: '0 20px 20px 20px'
         }}>
           NF2NPC - 94
         </div>

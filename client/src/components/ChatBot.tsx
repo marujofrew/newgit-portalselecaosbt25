@@ -441,9 +441,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="display: flex; justify-content: center; margin-bottom: 24px; padding: 0 24px;">
-          <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=NF2NPC-94-AZUL-${passengerName.replace(/\s+/g, '')}-${flightNumber}" style="width: 160px; height: 160px; display: block;" alt="QR Code" />
+        <div style="display: flex; justify-content: center; margin-bottom: 16px; padding: 0 20px;">
+          <div style="background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(ticketCode + '-AZUL-' + passengerName.replace(/\s/g, '').toUpperCase() + '-' + flightNumber)}" style="width: 120px; height: 120px; display: block;" alt="QR Code" />
           </div>
         </div>
         
