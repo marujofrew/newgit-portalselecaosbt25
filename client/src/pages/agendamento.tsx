@@ -5,7 +5,7 @@ import ChatBot from '@/components/ChatBot';
 export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
-  const [observacoes, setObservacoes] = useState('');
+
   const [chatBotOpen, setChatBotOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   
@@ -156,7 +156,7 @@ export default function Agendamento() {
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Horário do Teste *
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2 mb-6">
                     {horariosDisponiveis.map((horario) => (
                       <label key={horario.valor} className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-md hover:bg-gray-50">
                         <input
@@ -174,22 +174,34 @@ export default function Agendamento() {
                       </label>
                     ))}
                   </div>
+
+                  {/* Botão Confirmar Agendamento */}
+                  <div className="mb-6">
+                    <button 
+                      id="confirm-button"
+                      onClick={confirmarAgendamento}
+                      disabled={!dataSelecionada || !horarioSelecionado || loading}
+                      className={`w-full px-4 py-3 rounded-md font-medium transition duration-200 flex items-center justify-center ${
+                        (dataSelecionada && horarioSelecionado && !loading)
+                          ? 'bg-blue-600 text-white hover:bg-blue-700'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {loading ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Processando...
+                        </>
+                      ) : (
+                        'Confirmar Agendamento'
+                      )}
+                    </button>
+                  </div>
                 </div>
               )}
-
-              {/* Observações */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Observações (opcional)
-                </label>
-                <textarea
-                  value={observacoes}
-                  onChange={(e) => setObservacoes(e.target.value)}
-                  placeholder="Alguma informação adicional que gostaria de compartilhar..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
-                />
-              </div>
 
               {/* Informações Importantes */}
               <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
@@ -200,32 +212,6 @@ export default function Agendamento() {
                   <li>• O teste terá duração aproximada de 2 horas</li>
                   <li>• Local: Estúdios SBT - Osasco/SP</li>
                 </ul>
-              </div>
-
-              {/* Botão Centralizado */}
-              <div className="pt-6">
-                <button 
-                  id="confirm-button"
-                  onClick={confirmarAgendamento}
-                  disabled={!dataSelecionada || !horarioSelecionado || loading}
-                  className={`w-full px-4 py-3 rounded-md font-medium transition duration-200 flex items-center justify-center ${
-                    (dataSelecionada && horarioSelecionado && !loading)
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Processando...
-                    </>
-                  ) : (
-                    'Confirmar Agendamento'
-                  )}
-                </button>
               </div>
             </div>
           </div>
