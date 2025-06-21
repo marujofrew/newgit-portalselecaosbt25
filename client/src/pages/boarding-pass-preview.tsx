@@ -100,8 +100,9 @@ export default function BoardingPassPreview() {
               color: '#94a3b8',
               fontWeight: '600',
               marginBottom: '4px',
-              textTransform: 'uppercase'
-            }}>SÃO PAULO</div>
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap'
+            }}>SÃO PAULO - GUARULHOS</div>
             <div style={{
               fontSize: '28px',
               fontWeight: '700',
@@ -114,8 +115,8 @@ export default function BoardingPassPreview() {
         {/* Informações de embarque */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '2fr 2fr 1fr 1fr',
-          gap: '0',
+          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+          gap: '20px',
           padding: '0 20px',
           marginBottom: '24px'
         }}>
@@ -143,7 +144,7 @@ export default function BoardingPassPreview() {
               color: 'white'
             }}>13:20</div>
           </div>
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'left' }}>
             <div style={{
               fontSize: '8px',
               color: '#94a3b8',
@@ -155,7 +156,7 @@ export default function BoardingPassPreview() {
               color: 'white'
             }}>D</div>
           </div>
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'left' }}>
             <div style={{
               fontSize: '8px',
               color: '#94a3b8',
