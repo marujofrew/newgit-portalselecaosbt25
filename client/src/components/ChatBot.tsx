@@ -237,16 +237,30 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setCurrentStep(nextStep);
       setShowQuickOptions(showOptions);
       
-      // Se foi escolhido avião, enviar informação sobre o voo
+      // Se foi escolhido avião, enviar informação sobre o voo encontrado
       if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
+        console.log('Avião selecionado, nearestAirport:', nearestAirport, 'flightDate:', flightDate);
         setTimeout(() => {
           setIsTyping(true);
           setTimeout(() => {
             setIsTyping(false);
+            let flightInfo = '';
             if (nearestAirport && flightDate) {
-              const flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
-              addMessage(flightInfo, 'bot');
+              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
+            } else {
+              // Usar dados dinâmicos se disponíveis, senão usar fallback baseado na cidade do usuário
+              const cityName = userCity || 'São Paulo - SP';
+              const airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
+              const airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
+              const currentDate = new Date();
+              const flightDateCalc = new Date(currentDate);
+              flightDateCalc.setDate(currentDate.getDate() + 5); // 5 dias a partir de hoje
+              const dateString = flightDateCalc.toLocaleDateString('pt-BR');
+              
+              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${airportName} (${airportCode}) com destino a São Paulo no dia ${dateString}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
             }
+            console.log('Enviando mensagem do voo:', flightInfo);
+            addMessage(flightInfo, 'bot');
           }, 3000);
         }, 2000);
       }
