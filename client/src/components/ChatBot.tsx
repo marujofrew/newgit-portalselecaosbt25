@@ -59,7 +59,42 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   }, [messages]);
 
   useEffect(() => {
-    // Adicionar função global para salvar cartões de embarque
+    // Adicionar funções globais para os cartões de embarque
+    (window as any).openBoardingPass = (passId: string, passengerName: string, isAdult: boolean) => {
+      const modalHTML = `
+        <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);">
+          <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; position: relative;">
+            <button onclick="window.closeBoardingPass()" style="position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">×</button>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+              <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 18px;">Cartão de Embarque</h2>
+              <p style="color: #64748b; margin: 0; font-size: 14px;">Clique em "Salvar" e aguarde 3 segundos para retornar</p>
+            </div>
+            
+            ${createBoardingPassHTML(passengerName, isAdult)}
+            
+            <div style="text-align: center; margin-top: 20px;">
+              <button onclick="window.saveBoardingPass('${passengerName}', 'AD2768')" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-right: 10px;">
+                💾 Salvar Cartão
+              </button>
+              <button onclick="window.closeBoardingPass()" style="background: #6b7280; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    };
+
+    (window as any).closeBoardingPass = () => {
+      const modal = document.getElementById('boarding-pass-modal');
+      if (modal) {
+        modal.remove();
+      }
+    };
+
     (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
       // Criar elemento temporário para download
       const element = document.createElement('a');
@@ -69,7 +104,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         <head>
           <title>Cartão de Embarque - ${passengerName}</title>
           <style>
-            body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+            body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #f3f4f6; }
             .boarding-pass { max-width: 400px; margin: 0 auto; }
           </style>
         </head>
@@ -87,9 +122,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
+      
+      // Fechar modal automaticamente após 3 segundos
+      setTimeout(() => {
+        (window as any).closeBoardingPass();
+      }, 3000);
     };
 
     return () => {
+      delete (window as any).openBoardingPass;
+      delete (window as any).closeBoardingPass;
       delete (window as any).saveBoardingPass;
     };
   }, []);
@@ -184,8 +226,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setIsTyping(true);
       setTimeout(() => {
         setIsTyping(false);
-        const responsavelPass = createBoardingPassHTML(responsavelData.nome || 'RESPONSÁVEL', true);
-        addMessage(responsavelPass, 'bot');
+        const responsavelFile = createBoardingPassFile(responsavelData.nome || 'RESPONSÁVEL', true);
+        addMessage(responsavelFile, 'bot');
         
         // Gerar cartões dos candidatos
         candidatos.forEach((candidato: any, index: number) => {
@@ -193,13 +235,41 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              const candidatoPass = createBoardingPassHTML(candidato.nome || `CANDIDATO ${index + 1}`, false);
-              addMessage(candidatoPass, 'bot');
+              const candidatoFile = createBoardingPassFile(candidato.nome || `CANDIDATO ${index + 1}`, false);
+              addMessage(candidatoFile, 'bot');
             }, 2000);
           }, (index + 1) * 3000);
         });
       }, 2000);
     }, 1000);
+  };
+
+  const createBoardingPassFile = (passengerName: string, isAdult: boolean) => {
+    const passId = `pass-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    return `
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openBoardingPass && window.openBoardingPass('${passId}', '${passengerName}', ${isAdult})" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
+            ✈️
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
+              Cartão de Embarque - ${passengerName}
+            </div>
+            <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
+              Voo AD2768 • ${isAdult ? 'Adulto' : 'Menor'} • Assento 1D
+            </div>
+            <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
+              📱 Clique para visualizar e salvar
+            </div>
+          </div>
+          <div style="color: #94a3b8; font-size: 18px;">
+            📄
+          </div>
+        </div>
+      </div>
+    `;
   };
 
   const createBoardingPassHTML = (passengerName: string, isAdult: boolean) => {
@@ -291,10 +361,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           ${ticketCode}
         </div>
         
-        <!-- Botão salvar -->
-        <button onclick="window.saveBoardingPass && window.saveBoardingPass('${passengerName}', '${flightNumber}')" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: 600; backdrop-filter: blur(10px);">
-          💾 Salvar
-        </button>
+
       </div>
     `;
   };
