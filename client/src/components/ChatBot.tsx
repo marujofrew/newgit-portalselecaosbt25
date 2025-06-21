@@ -343,8 +343,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 20px 24px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>
-            <div style="width: 24px; height: 20px; background: linear-gradient(45deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6); border-radius: 4px; margin-left: 4px;"></div>
+            <img src="https://logodownload.org/wp-content/uploads/2016/11/azul-logo-1-1.png" style="height: 40px; width: auto;" alt="Azul" />
           </div>
           <div style="text-align: right; font-size: 12px; color: #94a3b8; line-height: 1.4;">
             <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
