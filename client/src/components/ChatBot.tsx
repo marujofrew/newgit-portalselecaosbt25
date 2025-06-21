@@ -78,7 +78,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (savedState) {
       try {
         const state = JSON.parse(savedState);
-        setMessages(state.messages || []);
+        
+        // Converter timestamps de volta para objetos Date
+        const messagesWithDates = (state.messages || []).map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        
+        setMessages(messagesWithDates);
         setCurrentStep(state.currentStep || 'welcome');
         setShowQuickOptions(state.showQuickOptions || false);
         setNearestAirport(state.nearestAirport || null);
