@@ -338,87 +338,88 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const originCode = cityName.includes('Goiânia') ? 'REC' : 'REC';
     const originCity = cityName.includes('Goiânia') ? 'RECIFE' : 'RECIFE';
     
-    const boardingTime = currentStep.includes('1') ? '12:55' : '14:15';
-    const departureTime = currentStep.includes('1') ? '13:20' : '14:45';
+    const boardingTime = '12:55';
+    const departureTime = '13:20';
     const flightNumber = `2768`;
     const seat = `1D`;
     const ticketCode = `NF2NPC - 94`;
 
     return `
-      <div style="background: linear-gradient(180deg, #1a365d 0%, #2d5282 100%); border-radius: 20px; padding: 0; color: white; font-family: system-ui, -apple-system, sans-serif; margin: 10px 0; position: relative; max-width: 320px; min-height: 520px; overflow: hidden;">
+      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 20px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 350px; height: 600px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
         
         <!-- Header com logo e data/voo -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 20px 15px 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 20px 24px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="https://logodownload.org/wp-content/uploads/2016/11/azul-logo-02.png" style="height: 32px; width: auto;" alt="Azul" />
+            <span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>
+            <div style="width: 24px; height: 20px; background: linear-gradient(45deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6); border-radius: 4px; margin-left: 4px;"></div>
           </div>
-          <div style="text-align: right; font-size: 11px; color: #a3bffa; line-height: 1.3;">
-            <div style="font-weight: 600;">DATA</div>
-            <div style="font-weight: 700; color: white;">${departureDate.toLocaleDateString('pt-BR').replace(/\//g, '/')}</div>
-            <div style="font-weight: 600; margin-top: 4px;">VOO</div>
-            <div style="font-weight: 700; color: white;">${flightNumber}</div>
+          <div style="text-align: right; font-size: 12px; color: #94a3b8; line-height: 1.4;">
+            <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
+            <div style="font-weight: 700; color: white; font-size: 14px;">${departureDate.toLocaleDateString('pt-BR')}</div>
+            <div style="font-weight: 600; margin-top: 8px; margin-bottom: 2px;">VOO</div>
+            <div style="font-weight: 700; color: white; font-size: 14px;">${flightNumber}</div>
           </div>
         </div>
         
         <!-- Aeroportos -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 32px;">
           <div style="text-align: left;">
-            <div style="font-size: 11px; color: #a3bffa; font-weight: 600; margin-bottom: 4px;">${originCity}</div>
-            <div style="font-size: 36px; font-weight: 700; letter-spacing: 2px;">${originCode}</div>
+            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">${originCity}</div>
+            <div style="font-size: 48px; font-weight: 700; letter-spacing: 1px; color: white;">${originCode}</div>
           </div>
-          <div style="font-size: 28px; color: #60a5fa; margin: 0 15px;">✈</div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(96, 165, 250, 0.1); border-radius: 50%; margin: 0 20px;">
+            <div style="font-size: 24px; color: #60a5fa;">✈</div>
+          </div>
           <div style="text-align: right;">
-            <div style="font-size: 11px; color: #a3bffa; font-weight: 600; margin-bottom: 4px;">SÃO PAULO - GUARULHOS</div>
-            <div style="font-size: 36px; font-weight: 700; letter-spacing: 2px;">GRU</div>
+            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 48px; font-weight: 700; letter-spacing: 1px; color: white;">GRU</div>
           </div>
         </div>
         
         <!-- Informações de embarque -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 20px; margin-bottom: 25px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 24px; margin-bottom: 32px;">
           <div style="text-align: center;">
-            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">INÍCIO EMBARQUE</div>
-            <div style="font-size: 16px; font-weight: 700;">${boardingTime}</div>
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">INÍCIO EMBARQUE</div>
+            <div style="font-size: 18px; font-weight: 700; color: white;">${boardingTime}</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">FIM EMBARQUE</div>
-            <div style="font-size: 16px; font-weight: 700;">${departureTime}</div>
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">FIM EMBARQUE</div>
+            <div style="font-size: 18px; font-weight: 700; color: white;">${departureTime}</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">SEÇÃO</div>
-            <div style="font-size: 16px; font-weight: 700;">D</div>
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">SEÇÃO</div>
+            <div style="font-size: 18px; font-weight: 700; color: white;">D</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">ASSENTO</div>
-            <div style="font-size: 16px; font-weight: 700;">${seat}</div>
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">ASSENTO</div>
+            <div style="font-size: 18px; font-weight: 700; color: white;">${seat}</div>
           </div>
         </div>
         
         <!-- Cliente e categoria -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 40px;">
           <div>
-            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">CLIENTE</div>
-            <div style="font-size: 16px; font-weight: 700;">${passengerName.toUpperCase()}</div>
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">CLIENTE</div>
+            <div style="font-size: 18px; font-weight: 700; color: white;">${passengerName.toUpperCase()}</div>
           </div>
           <div style="text-align: right;">
-            <div style="background: transparent; color: #60a5fa; font-size: 16px; font-weight: 700;">
+            <div style="font-size: 18px; font-weight: 700; color: #60a5fa;">
               Diamante
             </div>
           </div>
         </div>
         
-        <!-- QR Code -->
-        <div style="display: flex; justify-content: center; margin-bottom: 20px; padding: 0 20px;">
-          <div style="background: white; padding: 20px; border-radius: 12px; display: inline-flex;">
-            <div style="width: 140px; height: 140px; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23fff%22/%3E%3Cg fill=%22%23000%22%3E%3Crect x=%225%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2215%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2215%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2245%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2245%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3C/g%3E%3C/svg%3E'); background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
+        <!-- QR Code com fundo branco -->
+        <div style="display: flex; justify-content: center; margin-bottom: 24px; padding: 0 24px;">
+          <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=NF2NPC-94-AZUL-${passengerName.replace(/\s+/g, '')}-${flightNumber}" style="width: 160px; height: 160px; display: block;" alt="QR Code" />
           </div>
         </div>
         
         <!-- Código do ticket -->
-        <div style="text-align: center; font-size: 12px; font-weight: 700; color: #a3bffa; padding: 0 20px 25px 20px;">
+        <div style="text-align: center; font-size: 14px; font-weight: 700; color: #94a3b8; padding: 0 24px 24px 24px;">
           ${ticketCode}
         </div>
-        
-
       </div>
     `;
   };
