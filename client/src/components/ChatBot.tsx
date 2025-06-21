@@ -672,25 +672,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas R$ 29,90.', 'bot');
+                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas <strong>R$ 29,90</strong>.', 'bot');
                           
                           setTimeout(() => {
                             setIsTyping(true);
                             setTimeout(() => {
                               setIsTyping(false);
-                              addMessage('O kit inclui: mala de 23kg + mala de mão + mochila. É uma oportunidade única! Você gostaria de adicionar?', 'bot');
+                              addMessage('O kit inclui: bagagem de 23kg + bagagem de mão + mochila. Você gostaria de adicionar?', 'bot');
                               setShowQuickOptions(true);
                               setCurrentStep('baggage-option');
-                            }, 4000);
-                          }, 1500);
-                        }, 6000);
-                      }, 1500);
-                    }, 4000);
-                  }, 1500);
-                }, 4000);
-              }, 1500);
-            }, 4000);
-          }, 2000);
+                            }, 5000);
+                          }, 5000);
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
         } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
           // Salvar que foi escolhida a Opção 2 (1 dia antes)
           setCurrentStep('baggage-option');
@@ -698,7 +698,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           nextStep = 'baggage-option';
           showOptions = false;
           
-          // Sequência de mensagens humanizadas
+          // Sequência de mensagens humanizadas - Opção 2
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
@@ -721,25 +721,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas R$ 29,90.', 'bot');
+                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas <strong>R$ 29,90</strong>.', 'bot');
                           
                           setTimeout(() => {
                             setIsTyping(true);
                             setTimeout(() => {
                               setIsTyping(false);
-                              addMessage('O kit inclui: mala de 23kg + mala de mão + mochila. É uma oportunidade única! Você gostaria de adicionar?', 'bot');
+                              addMessage('O kit inclui: bagagem de 23kg + bagagem de mão + mochila. Você gostaria de adicionar?', 'bot');
                               setShowQuickOptions(true);
                               setCurrentStep('baggage-option');
-                            }, 4000);
-                          }, 1500);
-                        }, 6000);
-                      }, 1500);
-                    }, 4000);
-                  }, 1500);
-                }, 4000);
-              }, 1500);
-            }, 4000);
-          }, 2000);
+                            }, 5000);
+                          }, 5000);
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
           
           setTimeout(() => {
             setIsTyping(true);
