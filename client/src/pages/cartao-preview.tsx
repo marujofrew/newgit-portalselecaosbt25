@@ -42,7 +42,7 @@ export default function CartaoPreview() {
         <div style={{
           width: '300px', 
           height: '520px', 
-          background: 'linear-gradient(135deg, #1e3a5f 0%, #2c4d6b 100%)', 
+          background: '#003d82', 
           borderRadius: '12px', 
           padding: '20px', 
           color: 'white', 
