@@ -58,20 +58,20 @@ export default function BoardingPassPreview() {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          padding: '0 30px',
-          marginBottom: '40px'
+          padding: '0 20px',
+          marginBottom: '24px'
         }}>
-          <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ textAlign: 'left', flex: 1 }}>
             <div style={{
-              fontSize: '12px',
+              fontSize: '10px',
               color: '#94a3b8',
               fontWeight: '600',
-              marginBottom: '8px'
+              marginBottom: '4px',
+              textTransform: 'uppercase'
             }}>GOIÂNIA</div>
             <div style={{
-              fontSize: '52px',
+              fontSize: '28px',
               fontWeight: '700',
-              letterSpacing: '2px',
               color: 'white',
               lineHeight: '1'
             }}>GYN</div>
@@ -80,32 +80,31 @@ export default function BoardingPassPreview() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flex: 1,
             margin: '0 30px'
           }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '70px',
-              height: '70px',
+              width: '40px',
+              height: '40px',
               background: 'rgba(96, 165, 250, 0.15)',
               borderRadius: '50%'
             }}>
-              <div style={{ fontSize: '28px', color: '#60a5fa' }}>✈</div>
+              <div style={{ fontSize: '16px', color: '#60a5fa' }}>✈</div>
             </div>
           </div>
-          <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ textAlign: 'right', flex: 1 }}>
             <div style={{
-              fontSize: '12px',
+              fontSize: '10px',
               color: '#94a3b8',
               fontWeight: '600',
-              marginBottom: '8px'
+              marginBottom: '4px',
+              textTransform: 'uppercase'
             }}>SÃO PAULO - GUARULHOS</div>
             <div style={{
-              fontSize: '52px',
+              fontSize: '28px',
               fontWeight: '700',
-              letterSpacing: '2px',
               color: 'white',
               lineHeight: '1'
             }}>GRU</div>

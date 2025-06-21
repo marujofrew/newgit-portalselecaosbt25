@@ -398,19 +398,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="display: flex; align-items: center; padding: 0 24px; margin-bottom: 28px;">
-          <div style="text-align: center; width: 100px;">
-            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">${originCity}</div>
-            <div style="font-size: 40px; font-weight: 700; letter-spacing: 1px; color: white; line-height: 1;">${originCode}</div>
+        <div style="display: flex; align-items: center; padding: 0 20px; margin-bottom: 24px;">
+          <div style="text-align: left; flex: 1;">
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 4px; text-transform: uppercase;">${originCity}</div>
+            <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1;">${originCode}</div>
           </div>
-          <div style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 20px;">
-            <div style="display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: rgba(96, 165, 250, 0.15); border-radius: 50%;">
-              <div style="font-size: 20px; color: #60a5fa;">✈</div>
+          <div style="display: flex; align-items: center; justify-content: center; margin: 0 30px;">
+            <div style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(96, 165, 250, 0.15); border-radius: 50%;">
+              <div style="font-size: 16px; color: #60a5fa;">✈</div>
             </div>
           </div>
-          <div style="text-align: center; width: 100px;">
-            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SÃO PAULO - GUARULHOS</div>
-            <div style="font-size: 40px; font-weight: 700; letter-spacing: 1px; color: white; line-height: 1;">GRU</div>
+          <div style="text-align: right; flex: 1;">
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 4px; text-transform: uppercase;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 28px; font-weight: 700; color: white; line-height: 1;">GRU</div>
           </div>
         </div>
         
