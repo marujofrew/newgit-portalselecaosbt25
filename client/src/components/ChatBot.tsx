@@ -29,6 +29,7 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [currentStep, setCurrentStep] = useState('transport');
+  const [showQuickOptions, setShowQuickOptions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const botResponses = {
@@ -69,10 +70,30 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
     setMessages(prev => [...prev, newMessage]);
   };
 
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const handleQuickOption = (option: string) => {
+    setInputMessage(option);
+    setShowQuickOptions(false);
+    handleSendMessage(option);
+  };
 
-    addMessage(inputMessage, 'user');
+  const getQuickOptions = () => {
+    switch (currentStep) {
+      case 'transport':
+        return ['Avião', 'Ônibus'];
+      case 'hotel':
+        return ['Hotel próximo aos estúdios', 'Hotel no centro'];
+      case 'final':
+        return ['Não tenho restrições', 'Tenho restrições alimentares'];
+      default:
+        return [];
+    }
+  };
+
+  const handleSendMessage = (message?: string) => {
+    const messageToSend = message || inputMessage;
+    if (!messageToSend.trim()) return;
+
+    addMessage(messageToSend, 'user');
     
     // Processar resposta do bot baseado no step atual
     setTimeout(() => {
@@ -80,43 +101,50 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
       
       switch (currentStep) {
         case 'transport':
-          if (inputMessage.toLowerCase().includes('aviao') || inputMessage.toLowerCase().includes('avião')) {
+          if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
             botResponse = botResponses.transport.aviao;
-          } else if (inputMessage.toLowerCase().includes('onibus') || inputMessage.toLowerCase().includes('ônibus')) {
-            botResponse = botResponses.transport.onibus;
-          } else {
-            botResponse = "Por favor, escolha entre 'avião' ou 'ônibus' para que eu possa te ajudar melhor.";
-          }
-          if (botResponse !== "Por favor, escolha entre 'avião' ou 'ônibus' para que eu possa te ajudar melhor.") {
             setCurrentStep('city');
+            setShowQuickOptions(false);
+          } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
+            botResponse = botResponses.transport.onibus;
+            setCurrentStep('city');
+            setShowQuickOptions(false);
+          } else {
+            botResponse = "Por favor, escolha uma das opções acima para que eu possa te ajudar melhor.";
+            setShowQuickOptions(true);
           }
           break;
           
         case 'city':
           botResponse = botResponses.city.response;
           setCurrentStep('hotel');
+          setShowQuickOptions(true);
           break;
           
         case 'hotel':
-          if (inputMessage.toLowerCase().includes('proximo') || inputMessage.toLowerCase().includes('próximo') || inputMessage.toLowerCase().includes('estudio')) {
+          if (messageToSend.toLowerCase().includes('proximo') || messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estudio')) {
             botResponse = botResponses.hotel.proximo;
-          } else if (inputMessage.toLowerCase().includes('centro')) {
-            botResponse = botResponses.hotel.centro;
-          } else {
-            botResponse = "Por favor, escolha entre 'hotel próximo aos estúdios' ou 'hotel no centro'.";
-          }
-          if (botResponse !== "Por favor, escolha entre 'hotel próximo aos estúdios' ou 'hotel no centro'.") {
             setCurrentStep('people');
+            setShowQuickOptions(false);
+          } else if (messageToSend.toLowerCase().includes('centro')) {
+            botResponse = botResponses.hotel.centro;
+            setCurrentStep('people');
+            setShowQuickOptions(false);
+          } else {
+            botResponse = "Por favor, escolha uma das opções acima.";
+            setShowQuickOptions(true);
           }
           break;
           
         case 'people':
           botResponse = botResponses.people.response;
           setCurrentStep('final');
+          setShowQuickOptions(true);
           break;
           
         case 'final':
           botResponse = botResponses.final.response;
+          setShowQuickOptions(false);
           break;
       }
       
@@ -189,6 +217,23 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Quick Options */}
+        {showQuickOptions && getQuickOptions().length > 0 && (
+          <div className="px-4 pb-2">
+            <div className="flex flex-wrap gap-2">
+              {getQuickOptions().map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleQuickOption(option)}
+                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors"
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Input */}
         <div className="p-4 border-t border-gray-200">
           <div className="flex space-x-2">
@@ -201,7 +246,7 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
               className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
             <button
-              onClick={handleSendMessage}
+              onClick={() => handleSendMessage()}
               disabled={!inputMessage.trim()}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
             >
