@@ -149,18 +149,12 @@ export default function Agendamento() {
                 </ul>
               </div>
 
-              {/* Botões */}
-              <div className="flex space-x-4 pt-4">
-                <Link href="/cadastro" className="flex-1">
-                  <button className="w-full px-4 py-3 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-200 font-medium">
-                    Voltar
-                  </button>
-                </Link>
-                
+              {/* Botão Centralizado */}
+              <div className="pt-6">
                 <button 
                   onClick={confirmarAgendamento}
                   disabled={!dataSelecionada || !horarioSelecionado}
-                  className={`flex-1 px-4 py-3 rounded-md font-medium transition duration-200 ${
+                  className={`w-full px-4 py-3 rounded-md font-medium transition duration-200 ${
                     (dataSelecionada && horarioSelecionado)
                       ? 'bg-blue-600 text-white hover:bg-blue-700'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
