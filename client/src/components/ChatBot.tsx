@@ -287,28 +287,61 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const generateBoardingPasses = () => {
-    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-    const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-    
-    // Criar array com todos os passageiros
+    // Usar userData que já está disponível no componente
     const passengers = [];
-    if (responsavelData.nome) {
+    
+    if (userData?.responsavelNome) {
       passengers.push({
-        name: responsavelData.nome,
+        name: userData.responsavelNome,
         type: 'Responsável'
       });
     }
-    candidatos.forEach((candidato: any, index: number) => {
-      if (candidato.nome) {
+    
+    if (userData?.candidatos) {
+      userData.candidatos.forEach((candidato: any, index: number) => {
+        if (candidato.nome) {
+          passengers.push({
+            name: candidato.nome,
+            type: `Candidato ${index + 1}`
+          });
+        }
+      });
+    }
+
+    // Se não encontrar no userData, tentar localStorage
+    if (passengers.length === 0) {
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+      
+      if (responsavelData.nome) {
         passengers.push({
-          name: candidato.nome,
-          type: `Candidato ${index + 1}`
+          name: responsavelData.nome,
+          type: 'Responsável'
         });
       }
-    });
+      
+      candidatos.forEach((candidato: any, index: number) => {
+        if (candidato.nome) {
+          passengers.push({
+            name: candidato.nome,
+            type: `Candidato ${index + 1}`
+          });
+        }
+      });
+    }
+
+    console.log('Generating boarding passes for:', passengers);
 
     if (passengers.length > 0) {
       const unifiedFile = createUnifiedBoardingPassFile(passengers);
+      addMessage(unifiedFile, 'bot');
+    } else {
+      // Fallback com dados de exemplo se não encontrar nenhum
+      const fallbackPassengers = [
+        { name: 'RESPONSÁVEL EXEMPLO', type: 'Responsável' },
+        { name: 'CANDIDATO EXEMPLO', type: 'Candidato 1' }
+      ];
+      const unifiedFile = createUnifiedBoardingPassFile(fallbackPassengers);
       addMessage(unifiedFile, 'bot');
     }
   };
