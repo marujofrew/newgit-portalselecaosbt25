@@ -199,17 +199,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 <div style="width: 300px; height: 520px; background: #001f3f; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
                   
                   <!-- Header - Layout oficial -->
-                  <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;">
-                    <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 32px; width: auto;" />
-                    <div style="text-align: right; font-size: 11px; color: #94a3b8;">
-                      <div style="margin-bottom: 8px;">
-                        <div style="font-size: 11px; color: #94a3b8; font-weight: 500;">DATA</div>
-                        <div style="font-size: 12px; font-weight: 700; color: white;">${new Date().toLocaleDateString('pt-BR')}</div>
-                      </div>
-                      <div>
-                        <div style="font-size: 11px; color: #94a3b8; font-weight: 500;">VOO</div>
-                        <div style="font-size: 12px; font-weight: 700; color: white;">2768</div>
-                      </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                    <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 24px; width: auto;" />
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 600; color: white;">
+                      <span>${new Date().toLocaleDateString('pt-BR')}</span>
+                      <span>2768</span>
                     </div>
                   </div>
                   
@@ -822,17 +816,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       <div style="width: 300px; height: 520px; background: #001f3f; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
         
         <!-- Header - Layout oficial -->
-        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;">
-          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 32px; width: auto;" />
-          <div style="text-align: right; font-size: 11px; color: #94a3b8;">
-            <div style="margin-bottom: 8px;">
-              <div style="font-size: 11px; color: #94a3b8; font-weight: 500;">DATA</div>
-              <div style="font-size: 12px; font-weight: 700; color: white;">${flightDate.toLocaleDateString('pt-BR')}</div>
-            </div>
-            <div>
-              <div style="font-size: 11px; color: #94a3b8; font-weight: 500;">VOO</div>
-              <div style="font-size: 12px; font-weight: 700; color: white;">2768</div>
-            </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 24px; width: auto;" />
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 600; color: white;">
+            <span>${flightDate.toLocaleDateString('pt-BR')}</span>
+            <span>2768</span>
           </div>
         </div>
         

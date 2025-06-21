@@ -55,20 +55,14 @@ export default function CartaoPreview() {
           {/* Header - Layout oficial */}
           <div style={{
             display: 'flex', 
-            alignItems: 'flex-start', 
+            alignItems: 'center', 
             justifyContent: 'space-between', 
-            marginBottom: '20px'
+            marginBottom: '18px'
           }}>
-            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '32px', width: 'auto' }} />
-            <div style={{ textAlign: 'right', fontSize: '11px', color: '#94a3b8' }}>
-              <div style={{ marginBottom: '8px' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>DATA</div>
-                <div style={{ fontSize: '12px', fontWeight: '700', color: 'white' }}>07/12/21</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>VOO</div>
-                <div style={{ fontSize: '12px', fontWeight: '700', color: 'white' }}>2768</div>
-              </div>
+            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '24px', width: 'auto' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '11px', fontWeight: '600', color: 'white' }}>
+              <span>07/12/21</span>
+              <span>2768</span>
             </div>
           </div>
           
