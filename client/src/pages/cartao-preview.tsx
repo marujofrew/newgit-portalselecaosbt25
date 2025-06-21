@@ -38,155 +38,123 @@ export default function CartaoPreview() {
           Layout baseado no modelo oficial da Azul conforme prints fornecidos
         </p>
         
-        {/* Cartão de embarque */}
+        {/* Cartão de embarque - Modelo Oficial Azul */}
         <div style={{
-          width: '320px', 
-          height: '500px', 
-          background: 'linear-gradient(135deg, #003d82 0%, #0052a3 100%)', 
-          borderRadius: '8px', 
+          width: '300px', 
+          height: '520px', 
+          background: '#1a365d', 
+          borderRadius: '12px', 
           padding: '20px', 
           color: 'white', 
-          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+          fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif", 
           position: 'relative', 
           margin: '0 auto', 
-          boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
+          boxShadow: '0 12px 32px rgba(0,0,0,0.4)'
         }}>
           
-          {/* PRIMEIRA PARTE: Header com logo e boarding pass */}
+          {/* Header - Logo e Data/Voo */}
           <div style={{
             display: 'flex', 
-            alignItems: 'center', 
+            alignItems: 'flex-start', 
             justifyContent: 'space-between', 
-            marginBottom: '20px', 
-            borderBottom: '1px solid rgba(255,255,255,0.2)', 
-            paddingBottom: '15px'
+            marginBottom: '25px'
           }}>
-            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '32px', width: 'auto' }} />
+            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '28px', width: 'auto' }} />
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '9px', color: '#b3d1ff', letterSpacing: '0.5px', fontWeight: '500' }}>BOARDING PASS</div>
-              <div style={{ fontSize: '9px', color: '#b3d1ff', letterSpacing: '0.5px', fontWeight: '500' }}>CARTÃO DE EMBARQUE</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>DATA</div>
+              <div style={{ fontSize: '12px', fontWeight: '700', color: 'white', marginBottom: '8px' }}>07/12/21</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500' }}>VOO</div>
+              <div style={{ fontSize: '12px', fontWeight: '700', color: 'white' }}>2768</div>
             </div>
           </div>
           
-          {/* SEGUNDA PARTE: Aeroportos e informações principais */}
-          <div style={{ marginBottom: '25px' }}>
-            {/* Aeroportos origem e destino */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+          {/* Aeroportos */}
+          <div style={{ marginBottom: '30px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '36px', fontWeight: 'bold', lineHeight: '1', marginBottom: '2px' }}>{originCode}</div>
-                <div style={{ fontSize: '10px', color: '#b3d1ff', fontWeight: '500' }}>{originCity}</div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>RECIFE</div>
+                <div style={{ fontSize: '48px', fontWeight: '700', lineHeight: '1', color: 'white' }}>REC</div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1', margin: '0 20px' }}>
-                <div style={{ fontSize: '20px', marginBottom: '5px' }}>✈</div>
-                <div style={{ fontSize: '8px', color: '#b3d1ff', fontWeight: '500' }}>
-                  {sampleDate.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' }).toUpperCase()}
-                </div>
+              
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 20px' }}>
+                <div style={{ fontSize: '24px', color: '#60a5fa' }}>✈</div>
+              </div>
+              
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>SÃO PAULO - GUARULHOS</div>
+                <div style={{ fontSize: '48px', fontWeight: '700', lineHeight: '1', color: 'white' }}>GRU</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Informações de embarque - Layout do print */}
+          <div style={{ marginBottom: '25px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '20px' }}>
+              <div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>INÍCIO EMBARQUE</div>
+                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>12:55</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>FIM EMBARQUE</div>
+                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>13:20</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>SEÇÃO</div>
+                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>D</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>ASSENTO</div>
+                <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>1D</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Cliente e Status */}
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '500', marginBottom: '4px' }}>CLIENTE</div>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: 'white' }}>PRISCILA BRISIGHELLO</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '36px', fontWeight: 'bold', lineHeight: '1', marginBottom: '2px' }}>GRU</div>
-                <div style={{ fontSize: '10px', color: '#b3d1ff', fontWeight: '500' }}>SÃO PAULO</div>
-              </div>
-            </div>
-            
-            {/* Linha de informações principais - tudo na mesma linha */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '9px', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>PASSAGEIRO</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{samplePassenger.name}</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>VOO</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>AD1234</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>ASSENTO</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{samplePassenger.seatNumber}</span>
+                <div style={{ fontSize: '14px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
               </div>
             </div>
           </div>
           
-          {/* TERCEIRA PARTE: Informações de embarque organizadas */}
-          <div style={{ marginBottom: '25px' }}>
-            {/* Primeira linha de informações */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '9px', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>PORTÃO</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>15</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>EMBARQUE</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{boardingTime}</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>PARTIDA</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{flightTime}</span>
-              </div>
-            </div>
-            
-            {/* Segunda linha de informações */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '9px', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>SEÇÃO</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>Y</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>CLASSE</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>ECONÔMICA</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>STATUS</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>OK</span>
-              </div>
-            </div>
-            
-            {/* Terceira linha de informações */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '9px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>SEQUÊNCIA</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>001</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>LOCALIZADOR</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{ticketCode}</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <span style={{ color: '#b3d1ff', fontWeight: '500', marginBottom: '2px' }}>BAGAGEM</span>
-                <span style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>1PC</span>
-              </div>
-            </div>
-          </div>
-          
-          {/* QUARTA PARTE: QR Code no canto inferior direito */}
+          {/* QR Code centralizado na parte inferior */}
           <div style={{
-            position: 'absolute', 
-            bottom: '20px', 
-            right: '20px', 
-            width: '70px', 
-            height: '70px', 
-            backgroundColor: 'white', 
-            borderRadius: '4px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center'
+            position: 'absolute',
+            bottom: '25px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            textAlign: 'center'
           }}>
             <div style={{
-              width: '60px', 
-              height: '60px', 
-              backgroundImage: `url('data:image/svg+xml,${encodeURIComponent('<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="6" height="6" fill="black"/><rect x="12" y="0" width="6" height="6" fill="black"/><rect x="24" y="0" width="6" height="6" fill="black"/><rect x="36" y="0" width="6" height="6" fill="black"/><rect x="48" y="0" width="6" height="6" fill="black"/><rect x="0" y="12" width="6" height="6" fill="black"/><rect x="48" y="12" width="6" height="6" fill="black"/><rect x="0" y="24" width="6" height="6" fill="black"/><rect x="12" y="24" width="6" height="6" fill="black"/><rect x="24" y="24" width="6" height="6" fill="black"/><rect x="36" y="24" width="6" height="6" fill="black"/><rect x="48" y="24" width="6" height="6" fill="black"/><rect x="0" y="36" width="6" height="6" fill="black"/><rect x="48" y="36" width="6" height="6" fill="black"/><rect x="0" y="48" width="6" height="6" fill="black"/><rect x="12" y="48" width="6" height="6" fill="black"/><rect x="24" y="48" width="6" height="6" fill="black"/><rect x="36" y="48" width="6" height="6" fill="black"/><rect x="48" y="48" width="6" height="6" fill="black"/><rect x="6" y="6" width="6" height="6" fill="black"/><rect x="18" y="6" width="6" height="6" fill="black"/><rect x="30" y="6" width="6" height="6" fill="black"/><rect x="42" y="6" width="6" height="6" fill="black"/><rect x="6" y="18" width="6" height="6" fill="black"/><rect x="42" y="18" width="6" height="6" fill="black"/><rect x="6" y="30" width="6" height="6" fill="black"/><rect x="18" y="30" width="6" height="6" fill="black"/><rect x="30" y="30" width="6" height="6" fill="black"/><rect x="42" y="30" width="6" height="6" fill="black"/><rect x="6" y="42" width="6" height="6" fill="black"/><rect x="42" y="42" width="6" height="6" fill="black"/></svg>')}')`, 
-              backgroundSize: 'cover'
-            }}></div>
-          </div>
-          
-          {/* Texto informativo no rodapé */}
-          <div style={{
-            position: 'absolute', 
-            bottom: '15px', 
-            left: '20px', 
-            fontSize: '7px', 
-            color: '#b3d1ff'
-          }}>
-            <div>Azul Linhas Aéreas Brasileiras</div>
-            <div>Keep this boarding pass until departure</div>
+              width: '120px',
+              height: '120px',
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px'
+            }}>
+              <div style={{
+                width: '110px',
+                height: '110px',
+                backgroundImage: `url('data:image/svg+xml,${encodeURIComponent('<svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="10" height="10" fill="black"/><rect x="20" y="0" width="10" height="10" fill="black"/><rect x="40" y="0" width="10" height="10" fill="black"/><rect x="60" y="0" width="10" height="10" fill="black"/><rect x="80" y="0" width="10" height="10" fill="black"/><rect x="100" y="0" width="10" height="10" fill="black"/><rect x="0" y="20" width="10" height="10" fill="black"/><rect x="100" y="20" width="10" height="10" fill="black"/><rect x="0" y="40" width="10" height="10" fill="black"/><rect x="20" y="40" width="10" height="10" fill="black"/><rect x="40" y="40" width="10" height="10" fill="black"/><rect x="60" y="40" width="10" height="10" fill="black"/><rect x="80" y="40" width="10" height="10" fill="black"/><rect x="100" y="40" width="10" height="10" fill="black"/><rect x="0" y="60" width="10" height="10" fill="black"/><rect x="100" y="60" width="10" height="10" fill="black"/><rect x="0" y="80" width="10" height="10" fill="black"/><rect x="20" y="80" width="10" height="10" fill="black"/><rect x="40" y="80" width="10" height="10" fill="black"/><rect x="60" y="80" width="10" height="10" fill="black"/><rect x="80" y="80" width="10" height="10" fill="black"/><rect x="100" y="80" width="10" height="10" fill="black"/><rect x="0" y="100" width="10" height="10" fill="black"/><rect x="20" y="100" width="10" height="10" fill="black"/><rect x="40" y="100" width="10" height="10" fill="black"/><rect x="60" y="100" width="10" height="10" fill="black"/><rect x="80" y="100" width="10" height="10" fill="black"/><rect x="100" y="100" width="10" height="10" fill="black"/><rect x="10" y="10" width="10" height="10" fill="black"/><rect x="30" y="10" width="10" height="10" fill="black"/><rect x="50" y="10" width="10" height="10" fill="black"/><rect x="70" y="10" width="10" height="10" fill="black"/><rect x="90" y="10" width="10" height="10" fill="black"/><rect x="10" y="30" width="10" height="10" fill="black"/><rect x="90" y="30" width="10" height="10" fill="black"/><rect x="10" y="50" width="10" height="10" fill="black"/><rect x="30" y="50" width="10" height="10" fill="black"/><rect x="50" y="50" width="10" height="10" fill="black"/><rect x="70" y="50" width="10" height="10" fill="black"/><rect x="90" y="50" width="10" height="10" fill="black"/><rect x="10" y="70" width="10" height="10" fill="black"/><rect x="90" y="70" width="10" height="10" fill="black"/><rect x="10" y="90" width="10" height="10" fill="black"/><rect x="30" y="90" width="10" height="10" fill="black"/><rect x="50" y="90" width="10" height="10" fill="black"/><rect x="70" y="90" width="10" height="10" fill="black"/><rect x="90" y="90" width="10" height="10" fill="black"/></svg>')}')`,
+                backgroundSize: 'cover'
+              }}></div>
+            </div>
+            <div style={{ 
+              fontSize: '12px', 
+              fontWeight: '600', 
+              color: 'white',
+              letterSpacing: '1px'
+            }}>
+              NF2NPC - 94
+            </div>
           </div>
         </div>
 
