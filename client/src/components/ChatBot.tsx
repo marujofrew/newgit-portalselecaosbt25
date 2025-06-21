@@ -380,11 +380,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const ticketCode = `NF2NPC - 94`;
 
     return `
-      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 20px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 380px; height: 650px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 16px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 320px; height: 520px; overflow: hidden; box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);">
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 20px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 20px 16px 20px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="/azul-logo-oficial.png" style="height: 40px; width: auto;" alt="Azul" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\\'font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;\\'>Azul</span>'" />
+            <img src="/azul-logo-oficial.png" style="height: 32px; width: auto;" alt="Azul" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\\'font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;\\'>Azul</span>'" />
           </div>
           <div style="text-align: right; font-size: 12px; color: #94a3b8; line-height: 1.4;">
             <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
@@ -394,48 +394,48 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="display: flex; align-items: center; padding: 0 30px; margin-bottom: 40px;">
-          <div style="text-align: center; width: 120px;">
-            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">${originCity}</div>
-            <div style="font-size: 52px; font-weight: 700; letter-spacing: 2px; color: white; line-height: 1;">${originCode}</div>
+        <div style="display: flex; align-items: center; padding: 0 24px; margin-bottom: 28px;">
+          <div style="text-align: center; width: 100px;">
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">${originCity}</div>
+            <div style="font-size: 40px; font-weight: 700; letter-spacing: 1px; color: white; line-height: 1;">${originCode}</div>
           </div>
-          <div style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 30px;">
-            <div style="display: flex; align-items: center; justify-content: center; width: 70px; height: 70px; background: rgba(96, 165, 250, 0.15); border-radius: 50%;">
-              <div style="font-size: 28px; color: #60a5fa;">✈</div>
+          <div style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 20px;">
+            <div style="display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: rgba(96, 165, 250, 0.15); border-radius: 50%;">
+              <div style="font-size: 20px; color: #60a5fa;">✈</div>
             </div>
           </div>
-          <div style="text-align: center; width: 120px;">
-            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">SÃO PAULO - GUARULHOS</div>
-            <div style="font-size: 52px; font-weight: 700; letter-spacing: 2px; color: white; line-height: 1;">GRU</div>
+          <div style="text-align: center; width: 100px;">
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 40px; font-weight: 700; letter-spacing: 1px; color: white; line-height: 1;">GRU</div>
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 24px; margin-bottom: 32px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 20px; margin-bottom: 24px;">
           <div style="text-align: center;">
-            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">INÍCIO EMBARQUE</div>
-            <div style="font-size: 18px; font-weight: 700; color: white;">${boardingTime}</div>
+            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">INÍCIO EMBARQUE</div>
+            <div style="font-size: 14px; font-weight: 700; color: white;">${boardingTime}</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">FIM EMBARQUE</div>
-            <div style="font-size: 18px; font-weight: 700; color: white;">${departureTime}</div>
+            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">FIM EMBARQUE</div>
+            <div style="font-size: 14px; font-weight: 700; color: white;">${departureTime}</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">SEÇÃO</div>
-            <div style="font-size: 18px; font-weight: 700; color: white;">D</div>
+            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SEÇÃO</div>
+            <div style="font-size: 14px; font-weight: 700; color: white;">D</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">ASSENTO</div>
-            <div style="font-size: 18px; font-weight: 700; color: white;">${seat}</div>
+            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">ASSENTO</div>
+            <div style="font-size: 14px; font-weight: 700; color: white;">${seat}</div>
           </div>
         </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 40px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 24px;">
           <div>
-            <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">CLIENTE</div>
-            <div style="font-size: 18px; font-weight: 700; color: white;">${passengerName.toUpperCase()}</div>
+            <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">CLIENTE</div>
+            <div style="font-size: 14px; font-weight: 700; color: white;">${passengerName.toUpperCase()}</div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 18px; font-weight: 700; color: #60a5fa;">
+            <div style="font-size: 14px; font-weight: 700; color: #60a5fa;">
               Diamante
             </div>
           </div>
@@ -447,7 +447,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="text-align: center; font-size: 14px; font-weight: 700; color: #94a3b8; padding: 0 24px 24px 24px;">
+        <div style="text-align: center; font-size: 12px; font-weight: 700; color: #94a3b8; padding: 0 20px 20px 20px;">
           ${ticketCode}
         </div>
       </div>

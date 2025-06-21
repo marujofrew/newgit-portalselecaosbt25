@@ -9,8 +9,8 @@ export default function BoardingPassPreview() {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         margin: '10px auto',
         position: 'relative',
-        width: '380px',
-        height: '650px',
+        width: '320px',
+        height: '520px',
         overflow: 'hidden',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
       }}>
