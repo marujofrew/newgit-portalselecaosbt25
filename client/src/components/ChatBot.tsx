@@ -682,6 +682,31 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
+                  
+                  // Aguardando confirmação de pagamento
+                  setTimeout(() => {
+                    addMessage(`
+                      <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 16px; margin: 10px 0; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: #856404;">
+                          <div style="width: 24px; height: 24px; border: 3px solid #ffc107; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                          <span style="font-weight: bold;">Aguardando confirmação do pagamento...</span>
+                        </div>
+                        <style>
+                          @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                          }
+                        </style>
+                      </div>
+                    `, 'bot');
+                    
+                    // Simular confirmação após 10 segundos (será substituído pelo gateway real)
+                    setTimeout(() => {
+                      addMessage("✅ Seu pagamento foi confirmado! Vamos continuar?", 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('payment-confirmed');
+                    }, 10000);
+                  }, 2000);
                 }, 5000);
               }, 5000);
             }, 5000);
@@ -689,6 +714,24 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         } else {
           botResponse = "Por favor, confirme se vai realizar o pagamento.";
           showOptions = true;
+        }
+        break;
+
+      case 'payment-confirmed':
+        if (messageToSend.toLowerCase().includes('sim') && messageToSend.toLowerCase().includes('continuar')) {
+          botResponse = "Perfeito! Agora vamos organizar sua hospedagem.";
+          nextStep = 'hotel';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Para sua estadia em São Paulo, temos duas opções de hotel:", 'bot');
+              setShowQuickOptions(true);
+              setCurrentStep('hotel');
+            }, 5000);
+          }, 5000);
         }
         break;
 
@@ -1087,6 +1130,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Sim, adicionar kit', 'Não, sem bagagem'];
       case 'pix-payment':
         return ['Ok, vou realizar o pagamento e volto rapidamente'];
+      case 'payment-confirmed':
+        return ['Sim, vamos continuar!'];
       case 'flight-confirmation':
         return ['Opção 1', 'Opção 2'];
       case 'hotel':
