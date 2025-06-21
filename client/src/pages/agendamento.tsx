@@ -171,7 +171,8 @@ export default function Agendamento() {
       {/* Chat Bot */}
       <ChatBot 
         isOpen={chatBotOpen} 
-        onClose={() => setChatBotOpen(false)} 
+        onClose={() => setChatBotOpen(false)}
+        userCity="São Paulo" // Esta informação viria do CEP preenchido anteriormente
       />
     </main>
   );

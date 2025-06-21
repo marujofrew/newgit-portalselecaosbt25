@@ -10,9 +10,10 @@ interface Message {
 interface ChatBotProps {
   isOpen: boolean;
   onClose: () => void;
+  userCity?: string;
 }
 
-export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
+export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -30,22 +31,23 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
   const [inputMessage, setInputMessage] = useState('');
   const [currentStep, setCurrentStep] = useState('transport');
   const [showQuickOptions, setShowQuickOptions] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const botResponses = {
     transport: {
-      aviao: "Perfeito! Voo é mais rápido. De qual cidade você estará partindo? Preciso saber sua cidade de origem para buscar os melhores voos.",
-      onibus: "Ótima escolha! Ônibus é confortável. De qual cidade você estará partindo? Preciso saber para verificar as rotas disponíveis."
+      aviao: `Perfeito! Voo é mais rápido. Vejo que você está em ${userCity || '[CIDADE]'}. Vou buscar os melhores voos saindo desta cidade para São Paulo.`,
+      onibus: `Ótima escolha! Ônibus é confortável. Vejo que você está em ${userCity || '[CIDADE]'}. Vou verificar as rotas disponíveis desta cidade para São Paulo.`
     },
     city: {
       response: "Excelente! Agora sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo? O hotel próximo aos estúdios facilita o deslocamento, enquanto o do centro oferece mais opções de lazer."
     },
     hotel: {
-      proximo: "Perfeita escolha! Hotel próximo aos estúdios facilita muito. Agora, quantas pessoas viajarão? (Responsável + quantas crianças?)",
-      centro: "Ótima opção! Centro de SP tem muito a oferecer. Agora, quantas pessoas viajarão? (Responsável + quantas crianças?)"
+      proximo: "Perfeita escolha! Hotel próximo aos estúdios facilita muito. Agora, quantas pessoas viajarão?",
+      centro: "Ótima opção! Centro de SP tem muito a oferecer. Agora, quantas pessoas viajarão?"
     },
     people: {
-      response: "Entendido! Vou organizar acomodações para [X] pessoas. Para finalizar, você tem alguma restrição alimentar ou necessidade especial que devemos considerar? (Pode responder 'não' se não houver)"
+      response: "Entendido! Para finalizar, você tem alguma restrição alimentar ou necessidade especial que devemos considerar?"
     },
     final: {
       response: "Perfeito! Tenho todas as informações necessárias:\n\n✅ Transporte: [TRANSPORTE]\n✅ Origem: [CIDADE]\n✅ Hospedagem: [HOTEL]\n✅ Pessoas: [PESSOAS]\n✅ Observações: [OBS]\n\nEm até 24 horas você receberá um e-mail com:\n• Passagens/bilhetes confirmados\n• Voucher do hotel\n• Roteiro detalhado\n• Contato de emergência\n\nObrigado e até breve nos estúdios do SBT! 🎬"
@@ -62,7 +64,7 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
 
   const addMessage = (text: string, sender: 'bot' | 'user') => {
     const newMessage: Message = {
-      id: messages.length + 1,
+      id: Date.now() + Math.random(), // Use timestamp + random to ensure uniqueness
       text,
       sender,
       timestamp: new Date()
@@ -82,6 +84,8 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
         return ['Avião', 'Ônibus'];
       case 'hotel':
         return ['Hotel próximo aos estúdios', 'Hotel no centro'];
+      case 'people':
+        return ['2 pessoas (1 responsável + 1 criança)', '3 pessoas (1 responsável + 2 crianças)', '4 pessoas (2 responsáveis + 2 crianças)', 'Outro número'];
       case 'final':
         return ['Não tenho restrições', 'Tenho restrições alimentares'];
       default:
@@ -94,62 +98,67 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
     if (!messageToSend.trim()) return;
 
     addMessage(messageToSend, 'user');
+    setIsTyping(true);
+    setShowQuickOptions(false);
     
-    // Processar resposta do bot baseado no step atual
+    // Processar resposta do bot baseado no step atual com delay de 4 segundos
     setTimeout(() => {
+      setIsTyping(false);
       let botResponse = '';
+      let nextStep = currentStep;
+      let showOptions = false;
       
       switch (currentStep) {
         case 'transport':
           if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
             botResponse = botResponses.transport.aviao;
-            setCurrentStep('city');
-            setShowQuickOptions(false);
+            nextStep = 'city';
           } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
             botResponse = botResponses.transport.onibus;
-            setCurrentStep('city');
-            setShowQuickOptions(false);
+            nextStep = 'city';
           } else {
             botResponse = "Por favor, escolha uma das opções acima para que eu possa te ajudar melhor.";
-            setShowQuickOptions(true);
+            showOptions = true;
           }
           break;
           
         case 'city':
           botResponse = botResponses.city.response;
-          setCurrentStep('hotel');
-          setShowQuickOptions(true);
+          nextStep = 'hotel';
+          showOptions = true;
           break;
           
         case 'hotel':
           if (messageToSend.toLowerCase().includes('proximo') || messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estudio')) {
             botResponse = botResponses.hotel.proximo;
-            setCurrentStep('people');
-            setShowQuickOptions(false);
+            nextStep = 'people';
+            showOptions = true;
           } else if (messageToSend.toLowerCase().includes('centro')) {
             botResponse = botResponses.hotel.centro;
-            setCurrentStep('people');
-            setShowQuickOptions(false);
+            nextStep = 'people';
+            showOptions = true;
           } else {
             botResponse = "Por favor, escolha uma das opções acima.";
-            setShowQuickOptions(true);
+            showOptions = true;
           }
           break;
           
         case 'people':
           botResponse = botResponses.people.response;
-          setCurrentStep('final');
-          setShowQuickOptions(true);
+          nextStep = 'final';
+          showOptions = true;
           break;
           
         case 'final':
           botResponse = botResponses.final.response;
-          setShowQuickOptions(false);
+          showOptions = false;
           break;
       }
       
       addMessage(botResponse, 'bot');
-    }, 1000);
+      setCurrentStep(nextStep);
+      setShowQuickOptions(showOptions);
+    }, 4000);
 
     setInputMessage('');
   };
@@ -214,6 +223,20 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
               </div>
             </div>
           ))}
+          
+          {/* Typing indicator */}
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="bg-gray-100 text-gray-800 p-3 rounded-lg">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <div ref={messagesEndRef} />
         </div>
 
