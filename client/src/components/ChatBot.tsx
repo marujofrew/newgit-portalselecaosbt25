@@ -101,17 +101,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Salvar estado automaticamente quando houver mudanças
   useEffect(() => {
-    saveCurrentState();
-  }, [messages, currentStep, showQuickOptions, nearestAirport, flightDate, lastModalState]);
+    if (isOpen) {
+      saveCurrentState();
+    }
+  }, [messages, currentStep, showQuickOptions, nearestAirport, flightDate, lastModalState, isOpen]);
 
   useEffect(() => {
     // Adicionar funções globais para os cartões de embarque
     (window as any).openBoardingPass = (passId: string, passengerName: string, isAdult: boolean) => {
       // Salvar estado do modal
-      setLastModalState({
-        type: 'boardingPass',
-        data: { passId, passengerName, isAdult }
-      });
+      if (setLastModalState) {
+        setLastModalState({
+          type: 'boardingPass',
+          data: { passId, passengerName, isAdult }
+        });
+      }
       
       const modalHTML = `
         <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);">
@@ -143,7 +147,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         modal.remove();
       }
       // Limpar estado do modal
-      setLastModalState(null);
+      if (setLastModalState) {
+        setLastModalState(null);
+      }
     };
 
     (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
