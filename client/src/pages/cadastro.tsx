@@ -556,6 +556,27 @@ export default function Cadastro() {
                     <p className="text-xs text-gray-600 mt-1">
                       * Cada candidato precisará de cadastro individual
                     </p>
+                    
+                    {/* Incentivo para múltiplos candidatos */}
+                    {parseInt(quantidadeCandidatos) >= 2 && (
+                      <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-lg">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                              <i className="fas fa-percentage text-white text-sm"></i>
+                            </div>
+                          </div>
+                          <div className="ml-3">
+                            <h4 className="text-green-800 font-semibold text-sm">
+                              🎉 Você ganhou 50% de desconto na inscrição!
+                            </h4>
+                            <p className="text-green-700 text-xs mt-1">
+                              Por trazer {quantidadeCandidatos} candidatos ao teste, você recebe desconto especial na taxa de inscrição.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div>
