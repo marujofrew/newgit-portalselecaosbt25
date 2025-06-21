@@ -7,6 +7,20 @@ export default function Agendamento() {
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
   const [observacoes, setObservacoes] = useState('');
   const [chatBotOpen, setChatBotOpen] = useState(false);
+  
+  // Recuperar dados da cidade do localStorage
+  const getUserCity = () => {
+    try {
+      const cityData = localStorage.getItem('userCityData');
+      if (cityData) {
+        const parsed = JSON.parse(cityData);
+        return `${parsed.cidade} - ${parsed.uf}`;
+      }
+    } catch (error) {
+      console.error('Erro ao recuperar dados da cidade:', error);
+    }
+    return 'São Paulo - SP'; // fallback
+  };
 
   // Gerar 4 datas disponíveis no próximo mês
   const gerarDatasDisponiveis = () => {
@@ -172,7 +186,7 @@ export default function Agendamento() {
       <ChatBot 
         isOpen={chatBotOpen} 
         onClose={() => setChatBotOpen(false)}
-        userCity="São Paulo" // Esta informação viria do CEP preenchido anteriormente
+        userCity={getUserCity()}
       />
     </main>
   );
