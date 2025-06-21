@@ -202,27 +202,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         const stateRestored = restoreState();
         
         if (!stateRestored) {
-          const welcomeMessage: Message = {
-            id: 1,
-            text: `Olá! Sou a Rebeca, assistente da SBT. Vi que você se inscreveu para o teste da novela! 🎬\n\nPreciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou ônibus?`,
-            sender: 'bot',
-            timestamp: new Date()
-          };
-          setMessages([welcomeMessage]);
-          setShowQuickOptions(true);
-          setCurrentStep('transport');
-
-          if (userCity) {
-            setTimeout(() => {
-              const secondMessage: Message = {
-                id: 2,
-                text: `Identifiquei que você está em ${userCity}. Perfeito! Isso vai me ajudar a encontrar as melhores opções de viagem.`,
-                sender: 'bot',
-                timestamp: new Date()
-              };
-              setMessages(prev => [...prev, secondMessage]);
-            }, 2000);
-          }
+          // Mostrar indicador de "iniciando conversa" por 3 segundos
+          setIsTyping(true);
+          
+          setTimeout(() => {
+            setIsTyping(false);
+            const welcomeMessage: Message = {
+              id: 1,
+              text: `Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou ônibus?`,
+              sender: 'bot',
+              timestamp: new Date()
+            };
+            setMessages([welcomeMessage]);
+            setShowQuickOptions(true);
+            setCurrentStep('transport');
+          }, 3000);
           
           if (userData?.cep) {
             findNearestAirportFromCEP();
@@ -716,76 +710,88 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     setCurrentStep(nextStep);
     setShowQuickOptions(showOptions);
     
-    // Se foi escolhido avião, enviar informação sobre o voo encontrado
+    // Se foi escolhido avião, enviar segunda mensagem e informação sobre voos
     if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
+      // Primeira enviar a segunda mensagem sobre a cidade
       setTimeout(() => {
         setIsTyping(true);
         setTimeout(() => {
           setIsTyping(false);
-          
-          // Calcular datas baseadas na data do agendamento
-          let airportName, airportCode, date1, date2;
-          
-          if (nearestAirport) {
-            airportName = nearestAirport.name;
-            airportCode = nearestAirport.code;
-          } else {
-            const cityName = userCity || 'São Paulo - SP';
-            airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
-            airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
+          if (userCity) {
+            addMessage(`Identifiquei que você está em ${userCity}. Perfeito! Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
           }
           
-          if (selectedDate) {
-            const appointmentDate = new Date(selectedDate);
-            
-            const flightDate1 = new Date(appointmentDate);
-            flightDate1.setDate(appointmentDate.getDate() - 2);
-            date1 = flightDate1.toLocaleDateString('pt-BR');
-            
-            const flightDate2 = new Date(appointmentDate);
-            flightDate2.setDate(appointmentDate.getDate() - 1);
-            date2 = flightDate2.toLocaleDateString('pt-BR');
-          } else {
-            const currentDate = new Date();
-            const flightDateCalc = new Date(currentDate);
-            flightDateCalc.setDate(currentDate.getDate() + 3);
-            date1 = flightDateCalc.toLocaleDateString('pt-BR');
-            
-            const flightDateCalc2 = new Date(currentDate);
-            flightDateCalc2.setDate(currentDate.getDate() + 4);
-            date2 = flightDateCalc2.toLocaleDateString('pt-BR');
-          }
-          
-          // Enviar mensagens sequenciais
-          addMessage('✈️ Perfeito! Encontrei duas opções de voos disponíveis:', 'bot');
-          
+          // Depois enviar informações dos voos
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage(`🔸 Opção 1: ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+              
+              // Calcular datas baseadas na data do agendamento
+              let airportName, airportCode, date1, date2;
+              
+              if (nearestAirport) {
+                airportName = nearestAirport.name;
+                airportCode = nearestAirport.code;
+              } else {
+                const cityName = userCity || 'São Paulo - SP';
+                airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
+                airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
+              }
+              
+              if (selectedDate) {
+                const appointmentDate = new Date(selectedDate);
+                
+                const flightDate1 = new Date(appointmentDate);
+                flightDate1.setDate(appointmentDate.getDate() - 2);
+                date1 = flightDate1.toLocaleDateString('pt-BR');
+                
+                const flightDate2 = new Date(appointmentDate);
+                flightDate2.setDate(appointmentDate.getDate() - 1);
+                date2 = flightDate2.toLocaleDateString('pt-BR');
+              } else {
+                const currentDate = new Date();
+                const flightDateCalc = new Date(currentDate);
+                flightDateCalc.setDate(currentDate.getDate() + 3);
+                date1 = flightDateCalc.toLocaleDateString('pt-BR');
+                
+                const flightDateCalc2 = new Date(currentDate);
+                flightDateCalc2.setDate(currentDate.getDate() + 4);
+                date2 = flightDateCalc2.toLocaleDateString('pt-BR');
+              }
+              
+              // Enviar mensagens sequenciais
+              addMessage('✈️ Perfeito! Encontrei duas opções de voos disponíveis:', 'bot');
               
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage(`🔸 Opção 2: ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
+                  addMessage(`🔸 Opção 1: ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
                   
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage('Qual opção você prefere?', 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('flight-confirmation');
+                      addMessage(`🔸 Opção 2: ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage('Qual opção você prefere?', 'bot');
+                          setShowQuickOptions(true);
+                          setCurrentStep('flight-confirmation');
+                        }, 2000);
+                      }, 1000);
                     }, 2000);
                   }, 1000);
                 }, 2000);
               }, 1000);
-            }, 2000);
-          }, 1000);
-        }, 3000);
-      }, 2000);
+            }, 3000);
+          }, 2000);
+        }, 2000);
+      }, 1000);
     }
   };
 
