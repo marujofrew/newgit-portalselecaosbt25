@@ -36,7 +36,7 @@ export default function Agendamento() {
     return null;
   };
 
-  // Gerar datas disponíveis começando a partir de 1 mês da data atual
+  // Gerar datas disponíveis apenas aos sábados começando 1 mês no futuro
   const gerarDatasDisponiveis = () => {
     const datas = [];
     const hoje = new Date();
@@ -45,28 +45,26 @@ export default function Agendamento() {
     const dataInicio = new Date(hoje);
     dataInicio.setDate(hoje.getDate() + 30);
     
-    // Gerar 20 datas disponíveis (apenas dias úteis) a partir da data de início
-    let diasAdicionados = 0;
-    let contador = 0;
+    // Encontrar o primeiro sábado a partir da data de início
+    let proximoSabado = new Date(dataInicio);
+    while (proximoSabado.getDay() !== 6) { // 6 = sábado
+      proximoSabado.setDate(proximoSabado.getDate() + 1);
+    }
     
-    while (diasAdicionados < 20 && contador < 50) { // Limite de segurança
-      const data = new Date(dataInicio);
-      data.setDate(dataInicio.getDate() + contador);
+    // Gerar 8 sábados consecutivos
+    for (let i = 0; i < 8; i++) {
+      const sabado = new Date(proximoSabado);
+      sabado.setDate(proximoSabado.getDate() + (i * 7)); // Adicionar 7 dias para cada sábado
       
-      // Só adicionar dias úteis (segunda a sexta)
-      if (data.getDay() !== 0 && data.getDay() !== 6) {
-        datas.push({
-          valor: data.toISOString().split('T')[0],
-          texto: data.toLocaleDateString('pt-BR', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })
-        });
-        diasAdicionados++;
-      }
-      contador++;
+      datas.push({
+        valor: sabado.toISOString().split('T')[0],
+        texto: sabado.toLocaleDateString('pt-BR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })
+      });
     }
     
     return datas;
@@ -124,6 +122,9 @@ export default function Agendamento() {
     // Salvar dados do agendamento
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
+    
+    // Limpar estado anterior do chat bot para reiniciar do zero
+    localStorage.removeItem('chatBotState');
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
