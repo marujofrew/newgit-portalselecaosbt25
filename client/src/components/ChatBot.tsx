@@ -621,17 +621,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
-                  
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Nosso chat irá se encerrar automaticamente em 5 minutos se não houver retorno. Realize o pagamento e volte antes de 5 minutos para evitar de recomeçar o cadastro do início.", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('pix-payment');
-                    }, 5000);
-                  }, 5000);
+                  addMessage("Nosso chat irá se encerrar automaticamente em 5 minutos se não houver retorno. Realize o pagamento e volte antes de 5 minutos para evitar de recomeçar o cadastro do início.", 'bot');
+                  setShowQuickOptions(true);
+                  setCurrentStep('pix-payment');
                 }, 5000);
               }, 5000);
             }, 5000);
@@ -659,7 +651,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'pix-payment':
         if (messageToSend.toLowerCase().includes('ok') && messageToSend.toLowerCase().includes('pagamento')) {
-          botResponse = "Ok, vou realizar o pagamento e volto rapidamente.";
+          botResponse = "Tabom, vou te enviar aí!";
           nextStep = 'pix-key';
           showOptions = false;
           
@@ -668,33 +660,28 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("**Chave PIX Copia e Cola:**", 'bot');
+              addMessage(`
+                <div style="background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 16px; margin: 10px 0; font-family: monospace;">
+                  <div style="font-weight: bold; color: #007bff; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                    <span>🔗 PIX - R$ 29,90</span>
+                    <button onclick="navigator.clipboard.writeText('00020126580014BR.GOV.BCB.PIX013636303639-3034-4d42-b7a7-9e6c8f1a5b2c0208BAGAGEM520400005303986540529.905802BR5925SBT PRODUCOES ARTISTICAS6009SAO PAULO62070503***6304A8B9')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer;">📋 Copiar</button>
+                  </div>
+                  <div style="background: white; padding: 12px; border-radius: 4px; border: 1px solid #dee2e6; word-break: break-all; font-size: 12px;">
+                    00020126580014BR.GOV.BCB.PIX013636303639-3034-4d42-b7a7-9e6c8f1a5b2c0208BAGAGEM520400005303986540529.905802BR5925SBT PRODUCOES ARTISTICAS6009SAO PAULO62070503***6304A8B9
+                  </div>
+                  <div style="margin-top: 8px; font-size: 12px;">
+                    <div style="color: #007bff;">Copie e cole no seu app de pagamento</div>
+                    <div style="color: #007bff;">Valor: R$ 29,90</div>
+                    <div style="color: #007bff;">Beneficiário: SBT Produções</div>
+                  </div>
+                </div>
+              `, 'bot');
               
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage(`
-                    <div style="background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 16px; margin: 10px 0; font-family: monospace;">
-                      <div style="font-weight: bold; color: #007bff; margin-bottom: 8px;">💳 PIX - R$ 29,90</div>
-                      <div style="background: white; padding: 12px; border-radius: 4px; border: 1px solid #dee2e6; word-break: break-all; font-size: 12px;">
-                        00020126580014BR.GOV.BCB.PIX013636303639-3034-4d42-b7a7-9e6c8f1a5b2c0208BAGAGEM520400005303986540529.905802BR5925SBT PRODUCOES ARTISTICAS6009SAO PAULO62070503***6304A8B9
-                      </div>
-                      <div style="margin-top: 8px; font-size: 12px; color: #6c757d;">
-                        🔸 Copie e cole no seu app de pagamento<br/>
-                        🔸 Valor: R$ 29,90<br/>
-                        🔸 Beneficiário: SBT Produções
-                      </div>
-                    </div>
-                  `, 'bot');
-                  
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Estou te aguardando! ⏰", 'bot');
-                    }, 5000);
-                  }, 2000);
+                  addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
                 }, 5000);
               }, 5000);
             }, 5000);
