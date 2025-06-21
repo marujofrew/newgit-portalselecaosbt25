@@ -108,7 +108,8 @@ export default function Cadastro() {
             localStorage.setItem('userCityData', JSON.stringify({
               cidade: data.localidade,
               uf: data.uf,
-              estado: data.estado
+              estado: data.estado,
+              cep: data.cep
             }));
             verificarDisponibilidadeVagas(data);
             setCidadeConsultada(true);

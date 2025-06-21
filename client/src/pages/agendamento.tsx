@@ -22,6 +22,19 @@ export default function Agendamento() {
     return 'São Paulo - SP'; // fallback
   };
 
+  // Recuperar dados completos do usuário
+  const getUserData = () => {
+    try {
+      const cityData = localStorage.getItem('userCityData');
+      if (cityData) {
+        return JSON.parse(cityData);
+      }
+    } catch (error) {
+      console.error('Erro ao recuperar dados do usuário:', error);
+    }
+    return null;
+  };
+
   // Gerar 4 datas disponíveis no próximo mês
   const gerarDatasDisponiveis = () => {
     const datas = [];
@@ -187,6 +200,8 @@ export default function Agendamento() {
         isOpen={chatBotOpen} 
         onClose={() => setChatBotOpen(false)}
         userCity={getUserCity()}
+        userData={getUserData()}
+        selectedDate={dataSelecionada}
       />
     </main>
   );

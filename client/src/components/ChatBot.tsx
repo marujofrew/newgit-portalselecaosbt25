@@ -11,9 +11,13 @@ interface ChatBotProps {
   isOpen: boolean;
   onClose: () => void;
   userCity?: string;
+  userData?: any;
+  selectedDate?: string;
 }
 
-export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
+import { getCoordinatesFromCEP, findNearestAirport } from '@/utils/airports';
+
+export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -32,6 +36,8 @@ export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
   const [currentStep, setCurrentStep] = useState('transport');
   const [showQuickOptions, setShowQuickOptions] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
+  const [nearestAirport, setNearestAirport] = useState<any>(null);
+  const [flightDate, setFlightDate] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const botResponses = {
@@ -57,6 +63,46 @@ export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Calcular aeroporto mais próximo quando o componente abrir
+  useEffect(() => {
+    if (isOpen && userData?.cep && !nearestAirport) {
+      findNearestAirportFromCEP();
+    }
+    if (selectedDate) {
+      calculateFlightDate();
+    }
+  }, [isOpen, userData, selectedDate]);
+
+  const findNearestAirportFromCEP = async () => {
+    if (!userData?.cep) return;
+    
+    try {
+      const coordinates = await getCoordinatesFromCEP(userData.cep.replace('-', ''));
+      if (coordinates) {
+        const airport = findNearestAirport(coordinates.latitude, coordinates.longitude);
+        setNearestAirport(airport);
+      }
+    } catch (error) {
+      console.error('Erro ao encontrar aeroporto:', error);
+    }
+  };
+
+  const calculateFlightDate = () => {
+    if (!selectedDate) return;
+    
+    const appointmentDate = new Date(selectedDate);
+    const flightDateObj = new Date(appointmentDate);
+    flightDateObj.setDate(appointmentDate.getDate() - 2);
+    
+    const formattedDate = flightDateObj.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    
+    setFlightDate(formattedDate);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -113,6 +159,15 @@ export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
           if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
             botResponse = botResponses.transport.aviao;
             nextStep = 'city';
+            
+            // Após 4 segundos, enviar informação sobre o voo encontrado
+            setTimeout(() => {
+              if (nearestAirport && flightDate) {
+                const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
+                addMessage(flightInfo, 'bot');
+              }
+            }, 4000);
+            
           } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
             botResponse = botResponses.transport.onibus;
             nextStep = 'city';
