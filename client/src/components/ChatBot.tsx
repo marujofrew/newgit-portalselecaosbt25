@@ -32,6 +32,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [isTyping, setIsTyping] = useState(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
   const [flightDate, setFlightDate] = useState<string>('');
+  const [lastModalState, setLastModalState] = useState<{type: string, data: any} | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const botResponses = {
@@ -58,9 +59,60 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     scrollToBottom();
   }, [messages]);
 
+  // Salvar estado atual
+  const saveCurrentState = () => {
+    const state = {
+      messages,
+      currentStep,
+      showQuickOptions,
+      nearestAirport,
+      flightDate,
+      lastModalState
+    };
+    localStorage.setItem('chatBotState', JSON.stringify(state));
+  };
+
+  // Restaurar estado salvo
+  const restoreState = () => {
+    const savedState = localStorage.getItem('chatBotState');
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      setMessages(state.messages || []);
+      setCurrentStep(state.currentStep || 'welcome');
+      setShowQuickOptions(state.showQuickOptions || false);
+      setNearestAirport(state.nearestAirport || null);
+      setFlightDate(state.flightDate || '');
+      setLastModalState(state.lastModalState || null);
+      
+      // Se havia um modal aberto, reabrir após um delay
+      if (state.lastModalState && state.lastModalState.type === 'boardingPass') {
+        setTimeout(() => {
+          if ((window as any).openBoardingPass) {
+            (window as any).openBoardingPass(
+              state.lastModalState.data.passId,
+              state.lastModalState.data.passengerName,
+              state.lastModalState.data.isAdult
+            );
+          }
+        }, 1000);
+      }
+    }
+  };
+
+  // Salvar estado automaticamente quando houver mudanças
+  useEffect(() => {
+    saveCurrentState();
+  }, [messages, currentStep, showQuickOptions, nearestAirport, flightDate, lastModalState]);
+
   useEffect(() => {
     // Adicionar funções globais para os cartões de embarque
     (window as any).openBoardingPass = (passId: string, passengerName: string, isAdult: boolean) => {
+      // Salvar estado do modal
+      setLastModalState({
+        type: 'boardingPass',
+        data: { passId, passengerName, isAdult }
+      });
+      
       const modalHTML = `
         <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);">
           <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; position: relative;">
@@ -90,6 +142,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (modal) {
         modal.remove();
       }
+      // Limpar estado do modal
+      setLastModalState(null);
     };
 
     (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
