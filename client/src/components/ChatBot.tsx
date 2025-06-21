@@ -307,34 +307,33 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
     });
 
-    setTimeout(() => {
-      setIsTyping(true);
-      setTimeout(() => {
-        setIsTyping(false);
-        const unifiedFile = createUnifiedBoardingPassFile(passengers);
-        addMessage(unifiedFile, 'bot');
-      }, 2000);
-    }, 1000);
+    if (passengers.length > 0) {
+      const unifiedFile = createUnifiedBoardingPassFile(passengers);
+      addMessage(unifiedFile, 'bot');
+    }
   };
 
   const createUnifiedBoardingPassFile = (passengers: any[]) => {
     const passengersJson = JSON.stringify(passengers).replace(/"/g, '&quot;');
     
     return `
-      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openUnifiedBoardingPass && window.openUnifiedBoardingPass('${passengersJson}')" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 350px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openUnifiedBoardingPass && window.openUnifiedBoardingPass('${passengersJson}')" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
-            📄
+            ✈️
           </div>
           <div style="flex: 1;">
-            <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
-              Cartões de Embarque - ${passengers.length} passageiro(s)
+            <div style="font-weight: 700; color: #1e293b; font-size: 15px; margin-bottom: 6px;">
+              📄 Documento: Cartões de Embarque
             </div>
-            <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
-              ${passengers.map(p => p.name).join(', ')}
+            <div style="color: #3b82f6; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+              ${passengers.length} passageiro${passengers.length > 1 ? 's' : ''} incluído${passengers.length > 1 ? 's' : ''}
             </div>
-            <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
-              📱 Clique para visualizar e baixar todos
+            <div style="color: #64748b; font-size: 11px; margin-bottom: 4px; line-height: 1.3;">
+              ${passengers.map(p => `• ${p.name} (${p.type})`).join('<br>')}
+            </div>
+            <div style="color: #059669; font-size: 11px; font-weight: 600; background: #ecfdf5; padding: 4px 8px; border-radius: 4px; display: inline-block;">
+              📱 Clique para visualizar e baixar
             </div>
           </div>
         </div>
