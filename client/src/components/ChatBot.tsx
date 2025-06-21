@@ -414,22 +414,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; padding: 0 20px; margin-bottom: 24px;">
-          <div style="text-align: left;">
-            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">INÍCIO EMBARQUE</div>
-            <div style="font-size: 12px; font-weight: 700; color: white;">${boardingTime}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 8px; color: #94a3b8; font-weight: 600; white-space: nowrap;">INÍCIO EMBARQUE</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">${boardingTime}</span>
           </div>
-          <div style="text-align: left;">
-            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">FIM EMBARQUE</div>
-            <div style="font-size: 12px; font-weight: 700; color: white;">${departureTime}</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 8px; color: #94a3b8; font-weight: 600; white-space: nowrap;">FIM EMBARQUE</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">${departureTime}</span>
           </div>
-          <div style="text-align: left;">
-            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">SEÇÃO</div>
-            <div style="font-size: 12px; font-weight: 700; color: white;">D</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">SEÇÃO</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">D</span>
           </div>
-          <div style="text-align: left;">
-            <div style="font-size: 8px; color: #94a3b8; font-weight: 600;">ASSENTO</div>
-            <div style="font-size: 12px; font-weight: 700; color: white;">${seat}</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">ASSENTO</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">${seat}</span>
           </div>
         </div>
         

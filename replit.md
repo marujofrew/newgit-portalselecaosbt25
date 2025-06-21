@@ -92,7 +92,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## Recent Changes
 
-- **Layout compacto otimizado**: "São Paulo" em linha única, seção de embarque com grid 2fr-2fr-1fr-1fr para melhor distribuição de espaço, alinhamento ajustado
+- **Seção de embarque padronizada**: Todos os elementos em linha única horizontal com espaçamento uniforme de 8px, layout flex com justify-space-between
 - **Layout compacto implementado**: Todas as informações em linha única, fontes reduzidas (8px labels, 12px valores), largura aumentada (400px), bordas menos arredondadas (8px)
 - **Seção de aeroportos reformulada**: Códigos reduzidos (28px), cidades em texto uppercase menores (10px), alinhamento lateral esquerda/direita
 - **Header do cartão reorganizado**: Logo menor (24px) com data e voo alinhados na mesma linha horizontal

@@ -114,59 +114,61 @@ export default function BoardingPassPreview() {
         
         {/* Informações de embarque */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr 1fr',
-          gap: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           padding: '0 20px',
           marginBottom: '24px'
         }}>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
               fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600'
-            }}>INÍCIO EMBARQUE</div>
-            <div style={{
+              fontWeight: '600',
+              whiteSpace: 'nowrap'
+            }}>INÍCIO EMBARQUE</span>
+            <span style={{
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>12:55</div>
+            }}>12:55</span>
           </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
               fontSize: '8px',
               color: '#94a3b8',
-              fontWeight: '600'
-            }}>FIM EMBARQUE</div>
-            <div style={{
+              fontWeight: '600',
+              whiteSpace: 'nowrap'
+            }}>FIM EMBARQUE</span>
+            <span style={{
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>13:20</div>
+            }}>13:20</span>
           </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
               fontSize: '8px',
               color: '#94a3b8',
               fontWeight: '600'
-            }}>SEÇÃO</div>
-            <div style={{
+            }}>SEÇÃO</span>
+            <span style={{
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>D</div>
+            }}>D</span>
           </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
               fontSize: '8px',
               color: '#94a3b8',
               fontWeight: '600'
-            }}>ASSENTO</div>
-            <div style={{
+            }}>ASSENTO</span>
+            <span style={{
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>1D</div>
+            }}>1D</span>
           </div>
         </div>
         
