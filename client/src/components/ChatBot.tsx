@@ -228,7 +228,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   <!-- Seção de embarque padronizada - linha única horizontal -->
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                      <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">PASSAGEIRO</span>
+                      <span style="font-size: 8px; color: #94a3b8; font-weight: 600; white-space: nowrap;">PASSAGEIRO</span>
                       <span style="font-size: 12px; font-weight: 700; color: white;">${passenger.name}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -258,8 +258,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   </div>
                   
                   <!-- Linha adicional com cliente -->
-                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 24px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
                       <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">CLIENTE</span>
                       <span style="font-size: 12px; font-weight: 700; color: white;">${passenger.name}</span>
                     </div>
@@ -841,22 +841,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         </div>
         
         <!-- Linha adicional com cliente -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 24px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">CLIENTE</span>
-            <span style="font-size: 12px; font-weight: 700; color: white;">${passengerName}</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">${passenger.name}</span>
           </div>
         </div>
         
         <!-- QR Code posicionado no canto inferior direito -->
         <div style="position: absolute; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
           <div style="width: 50px; height: 50px; background-image: url('data:image/svg+xml,${encodeURIComponent('<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="10" height="10" fill="black"/><rect x="20" y="0" width="10" height="10" fill="black"/><rect x="40" y="0" width="10" height="10" fill="black"/><rect x="0" y="20" width="10" height="10" fill="black"/><rect x="40" y="20" width="10" height="10" fill="black"/><rect x="0" y="40" width="10" height="10" fill="black"/><rect x="20" y="40" width="10" height="10" fill="black"/><rect x="40" y="40" width="10" height="10" fill="black"/><rect x="10" y="10" width="10" height="10" fill="black"/><rect x="30" y="10" width="10" height="10" fill="black"/><rect x="10" y="30" width="10" height="10" fill="black"/><rect x="30" y="30" width="10" height="10" fill="black"/></svg>')}'); background-size: cover;"></div>
-        </div>
-        </div>
-        
-        <div style="text-align: center; padding: 0 20px; margin-bottom: 16px;">
-          <div style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">LOCALIZADOR</div>
-          <div style="font-size: 14px; font-weight: 700; color: white; letter-spacing: 2px;">${ticketCode}</div>
         </div>
       </div>
     `;
