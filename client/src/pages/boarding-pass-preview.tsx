@@ -131,7 +131,7 @@ export default function BoardingPassPreview() {
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>12:55</span>
+            }}>{boardingTime}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{
@@ -144,7 +144,7 @@ export default function BoardingPassPreview() {
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>13:20</span>
+            }}>{flightTime}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{

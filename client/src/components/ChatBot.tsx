@@ -324,34 +324,58 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const createBoardingPassHTML = (passengerName: string, isAdult: boolean) => {
+    // Recuperar dados salvos no localStorage
+    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+    const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{}');
+    
     // Usar a data específica da opção de voo escolhida pelo usuário
     let flightDate = new Date();
+    let flightTime = '13:20'; // Horário padrão
     
     if (selectedDate) {
       const appointmentDate = new Date(selectedDate);
       
-      // Determinar qual opção foi escolhida baseado no currentStep
-      if (currentStep.includes('option1') || messages.some(msg => msg.sender === 'user' && msg.text.includes('Opção 1'))) {
+      // Determinar qual opção foi escolhida baseado nas mensagens
+      const option1Selected = messages.some(msg => msg.sender === 'user' && msg.text.includes('Opção 1'));
+      const option2Selected = messages.some(msg => msg.sender === 'user' && msg.text.includes('Opção 2'));
+      
+      if (option1Selected) {
         // Opção 1: 2 dias antes do agendamento
         flightDate = new Date(appointmentDate);
         flightDate.setDate(appointmentDate.getDate() - 2);
-      } else if (currentStep.includes('option2') || messages.some(msg => msg.sender === 'user' && msg.text.includes('Opção 2'))) {
+        flightTime = '13:20';
+      } else if (option2Selected) {
         // Opção 2: 1 dia antes do agendamento
         flightDate = new Date(appointmentDate);
         flightDate.setDate(appointmentDate.getDate() - 1);
+        flightTime = '09:45';
       }
     }
     
-    // Usar aeroporto real encontrado pelo sistema
+    // Calcular horário de embarque (25 minutos antes)
+    const flightTimeHour = parseInt(flightTime.split(':')[0]);
+    const flightTimeMinute = parseInt(flightTime.split(':')[1]);
+    const boardingMinutes = flightTimeMinute - 25;
+    let boardingHour = flightTimeHour;
+    let boardingMinute = boardingMinutes;
+    
+    if (boardingMinutes < 0) {
+      boardingHour -= 1;
+      boardingMinute = 60 + boardingMinutes;
+    }
+    
+    const boardingTime = `${boardingHour.toString().padStart(2, '0')}:${boardingMinute.toString().padStart(2, '0')}`;
+    
+    // Usar aeroporto real encontrado pelo sistema ou dados da cidade
     let originCode = 'GRU';
     let originCity = 'SÃO PAULO';
     
     if (nearestAirport) {
       originCode = nearestAirport.code;
       originCity = nearestAirport.city.toUpperCase();
-    } else if (userCity) {
-      // Mapear cidades para aeroportos reais
-      const cityLower = userCity.toLowerCase();
+    } else if (cidadeInfo.localidade) {
+      // Mapear cidades para aeroportos reais baseado no CEP
+      const cityLower = cidadeInfo.localidade.toLowerCase();
       if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
         originCode = 'GYN';
         originCity = 'GOIÂNIA';
@@ -370,14 +394,72 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       } else if (cityLower.includes('rio de janeiro')) {
         originCode = 'GIG';
         originCity = 'RIO DE JANEIRO';
+      } else if (cityLower.includes('fortaleza')) {
+        originCode = 'FOR';
+        originCity = 'FORTALEZA';
+      } else if (cityLower.includes('curitiba')) {
+        originCode = 'CWB';
+        originCity = 'CURITIBA';
+      } else if (cityLower.includes('porto alegre')) {
+        originCode = 'POA';
+        originCity = 'PORTO ALEGRE';
+      } else if (cityLower.includes('manaus')) {
+        originCode = 'MAO';
+        originCity = 'MANAUS';
+      } else if (cityLower.includes('belém')) {
+        originCode = 'BEL';
+        originCity = 'BELÉM';
+      } else if (cityLower.includes('natal')) {
+        originCode = 'NAT';
+        originCity = 'NATAL';
+      } else if (cityLower.includes('joão pessoa')) {
+        originCode = 'JPA';
+        originCity = 'JOÃO PESSOA';
+      } else if (cityLower.includes('maceió')) {
+        originCode = 'MCZ';
+        originCity = 'MACEIÓ';
+      } else if (cityLower.includes('aracaju')) {
+        originCode = 'AJU';
+        originCity = 'ARACAJU';
+      } else if (cityLower.includes('teresina')) {
+        originCode = 'THE';
+        originCity = 'TERESINA';
+      } else if (cityLower.includes('são luís')) {
+        originCode = 'SLZ';
+        originCity = 'SÃO LUÍS';
+      } else if (cityLower.includes('cuiabá')) {
+        originCode = 'CGB';
+        originCity = 'CUIABÁ';
+      } else if (cityLower.includes('campo grande')) {
+        originCode = 'CGR';
+        originCity = 'CAMPO GRANDE';
+      } else if (cityLower.includes('florianópolis')) {
+        originCode = 'FLN';
+        originCity = 'FLORIANÓPOLIS';
+      } else if (cityLower.includes('vitória')) {
+        originCode = 'VIX';
+        originCity = 'VITÓRIA';
+      } else {
+        // Para outras cidades, usar a cidade informada
+        originCity = cidadeInfo.localidade.toUpperCase();
+      }
+    } else if (userCity) {
+      // Fallback para userCity se não houver dados do CEP
+      const cityLower = userCity.toLowerCase();
+      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
+        originCode = 'GYN';
+        originCity = 'GOIÂNIA';
+      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
+        originCode = 'BSB';
+        originCity = 'BRASÍLIA';
+      } else {
+        originCity = userCity.toUpperCase();
       }
     }
     
-    const boardingTime = '12:55';
-    const departureTime = '13:20';
-    const flightNumber = `2768`;
-    const seat = `1D`;
-    const ticketCode = `NF2NPC - 94`;
+    const flightNumber = `AD2768`;
+    const seat = isAdult ? `1A` : `1${String.fromCharCode(66 + Math.floor(Math.random() * 4))}`; // 1B, 1C, 1D, 1E para crianças
+    const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 
     return `
       <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 8px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 400px; height: 520px; overflow: hidden; box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);">
@@ -421,7 +503,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 8px; color: #94a3b8; font-weight: 600; white-space: nowrap;">FIM EMBARQUE</span>
-            <span style="font-size: 12px; font-weight: 700; color: white;">${departureTime}</span>
+            <span style="font-size: 12px; font-weight: 700; color: white;">${flightTime}</span>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 8px; color: #94a3b8; font-weight: 600;">SEÇÃO</span>
@@ -447,7 +529,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         <div style="display: flex; justify-content: center; margin-bottom: 24px; padding: 0 24px;">
           <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=NF2NPC-94-AZUL-${passengerName.replace(/\s+/g, '')}-${flightNumber}" style="width: 160px; height: 160px; display: block;" alt="QR Code" />
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${ticketCode}-AZUL-${passengerName.replace(/\s+/g, '')}-${flightNumber}-${flightDate.toLocaleDateString('pt-BR').replace(/\//g, '')}" style="width: 160px; height: 160px; display: block;" alt="QR Code" />
           </div>
         </div>
         
