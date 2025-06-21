@@ -19,33 +19,38 @@ export default function BoardingPassPreview() {
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          padding: '24px 24px 20px 24px'
+          alignItems: 'center',
+          padding: '16px 20px 20px 20px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <img 
               src="/azul-logo-oficial.png" 
-              style={{ height: '40px', width: 'auto' }} 
+              style={{ height: '24px', width: 'auto' }} 
               alt="Azul"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.style.display = 'none';
                 const fallback = document.createElement('div');
-                fallback.innerHTML = '<span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>';
+                fallback.innerHTML = '<span style="font-size: 24px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>';
                 target.parentNode?.appendChild(fallback);
               }}
             />
           </div>
           <div style={{
-            textAlign: 'right',
-            fontSize: '12px',
-            color: '#94a3b8',
-            lineHeight: '1.4'
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+            fontSize: '11px',
+            color: '#94a3b8'
           }}>
-            <div style={{ fontWeight: '600', marginBottom: '2px' }}>DATA</div>
-            <div style={{ fontWeight: '700', color: 'white', fontSize: '14px' }}>07/12/21</div>
-            <div style={{ fontWeight: '600', marginTop: '8px', marginBottom: '2px' }}>VOO</div>
-            <div style={{ fontWeight: '700', color: 'white', fontSize: '14px' }}>2768</div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontWeight: '600', marginBottom: '2px' }}>DATA</div>
+              <div style={{ fontWeight: '700', color: 'white', fontSize: '12px' }}>{new Date().toLocaleDateString('pt-BR')}</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontWeight: '600', marginBottom: '2px' }}>VOO</div>
+              <div style={{ fontWeight: '700', color: 'white', fontSize: '12px' }}>2768</div>
+            </div>
           </div>
         </div>
         

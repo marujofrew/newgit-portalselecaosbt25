@@ -382,15 +382,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     return `
       <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 16px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 320px; height: 520px; overflow: hidden; box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);">
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 20px 16px 20px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="/azul-logo-oficial.png" style="height: 32px; width: auto;" alt="Azul" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\\'font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;\\'>Azul</span>'" />
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 20px 20px;">
+          <div style="display: flex; align-items: center;">
+            <img src="/azul-logo-oficial.png" style="height: 24px; width: auto;" alt="Azul" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\\'font-size: 24px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;\\'>Azul</span>'" />
           </div>
-          <div style="text-align: right; font-size: 12px; color: #94a3b8; line-height: 1.4;">
-            <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
-            <div style="font-weight: 700; color: white; font-size: 14px;">${flightDate.toLocaleDateString('pt-BR')}</div>
-            <div style="font-weight: 600; margin-top: 8px; margin-bottom: 2px;">VOO</div>
-            <div style="font-weight: 700; color: white; font-size: 14px;">${flightNumber}</div>
+          <div style="display: flex; align-items: center; gap: 20px; font-size: 11px; color: #94a3b8;">
+            <div style="text-align: center;">
+              <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
+              <div style="font-weight: 700; color: white; font-size: 12px;">${flightDate.toLocaleDateString('pt-BR')}</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-weight: 600; margin-bottom: 2px;">VOO</div>
+              <div style="font-weight: 700; color: white; font-size: 12px;">${flightNumber}</div>
+            </div>
           </div>
         </div>
         

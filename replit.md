@@ -92,6 +92,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## Recent Changes
 
+- **Header do cartão reorganizado**: Logo menor (24px) com data e voo alinhados na mesma linha horizontal
 - **Códigos de aeroportos dinâmicos implementados**: Cartões usam códigos reais dos aeroportos encontrados pelo sistema com layout centralizado
 - **Sistema de datas dinâmicas implementado**: Cartões de embarque mostram a data exata da opção de voo escolhida pelo usuário
 - **Logo oficial da Azul implementada**: Cartões de embarque agora usam a logo oficial fornecida pelo usuário
