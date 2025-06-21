@@ -159,6 +159,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     switch (currentStep) {
       case 'transport':
         return ['Avião', 'Ônibus'];
+      case 'flight-confirmation':
+        return ['Sim, confirmar passagens', 'Não, buscar outras opções'];
       case 'hotel':
         return ['Hotel próximo aos estúdios', 'Hotel no centro'];
       case 'people':
@@ -197,6 +199,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           } else {
             botResponse = "Por favor, escolha uma das opções acima para que eu possa te ajudar melhor.";
             showOptions = true;
+          }
+          break;
+          
+        case 'flight-confirmation':
+          if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('confirmar')) {
+            botResponse = "Excelente! Suas passagens foram confirmadas. Você receberá um e-mail em até 24 horas com todos os detalhes do voo. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?";
+            nextStep = 'hotel';
+            showOptions = true;
+          } else {
+            botResponse = "Sem problemas! Vou buscar outras opções de voo para você. Por favor, aguarde...";
+            // Poderia implementar lógica para buscar outras opções
+            nextStep = 'city';
+            showOptions = false;
           }
           break;
           
@@ -246,7 +261,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(false);
             let flightInfo = '';
             if (nearestAirport && flightDate) {
-              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
+              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nPosso confirmar essas passagens para esse voo?`;
             } else {
               // Usar dados dinâmicos se disponíveis, senão usar fallback baseado na cidade do usuário
               const cityName = userCity || 'São Paulo - SP';
@@ -257,10 +272,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               flightDateCalc.setDate(currentDate.getDate() + 5); // 5 dias a partir de hoje
               const dateString = flightDateCalc.toLocaleDateString('pt-BR');
               
-              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${airportName} (${airportCode}) com destino a São Paulo no dia ${dateString}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
+              flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${airportName} (${airportCode}) com destino a São Paulo no dia ${dateString}. \n\nPosso confirmar essas passagens para esse voo?`;
             }
             console.log('Enviando mensagem do voo:', flightInfo);
             addMessage(flightInfo, 'bot');
+            
+            // Adicionar opções de resposta após alguns segundos
+            setTimeout(() => {
+              setShowQuickOptions(true);
+              setCurrentStep('flight-confirmation');
+            }, 1000);
           }, 3000);
         }, 2000);
       }
