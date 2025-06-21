@@ -163,6 +163,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       delete (window as any).downloadStackedCards;
     };
 
+    return () => {
+      delete (window as any).openUnifiedBoardingPass;
+      delete (window as any).closeBoardingPass;
+    };
+  }, [setLastModalState, nearestAirport, flightDate]);
+
+  // Configurar função global separada para geração
+  useEffect(() => {
     (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
       const element = document.createElement('a');
       const htmlContent = `
@@ -307,6 +315,31 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         addMessage(unifiedFile, 'bot');
       }, 2000);
     }, 1000);
+  };
+
+  const createUnifiedBoardingPassFile = (passengers: any[]) => {
+    const passengersJson = JSON.stringify(passengers).replace(/"/g, '&quot;');
+    
+    return `
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openUnifiedBoardingPass && window.openUnifiedBoardingPass('${passengersJson}')" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
+            📄
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
+              Cartões de Embarque - ${passengers.length} passageiro(s)
+            </div>
+            <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
+              ${passengers.map(p => p.name).join(', ')}
+            </div>
+            <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
+              📱 Clique para visualizar e baixar todos
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   };
 
   const createBoardingPassFile = (passengerName: string, isAdult: boolean, seatIndex: number) => {
