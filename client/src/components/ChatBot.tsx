@@ -246,7 +246,7 @@ export default function ChatBot({ isOpen, onClose, userCity }: ChatBotProps) {
             <div className="flex flex-wrap gap-2">
               {getQuickOptions().map((option, index) => (
                 <button
-                  key={index}
+                  key={`option-${currentStep}-${index}-${option}`}
                   onClick={() => handleQuickOption(option)}
                   className="px-3 py-2 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors"
                 >
