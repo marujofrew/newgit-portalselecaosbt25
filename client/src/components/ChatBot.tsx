@@ -166,8 +166,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     return () => {
       delete (window as any).openUnifiedBoardingPass;
       delete (window as any).closeBoardingPass;
+      delete (window as any).prevCard;
+      delete (window as any).nextCard;
+      delete (window as any).downloadStackedCards;
     };
-  }, [setLastModalState, nearestAirport, flightDate]);
+  }, []);
 
   // Configurar função global separada para geração
   useEffect(() => {
@@ -347,10 +350,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const createUnifiedBoardingPassFile = (passengers: any[]) => {
-    const passengersJson = JSON.stringify(passengers).replace(/"/g, '&quot;');
+    const passengersJson = JSON.stringify(passengers);
+    const escapedJson = passengersJson.replace(/"/g, '&quot;');
+    console.log('Creating boarding pass file for passengers:', passengers);
+    console.log('JSON to pass:', passengersJson);
     
     return `
-      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 350px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.openUnifiedBoardingPass && window.openUnifiedBoardingPass('${passengersJson}')" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 350px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="console.log('Clicked boarding pass!'); if(window.openUnifiedBoardingPass) { window.openUnifiedBoardingPass('${escapedJson}'); } else { console.error('openUnifiedBoardingPass function not found'); }" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
             ✈️
