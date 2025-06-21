@@ -8,6 +8,7 @@ import Loading from "@/pages/loading";
 import Cadastro from "@/pages/cadastro";
 import Agendamento from "@/pages/agendamento";
 import BoardingPassPreview from "@/pages/boarding-pass-preview";
+import CartaoPreview from "@/pages/cartao-preview";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/cadastro" component={Cadastro}/>
       <Route path="/agendamento" component={Agendamento}/>
       <Route path="/preview-cartao" component={BoardingPassPreview}/>
+      <Route path="/cartao-preview" component={CartaoPreview}/>
       <Route component={NotFound} />
     </Switch>
   );
