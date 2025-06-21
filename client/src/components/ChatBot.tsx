@@ -159,15 +159,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
             botResponse = botResponses.transport.aviao;
             nextStep = 'city';
-            
-            // Após 3 segundos, enviar informação sobre o voo encontrado
-            setTimeout(() => {
-              if (nearestAirport && flightDate) {
-                const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
-                addMessage(flightInfo, 'bot');
-              }
-            }, 3000);
-            
           } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
             botResponse = botResponses.transport.onibus;
             nextStep = 'city';
@@ -213,6 +204,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       addMessage(botResponse, 'bot');
       setCurrentStep(nextStep);
       setShowQuickOptions(showOptions);
+      
+      // Se foi escolhido avião, enviar informação sobre o voo após mais 3 segundos
+      if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
+        setTimeout(() => {
+          if (nearestAirport && flightDate) {
+            const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
+            addMessage(flightInfo, 'bot');
+          }
+        }, 3000);
+      }
     }, 4000);
 
     setInputMessage('');
