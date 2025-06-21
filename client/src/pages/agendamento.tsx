@@ -83,6 +83,19 @@ export default function Agendamento() {
     }
   };
 
+  // Função para scroll automático para o botão de confirmar
+  const scrollToConfirmButton = () => {
+    setTimeout(() => {
+      const confirmButton = document.getElementById('confirm-button');
+      if (confirmButton) {
+        confirmButton.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }
+    }, 100);
+  };
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
