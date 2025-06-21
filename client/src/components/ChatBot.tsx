@@ -729,16 +729,45 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         if (messageToSend.toLowerCase().includes('sim') && messageToSend.toLowerCase().includes('continuar')) {
           setShowPaymentStatus(false); // Remove o campo amarelo
           botResponse = "Estou realizando o pagamento das suas passagens, já te envio o cartão de embarque.";
-          nextStep = 'hotel';
+          nextStep = 'boarding-pass-confirmed';
           showOptions = false;
           
+          // Sequência de mensagens para cartão de embarque
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Para sua estadia em São Paulo, temos duas opções de hotel:", 'bot');
-              setShowQuickOptions(true);
-              setCurrentStep('hotel');
+              addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque.", 'bot');
+              
+              setTimeout(() => {
+                generateBoardingPasses();
+              }, 2000);
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Faça o download dos cartões de embarque para quando for embarcar apresentar os cartões.", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Fique tranquilo! Caso não consiga baixar, enviaremos por WhatsApp também.", 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage("Para sua estadia em São Paulo, temos duas opções de hotel:", 'bot');
+                          setShowQuickOptions(true);
+                          setCurrentStep('hotel');
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 6000);
             }, 5000);
           }, 5000);
         }
@@ -748,16 +777,45 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('continuar')) {
           setShowPaymentStatus(false); // Remove o campo amarelo
           botResponse = "Como não identifiquei o pagamento, irei cancelar o seu adicional de bagagem e finalizar a compra de suas passagens, ok?";
-          nextStep = 'payment-cancelled';
+          nextStep = 'boarding-pass-cancelled';
           showOptions = false;
           
+          // Sequência de mensagens para cartão de embarque sem bagagem
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Para sua estadia em São Paulo, temos duas opções de hotel:", 'bot');
-              setShowQuickOptions(true);
-              setCurrentStep('hotel');
+              addMessage("Pronto! Já realizei a compra de suas passagens aéreas (sem adicional de bagagem), agora vou te enviar os cartões de embarque.", 'bot');
+              
+              setTimeout(() => {
+                generateBoardingPasses();
+              }, 2000);
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Faça o download dos cartões de embarque para quando for embarcar apresentar os cartões.", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Fique tranquilo! Caso não consiga baixar, enviaremos por WhatsApp também.", 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage("Para sua estadia em São Paulo, temos duas opções de hotel:", 'bot');
+                          setShowQuickOptions(true);
+                          setCurrentStep('hotel');
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 6000);
             }, 5000);
           }, 5000);
         }
