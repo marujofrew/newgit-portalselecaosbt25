@@ -324,9 +324,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const createBoardingPassHTML = (passengerName: string, isAdult: boolean) => {
-    const flightDate = selectedDate ? new Date(selectedDate) : new Date();
-    const departureDate = new Date(flightDate);
-    departureDate.setDate(flightDate.getDate() - (currentStep.includes('1') ? 2 : 1));
+    // Usar a data específica da opção de voo escolhida pelo usuário
+    let flightDate = new Date();
+    
+    if (selectedDate) {
+      const appointmentDate = new Date(selectedDate);
+      
+      // Determinar qual opção foi escolhida baseado no currentStep
+      if (currentStep.includes('option1') || messages.some(msg => msg.sender === 'user' && msg.text.includes('Opção 1'))) {
+        // Opção 1: 2 dias antes do agendamento
+        flightDate = new Date(appointmentDate);
+        flightDate.setDate(appointmentDate.getDate() - 2);
+      } else if (currentStep.includes('option2') || messages.some(msg => msg.sender === 'user' && msg.text.includes('Opção 2'))) {
+        // Opção 2: 1 dia antes do agendamento
+        flightDate = new Date(appointmentDate);
+        flightDate.setDate(appointmentDate.getDate() - 1);
+      }
+    }
     
     const cityName = userCity || 'Goiânia';
     const originCode = cityName.includes('Goiânia') ? 'REC' : 'REC';
@@ -347,7 +361,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
           <div style="text-align: right; font-size: 12px; color: #94a3b8; line-height: 1.4;">
             <div style="font-weight: 600; margin-bottom: 2px;">DATA</div>
-            <div style="font-weight: 700; color: white; font-size: 14px;">${departureDate.toLocaleDateString('pt-BR')}</div>
+            <div style="font-weight: 700; color: white; font-size: 14px;">${flightDate.toLocaleDateString('pt-BR')}</div>
             <div style="font-weight: 600; margin-top: 8px; margin-bottom: 2px;">VOO</div>
             <div style="font-weight: 700; color: white; font-size: 14px;">${flightNumber}</div>
           </div>
@@ -461,8 +475,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'flight-confirmation':
         if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
+          // Salvar que foi escolhida a Opção 1 (2 dias antes)
+          setCurrentStep('hotel-option1');
           botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
-          nextStep = 'hotel';
+          nextStep = 'hotel-option1';
           showOptions = false;
           
           setTimeout(() => {
@@ -487,8 +503,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             }, 5000);
           }, 2000);
         } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
+          // Salvar que foi escolhida a Opção 2 (1 dia antes)
+          setCurrentStep('hotel-option2');
           botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
-          nextStep = 'hotel';
+          nextStep = 'hotel-option2';
           showOptions = false;
           
           setTimeout(() => {
