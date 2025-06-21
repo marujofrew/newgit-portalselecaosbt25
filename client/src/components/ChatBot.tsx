@@ -196,7 +196,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   </button>
                 </div>
                 
-                <div style="width: 300px; height: 520px; background: #003d82; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+                <div style="width: 300px; height: 520px; background: #001f3f; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
                   
                   <!-- Header - Layout oficial -->
                   <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;">
@@ -819,7 +819,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 
     return `
-      <div style="width: 300px; height: 520px; background: #003d82; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+      <div style="width: 300px; height: 520px; background: #001f3f; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
         
         <!-- Header - Layout oficial -->
         <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;">
