@@ -415,7 +415,7 @@ export default function Cadastro() {
                     setShowFormulario(true);
                     scrollToSection('formulario-responsavel');
                   }}
-                  className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200"
+                  className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
                 >
                   Continuar Cadastro
                 </button>
