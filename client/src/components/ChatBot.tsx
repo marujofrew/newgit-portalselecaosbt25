@@ -208,77 +208,91 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     departureDate.setDate(flightDate.getDate() - (currentStep.includes('1') ? 2 : 1));
     
     const cityName = userCity || 'Goiânia';
-    const originCode = cityName.includes('Goiânia') ? 'GYN' : 'CGH';
-    const originCity = cityName.includes('Goiânia') ? 'GOIÂNIA' : cityName.split(' - ')[0].toUpperCase();
+    const originCode = cityName.includes('Goiânia') ? 'REC' : 'REC';
+    const originCity = cityName.includes('Goiânia') ? 'RECIFE' : 'RECIFE';
     
     const boardingTime = currentStep.includes('1') ? '12:55' : '14:15';
     const departureTime = currentStep.includes('1') ? '13:20' : '14:45';
-    const flightNumber = `AD${Math.floor(Math.random() * 1000) + 2000}`;
-    const seat = `${Math.floor(Math.random() * 30) + 1}${String.fromCharCode(65 + Math.floor(Math.random() * 6))}`;
-    const ticketCode = `${Array.from({length: 6}, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join('')}`;
+    const flightNumber = `2768`;
+    const seat = `1D`;
+    const ticketCode = `NF2NPC - 94`;
 
     return `
-      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); border-radius: 12px; padding: 20px; color: white; font-family: 'Segoe UI', sans-serif; margin: 10px 0; position: relative; max-width: 350px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <div style="font-size: 24px; font-weight: bold; color: #60a5fa;">Azul ✈</div>
-          <div style="text-align: right; font-size: 12px; opacity: 0.8;">
-            <div>DATA: ${departureDate.toLocaleDateString('pt-BR')}</div>
-            <div>VOO: ${flightNumber}</div>
+      <div style="background: linear-gradient(180deg, #1a365d 0%, #2d5282 100%); border-radius: 20px; padding: 0; color: white; font-family: system-ui, -apple-system, sans-serif; margin: 10px 0; position: relative; max-width: 320px; min-height: 520px; overflow: hidden;">
+        
+        <!-- Header com logo e data/voo -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 20px 15px 20px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <img src="https://logodownload.org/wp-content/uploads/2016/11/azul-logo-02.png" style="height: 32px; width: auto;" alt="Azul" />
+          </div>
+          <div style="text-align: right; font-size: 11px; color: #a3bffa; line-height: 1.3;">
+            <div style="font-weight: 600;">DATA</div>
+            <div style="font-weight: 700; color: white;">${departureDate.toLocaleDateString('pt-BR').replace(/\//g, '/')}</div>
+            <div style="font-weight: 600; margin-top: 4px;">VOO</div>
+            <div style="font-weight: 700; color: white;">${flightNumber}</div>
           </div>
         </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-          <div>
-            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 2px;">${originCity}</div>
-            <div style="font-size: 32px; font-weight: bold;">${originCode}</div>
+        <!-- Aeroportos -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 25px;">
+          <div style="text-align: left;">
+            <div style="font-size: 11px; color: #a3bffa; font-weight: 600; margin-bottom: 4px;">${originCity}</div>
+            <div style="font-size: 36px; font-weight: 700; letter-spacing: 2px;">${originCode}</div>
           </div>
-          <div style="font-size: 32px; color: #60a5fa;">✈</div>
+          <div style="font-size: 28px; color: #60a5fa; margin: 0 15px;">✈</div>
           <div style="text-align: right;">
-            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 2px;">SÃO PAULO - GUARULHOS</div>
-            <div style="font-size: 32px; font-weight: bold;">GRU</div>
+            <div style="font-size: 11px; color: #a3bffa; font-weight: 600; margin-bottom: 4px;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 36px; font-weight: 700; letter-spacing: 2px;">GRU</div>
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; font-size: 12px;">
-          <div>
-            <div style="opacity: 0.8;">INÍCIO EMBARQUE</div>
-            <div style="font-size: 16px; font-weight: bold;">${boardingTime}</div>
+        <!-- Informações de embarque -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 20px; margin-bottom: 25px;">
+          <div style="text-align: center;">
+            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">INÍCIO EMBARQUE</div>
+            <div style="font-size: 16px; font-weight: 700;">${boardingTime}</div>
           </div>
-          <div>
-            <div style="opacity: 0.8;">FIM EMBARQUE</div>
-            <div style="font-size: 16px; font-weight: bold;">${departureTime}</div>
+          <div style="text-align: center;">
+            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">FIM EMBARQUE</div>
+            <div style="font-size: 16px; font-weight: 700;">${departureTime}</div>
           </div>
-          <div>
-            <div style="opacity: 0.8;">SEÇÃO</div>
-            <div style="font-size: 16px; font-weight: bold;">D</div>
+          <div style="text-align: center;">
+            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">SEÇÃO</div>
+            <div style="font-size: 16px; font-weight: 700;">D</div>
           </div>
-          <div>
-            <div style="opacity: 0.8;">ASSENTO</div>
-            <div style="font-size: 16px; font-weight: bold;">${seat}</div>
+          <div style="text-align: center;">
+            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">ASSENTO</div>
+            <div style="font-size: 16px; font-weight: 700;">${seat}</div>
           </div>
         </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <!-- Cliente e categoria -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 30px;">
           <div>
-            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 2px;">CLIENTE</div>
-            <div style="font-size: 16px; font-weight: bold;">${passengerName.toUpperCase()}</div>
+            <div style="font-size: 10px; color: #a3bffa; font-weight: 600; margin-bottom: 6px;">CLIENTE</div>
+            <div style="font-size: 16px; font-weight: 700;">${passengerName.toUpperCase()}</div>
           </div>
           <div style="text-align: right;">
-            <div style="background: #60a5fa; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
-              ${isAdult ? 'Adulto' : 'Menor'}
+            <div style="background: transparent; color: #60a5fa; font-size: 16px; font-weight: 700;">
+              Diamante
             </div>
           </div>
         </div>
         
-        <div style="display: flex; justify-content: center; background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-          <div style="width: 120px; height: 120px; background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ3aGl0ZSIvPgo8cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjI2IiB5PSIxMCIgd2lkdGg9IjgiIGhlaWdodD0iOCIgZmlsbD0iYmxhY2siLz4KPHN2Zz4K') center/contain no-repeat; border: 2px solid #e5e7eb;"></div>
+        <!-- QR Code -->
+        <div style="display: flex; justify-content: center; margin-bottom: 20px; padding: 0 20px;">
+          <div style="background: white; padding: 20px; border-radius: 12px; display: inline-flex;">
+            <div style="width: 140px; height: 140px; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23fff%22/%3E%3Cg fill=%22%23000%22%3E%3Crect x=%225%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%225%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2215%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2215%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2225%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2235%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2245%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2245%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2255%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2265%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2275%22 width=%225%22 height=%225%22/%3E%3Crect x=%225%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2215%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2225%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2235%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2245%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2255%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2265%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2275%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3Crect x=%2285%22 y=%2285%22 width=%225%22 height=%225%22/%3E%3C/g%3E%3C/svg%3E'); background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
+          </div>
         </div>
         
-        <div style="text-align: center; font-size: 12px; font-weight: bold; opacity: 0.8;">
-          ${ticketCode} - ${Math.floor(Math.random() * 100)}
+        <!-- Código do ticket -->
+        <div style="text-align: center; font-size: 12px; font-weight: 700; color: #a3bffa; padding: 0 20px 25px 20px;">
+          ${ticketCode}
         </div>
         
-        <button onclick="window.saveBoardingPass && window.saveBoardingPass('${passengerName}', '${flightNumber}')" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 10px; border-radius: 15px; font-size: 10px; cursor: pointer;">
+        <!-- Botão salvar -->
+        <button onclick="window.saveBoardingPass && window.saveBoardingPass('${passengerName}', '${flightNumber}')" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: 600; backdrop-filter: blur(10px);">
           💾 Salvar
         </button>
       </div>
