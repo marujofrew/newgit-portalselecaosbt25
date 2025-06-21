@@ -160,7 +160,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'transport':
         return ['Avião', 'Ônibus'];
       case 'flight-confirmation':
-        return ['**Opção 1**', '**Opção 2**'];
+        return ['Opção 1', 'Opção 2'];
       case 'hotel':
         return ['Hotel próximo aos estúdios', 'Hotel no centro'];
       case 'people':
