@@ -196,78 +196,112 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   </button>
                 </div>
                 
-                <div style="width: 300px; height: 500px; background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%); border-radius: 12px; padding: 24px; color: white; font-family: Arial, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
-                  <!-- Header -->
-                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-                    <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 28px; width: auto;" />
+                <div style="width: 320px; height: 500px; background: linear-gradient(135deg, #003d82 0%, #0052a3 100%); border-radius: 8px; padding: 20px; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+                  
+                  <!-- PRIMEIRA PARTE: Header com logo e boarding pass -->
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px;">
+                    <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 32px; width: auto;" />
                     <div style="text-align: right;">
-                      <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">CARTÃO DE EMBARQUE</div>
-                      <div style="font-size: 12px; font-weight: 600;">${new Date().toLocaleDateString('pt-BR')}</div>
+                      <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">BOARDING PASS</div>
+                      <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">CARTÃO DE EMBARQUE</div>
                     </div>
                   </div>
                   
-                  <!-- Aeroportos -->
-                  <div style="margin-bottom: 32px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                  <!-- SEGUNDA PARTE: Aeroportos e informações principais -->
+                  <div style="margin-bottom: 25px;">
+                    <!-- Aeroportos origem e destino -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                       <div style="text-align: left;">
-                        <div style="font-size: 32px; font-weight: bold; margin-bottom: 4px;">GRU</div>
-                        <div style="font-size: 12px; color: #bfdbfe;">SÃO PAULO</div>
+                        <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">GRU</div>
+                        <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">SÃO PAULO</div>
                       </div>
-                      <div style="display: flex; align-items: center; justify-content: center; width: 60px;">
-                        <div style="font-size: 24px;">✈️</div>
+                      <div style="display: flex; flex-direction: column; align-items: center; flex: 1; margin: 0 20px;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">✈</div>
+                        <div style="font-size: 8px; color: #b3d1ff; font-weight: 500;">DOM 15 DEZ</div>
                       </div>
                       <div style="text-align: right;">
-                        <div style="font-size: 32px; font-weight: bold; margin-bottom: 4px;">GRU</div>
-                        <div style="font-size: 12px; color: #bfdbfe;">SÃO PAULO</div>
+                        <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">GRU</div>
+                        <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">SÃO PAULO</div>
+                      </div>
+                    </div>
+                    
+                    <!-- Linha de informações principais - tudo na mesma linha -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
+                      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PASSAGEIRO</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">${passenger.name.toUpperCase()}</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">VOO</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">AD1234</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">ASSENTO</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">${seatNumber}</span>
                       </div>
                     </div>
                   </div>
                   
-                  <!-- Informações do voo -->
-                  <div style="margin-bottom: 24px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                      <div>
-                        <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">VOO</div>
-                        <div style="font-size: 14px; font-weight: 600;">AD 1234</div>
+                  <!-- TERCEIRA PARTE: Informações de embarque organizadas -->
+                  <div style="margin-bottom: 25px;">
+                    <!-- Primeira linha de informações -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
+                      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PORTÃO</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">15</span>
                       </div>
-                      <div>
-                        <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">ASSENTO</div>
-                        <div style="font-size: 14px; font-weight: 600;">${seatNumber}</div>
+                      <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">EMBARQUE</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">14:35</span>
                       </div>
-                      <div>
-                        <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">PORTÃO</div>
-                        <div style="font-size: 14px; font-weight: 600;">15</div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PARTIDA</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">15:00</span>
+                      </div>
+                    </div>
+                    
+                    <!-- Segunda linha de informações -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
+                      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">SEÇÃO</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">Y</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">CLASSE</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">ECONÔMICA</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">STATUS</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">OK</span>
+                      </div>
+                    </div>
+                    
+                    <!-- Terceira linha de informações -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px;">
+                      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">SEQUÊNCIA</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">001</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">LOCALIZADOR</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">ABC123</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">BAGAGEM</span>
+                        <span style="font-size: 11px; font-weight: 600; color: white;">1PC</span>
                       </div>
                     </div>
                   </div>
                   
-                  <!-- Horários -->
-                  <div style="margin-bottom: 24px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                      <div>
-                        <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">EMBARQUE</div>
-                        <div style="font-size: 14px; font-weight: 600;">14:35</div>
-                      </div>
-                      <div>
-                        <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">PARTIDA</div>
-                        <div style="font-size: 14px; font-weight: 600;">15:00</div>
-                      </div>
-                      <div>
-                        <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">SEÇÃO</div>
-                        <div style="font-size: 14px; font-weight: 600;">D</div>
-                      </div>
-                    </div>
+                  <!-- QUARTA PARTE: QR Code no canto inferior direito -->
+                  <div style="position: absolute; bottom: 20px; right: 20px; width: 70px; height: 70px; background-color: white; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 60px; height: 60px; background-image: url('data:image/svg+xml,${encodeURIComponent('<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="6" height="6" fill="black"/><rect x="12" y="0" width="6" height="6" fill="black"/><rect x="24" y="0" width="6" height="6" fill="black"/><rect x="36" y="0" width="6" height="6" fill="black"/><rect x="48" y="0" width="6" height="6" fill="black"/><rect x="0" y="12" width="6" height="6" fill="black"/><rect x="48" y="12" width="6" height="6" fill="black"/><rect x="0" y="24" width="6" height="6" fill="black"/><rect x="12" y="24" width="6" height="6" fill="black"/><rect x="24" y="24" width="6" height="6" fill="black"/><rect x="36" y="24" width="6" height="6" fill="black"/><rect x="48" y="24" width="6" height="6" fill="black"/><rect x="0" y="36" width="6" height="6" fill="black"/><rect x="48" y="36" width="6" height="6" fill="black"/><rect x="0" y="48" width="6" height="6" fill="black"/><rect x="12" y="48" width="6" height="6" fill="black"/><rect x="24" y="48" width="6" height="6" fill="black"/><rect x="36" y="48" width="6" height="6" fill="black"/><rect x="48" y="48" width="6" height="6" fill="black"/><rect x="6" y="6" width="6" height="6" fill="black"/><rect x="18" y="6" width="6" height="6" fill="black"/><rect x="30" y="6" width="6" height="6" fill="black"/><rect x="42" y="6" width="6" height="6" fill="black"/><rect x="6" y="18" width="6" height="6" fill="black"/><rect x="42" y="18" width="6" height="6" fill="black"/><rect x="6" y="30" width="6" height="6" fill="black"/><rect x="18" y="30" width="6" height="6" fill="black"/><rect x="30" y="30" width="6" height="6" fill="black"/><rect x="42" y="30" width="6" height="6" fill="black"/><rect x="6" y="42" width="6" height="6" fill="black"/><rect x="42" y="42" width="6" height="6" fill="black"/></svg>')}'); background-size: cover;"></div>
                   </div>
                   
-                  <!-- Passageiro -->
-                  <div style="margin-bottom: 32px;">
-                    <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 8px;">PASSAGEIRO</div>
-                    <div style="font-size: 16px; font-weight: 700; text-transform: uppercase;">${passenger.name}</div>
-                  </div>
-                  
-                  <!-- QR Code -->
-                  <div style="position: absolute; bottom: 24px; right: 24px; width: 80px; height: 80px; background-color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <div style="width: 70px; height: 70px; background-image: url('data:image/svg+xml,${encodeURIComponent('<svg width="70" height="70" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="10" height="10" fill="black"/><rect x="20" y="0" width="10" height="10" fill="black"/><rect x="40" y="0" width="10" height="10" fill="black"/><rect x="60" y="0" width="10" height="10" fill="black"/><rect x="0" y="20" width="10" height="10" fill="black"/><rect x="60" y="20" width="10" height="10" fill="black"/><rect x="0" y="40" width="10" height="10" fill="black"/><rect x="20" y="40" width="10" height="10" fill="black"/><rect x="40" y="40" width="10" height="10" fill="black"/><rect x="60" y="40" width="10" height="10" fill="black"/><rect x="0" y="60" width="10" height="10" fill="black"/><rect x="20" y="60" width="10" height="10" fill="black"/><rect x="40" y="60" width="10" height="10" fill="black"/><rect x="60" y="60" width="10" height="10" fill="black"/></svg>')}'); background-size: cover;"></div>
+                  <!-- Texto informativo no rodapé -->
+                  <div style="position: absolute; bottom: 15px; left: 20px; font-size: 7px; color: #b3d1ff;">
+                    <div>Azul Linhas Aéreas Brasileiras</div>
+                    <div>Keep this boarding pass until departure</div>
                   </div>
                 </div>
                 
@@ -779,78 +813,112 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 
     return `
-      <div style="width: 300px; height: 500px; background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%); border-radius: 12px; padding: 24px; color: white; font-family: Arial, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
-        <!-- Header -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 28px; width: auto;" />
+      <div style="width: 320px; height: 500px; background: linear-gradient(135deg, #003d82 0%, #0052a3 100%); border-radius: 8px; padding: 20px; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+        
+        <!-- PRIMEIRA PARTE: Header com logo e boarding pass -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px;">
+          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 32px; width: auto;" />
           <div style="text-align: right;">
-            <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">CARTÃO DE EMBARQUE</div>
-            <div style="font-size: 12px; font-weight: 600;">${flightDate.toLocaleDateString('pt-BR')}</div>
+            <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">BOARDING PASS</div>
+            <div style="font-size: 9px; color: #b3d1ff; letter-spacing: 0.5px; font-weight: 500;">CARTÃO DE EMBARQUE</div>
           </div>
         </div>
         
-        <!-- Aeroportos -->
-        <div style="margin-bottom: 32px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <!-- SEGUNDA PARTE: Aeroportos e informações principais -->
+        <div style="margin-bottom: 25px;">
+          <!-- Aeroportos origem e destino -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
             <div style="text-align: left;">
-              <div style="font-size: 32px; font-weight: bold; margin-bottom: 4px;">${originCode}</div>
-              <div style="font-size: 12px; color: #bfdbfe;">${originCity}</div>
+              <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">${originCode}</div>
+              <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">${originCity}</div>
             </div>
-            <div style="display: flex; align-items: center; justify-content: center; width: 60px;">
-              <div style="font-size: 24px;">✈️</div>
+            <div style="display: flex; flex-direction: column; align-items: center; flex: 1; margin: 0 20px;">
+              <div style="font-size: 20px; margin-bottom: 5px;">✈</div>
+              <div style="font-size: 8px; color: #b3d1ff; font-weight: 500;">${flightDate.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' }).toUpperCase()}</div>
             </div>
             <div style="text-align: right;">
-              <div style="font-size: 32px; font-weight: bold; margin-bottom: 4px;">GRU</div>
-              <div style="font-size: 12px; color: #bfdbfe;">SÃO PAULO</div>
+              <div style="font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 2px;">GRU</div>
+              <div style="font-size: 10px; color: #b3d1ff; font-weight: 500;">SÃO PAULO</div>
+            </div>
+          </div>
+          
+          <!-- Linha de informações principais - tudo na mesma linha -->
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PASSAGEIRO</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">${passengerName.toUpperCase()}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">VOO</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">AD1234</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">ASSENTO</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">${seat}</span>
             </div>
           </div>
         </div>
         
-        <!-- Informações do voo -->
-        <div style="margin-bottom: 24px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-            <div>
-              <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">VOO</div>
-              <div style="font-size: 14px; font-weight: 600;">AD 1234</div>
+        <!-- TERCEIRA PARTE: Informações de embarque organizadas -->
+        <div style="margin-bottom: 25px;">
+          <!-- Primeira linha de informações -->
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PORTÃO</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">15</span>
             </div>
-            <div>
-              <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">ASSENTO</div>
-              <div style="font-size: 14px; font-weight: 600;">${seat}</div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">EMBARQUE</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">${boardingTime}</span>
             </div>
-            <div>
-              <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">PORTÃO</div>
-              <div style="font-size: 14px; font-weight: 600;">15</div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">PARTIDA</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">${flightTime}</span>
+            </div>
+          </div>
+          
+          <!-- Segunda linha de informações -->
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-bottom: 12px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">SEÇÃO</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">Y</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">CLASSE</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">ECONÔMICA</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">STATUS</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">OK</span>
+            </div>
+          </div>
+          
+          <!-- Terceira linha de informações -->
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">SEQUÊNCIA</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">001</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">LOCALIZADOR</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">${ticketCode}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="color: #b3d1ff; font-weight: 500; margin-bottom: 2px;">BAGAGEM</span>
+              <span style="font-size: 11px; font-weight: 600; color: white;">1PC</span>
             </div>
           </div>
         </div>
         
-        <!-- Horários -->
-        <div style="margin-bottom: 24px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-            <div>
-              <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">EMBARQUE</div>
-              <div style="font-size: 14px; font-weight: 600;">${boardingTime}</div>
-            </div>
-            <div>
-              <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">PARTIDA</div>
-              <div style="font-size: 14px; font-weight: 600;">${flightTime}</div>
-            </div>
-            <div>
-              <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 4px;">SEÇÃO</div>
-              <div style="font-size: 14px; font-weight: 600;">D</div>
-            </div>
-          </div>
+        <!-- QUARTA PARTE: QR Code no canto inferior direito -->
+        <div style="position: absolute; bottom: 20px; right: 20px; width: 70px; height: 70px; background-color: white; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 60px; height: 60px; background-image: url('data:image/svg+xml,${encodeURIComponent('<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="6" height="6" fill="black"/><rect x="12" y="0" width="6" height="6" fill="black"/><rect x="24" y="0" width="6" height="6" fill="black"/><rect x="36" y="0" width="6" height="6" fill="black"/><rect x="48" y="0" width="6" height="6" fill="black"/><rect x="0" y="12" width="6" height="6" fill="black"/><rect x="48" y="12" width="6" height="6" fill="black"/><rect x="0" y="24" width="6" height="6" fill="black"/><rect x="12" y="24" width="6" height="6" fill="black"/><rect x="24" y="24" width="6" height="6" fill="black"/><rect x="36" y="24" width="6" height="6" fill="black"/><rect x="48" y="24" width="6" height="6" fill="black"/><rect x="0" y="36" width="6" height="6" fill="black"/><rect x="48" y="36" width="6" height="6" fill="black"/><rect x="0" y="48" width="6" height="6" fill="black"/><rect x="12" y="48" width="6" height="6" fill="black"/><rect x="24" y="48" width="6" height="6" fill="black"/><rect x="36" y="48" width="6" height="6" fill="black"/><rect x="48" y="48" width="6" height="6" fill="black"/><rect x="6" y="6" width="6" height="6" fill="black"/><rect x="18" y="6" width="6" height="6" fill="black"/><rect x="30" y="6" width="6" height="6" fill="black"/><rect x="42" y="6" width="6" height="6" fill="black"/><rect x="6" y="18" width="6" height="6" fill="black"/><rect x="42" y="18" width="6" height="6" fill="black"/><rect x="6" y="30" width="6" height="6" fill="black"/><rect x="18" y="30" width="6" height="6" fill="black"/><rect x="30" y="30" width="6" height="6" fill="black"/><rect x="42" y="30" width="6" height="6" fill="black"/><rect x="6" y="42" width="6" height="6" fill="black"/><rect x="42" y="42" width="6" height="6" fill="black"/></svg>')}'); background-size: cover;"></div>
         </div>
         
-        <!-- Passageiro -->
-        <div style="margin-bottom: 32px;">
-          <div style="font-size: 10px; color: #bfdbfe; margin-bottom: 8px;">PASSAGEIRO</div>
-          <div style="font-size: 16px; font-weight: 700; text-transform: uppercase;">${passengerName}</div>
-        </div>
-        
-        <!-- QR Code -->
-        <div style="position: absolute; bottom: 24px; right: 24px; width: 80px; height: 80px; background-color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <div style="width: 70px; height: 70px; background-image: url('data:image/svg+xml,${encodeURIComponent('<svg width="70" height="70" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="10" height="10" fill="black"/><rect x="20" y="0" width="10" height="10" fill="black"/><rect x="40" y="0" width="10" height="10" fill="black"/><rect x="60" y="0" width="10" height="10" fill="black"/><rect x="0" y="20" width="10" height="10" fill="black"/><rect x="60" y="20" width="10" height="10" fill="black"/><rect x="0" y="40" width="10" height="10" fill="black"/><rect x="20" y="40" width="10" height="10" fill="black"/><rect x="40" y="40" width="10" height="10" fill="black"/><rect x="60" y="40" width="10" height="10" fill="black"/><rect x="0" y="60" width="10" height="10" fill="black"/><rect x="20" y="60" width="10" height="10" fill="black"/><rect x="40" y="60" width="10" height="10" fill="black"/><rect x="60" y="60" width="10" height="10" fill="black"/></svg>')}'); background-size: cover;"></div>
+        <!-- Texto informativo no rodapé -->
+        <div style="position: absolute; bottom: 15px; left: 20px; font-size: 7px; color: #b3d1ff;">
+          <div>Azul Linhas Aéreas Brasileiras</div>
+          <div>Keep this boarding pass until departure</div>
         </div>
       </div>
     `;
