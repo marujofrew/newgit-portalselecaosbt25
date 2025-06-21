@@ -380,7 +380,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const ticketCode = `NF2NPC - 94`;
 
     return `
-      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 20px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 350px; height: 600px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+      <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 20px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 380px; height: 650px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
         
         <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 20px 24px;">
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -394,17 +394,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 32px;">
-          <div style="text-align: center; flex: 1;">
-            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">${originCity}</div>
-            <div style="font-size: 48px; font-weight: 700; letter-spacing: 1px; color: white;">${originCode}</div>
+        <div style="display: flex; align-items: center; padding: 0 30px; margin-bottom: 40px;">
+          <div style="text-align: center; width: 120px;">
+            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">${originCity}</div>
+            <div style="font-size: 52px; font-weight: 700; letter-spacing: 2px; color: white; line-height: 1;">${originCode}</div>
           </div>
-          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(96, 165, 250, 0.1); border-radius: 50%; margin: 0 20px; flex-shrink: 0;">
-            <div style="font-size: 24px; color: #60a5fa;">✈</div>
+          <div style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 30px;">
+            <div style="display: flex; align-items: center; justify-content: center; width: 70px; height: 70px; background: rgba(96, 165, 250, 0.15); border-radius: 50%;">
+              <div style="font-size: 28px; color: #60a5fa;">✈</div>
+            </div>
           </div>
-          <div style="text-align: center; flex: 1;">
-            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">SÃO PAULO - GUARULHOS</div>
-            <div style="font-size: 48px; font-weight: 700; letter-spacing: 1px; color: white;">GRU</div>
+          <div style="text-align: center; width: 120px;">
+            <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">SÃO PAULO - GUARULHOS</div>
+            <div style="font-size: 52px; font-weight: 700; letter-spacing: 2px; color: white; line-height: 1;">GRU</div>
           </div>
         </div>
         

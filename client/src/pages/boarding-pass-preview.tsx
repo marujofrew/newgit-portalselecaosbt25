@@ -9,8 +9,8 @@ export default function BoardingPassPreview() {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         margin: '10px auto',
         position: 'relative',
-        width: '350px',
-        height: '600px',
+        width: '380px',
+        height: '650px',
         overflow: 'hidden',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
       }}>
@@ -52,50 +52,57 @@ export default function BoardingPassPreview() {
         {/* Aeroportos */}
         <div style={{
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '0 24px',
-          marginBottom: '32px'
+          padding: '0 30px',
+          marginBottom: '40px'
         }}>
-          <div style={{ textAlign: 'center', flex: 1 }}>
+          <div style={{ textAlign: 'center', width: '120px' }}>
             <div style={{
               fontSize: '12px',
               color: '#94a3b8',
               fontWeight: '600',
-              marginBottom: '6px'
+              marginBottom: '8px'
             }}>GOIÂNIA</div>
             <div style={{
-              fontSize: '48px',
+              fontSize: '52px',
               fontWeight: '700',
-              letterSpacing: '1px',
-              color: 'white'
+              letterSpacing: '2px',
+              color: 'white',
+              lineHeight: '1'
             }}>GYN</div>
           </div>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '60px',
-            height: '60px',
-            background: 'rgba(96, 165, 250, 0.1)',
-            borderRadius: '50%',
-            margin: '0 20px',
-            flexShrink: 0
+            flex: 1,
+            margin: '0 30px'
           }}>
-            <div style={{ fontSize: '24px', color: '#60a5fa' }}>✈</div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '70px',
+              height: '70px',
+              background: 'rgba(96, 165, 250, 0.15)',
+              borderRadius: '50%'
+            }}>
+              <div style={{ fontSize: '28px', color: '#60a5fa' }}>✈</div>
+            </div>
           </div>
-          <div style={{ textAlign: 'center', flex: 1 }}>
+          <div style={{ textAlign: 'center', width: '120px' }}>
             <div style={{
               fontSize: '12px',
               color: '#94a3b8',
               fontWeight: '600',
-              marginBottom: '6px'
+              marginBottom: '8px'
             }}>SÃO PAULO - GUARULHOS</div>
             <div style={{
-              fontSize: '48px',
+              fontSize: '52px',
               fontWeight: '700',
-              letterSpacing: '1px',
-              color: 'white'
+              letterSpacing: '2px',
+              color: 'white',
+              lineHeight: '1'
             }}>GRU</div>
           </div>
         </div>
