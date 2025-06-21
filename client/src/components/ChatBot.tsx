@@ -606,13 +606,35 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'baggage-option':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
-          botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90. Agora vou mostrar as opções de voo com bagagem incluída:";
-          nextStep = 'flight-confirmation';
-          showOptions = true;
+          botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
+          nextStep = 'hotel';
+          showOptions = false;
+          
+          // Continuar para hotel após confirmar bagagem
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+              setShowQuickOptions(true);
+              setCurrentStep('hotel');
+            }, 6000);
+          }, 2000);
         } else if (messageToSend.toLowerCase().includes('não') || messageToSend.toLowerCase().includes('nao') || messageToSend.toLowerCase().includes('sem bagagem')) {
-          botResponse = "Entendido! As passagens serão apenas com bagagem de mão. Agora vou mostrar as opções de voo:";
-          nextStep = 'flight-confirmation';
-          showOptions = true;
+          botResponse = "Entendido! As passagens serão apenas com bagagem de mão.";
+          nextStep = 'hotel';
+          showOptions = false;
+          
+          // Continuar para hotel após recusar bagagem
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+              setShowQuickOptions(true);
+              setCurrentStep('hotel');
+            }, 6000);
+          }, 2000);
         } else {
           botResponse = "Por favor, escolha se deseja adicionar o kit bagagem ou não.";
           showOptions = true;
@@ -622,10 +644,70 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'flight-confirmation':
         if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
           // Salvar que foi escolhida a Opção 1 (2 dias antes)
-          setCurrentStep('hotel-option1');
-          botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
-          nextStep = 'hotel-option1';
+          setCurrentStep('baggage-option');
+          botResponse = "Ótima escolha! Opção 1 selecionada.";
+          nextStep = 'baggage-option';
           showOptions = false;
+          
+          // Enviar mensagens de bagagem após escolher voo
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage('⚠️ Importante: As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage('🎒 Por conta da parceria entre o SBT e Azul, conseguimos incluir o Kit Bagagem que é: uma mala de 23kg + mala de mão + mochila de costa.', 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage('💰 De R$ 279,90 por apenas R$ 29,90. Você gostaria de adicionar bagagem à sua passagem?', 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('baggage-option');
+                    }, 4000);
+                  }, 1500);
+                }, 6000);
+              }, 1500);
+            }, 6000);
+          }, 2000);
+        } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
+          // Salvar que foi escolhida a Opção 2 (1 dia antes)
+          setCurrentStep('baggage-option');
+          botResponse = "Ótima escolha! Opção 2 selecionada.";
+          nextStep = 'baggage-option';
+          showOptions = false;
+          
+          // Enviar mensagens de bagagem após escolher voo
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage('⚠️ Importante: As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage('🎒 Por conta da parceria entre o SBT e Azul, conseguimos incluir o Kit Bagagem que é: uma mala de 23kg + mala de mão + mochila de costa.', 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage('💰 De R$ 279,90 por apenas R$ 29,90. Você gostaria de adicionar bagagem à sua passagem?', 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('baggage-option');
+                    }, 4000);
+                  }, 1500);
+                }, 6000);
+              }, 1500);
+            }, 6000);
+          }, 2000);
           
           setTimeout(() => {
             setIsTyping(true);
@@ -692,16 +774,109 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'hotel-option1':
       case 'hotel-option2':
         if (messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estúdios')) {
-          botResponse = botResponses.hotel.proximos;
+          botResponse = "Perfeito! Vou realizar a compra de suas passagens e reservar hotel próximo aos estúdios.";
+          nextStep = 'purchase';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Pronto! Já realizei a compra de suas passagens aéreas e reservei sua hospedagem.", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Agora vou te enviar os documentos de viagem. Clique no documento abaixo para visualizar e salvar seus cartões de embarque.", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage(`
+                        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.generateAndShowBoardingPasses && window.generateAndShowBoardingPasses()" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                          <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
+                              📄
+                            </div>
+                            <div style="flex: 1;">
+                              <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
+                                Documentos de Viagem
+                              </div>
+                              <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
+                                Cartões de embarque e vouchers
+                              </div>
+                              <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
+                                📱 Clique para visualizar e baixar
+                              </div>
+                            </div>
+                            <div style="color: #94a3b8; font-size: 18px;">
+                              📋
+                            </div>
+                          </div>
+                        </div>
+                      `, 'bot');
+                    }, 4000);
+                  }, 2000);
+                }, 6000);
+              }, 2000);
+            }, 6000);
+          }, 2000);
         } else if (messageToSend.toLowerCase().includes('centro')) {
-          botResponse = botResponses.hotel.centro;
+          botResponse = "Perfeito! Vou realizar a compra de suas passagens e reservar hotel no centro de São Paulo.";
+          nextStep = 'purchase';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Pronto! Já realizei a compra de suas passagens aéreas e reservei sua hospedagem.", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Agora vou te enviar os documentos de viagem. Clique no documento abaixo para visualizar e salvar seus cartões de embarque.", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage(`
+                        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.generateAndShowBoardingPasses && window.generateAndShowBoardingPasses()" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                          <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
+                              📄
+                            </div>
+                            <div style="flex: 1;">
+                              <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
+                                Documentos de Viagem
+                              </div>
+                              <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
+                                Cartões de embarque e vouchers
+                              </div>
+                              <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
+                                📱 Clique para visualizar e baixar
+                              </div>
+                            </div>
+                            <div style="color: #94a3b8; font-size: 18px;">
+                              📋
+                            </div>
+                          </div>
+                        </div>
+                      `, 'bot');
+                    }, 4000);
+                  }, 2000);
+                }, 6000);
+              }, 2000);
+            }, 6000);
+          }, 2000);
         } else {
           botResponse = "Por favor, escolha entre hotel próximo aos estúdios ou no centro.";
           showOptions = true;
-          break;
         }
-        nextStep = 'people';
-        showOptions = true;
         break;
 
       case 'people':
@@ -794,26 +969,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          addMessage('⚠️ Importante: As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
-                          
-                          setTimeout(() => {
-                            setIsTyping(true);
-                            setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage('🎒 Por conta da parceria entre o SBT e Azul, conseguimos incluir o Kit Bagagem que é: uma mala de 23kg + mala de mão + mochila de costa.', 'bot');
-                              
-                              setTimeout(() => {
-                                setIsTyping(true);
-                                setTimeout(() => {
-                                  setIsTyping(false);
-                                  addMessage('💰 De R$ 279,90 por apenas R$ 29,90. Você gostaria de adicionar bagagem à sua passagem?', 'bot');
-                                  setShowQuickOptions(true);
-                                  setCurrentStep('baggage-option');
-                                }, 2000);
-                              }, 1500);
-                            }, 2000);
-                          }, 1500);
-                        }, 2000);
+                          addMessage('Qual opção você prefere?', 'bot');
+                          setShowQuickOptions(true);
+                          setCurrentStep('flight-confirmation');
+                        }, 4000);
                       }, 1000);
                     }, 2000);
                   }, 1000);
