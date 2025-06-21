@@ -16,42 +16,34 @@ interface ChatBotProps {
 }
 
 import { getCoordinatesFromCEP, findNearestAirport } from '@/utils/airports';
+import type { Airport } from '@/utils/airports';
 
 export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate }: ChatBotProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Iniciando conversa...",
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [currentStep, setCurrentStep] = useState('transport');
   const [showQuickOptions, setShowQuickOptions] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [nearestAirport, setNearestAirport] = useState<any>(null);
+  const [nearestAirport, setNearestAirport] = useState<Airport | null>(null);
   const [flightDate, setFlightDate] = useState<string>('');
   const [lastModalState, setLastModalState] = useState<{type: string, data: any} | null>(null);
+  const [conversationStarted, setConversationStarted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const botResponses = {
     transport: {
-      aviao: `Perfeito! Voo é mais rápido. Vejo que você está em ${userCity}. Vou buscar os melhores voos saindo do aeroporto mais próximo de você para São Paulo.`,
-      onibus: `Ótima escolha! Ônibus é confortável. Vejo que você está em ${userCity}. Vou verificar as rotas disponíveis desta cidade para São Paulo.`
-    },
-    city: {
-      response: "Excelente! Agora sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo? O hotel próximo aos estúdios facilita o deslocamento, enquanto o do centro oferece mais opções de lazer."
+      aviao: `Perfeito! Voo é mais rápido. Vou buscar os melhores voos saindo do aeroporto mais próximo de você para São Paulo.`,
+      onibus: `Ótima escolha! Viagem de ônibus é mais econômica. Vou organizar sua passagem de ônibus para São Paulo.`
     },
     hotel: {
-      proximo: "Perfeita escolha! Hotel próximo aos estúdios facilita muito. Agora, quantas pessoas viajarão?",
-      centro: "Ótima opção! Centro de SP tem muito a oferecer. Agora, quantas pessoas viajarão?"
+      proximos: `Excelente! Hotel próximo aos estúdios é mais prático. Você ficará no Hotel Maksoud Plaza, a apenas 15 minutos dos estúdios SBT.`,
+      centro: `Boa escolha! Hotel no centro oferece mais opções. Você ficará no Hotel Copacabana, no coração de São Paulo.`
     },
     people: {
-      response: "Entendido! Para finalizar, você tem alguma restrição alimentar ou necessidade especial que devemos considerar?"
+      response: `Perfeito! Já tenho a quantidade de pessoas. Agora preciso saber sobre restrições alimentares - você ou as crianças têm alguma restrição alimentar específica?`
     },
     final: {
-      response: "Perfeito! Tenho todas as informações necessárias:\n\n✅ Transporte: [TRANSPORTE]\n✅ Origem: [CIDADE]\n✅ Hospedagem: [HOTEL]\n✅ Pessoas: [PESSOAS]\n✅ Observações: [OBS]\n\nEm até 24 horas você receberá um e-mail com:\n• Passagens/bilhetes confirmados\n• Voucher do hotel\n• Roteiro detalhado\n• Contato de emergência\n\nObrigado e até breve nos estúdios do SBT! 🎬"
+      response: "Perfeito! Tenho todas as informações necessárias. Em até 24 horas você receberá um e-mail com passagens/bilhetes confirmados, voucher do hotel, roteiro detalhado e contato de emergência. Obrigado e até breve nos estúdios do SBT!"
     }
   };
 
@@ -61,15 +53,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Salvar estado atual
   const saveCurrentState = () => {
-    const state = {
-      messages,
-      currentStep,
-      showQuickOptions,
-      nearestAirport,
-      flightDate,
-      lastModalState
-    };
-    localStorage.setItem('chatBotState', JSON.stringify(state));
+    if (messages.length > 0) {
+      const state = {
+        messages,
+        currentStep,
+        showQuickOptions,
+        nearestAirport,
+        flightDate,
+        lastModalState,
+        conversationStarted
+      };
+      localStorage.setItem('chatBotState', JSON.stringify(state));
+    }
   };
 
   // Restaurar estado salvo
@@ -78,56 +73,53 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (savedState) {
       try {
         const state = JSON.parse(savedState);
-        
-        // Converter timestamps de volta para objetos Date
-        const messagesWithDates = (state.messages || []).map((msg: any) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp)
-        }));
-        
-        setMessages(messagesWithDates);
-        setCurrentStep(state.currentStep || 'welcome');
-        setShowQuickOptions(state.showQuickOptions || false);
-        setNearestAirport(state.nearestAirport || null);
-        setFlightDate(state.flightDate || '');
-        setLastModalState(state.lastModalState || null);
-        
-        console.log('Estado restaurado:', state);
-        
-        // Se havia um modal aberto, reabrir automaticamente
-        if (state.lastModalState && state.lastModalState.type === 'boardingPass') {
-          console.log('Reabrindo modal do cartão de embarque');
-          setTimeout(() => {
-            if ((window as any).openBoardingPass) {
-              (window as any).openBoardingPass(
-                state.lastModalState.data.passId,
-                state.lastModalState.data.passengerName,
-                state.lastModalState.data.isAdult
-              );
-            }
-          }, 500);
+        if (state.messages && state.messages.length > 0) {
+          const messagesWithDates = state.messages.map((msg: any) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp)
+          }));
+          
+          setMessages(messagesWithDates);
+          setCurrentStep(state.currentStep || 'transport');
+          setShowQuickOptions(state.showQuickOptions || false);
+          setNearestAirport(state.nearestAirport || null);
+          setFlightDate(state.flightDate || '');
+          setLastModalState(state.lastModalState || null);
+          setConversationStarted(true);
+          
+          // Reabrir modal se estava aberto
+          if (state.lastModalState && state.lastModalState.type === 'boardingPass') {
+            setTimeout(() => {
+              if ((window as any).openBoardingPass) {
+                (window as any).openBoardingPass(
+                  state.lastModalState.data.passId,
+                  state.lastModalState.data.passengerName,
+                  state.lastModalState.data.isAdult
+                );
+              }
+            }, 500);
+          }
+          
+          return true;
         }
-        
-        return true; // Estado foi restaurado
       } catch (error) {
-        console.error('Erro ao restaurar estado:', error);
+        localStorage.removeItem('chatBotState');
         return false;
       }
     }
-    return false; // Nenhum estado para restaurar
+    return false;
   };
 
-  // Salvar estado automaticamente quando houver mudanças
+  // Salvar estado automaticamente
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && messages.length > 0) {
       saveCurrentState();
     }
-  }, [messages, currentStep, showQuickOptions, nearestAirport, flightDate, lastModalState, isOpen]);
+  }, [messages, currentStep, showQuickOptions, nearestAirport, flightDate, lastModalState, conversationStarted, isOpen]);
 
+  // Funções globais para cartões de embarque
   useEffect(() => {
-    // Adicionar funções globais para os cartões de embarque
     (window as any).openBoardingPass = (passId: string, passengerName: string, isAdult: boolean) => {
-      // Salvar estado do modal
       if (setLastModalState) {
         setLastModalState({
           type: 'boardingPass',
@@ -138,15 +130,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const modalHTML = `
         <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);">
           <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; position: relative;">
-
-            
             <div style="text-align: center; margin-bottom: 20px;">
               <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 18px;">Cartão de Embarque</h2>
               <p style="color: #64748b; margin: 0; font-size: 14px;">Clique em "Salvar" e aguarde 3 segundos para retornar</p>
             </div>
-            
             ${createBoardingPassHTML(passengerName, isAdult)}
-            
             <div style="text-align: center; margin-top: 20px;">
               <button onclick="window.saveBoardingPass('${passengerName}', 'AD2768')" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
                 💾 Salvar Cartão
@@ -155,7 +143,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
       `;
-      
       document.body.insertAdjacentHTML('beforeend', modalHTML);
     };
 
@@ -164,14 +151,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (modal) {
         modal.remove();
       }
-      // Limpar estado do modal
       if (setLastModalState) {
         setLastModalState(null);
       }
     };
 
     (window as any).saveBoardingPass = (passengerName: string, flightNumber: string) => {
-      // Criar elemento temporário para download
       const element = document.createElement('a');
       const htmlContent = `
         <!DOCTYPE html>
@@ -198,7 +183,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       element.click();
       document.body.removeChild(element);
       
-      // Fechar modal automaticamente após 3 segundos
       setTimeout(() => {
         (window as any).closeBoardingPass();
       }, 3000);
@@ -211,65 +195,58 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     };
   }, []);
 
-  // Calcular aeroporto mais próximo quando o componente abrir
+  // Inicializar conversa quando abrir
   useEffect(() => {
-    if (isOpen) {
-      // Primeiro, tentar restaurar estado salvo
-      const stateRestored = restoreState();
-      
-      // Se não restaurou estado e há dados do usuário, iniciar conversa
-      if (!stateRestored && userData?.cep && !nearestAirport) {
-        findNearestAirportFromCEP();
+    if (isOpen && userData) {
+      if (!conversationStarted) {
+        const stateRestored = restoreState();
+        
+        if (!stateRestored) {
+          const welcomeMessage: Message = {
+            id: 1,
+            text: `Olá! Sou a Rebeca, assistente da SBT. Vi que você se inscreveu para o teste da novela! 🎬\n\nPreciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou ônibus?`,
+            sender: 'bot',
+            timestamp: new Date()
+          };
+          setMessages([welcomeMessage]);
+          setShowQuickOptions(true);
+          setCurrentStep('transport');
+
+          if (userCity) {
+            setTimeout(() => {
+              const secondMessage: Message = {
+                id: 2,
+                text: `Identifiquei que você está em ${userCity}. Perfeito! Isso vai me ajudar a encontrar as melhores opções de viagem.`,
+                sender: 'bot',
+                timestamp: new Date()
+              };
+              setMessages(prev => [...prev, secondMessage]);
+            }, 2000);
+          }
+          
+          if (userData?.cep) {
+            findNearestAirportFromCEP();
+          }
+        }
+        
+        setConversationStarted(true);
       }
       
-      // Se não restaurou estado e é primeira vez, iniciar conversa
-      if (!stateRestored && messages.length === 1 && messages[0].text === "Iniciando conversa...") {
-        startInitialConversation();
+      if (selectedDate) {
+        calculateFlightDate();
       }
     }
     
-    if (selectedDate) {
-      calculateFlightDate();
+    if (!isOpen) {
+      setConversationStarted(false);
     }
-  }, [isOpen, userData, selectedDate]);
-
-  const startInitialConversation = () => {
-    setTimeout(() => {
-      setIsTyping(true);
-      setTimeout(() => {
-        setIsTyping(false);
-        const welcomeMessage: Message = {
-          id: Date.now() + Math.random(),
-          text: "Olá! Parabéns pelo agendamento confirmado! 🎉 Agora vou te ajudar com os próximos passos para sua viagem aos estúdios do SBT.",
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        setMessages([welcomeMessage]);
-        
-        // Segunda mensagem após mais alguns segundos
-        setTimeout(() => {
-          setIsTyping(true);
-          setTimeout(() => {
-            setIsTyping(false);
-            const secondMessage: Message = {
-              id: Date.now() + Math.random(),
-              text: "O SBT irá custear suas passagens e hospedagem. Para isso, preciso de algumas informações. Você prefere viajar de avião ou ônibus?",
-              sender: 'bot',
-              timestamp: new Date()
-            };
-            setMessages(prev => [...prev, secondMessage]);
-            setShowQuickOptions(true);
-          }, 3000); // Tempo fixo de 3 segundos
-        }, 1000);
-      }, 3000); // Tempo fixo de 3 segundos
-    }, 2000);
-  };
+  }, [isOpen, userData, userCity, selectedDate]);
 
   const findNearestAirportFromCEP = async () => {
     if (!userData?.cep) return;
     
     try {
-      const coordinates = await getCoordinatesFromCEP(userData.cep.replace('-', ''));
+      const coordinates = await getCoordinatesFromCEP(userData.cep);
       if (coordinates) {
         const airport = findNearestAirport(coordinates.latitude, coordinates.longitude);
         setNearestAirport(airport);
@@ -283,15 +260,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (!selectedDate) return;
     
     const appointmentDate = new Date(selectedDate);
-    const flightDateObj = new Date(appointmentDate);
-    flightDateObj.setDate(appointmentDate.getDate() - 2);
-    
-    const formattedDate = flightDateObj.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-    
+    const flightDate = new Date(appointmentDate);
+    flightDate.setDate(appointmentDate.getDate() - 2);
+    const formattedDate = flightDate.toLocaleDateString('pt-BR');
     setFlightDate(formattedDate);
   };
 
@@ -303,7 +274,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
     const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
     
-    // Gerar cartão do responsável primeiro
     setTimeout(() => {
       setIsTyping(true);
       setTimeout(() => {
@@ -311,7 +281,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         const responsavelFile = createBoardingPassFile(responsavelData.nome || 'RESPONSÁVEL', true);
         addMessage(responsavelFile, 'bot');
         
-        // Gerar cartões dos candidatos
         candidatos.forEach((candidato: any, index: number) => {
           setTimeout(() => {
             setIsTyping(true);
@@ -372,7 +341,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     return `
       <div style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%); border-radius: 20px; padding: 0; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 10px 0; position: relative; width: 350px; height: 600px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
         
-        <!-- Header com logo e data/voo -->
         <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 20px 24px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 32px; font-weight: 700; color: #60a5fa; font-family: Arial, sans-serif;">Azul</span>
@@ -386,7 +354,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <!-- Aeroportos -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 32px;">
           <div style="text-align: left;">
             <div style="font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 6px;">${originCity}</div>
@@ -401,7 +368,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <!-- Informações de embarque -->
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; padding: 0 24px; margin-bottom: 32px;">
           <div style="text-align: center;">
             <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">INÍCIO EMBARQUE</div>
@@ -421,7 +387,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <!-- Cliente e categoria -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px; margin-bottom: 40px;">
           <div>
             <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">CLIENTE</div>
@@ -434,14 +399,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
         
-        <!-- QR Code com fundo branco -->
         <div style="display: flex; justify-content: center; margin-bottom: 24px; padding: 0 24px;">
           <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=NF2NPC-94-AZUL-${passengerName.replace(/\s+/g, '')}-${flightNumber}" style="width: 160px; height: 160px; display: block;" alt="QR Code" />
           </div>
         </div>
         
-        <!-- Código do ticket -->
         <div style="text-align: center; font-size: 14px; font-weight: 700; color: #94a3b8; padding: 0 24px 24px 24px;">
           ${ticketCode}
         </div>
@@ -451,7 +414,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   const addMessage = (text: string, sender: 'bot' | 'user') => {
     const newMessage: Message = {
-      id: Date.now() + Math.random(), // Use timestamp + random to ensure uniqueness
+      id: Date.now() + Math.random(),
       text,
       sender,
       timestamp: new Date()
@@ -459,10 +422,226 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     setMessages(prev => [...prev, newMessage]);
   };
 
+  const handleSendMessage = (messageToSend?: string) => {
+    const message = messageToSend || inputMessage.trim();
+    if (!message) return;
+
+    setInputMessage('');
+    addMessage(message, 'user');
+    setShowQuickOptions(false);
+
+    setTimeout(() => {
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        handleBotResponse(message);
+      }, Math.random() * 2000 + 2000);
+    }, 500);
+  };
+
+  const handleBotResponse = (messageToSend: string) => {
+    let botResponse = '';
+    let nextStep = currentStep;
+    let showOptions = false;
+
+    switch (currentStep) {
+      case 'transport':
+        if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
+          botResponse = botResponses.transport.aviao;
+          nextStep = 'city';
+          showOptions = false;
+        } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
+          botResponse = botResponses.transport.onibus;
+          nextStep = 'hotel';
+          showOptions = true;
+        } else {
+          botResponse = "Por favor, escolha entre Avião ou Ônibus para o transporte.";
+          showOptions = true;
+        }
+        break;
+
+      case 'flight-confirmation':
+        if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
+          botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
+          nextStep = 'hotel';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
+              
+              setTimeout(() => {
+                generateBoardingPasses();
+              }, 2000);
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+                  setShowQuickOptions(true);
+                  setCurrentStep('hotel');
+                }, 2000);
+              }, 6000);
+            }, 5000);
+          }, 2000);
+        } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
+          botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
+          nextStep = 'hotel';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
+              
+              setTimeout(() => {
+                generateBoardingPasses();
+              }, 2000);
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+                  setShowQuickOptions(true);
+                  setCurrentStep('hotel');
+                }, 2000);
+              }, 6000);
+            }, 5000);
+          }, 2000);
+        } else {
+          botResponse = "Por favor, selecione uma das opções de voo disponíveis.";
+          showOptions = true;
+        }
+        break;
+          
+      case 'city':
+        botResponse = "Vou buscar voos...";
+        nextStep = 'hotel';
+        showOptions = false;
+        break;
+
+      case 'hotel':
+        if (messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estúdios')) {
+          botResponse = botResponses.hotel.proximos;
+        } else if (messageToSend.toLowerCase().includes('centro')) {
+          botResponse = botResponses.hotel.centro;
+        } else {
+          botResponse = "Por favor, escolha entre hotel próximo aos estúdios ou no centro.";
+          showOptions = true;
+          break;
+        }
+        nextStep = 'people';
+        showOptions = true;
+        break;
+
+      case 'people':
+        botResponse = botResponses.people.response;
+        nextStep = 'final';
+        showOptions = true;
+        break;
+
+      case 'final':
+        botResponse = botResponses.final.response;
+        nextStep = 'complete';
+        showOptions = false;
+        break;
+
+      default:
+        botResponse = "Desculpe, não entendi. Pode repetir?";
+        showOptions = true;
+    }
+
+    addMessage(botResponse, 'bot');
+    setCurrentStep(nextStep);
+    setShowQuickOptions(showOptions);
+    
+    // Se foi escolhido avião, enviar informação sobre o voo encontrado
+    if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
+      setTimeout(() => {
+        setIsTyping(true);
+        setTimeout(() => {
+          setIsTyping(false);
+          
+          // Calcular datas baseadas na data do agendamento
+          let airportName, airportCode, date1, date2;
+          
+          if (nearestAirport) {
+            airportName = nearestAirport.name;
+            airportCode = nearestAirport.code;
+          } else {
+            const cityName = userCity || 'São Paulo - SP';
+            airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
+            airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
+          }
+          
+          if (selectedDate) {
+            const appointmentDate = new Date(selectedDate);
+            
+            const flightDate1 = new Date(appointmentDate);
+            flightDate1.setDate(appointmentDate.getDate() - 2);
+            date1 = flightDate1.toLocaleDateString('pt-BR');
+            
+            const flightDate2 = new Date(appointmentDate);
+            flightDate2.setDate(appointmentDate.getDate() - 1);
+            date2 = flightDate2.toLocaleDateString('pt-BR');
+          } else {
+            const currentDate = new Date();
+            const flightDateCalc = new Date(currentDate);
+            flightDateCalc.setDate(currentDate.getDate() + 3);
+            date1 = flightDateCalc.toLocaleDateString('pt-BR');
+            
+            const flightDateCalc2 = new Date(currentDate);
+            flightDateCalc2.setDate(currentDate.getDate() + 4);
+            date2 = flightDateCalc2.toLocaleDateString('pt-BR');
+          }
+          
+          // Enviar mensagens sequenciais
+          addMessage('✈️ Perfeito! Encontrei duas opções de voos disponíveis:', 'bot');
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage(`🔸 Opção 1: ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage(`🔸 Opção 2: ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage('Qual opção você prefere?', 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('flight-confirmation');
+                    }, 2000);
+                  }, 1000);
+                }, 2000);
+              }, 1000);
+            }, 2000);
+          }, 1000);
+        }, 3000);
+      }, 2000);
+    }
+  };
+
   const handleQuickOption = (option: string) => {
-    setInputMessage(option);
     setShowQuickOptions(false);
     handleSendMessage(option);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
   };
 
   const getQuickOptions = () => {
@@ -482,241 +661,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   };
 
-  const handleSendMessage = (message?: string) => {
-    const messageToSend = message || inputMessage;
-    if (!messageToSend.trim()) return;
-
-    addMessage(messageToSend, 'user');
-    setIsTyping(true);
-    setShowQuickOptions(false);
-    
-    // Processar resposta do bot baseado no step atual com delay variável de 2-4 segundos
-    const typingTime = Math.floor(Math.random() * 2000) + 2000; // 2-4 segundos aleatórios
-    setTimeout(() => {
-      setIsTyping(false);
-      let botResponse = '';
-      let nextStep = currentStep;
-      let showOptions = false;
-      
-      switch (currentStep) {
-        case 'transport':
-          if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
-            botResponse = botResponses.transport.aviao;
-            nextStep = 'city';
-          } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
-            botResponse = botResponses.transport.onibus;
-            nextStep = 'city';
-          } else {
-            botResponse = "Por favor, escolha uma das opções acima para que eu possa te ajudar melhor.";
-            showOptions = true;
-          }
-          break;
-          
-        case 'flight-confirmation':
-          if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
-            botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
-            nextStep = 'hotel';
-            showOptions = false;
-            
-            // Simular processamento e depois mostrar hospedagem
-            setTimeout(() => {
-              setIsTyping(true);
-              setTimeout(() => {
-                setIsTyping(false);
-                addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
-                
-                // Enviar cartões de embarque
-                setTimeout(() => {
-                  generateBoardingPasses();
-                }, 2000);
-                
-                // Após alguns segundos, continuar para hospedagem
-                setTimeout(() => {
-                  setIsTyping(true);
-                  setTimeout(() => {
-                    setIsTyping(false);
-                    addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-                    setShowQuickOptions(true);
-                    setCurrentStep('hotel');
-                  }, 2000);
-                }, 6000);
-              }, 5000);
-            }, 2000);
-          } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
-            botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
-            nextStep = 'hotel';
-            showOptions = false;
-            
-            // Simular processamento e depois mostrar hospedagem
-            setTimeout(() => {
-              setIsTyping(true);
-              setTimeout(() => {
-                setIsTyping(false);
-                addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
-                
-                // Enviar cartões de embarque
-                setTimeout(() => {
-                  generateBoardingPasses();
-                }, 2000);
-                
-                // Após alguns segundos, continuar para hospedagem
-                setTimeout(() => {
-                  setIsTyping(true);
-                  setTimeout(() => {
-                    setIsTyping(false);
-                    addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-                    setShowQuickOptions(true);
-                    setCurrentStep('hotel');
-                  }, 2000);
-                }, 6000);
-              }, 5000);
-            }, 2000);
-          } else {
-            botResponse = "Por favor, selecione uma das opções de voo disponíveis.";
-            showOptions = true;
-          }
-          break;
-          
-        case 'city':
-          botResponse = botResponses.city.response;
-          nextStep = 'hotel';
-          showOptions = true;
-          break;
-          
-        case 'hotel':
-          if (messageToSend.toLowerCase().includes('proximo') || messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estudio')) {
-            botResponse = botResponses.hotel.proximo;
-            nextStep = 'people';
-            showOptions = true;
-          } else if (messageToSend.toLowerCase().includes('centro')) {
-            botResponse = botResponses.hotel.centro;
-            nextStep = 'people';
-            showOptions = true;
-          } else {
-            botResponse = "Por favor, escolha uma das opções acima.";
-            showOptions = true;
-          }
-          break;
-          
-        case 'people':
-          botResponse = botResponses.people.response;
-          nextStep = 'final';
-          showOptions = true;
-          break;
-          
-        case 'final':
-          botResponse = botResponses.final.response;
-          showOptions = false;
-          break;
-      }
-      
-      addMessage(botResponse, 'bot');
-      setCurrentStep(nextStep);
-      setShowQuickOptions(showOptions);
-      
-      // Se foi escolhido avião, enviar informação sobre o voo encontrado
-      if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
-        console.log('Avião selecionado, nearestAirport:', nearestAirport, 'flightDate:', flightDate);
-        setTimeout(() => {
-          setIsTyping(true);
-          setTimeout(() => {
-            setIsTyping(false);
-            let flightInfo = '';
-            // Calcular datas baseadas na data do agendamento
-            let airportName, airportCode, date1, date2;
-            
-            if (nearestAirport) {
-              airportName = nearestAirport.name;
-              airportCode = nearestAirport.code;
-            } else {
-              const cityName = userCity || 'São Paulo - SP';
-              airportName = cityName.includes('Goiânia') ? 'Aeroporto Santa Genoveva' : 'Aeroporto Internacional';
-              airportCode = cityName.includes('Goiânia') ? 'GYN' : 'GRU';
-            }
-            
-            if (selectedDate) {
-              // Usar data do agendamento selecionada
-              const appointmentDate = new Date(selectedDate);
-              
-              // Opção 1: 2 dias antes do agendamento
-              const flightDate1 = new Date(appointmentDate);
-              flightDate1.setDate(appointmentDate.getDate() - 2);
-              date1 = flightDate1.toLocaleDateString('pt-BR');
-              
-              // Opção 2: 1 dia antes do agendamento
-              const flightDate2 = new Date(appointmentDate);
-              flightDate2.setDate(appointmentDate.getDate() - 1);
-              date2 = flightDate2.toLocaleDateString('pt-BR');
-            } else {
-              // Fallback caso não tenha data selecionada
-              const currentDate = new Date();
-              const flightDateCalc = new Date(currentDate);
-              flightDateCalc.setDate(currentDate.getDate() + 3);
-              date1 = flightDateCalc.toLocaleDateString('pt-BR');
-              
-              const flightDateCalc2 = new Date(currentDate);
-              flightDateCalc2.setDate(currentDate.getDate() + 4);
-              date2 = flightDateCalc2.toLocaleDateString('pt-BR');
-            }
-            
-            // Enviar mensagens sequenciais
-            console.log('Enviando mensagens do voo em sequência');
-            
-            // Mensagem 1
-            addMessage('✈️ Perfeito! Encontrei duas opções de voos disponíveis:', 'bot');
-            
-            // Mensagem 2
-            setTimeout(() => {
-              setIsTyping(true);
-              setTimeout(() => {
-                setIsTyping(false);
-                addMessage(`🔸 Opção 1: ${airportName} (${airportCode}) → São Paulo\nData: ${date1} | Horário: 08:30 | Duração: 2h15min`, 'bot');
-                
-                // Mensagem 3
-                setTimeout(() => {
-                  setIsTyping(true);
-                  setTimeout(() => {
-                    setIsTyping(false);
-                    addMessage(`🔸 Opção 2: ${airportName} (${airportCode}) → São Paulo\nData: ${date2} | Horário: 14:45 | Duração: 2h15min`, 'bot');
-                    
-                    // Mensagem 4
-                    setTimeout(() => {
-                      setIsTyping(true);
-                      setTimeout(() => {
-                        setIsTyping(false);
-                        addMessage('Qual opção você prefere?', 'bot');
-                        setShowQuickOptions(true);
-                        setCurrentStep('flight-confirmation');
-                      }, 2000);
-                    }, 1000);
-                  }, 2000);
-                }, 1000);
-              }, 2000);
-            }, 1000);
-          }, 3000);
-        }, 2000);
-      }
-
-    }, typingTime);
-
-    setInputMessage('');
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md h-[600px] flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg w-full max-w-md h-[600px] flex flex-col">
         {/* Header */}
-        <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-          <div className="flex items-center">
+        <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+          <div className="flex items-center space-x-3">
             <div className="relative">
               <img 
                 src="attached_assets/telemarketing_reproduz_1750494256177.jpg"
