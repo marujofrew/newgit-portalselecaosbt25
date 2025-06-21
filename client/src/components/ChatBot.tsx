@@ -163,6 +163,204 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       delete (window as any).downloadStackedCards;
     };
 
+    // Definir função global para cartões unificados
+    (window as any).openUnifiedBoardingPass = (passengersJson: string) => {
+      console.log('Opening unified boarding pass with:', passengersJson);
+      
+      try {
+        const passengers = JSON.parse(passengersJson.replace(/&quot;/g, '"'));
+        console.log('Passengers parsed:', passengers);
+        
+        let currentIndex = 0;
+        let autoCloseTimer: NodeJS.Timeout;
+        
+        const createModalHTML = (index: number) => {
+          const passenger = passengers[index];
+          const seatNumber = `${index + 1}D`;
+          
+          return `
+            <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);">
+              <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; position: relative;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                  <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 18px;">Cartões de Embarque (${index + 1}/${passengers.length})</h2>
+                  <p style="color: #64748b; margin: 0; font-size: 14px;">${passenger.name} - ${passenger.type}</p>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                  <button onclick="window.prevCard()" ${index === 0 ? 'disabled' : ''} style="background: ${index === 0 ? '#d1d5db' : '#6b7280'}; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: ${index === 0 ? 'not-allowed' : 'pointer'};">
+                    ← Anterior
+                  </button>
+                  <span style="color: #374151; font-weight: 500;">${passenger.name}</span>
+                  <button onclick="window.nextCard()" ${index === passengers.length - 1 ? 'disabled' : ''} style="background: ${index === passengers.length - 1 ? '#d1d5db' : '#6b7280'}; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: ${index === passengers.length - 1 ? 'not-allowed' : 'pointer'};">
+                    Próximo →
+                  </button>
+                </div>
+                
+                <div style="width: 400px; height: 240px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); border-radius: 12px; padding: 20px; color: white; font-family: Arial, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 24px; width: auto;" />
+                      <div style="font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px;">
+                        <span>${new Date().toLocaleDateString('pt-BR')}</span>
+                        <span>AD 1234</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div style="text-align: left;">
+                      <div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">GRU</div>
+                      <div style="font-size: 10px; text-transform: uppercase; opacity: 0.9;">SÃO PAULO</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;">
+                      <div style="width: 40px; height: 1px; background-color: rgba(255,255,255,0.6);"></div>
+                      <div style="font-size: 12px; padding: 4px 8px; background-color: rgba(255,255,255,0.2); border-radius: 4px;">✈️</div>
+                      <div style="width: 40px; height: 1px; background-color: rgba(255,255,255,0.6);"></div>
+                    </div>
+                    
+                    <div style="text-align: right;">
+                      <div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">GRU</div>
+                      <div style="font-size: 10px; text-transform: uppercase; opacity: 0.9;">SÃO PAULO</div>
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 8px; margin-bottom: 12px; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="text-align: center;">
+                        <div style="font-size: 8px; opacity: 0.8;">PASSAGEIRO</div>
+                        <div style="font-size: 12px; font-weight: bold;">${passenger.name}</div>
+                      </div>
+                      <div style="text-align: center;">
+                        <div style="font-size: 8px; opacity: 0.8;">ASSENTO</div>
+                        <div style="font-size: 12px; font-weight: bold;">${seatNumber}</div>
+                      </div>
+                      <div style="text-align: center;">
+                        <div style="font-size: 8px; opacity: 0.8;">PORTÃO</div>
+                        <div style="font-size: 12px; font-weight: bold;">15</div>
+                      </div>
+                      <div style="text-align: center;">
+                        <div style="font-size: 8px; opacity: 0.8;">EMBARQUE</div>
+                        <div style="font-size: 12px; font-weight: bold;">14:35</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style="position: absolute; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 50px; height: 50px; background-image: url('data:image/svg+xml,${encodeURIComponent('<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="10" height="10" fill="black"/><rect x="20" y="0" width="10" height="10" fill="black"/><rect x="40" y="0" width="10" height="10" fill="black"/><rect x="0" y="20" width="10" height="10" fill="black"/><rect x="40" y="20" width="10" height="10" fill="black"/><rect x="0" y="40" width="10" height="10" fill="black"/><rect x="20" y="40" width="10" height="10" fill="black"/><rect x="40" y="40" width="10" height="10" fill="black"/><rect x="10" y="10" width="10" height="10" fill="black"/><rect x="30" y="10" width="10" height="10" fill="black"/><rect x="10" y="30" width="10" height="10" fill="black"/><rect x="30" y="30" width="10" height="10" fill="black"/></svg>')}'); background-size: cover;"></div>
+                  </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                  <button onclick="window.downloadStackedCards()" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                    📥 Baixar Todos Empilhados
+                  </button>
+                  <button onclick="window.closeBoardingPass()" style="background: #6b7280; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-left: 10px;">
+                    Fechar
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        };
+        
+        const updateModal = () => {
+          const existingModal = document.getElementById('boarding-pass-modal');
+          if (existingModal) {
+            existingModal.remove();
+          }
+          document.body.insertAdjacentHTML('beforeend', createModalHTML(currentIndex));
+        };
+        
+        updateModal();
+        
+        autoCloseTimer = setTimeout(() => {
+          (window as any).closeBoardingPass();
+        }, 30000);
+        
+        (window as any).prevCard = () => {
+          if (currentIndex > 0) {
+            currentIndex--;
+            updateModal();
+          }
+        };
+        
+        (window as any).nextCard = () => {
+          if (currentIndex < passengers.length - 1) {
+            currentIndex++;
+            updateModal();
+          }
+        };
+        
+        (window as any).downloadStackedCards = () => {
+          clearTimeout(autoCloseTimer);
+          
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const cardHeight = 280;
+          const cardWidth = 450;
+          const spacing = 20;
+          
+          canvas.width = cardWidth;
+          canvas.height = (cardHeight * passengers.length) + (spacing * (passengers.length - 1));
+          
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          
+          passengers.forEach((passenger: any, index: number) => {
+            const y = index * (cardHeight + spacing);
+            const seatNumber = `${index + 1}D`;
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, y, cardWidth, cardHeight);
+            
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(0, y, cardWidth, cardHeight);
+            
+            const gradient = ctx.createLinearGradient(0, y, cardWidth, y + 60);
+            gradient.addColorStop(0, '#0ea5e9');
+            gradient.addColorStop(1, '#0284c7');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, y, cardWidth, 60);
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 18px Arial';
+            ctx.fillText('AZUL LINHAS AÉREAS', 20, y + 25);
+            ctx.font = '14px Arial';
+            ctx.fillText('Cartão de Embarque', 20, y + 45);
+            
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText(`Nome: ${passenger.name}`, 20, y + 100);
+            ctx.font = '14px Arial';
+            ctx.fillText(`Tipo: ${passenger.type}`, 20, y + 125);
+            ctx.fillText(`Assento: ${seatNumber}`, 20, y + 150);
+            ctx.fillText(`Portão: 15`, 20, y + 175);
+            ctx.fillText(`Embarque: 14:35`, 20, y + 200);
+            ctx.fillText(`Decolagem: 15:00`, 20, y + 225);
+          });
+          
+          canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cartoes-embarque-sbt.png';
+            a.click();
+            URL.revokeObjectURL(url);
+          }, 'image/png');
+          
+          (window as any).closeBoardingPass();
+        };
+        
+      } catch (error) {
+        console.error('Error in unified boarding pass:', error);
+        alert('Erro ao abrir cartões de embarque');
+      }
+    };
+    
+    console.log('Global function openUnifiedBoardingPass defined:', typeof (window as any).openUnifiedBoardingPass);
+
     return () => {
       delete (window as any).openUnifiedBoardingPass;
       delete (window as any).closeBoardingPass;
