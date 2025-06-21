@@ -89,7 +89,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         // Segunda mensagem após mais alguns segundos
         setTimeout(() => {
           setIsTyping(true);
-          const typingTime = Math.floor(Math.random() * 2000) + 2000; // 2-4 segundos
           setTimeout(() => {
             setIsTyping(false);
             const secondMessage: Message = {
@@ -100,9 +99,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             };
             setMessages(prev => [...prev, secondMessage]);
             setShowQuickOptions(true);
-          }, typingTime);
+          }, 3000); // Tempo fixo de 3 segundos
         }, 1000);
-      }, Math.floor(Math.random() * 2000) + 2000); // 2-4 segundos
+      }, 3000); // Tempo fixo de 3 segundos
     }, 2000);
   };
 
