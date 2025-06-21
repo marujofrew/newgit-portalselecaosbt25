@@ -204,13 +204,35 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
         case 'flight-confirmation':
           if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
-            botResponse = "Perfeito! Voo da manhã selecionado (08:30). Suas passagens foram confirmadas e você receberá um e-mail em até 24 horas com todos os detalhes. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?";
+            botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
             nextStep = 'hotel';
-            showOptions = true;
+            showOptions = false;
+            
+            // Simular processamento e depois mostrar hospedagem
+            setTimeout(() => {
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                addMessage("Pronto! Suas passagens foram confirmadas. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+                setShowQuickOptions(true);
+                setCurrentStep('hotel');
+              }, 3000);
+            }, 2000);
           } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
-            botResponse = "Excelente! Voo da tarde selecionado (14:45). Suas passagens foram confirmadas e você receberá um e-mail em até 24 horas com todos os detalhes. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?";
+            botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
             nextStep = 'hotel';
-            showOptions = true;
+            showOptions = false;
+            
+            // Simular processamento e depois mostrar hospedagem
+            setTimeout(() => {
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                addMessage("Pronto! Suas passagens foram confirmadas. Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
+                setShowQuickOptions(true);
+                setCurrentStep('hotel');
+              }, 3000);
+            }, 2000);
           } else {
             botResponse = "Por favor, selecione uma das opções de voo disponíveis.";
             showOptions = true;
