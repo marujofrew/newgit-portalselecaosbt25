@@ -160,13 +160,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             botResponse = botResponses.transport.aviao;
             nextStep = 'city';
             
-            // Após 4 segundos, enviar informação sobre o voo encontrado
+            // Após 3 segundos, enviar informação sobre o voo encontrado
             setTimeout(() => {
               if (nearestAirport && flightDate) {
                 const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
                 addMessage(flightInfo, 'bot');
               }
-            }, 4000);
+            }, 3000);
             
           } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
             botResponse = botResponses.transport.onibus;
