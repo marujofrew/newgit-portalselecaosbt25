@@ -241,15 +241,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
         setTimeout(() => {
           setIsTyping(true);
-          const flightTypingTime = Math.floor(Math.random() * 2000) + 2000; // 2-4 segundos
           setTimeout(() => {
             setIsTyping(false);
             if (nearestAirport && flightDate) {
-              const flightInfo = `✈️ Encontrei uma passagem que sai do ${nearestAirport.name} (${nearestAirport.code}) para São Paulo no dia ${flightDate}. Voo confirmado!`;
+              const flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
               addMessage(flightInfo, 'bot');
             }
-          }, flightTypingTime);
-        }, 1000);
+          }, 3000);
+        }, 2000);
       }
     }, typingTime);
 

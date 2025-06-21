@@ -101,7 +101,8 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Chat bot implementado**: Assistente virtual Rebeca para organizar passagens e hospedagem após agendamento
 - **Sistema de localização**: Captura cidade real do CEP preenchido e usa no chat bot
 - **Opções interativas**: Botões clicáveis para respostas rápidas em todas as perguntas
-- **Indicador de digitação**: Simulação de 4 segundos antes de cada resposta
+- **Indicador de digitação**: Simulação variável de 2-4 segundos antes de cada resposta
+- **Mensagem de voo**: Sistema automatizado que exibe detalhes do voo encontrado após seleção de transporte
 - **Fluxo completo**: CEP → Vagas → Responsável → Candidato(s) → Termos → Agendamento → Chat Bot
 
 ## Changelog
