@@ -191,19 +191,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           if (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião')) {
             botResponse = botResponses.transport.aviao;
             nextStep = 'city';
-            
-            // Agendar mensagem do voo após resposta principal
-            setTimeout(() => {
-              if (nearestAirport && flightDate) {
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-                  const flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
-                  addMessage(flightInfo, 'bot');
-                }, 3000);
-              }
-            }, 2000);
-            
           } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
             botResponse = botResponses.transport.onibus;
             nextStep = 'city';
@@ -250,6 +237,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setCurrentStep(nextStep);
       setShowQuickOptions(showOptions);
       
+      // Se foi escolhido avião, enviar informação sobre o voo
+      if (currentStep === 'transport' && (messageToSend.toLowerCase().includes('aviao') || messageToSend.toLowerCase().includes('avião'))) {
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            if (nearestAirport && flightDate) {
+              const flightInfo = `✈️ Perfeito! Encontrei uma passagem disponível que sai do ${nearestAirport.name} (${nearestAirport.code}) com destino a São Paulo no dia ${flightDate}. \n\nSeu voo está confirmado! O bilhete será enviado por e-mail em até 24 horas.`;
+              addMessage(flightInfo, 'bot');
+            }
+          }, 3000);
+        }, 2000);
+      }
 
     }, typingTime);
 
