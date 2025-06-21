@@ -147,7 +147,7 @@ export default function ChatBot({ isOpen, onClose }: ChatBotProps) {
                 alt="Rebeca"
                 className="w-10 h-10 rounded-full object-cover mr-3"
               />
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
             </div>
             <div>
               <h3 className="font-semibold">Rebeca - Assistente SBT</h3>
