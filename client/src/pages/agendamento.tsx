@@ -6,28 +6,34 @@ export default function Agendamento() {
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
   const [observacoes, setObservacoes] = useState('');
 
-  // Gerar próximas 2 semanas de datas disponíveis
+  // Gerar 4 datas disponíveis no próximo mês
   const gerarDatasDisponiveis = () => {
     const datas = [];
     const hoje = new Date();
+    const umMesAFrente = new Date(hoje);
+    umMesAFrente.setMonth(hoje.getMonth() + 1);
     
-    for (let i = 1; i <= 14; i++) {
-      const data = new Date(hoje);
-      data.setDate(hoje.getDate() + i);
+    // Definir 4 datas específicas no próximo mês (espaçadas ao longo do mês)
+    const diasDoMes = [5, 12, 19, 26]; // Dias 5, 12, 19 e 26 do próximo mês
+    
+    diasDoMes.forEach(dia => {
+      const data = new Date(umMesAFrente.getFullYear(), umMesAFrente.getMonth(), dia);
       
-      // Pular fins de semana
-      if (data.getDay() !== 0 && data.getDay() !== 6) {
-        datas.push({
-          valor: data.toISOString().split('T')[0],
-          texto: data.toLocaleDateString('pt-BR', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })
-        });
+      // Verificar se é um dia útil, se não for, ajustar para o próximo dia útil
+      while (data.getDay() === 0 || data.getDay() === 6) {
+        data.setDate(data.getDate() + 1);
       }
-    }
+      
+      datas.push({
+        valor: data.toISOString().split('T')[0],
+        texto: data.toLocaleDateString('pt-BR', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })
+      });
+    });
     
     return datas;
   };
