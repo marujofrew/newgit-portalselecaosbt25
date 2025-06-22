@@ -717,8 +717,104 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
     }
     
-    // Calcular horário de embarque (25 minutos antes)
-    const flightTimeHour = parseInt(flightTime.split(':')[0]);
+    // Calcular horário de embarque (25 minutos antes do voo)
+    const flightTimeparts = flightTime.split(':');
+    const flightHour = parseInt(flightTimeparts[0]);
+    const flightMinute = parseInt(flightTimeparts[1]);
+    
+    let boardingHour = flightHour;
+    let boardingMinute = flightMinute - 25;
+    
+    if (boardingMinute < 0) {
+      boardingMinute += 60;
+      boardingHour -= 1;
+    }
+    
+    const boardingTime = `${boardingHour.toString().padStart(2, '0')}:${boardingMinute.toString().padStart(2, '0')}`;
+    
+    // Determinar aeroporto de origem baseado no CEP ou cidade do usuário
+    let originCode = 'GRU';
+    let originCity = 'SÃO PAULO';
+    
+    // Usar aeroporto mais próximo se disponível
+    if (nearestAirport) {
+      originCode = nearestAirport.code;
+      originCity = nearestAirport.city.toUpperCase();
+    } else if (cidadeInfo.localidade) {
+      const cityLower = cidadeInfo.localidade.toLowerCase();
+      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
+        originCode = 'GYN';
+        originCity = 'GOIÂNIA';
+      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
+        originCode = 'BSB';
+        originCity = 'BRASÍLIA';
+      } else if (cityLower.includes('recife')) {
+        originCode = 'REC';
+        originCity = 'RECIFE';
+      } else if (cityLower.includes('salvador')) {
+        originCode = 'SSA';
+        originCity = 'SALVADOR';
+      } else if (cityLower.includes('belo horizonte')) {
+        originCode = 'CNF';
+        originCity = 'BELO HORIZONTE';
+      } else if (cityLower.includes('fortaleza')) {
+        originCode = 'FOR';
+        originCity = 'FORTALEZA';
+      } else if (cityLower.includes('manaus')) {
+        originCode = 'MAO';
+        originCity = 'MANAUS';
+      } else if (cityLower.includes('belém')) {
+        originCode = 'BEL';
+        originCity = 'BELÉM';
+      } else if (cityLower.includes('porto alegre')) {
+        originCode = 'POA';
+        originCity = 'PORTO ALEGRE';
+      } else if (cityLower.includes('curitiba')) {
+        originCode = 'CWB';
+        originCity = 'CURITIBA';
+      } else if (cityLower.includes('campo grande')) {
+        originCode = 'CGR';
+        originCity = 'CAMPO GRANDE';
+      } else if (cityLower.includes('florianópolis')) {
+        originCode = 'FLN';
+        originCity = 'FLORIANÓPOLIS';
+      } else if (cityLower.includes('vitória')) {
+        originCode = 'VIX';
+        originCity = 'VITÓRIA';
+      } else {
+        // Para outras cidades, usar a cidade informada
+        originCity = cidadeInfo.localidade.toUpperCase();
+      }
+    } else if (userCity) {
+      // Fallback para userCity se não houver dados do CEP
+      const cityLower = userCity.toLowerCase();
+      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
+        originCode = 'GYN';
+        originCity = 'GOIÂNIA';
+      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
+        originCode = 'BSB';
+        originCity = 'BRASÍLIA';
+      } else {
+        originCity = userCity.toUpperCase();
+      }
+    }
+    
+    const flightNumber = `AD2768`;
+    // Recuperar índice do assento do localStorage ou determinar baseado no nome
+    let seatIndex = 0;
+    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+    const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+    
+    if (passengerName === responsavelInfo.nome) {
+      seatIndex = 0; // Responsável sempre no assento 1D
+    } else {
+      // Encontrar índice do candidato
+      const candidatoIndex = candidatos.findIndex((c: any) => c.nome === passengerName);
+      seatIndex = candidatoIndex >= 0 ? candidatoIndex + 1 : 1;
+    }
+    
+    const seat = `${seatIndex + 1}D`; // 1D, 2D, 3D, 4D...
+    const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;ghtTimeHour = parseInt(flightTime.split(':')[0]);
     const flightTimeMinute = parseInt(flightTime.split(':')[1]);
     const boardingMinutes = flightTimeMinute - 25;
     let boardingHour = flightTimeHour;

@@ -1,19 +1,110 @@
 import React, { useState, useEffect } from 'react';
 
 export default function CartaoPreview() {
+  // Recuperar dados reais do localStorage
+  const [passengerData, setPassengerData] = useState<any>(null);
+  const [flightData, setFlightData] = useState<any>(null);
 
+  useEffect(() => {
+    // Recuperar dados do passageiro
+    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+    const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{}');
+    const selectedDate = localStorage.getItem('selectedDate');
+    
+    // Calcular data do voo baseado na data de agendamento
+    let flightDate = new Date();
+    let flightTime = '13:20';
+    
+    if (selectedDate) {
+      const appointmentDate = new Date(selectedDate);
+      // Por padrão, usar opção 1 (2 dias antes)
+      flightDate = new Date(appointmentDate);
+      flightDate.setDate(appointmentDate.getDate() - 2);
+    }
+    
+    // Calcular horário de embarque (25 minutos antes)
+    const flightTimeparts = flightTime.split(':');
+    const flightHour = parseInt(flightTimeparts[0]);
+    const flightMinute = parseInt(flightTimeparts[1]);
+    
+    let boardingHour = flightHour;
+    let boardingMinute = flightMinute - 25;
+    
+    if (boardingMinute < 0) {
+      boardingMinute += 60;
+      boardingHour -= 1;
+    }
+    
+    const boardingTime = `${boardingHour.toString().padStart(2, '0')}:${boardingMinute.toString().padStart(2, '0')}`;
+    
+    // Determinar aeroporto de origem
+    let originCode = 'GRU';
+    let originCity = 'SÃO PAULO';
+    
+    if (cidadeInfo.localidade) {
+      const cityLower = cidadeInfo.localidade.toLowerCase();
+      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
+        originCode = 'GYN';
+        originCity = 'GOIÂNIA';
+      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
+        originCode = 'BSB';
+        originCity = 'BRASÍLIA';
+      } else if (cityLower.includes('recife')) {
+        originCode = 'REC';
+        originCity = 'RECIFE';
+      } else if (cityLower.includes('salvador')) {
+        originCode = 'SSA';
+        originCity = 'SALVADOR';
+      } else if (cityLower.includes('belo horizonte')) {
+        originCode = 'CNF';
+        originCity = 'BELO HORIZONTE';
+      } else if (cityLower.includes('fortaleza')) {
+        originCode = 'FOR';
+        originCity = 'FORTALEZA';
+      } else if (cityLower.includes('manaus')) {
+        originCode = 'MAO';
+        originCity = 'MANAUS';
+      } else if (cityLower.includes('belém')) {
+        originCode = 'BEL';
+        originCity = 'BELÉM';
+      } else if (cityLower.includes('porto alegre')) {
+        originCode = 'POA';
+        originCity = 'PORTO ALEGRE';
+      } else if (cityLower.includes('curitiba')) {
+        originCode = 'CWB';
+        originCity = 'CURITIBA';
+      } else if (cityLower.includes('campo grande')) {
+        originCode = 'CGR';
+        originCity = 'CAMPO GRANDE';
+      } else if (cityLower.includes('florianópolis')) {
+        originCode = 'FLN';
+        originCity = 'FLORIANÓPOLIS';
+      } else if (cityLower.includes('vitória')) {
+        originCode = 'VIX';
+        originCity = 'VITÓRIA';
+      } else {
+        originCity = cidadeInfo.localidade.toUpperCase();
+      }
+    }
+    
+    setPassengerData({
+      name: responsavelData.nome || "PASSAGEIRO EXEMPLO",
+      seatNumber: "1D"
+    });
+    
+    setFlightData({
+      date: flightDate,
+      originCode,
+      originCity,
+      boardingTime,
+      flightTime,
+      ticketCode: `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`
+    });
+  }, []);
 
-  const samplePassenger = {
-    name: "JOÃO SILVA SANTOS",
-    seatNumber: "15D"
-  };
-  
-  const sampleDate = new Date();
-  const ticketCode = "GRU123";
-  const originCode = "GRU";
-  const originCity = "SÃO PAULO";
-  const boardingTime = "14:35";
-  const flightTime = "15:00";
+  if (!passengerData || !flightData) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <div style={{ 
@@ -113,7 +204,7 @@ export default function CartaoPreview() {
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>ASSENTO</div>
-                <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>1D</div>
+                <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>{passengerData.seatNumber}</div>
               </div>
             </div>
           </div>
@@ -123,7 +214,7 @@ export default function CartaoPreview() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <div>
                 <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>CLIENTE</div>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>PRISCILA BRISIGHELLO</div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{passengerData.name.toUpperCase()}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '11px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
