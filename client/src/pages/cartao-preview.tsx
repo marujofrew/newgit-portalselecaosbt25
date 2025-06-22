@@ -158,7 +158,7 @@ export default function CartaoPreview() {
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', textAlign: 'center' }}>
               <div>
                 <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>DATA</div>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>07/12/21</div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{flightData.date.toLocaleDateString('pt-BR')}</div>
               </div>
               <div>
                 <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>VOO</div>
@@ -171,13 +171,13 @@ export default function CartaoPreview() {
           <div style={{ marginBottom: '25px' }}>
             {/* Nomes das cidades em uma linha */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>RECIFE</div>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>{flightData.originCity}</div>
               <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>SAO PAULO - GUARULHOS</div>
             </div>
             
             {/* Códigos dos aeroportos alinhados */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>REC</div>
+              <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>{flightData.originCode}</div>
               
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 15px' }}>
                 <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>

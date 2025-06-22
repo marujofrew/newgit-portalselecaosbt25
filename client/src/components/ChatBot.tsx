@@ -204,7 +204,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     <div style="display: flex; align-items: flex-start; gap: 16px; text-align: center;">
                       <div>
                         <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">DATA</div>
-                        <div style="font-size: 11px; font-weight: 600; color: white;">${new Date().toLocaleDateString('pt-BR')}</div>
+                        <div style="font-size: 11px; font-weight: 600; color: white;">${flightDate.toLocaleDateString('pt-BR')}</div>
                       </div>
                       <div>
                         <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">VOO</div>
@@ -217,13 +217,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   <div style="margin-bottom: 25px;">
                     <!-- Nomes das cidades em uma linha -->
                     <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                      <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">RECIFE</div>
+                      <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">${originCity}</div>
                       <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">SAO PAULO - GUARULHOS</div>
                     </div>
                     
                     <!-- Códigos dos aeroportos alinhados -->
                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                      <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">REC</div>
+                      <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">${originCode}</div>
                       
                       <div style="display: flex; align-items: center; justify-content: center; margin: 0 15px;">
                         <div style="font-size: 20px; color: #60a5fa;">✈</div>
@@ -814,95 +814,93 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
     
     const seat = `${seatIndex + 1}D`; // 1D, 2D, 3D, 4D...
-    const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;ghtTimeHour = parseInt(flightTime.split(':')[0]);
-    const flightTimeMinute = parseInt(flightTime.split(':')[1]);
-    const boardingMinutes = flightTimeMinute - 25;
-    let boardingHour = flightTimeHour;
-    let boardingMinute = boardingMinutes;
-    
-    if (boardingMinutes < 0) {
-      boardingHour -= 1;
-      boardingMinute = 60 + boardingMinutes;
-    }
-    
-    const boardingTime = `${boardingHour.toString().padStart(2, '0')}:${boardingMinute.toString().padStart(2, '0')}`;
-    
-    // Usar aeroporto real encontrado pelo sistema ou dados da cidade
-    let originCode = 'GRU';
-    let originCity = 'SÃO PAULO';
-    
-    if (nearestAirport) {
-      originCode = nearestAirport.code;
-      originCity = nearestAirport.city.toUpperCase();
-    } else if (cidadeInfo.localidade) {
-      // Mapear cidades para aeroportos reais baseado no CEP
-      const cityLower = cidadeInfo.localidade.toLowerCase();
-      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
-        originCode = 'GYN';
-        originCity = 'GOIÂNIA';
-      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
-        originCode = 'BSB';
-        originCity = 'BRASÍLIA';
-      } else if (cityLower.includes('recife')) {
-        originCode = 'REC';
-        originCity = 'RECIFE';
-      } else if (cityLower.includes('salvador')) {
-        originCode = 'SSA';
-        originCity = 'SALVADOR';
-      } else if (cityLower.includes('belo horizonte')) {
-        originCode = 'CNF';
-        originCity = 'BELO HORIZONTE';
-      } else if (cityLower.includes('rio de janeiro')) {
-        originCode = 'GIG';
-        originCity = 'RIO DE JANEIRO';
-      } else if (cityLower.includes('fortaleza')) {
-        originCode = 'FOR';
-        originCity = 'FORTALEZA';
-      } else if (cityLower.includes('curitiba')) {
-        originCode = 'CWB';
-        originCity = 'CURITIBA';
-      } else if (cityLower.includes('porto alegre')) {
-        originCode = 'POA';
-        originCity = 'PORTO ALEGRE';
-      } else if (cityLower.includes('manaus')) {
-        originCode = 'MAO';
-        originCity = 'MANAUS';
-      } else if (cityLower.includes('belém')) {
-        originCode = 'BEL';
-        originCity = 'BELÉM';
-      } else if (cityLower.includes('natal')) {
-        originCode = 'NAT';
-        originCity = 'NATAL';
-      } else if (cityLower.includes('joão pessoa')) {
-        originCode = 'JPA';
-        originCity = 'JOÃO PESSOA';
-      } else if (cityLower.includes('maceió')) {
-        originCode = 'MCZ';
-        originCity = 'MACEIÓ';
-      } else if (cityLower.includes('aracaju')) {
-        originCode = 'AJU';
-        originCity = 'ARACAJU';
-      } else if (cityLower.includes('teresina')) {
-        originCode = 'THE';
-        originCity = 'TERESINA';
-      } else if (cityLower.includes('são luís')) {
-        originCode = 'SLZ';
-        originCity = 'SÃO LUÍS';
-      } else if (cityLower.includes('cuiabá')) {
-        originCode = 'CGB';
-        originCity = 'CUIABÁ';
-      } else if (cityLower.includes('campo grande')) {
-        originCode = 'CGR';
-        originCity = 'CAMPO GRANDE';
-      } else if (cityLower.includes('florianópolis')) {
-        originCode = 'FLN';
-        originCity = 'FLORIANÓPOLIS';
-      } else if (cityLower.includes('vitória')) {
-        originCode = 'VIX';
-        originCity = 'VITÓRIA';
-      } else {
-        // Para outras cidades, usar a cidade informada
-        originCity = cidadeInfo.localidade.toUpperCase();
+    const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+
+    return `
+      <div style="width: 300px; height: 520px; background: #001f3f; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+        
+        <!-- Header - Layout oficial -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+          <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style="height: 24px; width: auto;" />
+          <div style="display: flex; align-items: flex-start; gap: 16px; text-align: center;">
+            <div>
+              <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">DATA</div>
+              <div style="font-size: 11px; font-weight: 600; color: white;">${flightDate.toLocaleDateString('pt-BR')}</div>
+            </div>
+            <div>
+              <div style="font-size: 9px; color: #94a3b8; font-weight: 500; margin-bottom: 2px;">VOO</div>
+              <div style="font-size: 11px; font-weight: 600; color: white;">2768</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- SEGUNDA PARTE: Aeroportos e informações principais -->
+        <div style="margin-bottom: 25px;">
+          <!-- Nomes das cidades em uma linha -->
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">${originCity}</div>
+            <div style="font-size: 10px; color: #94a3b8; font-weight: 500;">SAO PAULO - GUARULHOS</div>
+          </div>
+          
+          <!-- Códigos dos aeroportos alinhados -->
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">${originCode}</div>
+            
+            <div style="display: flex; align-items: center; justify-content: center; margin: 0 15px;">
+              <div style="font-size: 20px; color: #60a5fa;">✈</div>
+            </div>
+            
+            <div style="font-size: 48px; font-weight: 400; line-height: 1; color: white;">GRU</div>
+          </div>
+          
+          <!-- Linha de informações de embarque -->
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+              <div style="text-align: left;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">INÍCIO EMBARQUE</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">${boardingTime}</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">FIM EMBARQUE</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">${flightTime}</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">SEÇÃO</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">D</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">ASSENTO</div>
+                <div style="font-size: 12px; font-weight: 600; color: white;">${seat}</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cliente e Status -->
+          <div style="margin-bottom: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+              <div>
+                <div style="font-size: 8px; color: #94a3b8; font-weight: 500; margin-bottom: 1px;">CLIENTE</div>
+                <div style="font-size: 11px; font-weight: 600; color: white;">${passengerName.toUpperCase()}</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 11px; font-weight: 600; color: #60a5fa;">Diamante</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- QR Code centralizado na parte inferior -->
+          <div style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); text-align: center;">
+            <div style="width: 120px; height: 120px; background-color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+              <img src="/qr-code.png" alt="QR Code" style="width: 110px; height: 110px; object-fit: cover;">
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: white; letter-spacing: 1px;">
+              ${ticketCode} - 94
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  };
       }
     } else if (userCity) {
       // Fallback para userCity se não houver dados do CEP
