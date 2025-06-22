@@ -16,9 +16,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Em produção, estes dados viriam do banco de dados
       const passengers = [];
       
-      // Simular dados que estariam no localStorage
+      // Recuperar dados reais do localStorage via query parameters ou header
+      // Para teste, vamos simular dados que deveriam vir do frontend
       const responsavelData = {
-        nome: "João Silva Santos",
+        nome: "JOÃO SILVA SANTOS",
         email: "joao@email.com",
         telefone: "(11) 99999-9999",
         cep: "01310-100"
@@ -26,7 +27,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const candidatos = [
         {
-          nome: "Maria Silva Santos",
+          nome: "MARIA SILVA SANTOS",
           idade: 12,
           telefone: "(11) 88888-8888"
         }

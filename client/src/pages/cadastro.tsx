@@ -955,6 +955,25 @@ export default function Cadastro() {
                         disabled={!(termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem)}
                         onClick={() => {
                           if (termoAutorizacao && termoContrato && termoConfidencialidade && termoDireitosImagem) {
+                            // Salvar dados no localStorage antes de redirecionar
+                            const responsavelData = {
+                              nome,
+                              cpf,
+                              dataNascimento,
+                              nomeMae,
+                              sexo,
+                              grauParentesco,
+                              telefone
+                            };
+                            
+                            localStorage.setItem('responsavelData', JSON.stringify(responsavelData));
+                            localStorage.setItem('candidatos', JSON.stringify(candidatos));
+                            localStorage.setItem('cidadeInfo', JSON.stringify(cidadeInfo));
+                            
+                            console.log('Dados salvos no localStorage:');
+                            console.log('responsavelData:', responsavelData);
+                            console.log('candidatos:', candidatos);
+                            
                             // Redirecionar para página de agendamento
                             window.location.href = '/agendamento';
                           }

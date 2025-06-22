@@ -42,7 +42,14 @@ export default function BoardingPassPreview() {
     }
   }
   
-  const passengerName = responsavelData.nome !== 'PASSAGEIRO EXEMPLO' ? responsavelData.nome : '-';
+  // Confirmar se dados reais foram encontrados
+  const hasRealData = responsavelData.nome && responsavelData.nome !== 'PASSAGEIRO EXEMPLO';
+  const passengerName = hasRealData ? responsavelData.nome : '-';
+  
+  // Debug: log para verificar dados
+  console.log('Preview - responsavelData:', responsavelData);
+  console.log('Preview - hasRealData:', hasRealData);
+  console.log('Preview - passengerName:', passengerName);
   const flightNumber = 'AD2768';
   const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 

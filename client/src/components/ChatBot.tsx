@@ -200,34 +200,35 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           // Determinar nome real do passageiro
           let realPassengerName = passenger.name;
           
-          // Se for dados de exemplo, buscar dados reais
-          if (passenger.name === 'RESPONSÁVEL EXEMPLO' || passenger.name === 'DADOS NÃO ENCONTRADOS') {
-            if (responsavelData.nome) {
-              realPassengerName = responsavelData.nome;
-            }
-          } else if (passenger.name === 'CANDIDATO EXEMPLO' || passenger.name === 'VERIFIQUE CADASTRO') {
-            if (candidatos.length > 0) {
-              const candidatoIndex = index - 1; // Assumindo que responsável é sempre index 0
-              if (candidatos[candidatoIndex] && candidatos[candidatoIndex].nome) {
-                realPassengerName = candidatos[candidatoIndex].nome;
-              } else if (candidatos[0] && candidatos[0].nome) {
-                realPassengerName = candidatos[0].nome;
-              }
+          // Debug logs
+          console.log('Processing passenger:', passenger, 'at index:', index);
+          console.log('responsavelData:', responsavelData);
+          console.log('candidatos:', candidatos);
+          
+          // Sempre buscar dados reais primeiro
+          if (index === 0 && responsavelData.nome) {
+            // Primeiro passageiro é sempre o responsável
+            realPassengerName = responsavelData.nome;
+            console.log('Found responsavel name:', realPassengerName);
+          } else if (index > 0 && candidatos.length > 0) {
+            // Outros passageiros são candidatos
+            const candidatoIndex = index - 1;
+            if (candidatos[candidatoIndex] && candidatos[candidatoIndex].nome) {
+              realPassengerName = candidatos[candidatoIndex].nome;
+              console.log('Found candidato name:', realPassengerName);
             }
           }
           
-          // Se ainda não temos nome real, tentar buscar via API
-          if (realPassengerName === passenger.name && (passenger.name.includes('EXEMPLO') || passenger.name.includes('DADOS NÃO'))) {
-            // Fazer chamada para API para buscar dados reais
-            fetch('/api/passengers')
-              .then(response => response.json())
-              .then(data => {
-                if (data.passengers && data.passengers.length > index) {
-                  realPassengerName = data.passengers[index].name;
-                }
-              })
-              .catch(console.error);
+          // Se ainda não encontrou dados reais, manter o nome original (se não for exemplo)
+          if (!realPassengerName || realPassengerName === passenger.name) {
+            if (passenger.name.includes('EXEMPLO') || passenger.name.includes('DADOS NÃO')) {
+              realPassengerName = 'NOME NÃO ENCONTRADO';
+            } else {
+              realPassengerName = passenger.name;
+            }
           }
+          
+          console.log('Final realPassengerName:', realPassengerName);
           
           // Calcular data correta do voo
           let flightDate = new Date();
@@ -725,6 +726,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
 
       console.log('Generating boarding passes for:', passengers);
+      console.log('localStorage responsavelData:', localStorage.getItem('responsavelData'));
+      console.log('localStorage candidatos:', localStorage.getItem('candidatos'));
 
       if (passengers.length > 0) {
         const unifiedFile = createUnifiedBoardingPassFile(passengers);
