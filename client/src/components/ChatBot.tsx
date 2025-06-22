@@ -729,7 +729,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
     } catch (error) {
       console.error('Erro ao gerar cartões de embarque:', error);
-      addMessage("Erro ao gerar cartões de embarque. Tente novamente.", 'bot');
     }
   };
 
@@ -1203,7 +1202,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque.", 'bot');
+              addMessage("Certo! Agora vou finalizar a compra das suas passagens com bagagem incluída.", 'bot');
               
               setTimeout(() => {
                 generateBoardingPasses();
@@ -1251,7 +1250,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Pronto! Já realizei a compra de suas passagens aéreas (sem adicional de bagagem), agora vou te enviar os cartões de embarque.", 'bot');
+              addMessage("Certo! Agora vou finalizar a compra das suas passagens sem bagagem adicional.", 'bot');
               
               setTimeout(() => {
                 generateBoardingPasses();
