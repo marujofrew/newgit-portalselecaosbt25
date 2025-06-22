@@ -87,8 +87,17 @@ export default function CartaoPreview() {
       }
     }
     
+    // CONFIRMAÇÃO: Verificar se há dados reais ou mostrar "-"
+    const hasRealData = responsavelData.nome && responsavelData.nome !== "PASSAGEIRO EXEMPLO";
+    const displayName = hasRealData ? responsavelData.nome : "-";
+    
+    console.log('CartaoPreview - Dados encontrados:', responsavelData);
+    console.log('CartaoPreview - Tem dados reais?', hasRealData);
+    console.log('CartaoPreview - Nome a exibir:', displayName);
+    console.log('CONFIRMAÇÃO:', displayName === '-' ? 'SISTEMA FUNCIONANDO - MOSTRANDO TRAÇO' : 'DADOS REAIS ENCONTRADOS');
+    
     setPassengerData({
-      name: responsavelData.nome || "PASSAGEIRO EXEMPLO",
+      name: displayName,
       seatNumber: "1D"
     });
     
@@ -214,7 +223,7 @@ export default function CartaoPreview() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <div>
                 <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>CLIENTE</div>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{passengerData.name.toUpperCase()}</div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{passengerData.name === '-' ? '-' : passengerData.name.toUpperCase()}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '11px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
