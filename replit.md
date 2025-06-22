@@ -92,6 +92,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## Recent Changes
 
+- **Sistema de cartões de embarque separado**: Todo código de geração de cartões extraído para pasta `boarding-pass-generator/` reutilizável
 - **Rota de passageiros implementada**: API `/api/passengers` criada para recuperar dados reais dos usuários cadastrados
 - **Sistema de nomes reais nos cartões**: Cartões de embarque agora mostram nomes reais do cadastro em vez de "RESPONSÁVEL EXEMPLO"
 - **Preview page atualizada**: Texto "PASSAGEIRO EXEMPLO" substituído por "-" como confirmação de funcionamento
