@@ -256,7 +256,7 @@ export default function CartaoPreview() {
               color: 'white',
               letterSpacing: '1px'
             }}>
-              NF2NPC - 94
+              {flightData.ticketCode}
             </div>
           </div>
         </div>
