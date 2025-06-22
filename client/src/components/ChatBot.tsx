@@ -191,6 +191,33 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             return '';
           }
           
+          // Recuperar dados reais dos passageiros
+          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+          const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+          const selectedDate = localStorage.getItem('selectedDate') || '';
+          const selectedFlightOption = localStorage.getItem('selectedFlightOption') || '1';
+          
+          // Determinar nome real do passageiro
+          let realPassengerName = passenger.name;
+          if (passenger.name === 'RESPONSÁVEL EXEMPLO' && responsavelData.nome) {
+            realPassengerName = responsavelData.nome;
+          } else if (passenger.name === 'CANDIDATO EXEMPLO' && candidatos.length > 0) {
+            realPassengerName = candidatos[0].nome || passenger.name;
+          }
+          
+          // Calcular data correta do voo
+          let flightDate = new Date();
+          if (selectedDate) {
+            const appointmentDate = new Date(selectedDate);
+            flightDate = new Date(appointmentDate);
+            
+            if (selectedFlightOption === '1') {
+              flightDate.setDate(appointmentDate.getDate() - 2);
+            } else {
+              flightDate.setDate(appointmentDate.getDate() - 1);
+            }
+          }
+          
           const seatNumber = `${index + 1}D`;
           
           return `
@@ -198,14 +225,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; position: relative;">
                 <div style="text-align: center; margin-bottom: 20px;">
                   <h2 style="color: #1e293b; margin: 0 0 8px 0; font-size: 18px;">Cartões de Embarque (${index + 1}/${passengers.length})</h2>
-                  <p style="color: #64748b; margin: 0; font-size: 14px;">${passenger.name} - ${passenger.type}</p>
+                  <p style="color: #64748b; margin: 0; font-size: 14px;">${realPassengerName} - ${passenger.type}</p>
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                   <button onclick="window.prevCard()" ${index === 0 ? 'disabled' : ''} style="background: ${index === 0 ? '#d1d5db' : '#6b7280'}; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: ${index === 0 ? 'not-allowed' : 'pointer'};">
                     ← Anterior
                   </button>
-                  <span style="color: #374151; font-weight: 500;">${passenger.name}</span>
+                  <span style="color: #374151; font-weight: 500;">${realPassengerName}</span>
                   <button onclick="window.nextCard()" ${index === passengers.length - 1 ? 'disabled' : ''} style="background: ${index === passengers.length - 1 ? '#d1d5db' : '#6b7280'}; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: ${index === passengers.length - 1 ? 'not-allowed' : 'pointer'};">
                     Próximo →
                   </button>
