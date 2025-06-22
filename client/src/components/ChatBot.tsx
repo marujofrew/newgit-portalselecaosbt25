@@ -199,10 +199,34 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
           // Determinar nome real do passageiro
           let realPassengerName = passenger.name;
-          if (passenger.name === 'RESPONSÁVEL EXEMPLO' && responsavelData.nome) {
-            realPassengerName = responsavelData.nome;
-          } else if (passenger.name === 'CANDIDATO EXEMPLO' && candidatos.length > 0) {
-            realPassengerName = candidatos[0].nome || passenger.name;
+          
+          // Se for dados de exemplo, buscar dados reais
+          if (passenger.name === 'RESPONSÁVEL EXEMPLO' || passenger.name === 'DADOS NÃO ENCONTRADOS') {
+            if (responsavelData.nome) {
+              realPassengerName = responsavelData.nome;
+            }
+          } else if (passenger.name === 'CANDIDATO EXEMPLO' || passenger.name === 'VERIFIQUE CADASTRO') {
+            if (candidatos.length > 0) {
+              const candidatoIndex = index - 1; // Assumindo que responsável é sempre index 0
+              if (candidatos[candidatoIndex] && candidatos[candidatoIndex].nome) {
+                realPassengerName = candidatos[candidatoIndex].nome;
+              } else if (candidatos[0] && candidatos[0].nome) {
+                realPassengerName = candidatos[0].nome;
+              }
+            }
+          }
+          
+          // Se ainda não temos nome real, tentar buscar via API
+          if (realPassengerName === passenger.name && (passenger.name.includes('EXEMPLO') || passenger.name.includes('DADOS NÃO'))) {
+            // Fazer chamada para API para buscar dados reais
+            fetch('/api/passengers')
+              .then(response => response.json())
+              .then(data => {
+                if (data.passengers && data.passengers.length > index) {
+                  realPassengerName = data.passengers[index].name;
+                }
+              })
+              .catch(console.error);
           }
           
           // Calcular data correta do voo

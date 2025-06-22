@@ -42,7 +42,7 @@ export default function BoardingPassPreview() {
     }
   }
   
-  const passengerName = responsavelData.nome || 'PASSAGEIRO EXEMPLO';
+  const passengerName = responsavelData.nome !== 'PASSAGEIRO EXEMPLO' ? responsavelData.nome : '-';
   const flightNumber = 'AD2768';
   const ticketCode = `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 

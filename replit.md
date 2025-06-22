@@ -92,6 +92,10 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 
 ## Recent Changes
 
+- **Rota de passageiros implementada**: API `/api/passengers` criada para recuperar dados reais dos usuários cadastrados
+- **Sistema de nomes reais nos cartões**: Cartões de embarque agora mostram nomes reais do cadastro em vez de "RESPONSÁVEL EXEMPLO"
+- **Preview page atualizada**: Texto "PASSAGEIRO EXEMPLO" substituído por "-" como confirmação de funcionamento
+- **Integração dados reais**: Sistema busca dados via API e localStorage para garantir nomes corretos nos cartões
 - **Fluxo de documentos implementado**: Chat bot abre primeiro após agendamento, cartões só aparecem quando usuário clica no documento
 - **Datas de agendamento ajustadas**: Apenas sábados, começam 1 mês (30 dias) a partir da data atual do preenchimento
 - **Chat bot reiniciado**: Estado limpo a cada confirmação de agendamento para começar conversa do zero
