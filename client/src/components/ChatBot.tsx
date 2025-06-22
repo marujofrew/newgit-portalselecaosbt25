@@ -1383,9 +1383,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-                  setShowQuickOptions(true);
-                  setCurrentStep('hotel');
+                  addMessage("Pronto! Todas as suas passagens foram organizadas. Tenha uma excelente viagem e boa sorte nos testes!", 'bot');
+                  setCurrentStep('complete');
+                  setShowQuickOptions(false);
                 }, 2000);
               }, 6000);
             }, 5000);
