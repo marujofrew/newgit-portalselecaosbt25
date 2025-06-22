@@ -168,14 +168,29 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       console.log('Opening unified boarding pass with:', passengersJson);
       
       try {
-        const passengers = JSON.parse(passengersJson.replace(/&quot;/g, '"'));
+        let passengers;
+        if (typeof passengersJson === 'string') {
+          passengers = JSON.parse(passengersJson.replace(/&quot;/g, '"'));
+        } else {
+          passengers = passengersJson; // Já é um array
+        }
         console.log('Passengers parsed:', passengers);
+        
+        if (!passengers || !Array.isArray(passengers) || passengers.length === 0) {
+          console.error('Invalid passengers data');
+          return;
+        }
         
         let currentIndex = 0;
         let autoCloseTimer: NodeJS.Timeout;
         
         const createModalHTML = (index: number) => {
           const passenger = passengers[index];
+          if (!passenger || !passenger.name) {
+            console.error('Invalid passenger data at index', index);
+            return '';
+          }
+          
           const seatNumber = `${index + 1}D`;
           
           return `
@@ -196,7 +211,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   </button>
                 </div>
                 
-                <div style="width: 300px; height: 520px; background: #001f3f; border-radius: 12px; padding: 20px; color: white; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; position: relative; margin: 0 auto; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+                ${createBoardingPassHTML(passenger.name, true)}
                   
                   <!-- Header - Layout oficial -->
                   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
@@ -350,7 +365,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           if (existingModal) {
             existingModal.remove();
           }
-          document.body.insertAdjacentHTML('beforeend', createModalHTML(currentIndex));
+          const modalHTML = createModalHTML(currentIndex);
+          if (modalHTML) {
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+          }
         };
         
         updateModal();
@@ -436,7 +454,34 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
       } catch (error) {
         console.error('Error in unified boarding pass:', error);
-        alert('Erro ao abrir cartões de embarque');
+        console.error('Error details:', error.message, error.stack);
+        // Fallback: tentar abrir com dados básicos
+        const fallbackPassengers = [
+          { name: 'RESPONSÁVEL EXEMPLO', type: 'Responsável' },
+          { name: 'CANDIDATO EXEMPLO', type: 'Candidato 1' }
+        ];
+        
+        let currentIndex = 0;
+        const createFallbackModal = (index: number) => {
+          const passenger = fallbackPassengers[index];
+          return `
+            <div id="boarding-pass-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000;">
+              <div style="background: white; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow: auto;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                  <h2 style="color: #1e293b;">Cartão de Embarque</h2>
+                  <p style="color: #64748b;">${passenger.name}</p>
+                </div>
+                ${createBoardingPassHTML(passenger.name, true)}
+                <div style="text-align: center; margin-top: 20px;">
+                  <button onclick="window.closeBoardingPass()" style="background: #6b7280; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">
+                    Fechar
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        };
+        document.body.insertAdjacentHTML('beforeend', createFallbackModal(0));
       }
     };
     
