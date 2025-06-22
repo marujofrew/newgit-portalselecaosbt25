@@ -1,9 +1,5 @@
 export default function BoardingPassPreview() {
-  // Limpar localStorage para teste (simular usuário sem cadastro)
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('responsavelData');
-    localStorage.removeItem('candidatos');
-  }
+  // Manter dados reais se existirem
   
   // Recuperar dados reais salvos
   const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{"nome": "PASSAGEIRO EXEMPLO"}');

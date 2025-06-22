@@ -1453,57 +1453,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           showOptions = true;
         }
         break;
-          
-          setTimeout(() => {
-            setIsTyping(true);
-            setTimeout(() => {
-              setIsTyping(false);
-              addMessage("Pronto! Já realizei a compra de suas passagens aéreas e reservei sua hospedagem.", 'bot');
-              
-              setTimeout(() => {
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-                  addMessage("Agora vou te enviar os documentos de viagem. Clique no documento abaixo para visualizar e salvar seus cartões de embarque.", 'bot');
-                  
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage(`
-                        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 300px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.generateAndShowBoardingPasses && window.generateAndShowBoardingPasses()" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
-                          <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
-                              📄
-                            </div>
-                            <div style="flex: 1;">
-                              <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
-                                Documentos de Viagem
-                              </div>
-                              <div style="color: #64748b; font-size: 12px; margin-bottom: 2px;">
-                                Cartões de embarque e vouchers
-                              </div>
-                              <div style="color: #3b82f6; font-size: 11px; font-weight: 600;">
-                                📱 Clique para visualizar e baixar
-                              </div>
-                            </div>
-                            <div style="color: #94a3b8; font-size: 18px;">
-                              📋
-                            </div>
-                          </div>
-                        </div>
-                      `, 'bot');
-                    }, 4000);
-                  }, 2000);
-                }, 6000);
-              }, 2000);
-            }, 6000);
-          }, 2000);
-        } else {
-          botResponse = "Por favor, escolha entre hotel próximo aos estúdios ou no centro.";
-          showOptions = true;
-        }
-        break;
 
       case 'people':
         botResponse = botResponses.people.response;
