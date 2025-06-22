@@ -664,33 +664,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const generateBoardingPasses = () => {
-    // Usar userData que já está disponível no componente
-    const passengers = [];
-    
-    if (userData?.responsavelNome) {
-      passengers.push({
-        name: userData.responsavelNome,
-        type: 'Responsável'
-      });
-    }
-    
-    if (userData?.candidatos) {
-      userData.candidatos.forEach((candidato: any, index: number) => {
-        if (candidato.nome) {
-          passengers.push({
-            name: candidato.nome,
-            type: `Candidato ${index + 1}`
-          });
-        }
-      });
-    }
-
-    // Se não encontrar no userData, tentar localStorage
-    if (passengers.length === 0) {
+  const generateBoardingPasses = async () => {
+    try {
+      // Priorizar dados do localStorage (mais recentes)
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+      let passengers = [];
       
+      // Adicionar responsável
       if (responsavelData.nome) {
         passengers.push({
           name: responsavelData.nome,
@@ -698,6 +679,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         });
       }
       
+      // Adicionar candidatos
       candidatos.forEach((candidato: any, index: number) => {
         if (candidato.nome) {
           passengers.push({
@@ -706,21 +688,55 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           });
         }
       });
-    }
 
-    console.log('Generating boarding passes for:', passengers);
+      // Se não encontrar no localStorage, tentar userData
+      if (passengers.length === 0 && userData) {
+        if (userData.responsavelNome) {
+          passengers.push({
+            name: userData.responsavelNome,
+            type: 'Responsável'
+          });
+        }
+        
+        if (userData.candidatos) {
+          userData.candidatos.forEach((candidato: any, index: number) => {
+            if (candidato.nome) {
+              passengers.push({
+                name: candidato.nome,
+                type: `Candidato ${index + 1}`
+              });
+            }
+          });
+        }
+      }
 
-    if (passengers.length > 0) {
-      const unifiedFile = createUnifiedBoardingPassFile(passengers);
-      addMessage(unifiedFile, 'bot');
-    } else {
-      // Fallback com dados de exemplo se não encontrar nenhum
-      const fallbackPassengers = [
-        { name: 'RESPONSÁVEL EXEMPLO', type: 'Responsável' },
-        { name: 'CANDIDATO EXEMPLO', type: 'Candidato 1' }
-      ];
-      const unifiedFile = createUnifiedBoardingPassFile(fallbackPassengers);
-      addMessage(unifiedFile, 'bot');
+      // Se ainda não encontrar, tentar API como backup
+      if (passengers.length === 0) {
+        try {
+          const response = await fetch('/api/passengers');
+          if (response.ok) {
+            const data = await response.json();
+            passengers = data.passengers || [];
+            console.log('Passengers from API:', passengers);
+          }
+        } catch (apiError) {
+          console.warn('API não disponível, usando fallback');
+        }
+      }
+
+      console.log('Generating boarding passes for:', passengers);
+
+      if (passengers.length > 0) {
+        const unifiedFile = createUnifiedBoardingPassFile(passengers);
+        addMessage(unifiedFile, 'bot');
+      } else {
+        // Último recurso: informar erro
+        console.error('Nenhum dado de passageiro encontrado');
+        addMessage("Erro: Não foi possível encontrar dados dos passageiros. Verifique se o cadastro foi concluído corretamente.", 'bot');
+      }
+    } catch (error) {
+      console.error('Erro ao gerar cartões de embarque:', error);
+      addMessage("Erro ao gerar cartões de embarque. Tente novamente.", 'bot');
     }
   };
 
