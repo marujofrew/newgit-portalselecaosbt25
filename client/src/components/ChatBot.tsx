@@ -1289,54 +1289,36 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'flight-confirmation':
         if (messageToSend.toLowerCase().includes('opção 1') || messageToSend.toLowerCase().includes('opcao 1')) {
-          // Salvar que foi escolhida a Opção 1 (2 dias antes)
-          setCurrentStep('baggage-option');
-          botResponse = "Certo! Só um minuto que estou efetuando a compra de suas passagens e vou te enviar as passagens aqui para que você utilize na hora do embarque...";
-          nextStep = 'baggage-option';
+          localStorage.setItem('selectedFlightOption', '1');
+          botResponse = `${userData?.responsavelNome || 'Senhor(a)'}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`;
+          nextStep = 'baggage';
           showOptions = false;
           
-          // Sequência de mensagens humanizadas
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage(`${userData?.responsavelNome || 'Senhor(a)'}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`, 'bot');
+              addMessage('Antes de finalizar a compra de suas passagens, tenho que te dar um aviso importante.', 'bot');
               
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage('Antes de finalizar a compra de suas passagens, tenho que te dar um aviso importante.', 'bot');
+                  addMessage('No valor da passagem não está incluso bagagem. Se você quiser levar uma bagagem de até 23kg, posso incluir por apenas **R$ 29,90** (valor promocional SBT-Azul de R$ 279,90 por R$ 29,90).', 'bot');
                   
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage('As passagens custeadas pelo SBT são de categoria básica e não possuem bagagem inclusa.', 'bot');
-                      
-                      setTimeout(() => {
-                        setIsTyping(true);
-                        setTimeout(() => {
-                          setIsTyping(false);
-                          addMessage('Temos uma parceria com a Azul onde conseguimos um valor promocional pelo kit de bagagem. Esse kit no valor normal vai te custar R$ 279,90, porém conseguimos adicionar o mesmo kit com valor de parceiro por apenas <strong>R$ 29,90</strong>.', 'bot');
-                          
-                          setTimeout(() => {
-                            setIsTyping(true);
-                            setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage('O kit inclui: bagagem de 23kg + bagagem de mão + mochila. Você gostaria de adicionar?', 'bot');
-                              setShowQuickOptions(true);
-                              setCurrentStep('baggage-option');
-                            }, 5000);
-                          }, 5000);
-                        }, 5000);
-                      }, 5000);
+                      addMessage('Você gostaria de incluir bagagem por R$ 29,90 ou preferir viajar apenas com bagagem de mão?', 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('baggage');
                     }, 5000);
                   }, 5000);
                 }, 5000);
               }, 5000);
             }, 5000);
-          }, 5000);
+          }, 2000);
         } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
           // Salvar que foi escolhida a Opção 2 (1 dia antes)
           setCurrentStep('baggage-option');
@@ -1410,29 +1392,33 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }, 2000);
         } else if (messageToSend.toLowerCase().includes('opção 2') || messageToSend.toLowerCase().includes('opcao 2')) {
           localStorage.setItem('selectedFlightOption', '2');
-          botResponse = "Perfeito, vou realizar a compra de suas passagens, logo em seguida te envio os cartões de embarque, só um instante...";
-          nextStep = 'baggage-option';
+          botResponse = `${userData?.responsavelNome || 'Senhor(a)'}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`;
+          nextStep = 'baggage';
           showOptions = false;
           
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
-              
-              setTimeout(() => {
-                generateBoardingPasses();
-              }, 2000);
+              addMessage('Antes de finalizar a compra de suas passagens, tenho que te dar um aviso importante.', 'bot');
               
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-                  setShowQuickOptions(true);
-                  setCurrentStep('hotel');
-                }, 2000);
-              }, 6000);
+                  addMessage('No valor da passagem não está incluso bagagem. Se você quiser levar uma bagagem de até 23kg, posso incluir por apenas **R$ 29,90** (valor promocional SBT-Azul de R$ 279,90 por R$ 29,90).', 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage('Você gostaria de incluir bagagem por R$ 29,90 ou preferir viajar apenas com bagagem de mão?', 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('baggage');
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
             }, 5000);
           }, 2000);
         } else {
