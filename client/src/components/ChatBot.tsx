@@ -37,16 +37,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     transport: {
       aviao: `Perfeito! Voo é mais rápido. Vou buscar os melhores voos saindo do aeroporto mais próximo de você para São Paulo.`,
       onibus: `Ótima escolha! Viagem de ônibus é mais econômica. Vou organizar sua passagem de ônibus para São Paulo.`
-    },
-    hotel: {
-      proximos: `Excelente! Hotel próximo aos estúdios é mais prático. Você ficará no Hotel Maksoud Plaza, a apenas 15 minutos dos estúdios SBT.`,
-      centro: `Boa escolha! Hotel no centro oferece mais opções. Você ficará no Hotel Copacabana, no coração de São Paulo.`
-    },
-    people: {
-      response: `Perfeito! Já tenho a quantidade de pessoas. Agora preciso saber sobre restrições alimentares - você ou as crianças têm alguma restrição alimentar específica?`
-    },
-    final: {
-      response: "Perfeito! Tenho todas as informações necessárias. Em até 24 horas você receberá um e-mail com passagens/bilhetes confirmados, voucher do hotel, roteiro detalhado e contato de emergência. Obrigado e até breve nos estúdios do SBT!"
     }
   };
 
@@ -1094,14 +1084,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           nextStep = 'complete';
           showOptions = false;
           
-          // Continuar para hotel após recusar bagagem
+          // Finalizar após recusar bagagem
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Agora vamos falar sobre hospedagem - você prefere ficar em hotel próximo aos estúdios ou em hotel no centro de São Paulo?", 'bot');
-              setShowQuickOptions(true);
-              setCurrentStep('hotel');
+              addMessage("Pronto! Todas as suas passagens foram organizadas. Tenha uma excelente viagem e boa sorte nos testes!", 'bot');
+              setCurrentStep('complete');
+              setShowQuickOptions(false);
             }, 5000);
           }, 5000);
         } else {
@@ -1435,7 +1425,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
       case 'city':
         botResponse = "Vou buscar voos...";
-        nextStep = 'hotel';
+        nextStep = 'complete';
         showOptions = false;
         break;
 
