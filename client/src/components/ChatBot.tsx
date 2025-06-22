@@ -1047,8 +1047,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           showOptions = false;
         } else if (messageToSend.toLowerCase().includes('onibus') || messageToSend.toLowerCase().includes('ônibus')) {
           botResponse = botResponses.transport.onibus;
-          nextStep = 'hotel';
-          showOptions = true;
+          nextStep = 'complete';
+          showOptions = false;
         } else {
           botResponse = "Por favor, escolha entre Avião ou Ônibus para o transporte.";
           showOptions = true;
@@ -1550,12 +1550,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Sim, continuar cadastro'];
       case 'flight-confirmation':
         return ['Opção 1', 'Opção 2'];
-      case 'hotel':
-        return ['Hotel próximo aos estúdios', 'Hotel no centro'];
-      case 'people':
-        return ['2 pessoas (1 responsável + 1 criança)', '3 pessoas (1 responsável + 2 crianças)', '4 pessoas (2 responsáveis + 2 crianças)', 'Outro número'];
-      case 'final':
-        return ['Não tenho restrições', 'Tenho restrições alimentares'];
+
       default:
         return [];
     }
