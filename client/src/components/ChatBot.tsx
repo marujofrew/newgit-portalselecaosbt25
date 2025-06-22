@@ -760,10 +760,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               📄 Documento: Cartões de Embarque
             </div>
             <div style="color: #3b82f6; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
-              ${passengers.length} passageiro${passengers.length > 1 ? 's' : ''} incluído${passengers.length > 1 ? 's' : ''}
+              ${realPassengers.length} passageiro${realPassengers.length > 1 ? 's' : ''} incluído${realPassengers.length > 1 ? 's' : ''}
             </div>
             <div style="color: #64748b; font-size: 11px; margin-bottom: 4px; line-height: 1.3;">
-              ${passengers.map(p => `• ${p.name} (${p.type})`).join('<br>')}
+              ${realPassengers.map(p => `• ${p.name} (${p.type})`).join('<br>')}
             </div>
             <div style="color: #059669; font-size: 11px; font-weight: 600; background: #ecfdf5; padding: 4px 8px; border-radius: 4px; display: inline-block;">
               📱 Clique para visualizar e baixar

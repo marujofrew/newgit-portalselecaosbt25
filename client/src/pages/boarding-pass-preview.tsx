@@ -244,7 +244,7 @@ export default function BoardingPassPreview() {
               fontSize: '12px',
               fontWeight: '700',
               color: 'white'
-            }}>{passengerName.toUpperCase()}</span>
+            }}>{passengerName === '-' ? '-' : passengerName.toUpperCase()}</span>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{
