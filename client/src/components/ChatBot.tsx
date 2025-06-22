@@ -1055,13 +1055,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
         break;
 
-      case 'baggage-option':
+      case 'baggage':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
           botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
           nextStep = 'pix-payment';
           showOptions = false;
           
-          // Enviar informações sobre pagamento PIX
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
@@ -1081,19 +1080,38 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }, 5000);
         } else if (messageToSend.toLowerCase().includes('não') || messageToSend.toLowerCase().includes('nao') || messageToSend.toLowerCase().includes('sem bagagem')) {
           botResponse = "Entendido! As passagens serão apenas com bagagem de mão.";
-          nextStep = 'complete';
+          nextStep = 'purchase-tickets';
           showOptions = false;
           
-          // Finalizar após recusar bagagem
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Pronto! Todas as suas passagens foram organizadas. Tenha uma excelente viagem e boa sorte nos testes!", 'bot');
-              setCurrentStep('complete');
-              setShowQuickOptions(false);
+              addMessage("Certo! Só um minuto que estou efetuando a compra de suas passagens e vou te enviar as passagens aqui para que você utilize na hora do embarque...", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Pronto! Já realizei a compra de suas passagens aéreas, agora vou te enviar os cartões de embarque. Salve os cartões em seu celular para evitar problemas no embarque.", 'bot');
+                  
+                  setTimeout(() => {
+                    generateBoardingPasses();
+                  }, 2000);
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Pronto! Todas as suas passagens foram organizadas. Tenha uma excelente viagem e boa sorte nos testes!", 'bot');
+                      setCurrentStep('complete');
+                      setShowQuickOptions(false);
+                    }, 2000);
+                  }, 6000);
+                }, 5000);
+              }, 5000);
             }, 5000);
-          }, 5000);
+          }, 2000);
         } else {
           botResponse = "Por favor, escolha se deseja adicionar o kit bagagem ou não.";
           showOptions = true;
@@ -1540,7 +1558,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     switch (currentStep) {
       case 'transport':
         return ['Avião', 'Ônibus'];
-      case 'baggage-option':
+      case 'baggage':
         return ['Sim, adicionar kit', 'Não, sem bagagem'];
       case 'pix-payment':
         return ['Ok, vou realizar o pagamento e volto rapidamente'];
