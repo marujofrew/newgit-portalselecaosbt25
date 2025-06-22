@@ -1091,7 +1091,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }, 5000);
         } else if (messageToSend.toLowerCase().includes('não') || messageToSend.toLowerCase().includes('nao') || messageToSend.toLowerCase().includes('sem bagagem')) {
           botResponse = "Entendido! As passagens serão apenas com bagagem de mão.";
-          nextStep = 'hotel';
+          nextStep = 'complete';
           showOptions = false;
           
           // Continuar para hotel após recusar bagagem
@@ -1439,32 +1439,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         showOptions = false;
         break;
 
-      case 'hotel':
-        if (messageToSend.toLowerCase().includes('próximo') || messageToSend.toLowerCase().includes('estúdios')) {
-          botResponse = botResponses.hotel.proximos;
-          nextStep = 'people';
-          showOptions = true;
-        } else if (messageToSend.toLowerCase().includes('centro')) {
-          botResponse = botResponses.hotel.centro;
-          nextStep = 'people';
-          showOptions = true;
-        } else {
-          botResponse = "Por favor, escolha uma das opções de hospedagem.";
-          showOptions = true;
-        }
-        break;
 
-      case 'people':
-        botResponse = botResponses.people.response;
-        nextStep = 'final';
-        showOptions = true;
-        break;
-
-      case 'final':
-        botResponse = botResponses.final.response;
-        nextStep = 'complete';
-        showOptions = false;
-        break;
 
       default:
         botResponse = "Desculpe, não entendi. Pode repetir?";
