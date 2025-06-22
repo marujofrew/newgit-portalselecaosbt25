@@ -4,6 +4,16 @@ export default function BoardingPassPreview() {
   const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{"localidade": "São Paulo"}');
   const selectedDate = localStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0];
   
+  // TESTE: Forçar dados de teste para verificar funcionamento
+  const testData = {
+    nome: "JOÃO TESTE SILVA"
+  };
+  
+  // Para teste: usar dados de teste se não houver dados reais
+  const finalData = responsavelData.nome && responsavelData.nome !== "PASSAGEIRO EXEMPLO" 
+    ? responsavelData 
+    : testData;
+  
   // Calcular data do voo (2 dias antes do agendamento por padrão)
   const appointmentDate = new Date(selectedDate);
   const flightDate = new Date(appointmentDate);
@@ -43,11 +53,12 @@ export default function BoardingPassPreview() {
   }
   
   // Confirmar se dados reais foram encontrados
-  const hasRealData = responsavelData.nome && responsavelData.nome !== 'PASSAGEIRO EXEMPLO';
-  const passengerName = hasRealData ? responsavelData.nome : '-';
+  const hasRealData = finalData.nome && finalData.nome !== 'PASSAGEIRO EXEMPLO';
+  const passengerName = hasRealData ? finalData.nome : '-';
   
   // Debug: log para verificar dados
   console.log('Preview - responsavelData:', responsavelData);
+  console.log('Preview - finalData:', finalData);
   console.log('Preview - hasRealData:', hasRealData);
   console.log('Preview - passengerName:', passengerName);
   const flightNumber = 'AD2768';
