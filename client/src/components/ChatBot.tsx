@@ -773,17 +773,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   setPaymentTimer(300); // 5 minutos
                   setCurrentStep('waiting-baggage-payment');
 
-                  // Simular confirmação de pagamento após 30 segundos
-                  setTimeout(() => {
-                    setShowPaymentStatus(false);
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Seu pagamento foi confirmado, vamos continuar?", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('baggage-payment-confirmed');
-                    }, 5000);
-                  }, 30000);
+                  // Sistema de verificação real do gateway implementado
 
                   // Timeout após 2 minutos
                   setTimeout(() => {
