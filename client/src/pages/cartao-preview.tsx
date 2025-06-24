@@ -30,8 +30,8 @@ export default function CartaoPreview() {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [showChatBot, setShowChatBot] = useState(false);
-  // Chat deve abrir imediatamente se há conversa salva
-  const [chatBotMinimized, setChatBotMinimized] = useState(!ChatStorage.hasConversation());
+  // Chat sempre inicia minimizado
+  const [chatBotMinimized, setChatBotMinimized] = useState(true);
 
 
   const [userCity, setUserCity] = useState<string>('');
