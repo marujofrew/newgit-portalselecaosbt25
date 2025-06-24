@@ -27,6 +27,19 @@ export default function CartaoPreview() {
 
   useEffect(() => {
     loadBoardingPassData();
+    
+    // Scroll automático para o botão de download após 4 segundos
+    const scrollTimer = setTimeout(() => {
+      const downloadButton = document.querySelector('#download-button-below');
+      if (downloadButton) {
+        downloadButton.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }
+    }, 4000);
+
+    return () => clearTimeout(scrollTimer);
   }, []);
 
   const loadBoardingPassData = () => {
@@ -331,6 +344,7 @@ export default function CartaoPreview() {
           {/* Download Button Below Cards */}
           <div className="flex justify-center mt-8">
             <button
+              id="download-button-below"
               onClick={downloadAllCards}
               className="flex items-center space-x-3 text-white px-8 py-4 rounded-xl transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 duration-300 hover:opacity-90"
               style={{ backgroundColor: '#001f3f' }}
