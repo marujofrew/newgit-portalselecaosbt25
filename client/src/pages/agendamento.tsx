@@ -14,24 +14,35 @@ export default function Agendamento() {
   const [userCity, setUserCity] = useState<string>('');
   const [userData, setUserData] = useState<any>(null);
 
-  // Carregar dados do usuário (usar mesma fonte que cartao-preview)
+  // Carregar dados do usuário (usar EXATAMENTE a mesma fonte que cartao-preview)
   useEffect(() => {
     try {
       const responsavelData = localStorage.getItem('responsavelData');
       const cityData = localStorage.getItem('userCityData');
       const storedSelectedDate = localStorage.getItem('selectedDate');
       
+      console.log('Agendamento: Carregando dados para chat:', {
+        responsavel: !!responsavelData,
+        city: !!cityData,
+        selectedDate: storedSelectedDate
+      });
+      
       if (responsavelData) {
-        setUserData(JSON.parse(responsavelData));
+        const userData = JSON.parse(responsavelData);
+        setUserData(userData);
+        console.log('Agendamento: Dados do usuário carregados:', userData.nome);
       }
       
       if (cityData) {
         const parsed = JSON.parse(cityData);
-        setUserCity(`${parsed.cidade} - ${parsed.uf}`);
+        const cityString = `${parsed.cidade} - ${parsed.uf}`;
+        setUserCity(cityString);
+        console.log('Agendamento: Cidade carregada:', cityString);
       }
       
       if (storedSelectedDate) {
         setDataSelecionada(storedSelectedDate);
+        console.log('Agendamento: Data selecionada carregada:', storedSelectedDate);
       }
     } catch (error) {
       console.error('Erro ao carregar dados do usuário:', error);

@@ -76,16 +76,26 @@ export default function CartaoPreview() {
       const storedSelectedDate = localStorage.getItem('selectedDate');
       const cityData = localStorage.getItem('userCityData');
 
-      // Salvar dados para o chatbot (usar mesma fonte que outras páginas)
+      // Salvar dados para o chatbot (usar EXATAMENTE a mesma fonte que agendamento)
+      console.log('CartaoPreview: Carregando dados para chat:', {
+        responsavel: !!responsavelData,
+        city: !!cityData,
+        selectedDate: storedSelectedDate
+      });
+      
       setUserData(responsavelData);
+      console.log('CartaoPreview: Dados do usuário carregados:', responsavelData.nome);
       
       if (cityData) {
         const parsed = JSON.parse(cityData);
-        setUserCity(`${parsed.cidade} - ${parsed.uf}`);
+        const cityString = `${parsed.cidade} - ${parsed.uf}`;
+        setUserCity(cityString);
+        console.log('CartaoPreview: Cidade carregada:', cityString);
       }
       
       if (storedSelectedDate) {
         setSelectedDate(storedSelectedDate);
+        console.log('CartaoPreview: Data selecionada carregada:', storedSelectedDate);
       }
 
       // Criar lista de passageiros

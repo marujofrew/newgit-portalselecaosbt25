@@ -37,6 +37,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [nearestAirport, setNearestAirport] = useState<any>(null);
   const [isMinimized, setIsMinimized] = useState(initialMinimized);
 
+  // Debug: verificar props recebidas
+  useEffect(() => {
+    console.log('ChatBot: Props recebidas:', {
+      userCity,
+      userName: userData?.nome,
+      selectedDate,
+      isOpen,
+      pathname: window.location.pathname
+    });
+  }, [userCity, userData, selectedDate, isOpen]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -54,8 +65,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   }, [isOpen, isMinimized, messages.length]);
 
-  // Carregar histórico do localStorage
+  // Carregar histórico do localStorage - EXECUTAR APENAS UMA VEZ
   useEffect(() => {
+    if (isInitialized) return; // Evita recarregar se já foi inicializado
+    
     console.log('ChatBot: Carregando estado do localStorage...');
     const savedMessages = localStorage.getItem('chatbotMessages');
     const savedCurrentStep = localStorage.getItem('chatbotCurrentStep');
@@ -110,7 +123,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setIsMinimized(true);
       console.log('ChatBot: Iniciando minimizado');
     }
-  }, []);
+    
+    setIsInitialized(true);
+  }, []); // Remove dependências para executar apenas uma vez
 
   // Salvar estado no localStorage sempre que houver mudanças
   useEffect(() => {
@@ -184,9 +199,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   }, [showPaymentStatus, paymentTimer]);
 
   useEffect(() => {
-    if (isOpen && !isInitialized) {
-      setIsInitialized(true);
-      
+    if (isOpen && isInitialized) {
       // Aguardar um pouco para garantir que o estado foi carregado
       setTimeout(() => {
         if (messages.length > 0) {
@@ -196,7 +209,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             scrollToBottom();
           }, 200);
         } else {
-          // Só inicializar conversa nova se não há mensagens salvas
+          // Só inicializar conversa nova se não há mensagens salvas E ainda não foi inicializado
           console.log('ChatBot: Iniciando nova conversa');
           // Buscar aeroporto mais próximo baseado no CEP
           const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
@@ -216,7 +229,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
       }, 100);
     }
-  }, [isOpen, isInitialized, messages.length]);
+  }, [isOpen, isInitialized]); // Remove messages.length da dependência
 
   const continueConversationFlow = () => {
     // Esta função verifica se a conversa precisa continuar automaticamente
