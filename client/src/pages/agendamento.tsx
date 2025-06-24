@@ -134,6 +134,7 @@ export default function Agendamento() {
     
     // Marcar que chatbot deve aparecer automaticamente
     localStorage.setItem('showChatBotGlobal', 'true');
+    localStorage.setItem('agendamentoConfirmado', 'true');
     
     // Marcar que chatbot foi aberto pela primeira vez e ativar
     setTimeout(() => {

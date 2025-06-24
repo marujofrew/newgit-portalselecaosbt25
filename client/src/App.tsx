@@ -41,9 +41,17 @@ function App() {
     const chatBotOpened = localStorage.getItem('chatBotOpened');
     const currentPath = window.location.pathname;
     
-    // Não mostrar chatbot na página inicial nem na página de agendamento antes da confirmação
-    if (currentPath === '/' || currentPath === '/agendamento') {
+    // Não mostrar chatbot na página inicial
+    if (currentPath === '/') {
       return;
+    }
+    
+    // Na página de agendamento, só mostrar se já foi confirmado
+    if (currentPath === '/agendamento') {
+      const agendamentoConfirmado = localStorage.getItem('agendamentoConfirmado');
+      if (agendamentoConfirmado !== 'true') {
+        return;
+      }
     }
     
     if (shouldShowChatBot === 'true' && chatBotOpened === 'true') {
