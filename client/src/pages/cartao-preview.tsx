@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import ChatBot from '../components/ChatBot';
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
 import sbtLogo from '@assets/sbt_logo.png';
 
@@ -25,6 +26,10 @@ export default function CartaoPreview() {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showChatBot, setShowChatBot] = useState(false);
+  const [userCity, setUserCity] = useState<string>('');
+  const [userData, setUserData] = useState<any>(null);
+  const [selectedDate, setSelectedDate] = useState<string>('');
 
   useEffect(() => {
     loadBoardingPassData();
@@ -40,16 +45,31 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    return () => clearTimeout(scrollTimer);
-  }, []);
+    // Timer para abrir chatbot após 30 segundos de inatividade
+    const chatBotTimer = setTimeout(() => {
+      if (!showChatBot) {
+        setShowChatBot(true);
+      }
+    }, 30000);
+
+    return () => {
+      clearTimeout(scrollTimer);
+      clearTimeout(chatBotTimer);
+    };
+  }, [showChatBot]);
 
   const loadBoardingPassData = () => {
     try {
       // Carregar dados do responsável
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatosData = JSON.parse(localStorage.getItem('candidatos') || '[]');
-      const selectedDate = localStorage.getItem('selectedDate');
-      const userCity = localStorage.getItem('userCity');
+      const storedSelectedDate = localStorage.getItem('selectedDate');
+      const storedUserCity = localStorage.getItem('userCity');
+      
+      // Salvar dados para o chatbot
+      setUserData(responsavelData);
+      setUserCity(storedUserCity || '');
+      setSelectedDate(storedSelectedDate || '');
 
       // Criar lista de passageiros
       const passengersList: Passenger[] = [];
@@ -75,8 +95,8 @@ export default function CartaoPreview() {
       setPassengers(passengersList);
 
       // Calcular dados do voo
-      if (selectedDate) {
-        const flightDate = new Date(selectedDate);
+      if (storedSelectedDate) {
+        const flightDate = new Date(storedSelectedDate);
         flightDate.setDate(flightDate.getDate() - 1); // Um dia antes do agendamento
         
         const boardingDate = new Date(flightDate);
@@ -87,7 +107,7 @@ export default function CartaoPreview() {
           flightTime: "08:30",
           boardingTime: boardingDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
           originCode: "GYN",
-          originCity: userCity?.toUpperCase() || "GOIÂNIA",
+          originCity: storedUserCity?.toUpperCase() || "GOIÂNIA",
           destinationCode: "GRU",
           destinationCity: "SÃO PAULO"
         });
@@ -130,6 +150,12 @@ export default function CartaoPreview() {
           await new Promise(resolve => setTimeout(resolve, 500));
         }
       }
+      
+      // Abrir chatbot após download concluído
+      setTimeout(() => {
+        setShowChatBot(true);
+      }, 1000);
+      
     } catch (error) {
       console.error('Erro ao baixar cartões:', error);
       alert('Erro ao gerar imagens dos cartões. Tente novamente.');

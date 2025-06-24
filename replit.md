@@ -106,7 +106,9 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Delays de digitação padronizados**: 5 segundos entre todas as mensagens para ritmo consistente
 - **Mensagens de bagagem humanizadas**: Sequência natural com valor R$ 29,90 em negrito e texto otimizado sobre bagagens
 - **Fluxo completo do chatbot implementado**: Script exato seguido com correções ortográficas, incluindo transporte (avião/van), bagagens, hotel, inscrição e pagamento PIX
-- **Página oficial de cartões de embarque redesenhada**: Layout profissional com header SBT, cards informativos azuis, grid responsivo de cartões, modal detalhado, download completo, instruções de viagem e fundo branco
+- **Página oficial de cartões de embarque redesenhada**: Layout profissional com header SBT, cards informativos azuis, grid responsivo de cartões, modal detalhado, download como imagens PNG, instruções de viagem, fundo branco e chatbot integrado
+- **Download de cartões como imagens implementado**: html2canvas captura cada cartão individualmente em PNG alta qualidade
+- **Chatbot automático na página de cartões**: Abre após download ou 30 segundos de inatividade para continuar fluxo da conversa
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
 - **Fluxo de van corrigido**: Sequência completa de mensagens sobre bagagem após confirmação da viagem de van implementada
