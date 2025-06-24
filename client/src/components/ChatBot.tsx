@@ -593,18 +593,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!", 'bot');
-                
-                // Adicionar link para cartões de embarque após 1 segundo
-                setTimeout(() => {
-                  const linkMessage: Message = {
-                    id: Date.now() + 1,
-                    text: `<a href="/cartao-preview" target="_blank" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
-                    sender: 'bot',
-                    timestamp: new Date()
-                  };
-                  setMessages(prev => [...prev, linkMessage]);
-                }, 1000);
+                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!\n\n<a href=\"/cartao-preview\" target=\"_blank\" style=\"display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;\">🎫 Ver Cartões de Embarque</a>", 'bot');
                 
                 setTimeout(() => {
                   generateBoardingPasses();
