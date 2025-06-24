@@ -95,40 +95,28 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         setShowPaymentStatus(false);
         setPaymentTimer(0);
         
-        // Se vem da página de cartões, adicionar mensagem de continuação
+        // Se vem da página de cartões, apenas mostrar opções para continuar
         if (isFromBoardingPass && window.location.pathname === '/cartao-preview') {
+          // Não adicionar nova mensagem, apenas ativar opções baseado no estado atual
+          let currentStepToUse = savedState.currentStep;
+          
+          // Se estava no greeting, avançar para transport para dar opções de transporte
+          if (savedState.currentStep === 'greeting') {
+            currentStepToUse = 'transport';
+            setCurrentStep('transport');
+          }
+          
           setTimeout(() => {
-            const continuationMsg: Message = {
-              id: Date.now() + 9999,
-              text: "Oi! Vi que você está na página dos cartões de embarque. Vamos continuar nossa conversa de onde paramos?",
-              sender: 'bot',
-              timestamp: new Date()
-            };
-            setMessages(prev => [...prev, continuationMsg]);
-            
-            // Determinar qual etapa continuar baseado no estado salvo
-            let nextStep = savedState.currentStep;
-            
-            // Se estava no greeting (primeira mensagem), avançar para transport
-            if (savedState.currentStep === 'greeting') {
-              nextStep = 'transport';
-              setCurrentStep('transport');
-            }
-            
-            // Ativar opções após a mensagem de continuação
-            setTimeout(() => {
-              setShowQuickOptions(true);
-              console.log('📋 Opções ativadas para continuação na etapa:', nextStep);
-            }, 1000);
-            
-            ChatPersistence.save({ 
-              messages: [...savedState.messages, continuationMsg],
-              currentStep: nextStep,
-              showQuickOptions: true 
-            });
-          }, 1500);
+            setShowQuickOptions(true);
+            console.log('📋 Ativando opções para continuar na etapa:', currentStepToUse);
+          }, 1000);
+          
+          ChatPersistence.save({ 
+            currentStep: currentStepToUse,
+            showQuickOptions: true 
+          });
         } else {
-          // Restaurar opções se necessário
+          // Restaurar opções normalmente
           setTimeout(() => {
             setShowQuickOptions(savedState.showQuickOptions);
             console.log('🔄 Opções restauradas:', savedState.showQuickOptions);
