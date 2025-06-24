@@ -1584,49 +1584,59 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   };
 
+  // Função para abrir modal de cartões - movida para escopo principal
+  const handleBoardingPassClick = () => {
+    console.log('Clique no cartão de embarque detectado');
+    
+    try {
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+      
+      const fullPassengers = [
+        { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
+      ];
+      
+      candidatos.forEach((candidato: any, index: number) => {
+        fullPassengers.push({
+          name: candidato.nome || `CANDIDATO ${index + 1}`,
+          type: `Candidato ${index + 1}`,
+          isMain: false
+        });
+      });
+
+      const flightData = calculateFlightData(selectedDate, userCity);
+      
+      console.log('Dados preparados:', { fullPassengers, flightData });
+      
+      // Usar state do React para controlar modal
+      setBoardingPassData({ passengers: fullPassengers, flightData });
+      setShowBoardingPassModal(true);
+      
+      console.log('Modal state atualizado - deveria abrir agora');
+      
+    } catch (error) {
+      console.error('Erro ao preparar dados do modal:', error);
+      // Fallback: modal básico de teste
+      setShowBoardingPassModal(true);
+      setBoardingPassData(null);
+    }
+  };
+
   const formatMessage = (text: string) => {
     // Verificar se é um componente de cartão de embarque
     if (text.startsWith('BOARDING_PASS_COMPONENT:')) {
       const data = JSON.parse(text.replace('BOARDING_PASS_COMPONENT:', ''));
       const { passengers } = data;
       
-      const handleBoardingPassClick = () => {
-        console.log('Clique no cartão de embarque detectado');
-        
-        try {
-          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-          const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-          
-          const fullPassengers = [
-            { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
-          ];
-          
-          candidatos.forEach((candidato: any, index: number) => {
-            fullPassengers.push({
-              name: candidato.nome || `CANDIDATO ${index + 1}`,
-              type: `Candidato ${index + 1}`,
-              isMain: false
-            });
-          });
-
-          const flightData = calculateFlightData(selectedDate, userCity);
-          
-          // Usar state do React para controlar modal
-          setBoardingPassData({ passengers: fullPassengers, flightData });
-          setShowBoardingPassModal(true);
-          
-        } catch (error) {
-          console.error('Erro ao preparar dados do modal:', error);
-          // Fallback: modal básico de teste
-          setShowBoardingPassModal(true);
-          setBoardingPassData(null);
-        }
-      };
-      
       return (
         <div 
           className="bg-blue-50 border border-blue-200 rounded-lg p-4 cursor-pointer hover:bg-blue-100 transition-colors mb-3"
-          onClick={handleBoardingPassClick}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Evento de clique capturado');
+            handleBoardingPassClick();
+          }}
         >
           <div className="flex items-center space-x-3">
             <div className="bg-blue-500 text-white p-2 rounded">
@@ -1670,6 +1680,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Modal de cartões de embarque
   const BoardingPassModal = () => {
+    console.log('BoardingPassModal renderizado, showBoardingPassModal:', showBoardingPassModal);
     if (!showBoardingPassModal) return null;
 
     const handleCloseModal = () => {
