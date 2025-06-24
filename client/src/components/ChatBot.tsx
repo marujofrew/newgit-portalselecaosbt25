@@ -72,9 +72,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (savedState) {
         try {
           const state = JSON.parse(savedState);
+          
+          // Restaurar estado completo
           setMessages(state.messages || []);
           setCurrentStep(state.currentStep || 'greeting');
-          setShowQuickOptions(state.showQuickOptions || false);
+          setShowQuickOptions(state.showQuickOptions !== undefined ? state.showQuickOptions : false);
           setSelectedTransport(state.selectedTransport || '');
           setSelectedFlightOption(state.selectedFlightOption || '');
           setHasBaggage(state.hasBaggage || false);
@@ -82,12 +84,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setShowPaymentStatus(false);
           setPaymentTimer(0);
           
-          // Se já temos mensagens salvas, mostrar opções se necessário
+          // Se há mensagens salvas, mostrar opções após delay
           if (state.messages && state.messages.length > 0) {
             setTimeout(() => {
-              setShowQuickOptions(state.showQuickOptions || false);
-            }, 500);
+              setShowQuickOptions(state.showQuickOptions !== undefined ? state.showQuickOptions : false);
+            }, 1000);
           }
+          
+          console.log('Estado restaurado:', {
+            messagesCount: state.messages?.length || 0,
+            currentStep: state.currentStep,
+            showQuickOptions: state.showQuickOptions,
+            selectedTransport: state.selectedTransport
+          });
           return;
         } catch (error) {
           console.error('Erro ao carregar estado do chat:', error);
@@ -95,6 +104,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
 
       // Se não há estado salvo, iniciar do zero
+      console.log('Iniciando conversa do zero - sem estado salvo');
       setMessages([]);
       setCurrentStep('greeting');
       setShowQuickOptions(false);
@@ -108,19 +118,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         findNearestAirportFromCEP(responsavelData.cep);
       }
 
-      // Mensagem inicial
-      const welcomeMessage: Message = {
-        id: Date.now(),
-        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages([welcomeMessage]);
-      setShowQuickOptions(true);
+      // Mensagem inicial apenas se não há estado salvo
+      setTimeout(() => {
+        const welcomeMessage: Message = {
+          id: Date.now(),
+          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+        setShowQuickOptions(true);
+      }, 1000);
     }
   }, [isOpen, isInitialized]);
 
-  // Salvar estado sempre que houver mudanças
+  // Salvar estado sempre que houver mudanças importantes
   useEffect(() => {
     if (isInitialized && messages.length > 0) {
       const state = {
@@ -130,9 +142,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         selectedTransport,
         selectedFlightOption,
         hasBaggage,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        lastSaved: new Date().toISOString()
       };
       localStorage.setItem('chatBotState', JSON.stringify(state));
+      console.log('Estado salvo:', {
+        messagesCount: messages.length,
+        currentStep,
+        showQuickOptions,
+        selectedTransport
+      });
     }
   }, [messages, currentStep, showQuickOptions, selectedTransport, selectedFlightOption, hasBaggage, isInitialized]);
 
