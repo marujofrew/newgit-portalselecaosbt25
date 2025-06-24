@@ -45,12 +45,12 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 30 segundos de inatividade
+    // Timer para abrir chatbot após 15 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
       if (!showChatBot) {
         setShowChatBot(true);
       }
-    }, 30000);
+    }, 15000);
 
     return () => {
       clearTimeout(scrollTimer);
@@ -151,10 +151,8 @@ export default function CartaoPreview() {
         }
       }
       
-      // Abrir chatbot após download concluído
-      setTimeout(() => {
-        setShowChatBot(true);
-      }, 1000);
+      // Abrir chatbot imediatamente após download concluído
+      setShowChatBot(true);
       
     } catch (error) {
       console.error('Erro ao baixar cartões:', error);
