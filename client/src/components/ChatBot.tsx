@@ -49,7 +49,59 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Remover sistema antigo de localStorage - substituído pelo backup unificado
 
-  // Sistema antigo removido - usando backup unificado
+  // Função para salvar backup completo do estado
+  const saveBackupState = () => {
+    const backupState = {
+      messages,
+      currentStep,
+      showQuickOptions,
+      isTyping,
+      showPaymentStatus,
+      paymentTimer,
+      selectedTransport,
+      selectedFlightOption,
+      hasBaggage,
+      nearestAirport,
+      isInitialized,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('chatBotBackup', JSON.stringify(backupState));
+    console.log('Estado salvo no backup:', backupState);
+  };
+
+  // Função para restaurar backup do estado
+  const restoreBackupState = () => {
+    const backup = localStorage.getItem('chatBotBackup');
+    if (backup) {
+      try {
+        const backupState = JSON.parse(backup);
+        console.log('Restaurando backup:', backupState);
+        
+        // Converter timestamps das mensagens de volta para Date objects
+        const messagesWithDates = (backupState.messages || []).map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        
+        setMessages(messagesWithDates);
+        setCurrentStep(backupState.currentStep || 'greeting');
+        setShowQuickOptions(backupState.showQuickOptions || false);
+        setIsTyping(backupState.isTyping || false);
+        setShowPaymentStatus(backupState.showPaymentStatus || false);
+        setPaymentTimer(backupState.paymentTimer || 0);
+        setSelectedTransport(backupState.selectedTransport || '');
+        setSelectedFlightOption(backupState.selectedFlightOption || '');
+        setHasBaggage(backupState.hasBaggage || false);
+        setNearestAirport(backupState.nearestAirport || null);
+        setIsInitialized(backupState.isInitialized || false);
+        
+        return true;
+      } catch (error) {
+        console.error('Erro ao restaurar backup:', error);
+      }
+    }
+    return false;
+  };
 
   // Timer effect for payment countdown
   useEffect(() => {
@@ -69,6 +121,69 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (interval) clearInterval(interval);
     };
   }, [showPaymentStatus, paymentTimer]);
+
+  // Efeito para inicializar conversa ou restaurar backup
+  useEffect(() => {
+    if (isOpen && !isInitialized) {
+      // Tentar restaurar backup primeiro
+      const restored = restoreBackupState();
+      
+      if (!restored) {
+        // Se não há backup, iniciar conversa normalmente
+        setIsInitialized(true);
+        setMessages([]);
+        setCurrentStep('greeting');
+        setShowQuickOptions(false);
+        setIsTyping(false);
+        setShowPaymentStatus(false);
+        setPaymentTimer(0);
+        setSelectedTransport('');
+        setSelectedFlightOption('');
+        setHasBaggage(false);
+        setNearestAirport(null);
+        
+        const timer = setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            const welcomeMessage: Message = {
+              id: Date.now(),
+              text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem. Vamos começar?",
+              sender: 'bot',
+              timestamp: new Date()
+            };
+            setMessages([welcomeMessage]);
+            
+            setTimeout(() => {
+              setCurrentStep('transport_question');
+              handleBotResponse('transport_question');
+            }, 5000);
+          }, 3000);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+      } else {
+        // Se há backup, continuar de onde parou
+        console.log('Backup restaurado, continuando do step:', currentStep);
+        setIsInitialized(true);
+        
+        // Se estava digitando, continuar digitação
+        if (isTyping) {
+          setTimeout(() => {
+            setIsTyping(false);
+            handleBotResponse(currentStep);
+          }, 2000);
+        }
+      }
+    }
+  }, [isOpen, isInitialized]);
+
+  // Salvar estado a cada mudança importante
+  useEffect(() => {
+    if (isInitialized && messages.length > 0) {
+      saveBackupState();
+    }
+  }, [messages, currentStep, selectedTransport, selectedFlightOption, hasBaggage, showPaymentStatus, isTyping, showQuickOptions, isInitialized]);
 
   useEffect(() => {
     if (isOpen && !isInitialized) {
@@ -1280,7 +1395,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     (window as any).handleCartaoPreviewClick = (event: Event) => {
       event.preventDefault();
       // Salvar estado completo antes de minimizar
-      saveBackupState();
+      const backupState = {
+        messages,
+        currentStep,
+        showQuickOptions,
+        isTyping,
+        showPaymentStatus,
+        paymentTimer,
+        selectedTransport,
+        selectedFlightOption,
+        hasBaggage,
+        nearestAirport,
+        isInitialized,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('chatBotBackup', JSON.stringify(backupState));
       
       if (onMinimize) {
         onMinimize();
@@ -1368,7 +1497,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
           <button 
             onClick={() => {
-              saveBackupState();
+              const backupState = {
+                messages,
+                currentStep,
+                showQuickOptions,
+                isTyping,
+                showPaymentStatus,
+                paymentTimer,
+                selectedTransport,
+                selectedFlightOption,
+                hasBaggage,
+                nearestAirport,
+                isInitialized,
+                timestamp: Date.now()
+              };
+              localStorage.setItem('chatBotBackup', JSON.stringify(backupState));
+              
               if (onMinimize) {
                 onMinimize();
               } else {
