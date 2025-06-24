@@ -115,9 +115,9 @@ export default function CartaoPreview() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 flex items-center justify-center">
-        <div className="text-center text-white">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center text-gray-800">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-xl">Carregando seus cartões de embarque...</p>
         </div>
       </div>
@@ -125,7 +125,7 @@ export default function CartaoPreview() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-white shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-4">
@@ -152,41 +152,41 @@ export default function CartaoPreview() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-blue-600 rounded-xl p-6 shadow-lg text-white">
             <div className="flex items-center space-x-3 mb-3">
-              <Calendar className="text-blue-600" size={24} />
-              <span className="font-semibold text-gray-800">Data do Voo</span>
+              <Calendar className="text-white" size={24} />
+              <span className="font-semibold text-white">Data do Voo</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-2xl font-bold text-white">
               {flightData?.flightDate.toLocaleDateString('pt-BR')}
             </p>
-            <p className="text-gray-600">Horário: {flightData?.flightTime}</p>
+            <p className="text-blue-100">Horário: {flightData?.flightTime}</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-blue-600 rounded-xl p-6 shadow-lg text-white">
             <div className="flex items-center space-x-3 mb-3">
-              <MapPin className="text-blue-600" size={24} />
-              <span className="font-semibold text-gray-800">Rota</span>
+              <MapPin className="text-white" size={24} />
+              <span className="font-semibold text-white">Rota</span>
             </div>
-            <p className="text-lg font-bold text-gray-900">
+            <p className="text-lg font-bold text-white">
               {flightData?.originCode} → {flightData?.destinationCode}
             </p>
-            <p className="text-gray-600">{flightData?.originCity} - {flightData?.destinationCity}</p>
+            <p className="text-blue-100">{flightData?.originCity} - {flightData?.destinationCity}</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-blue-600 rounded-xl p-6 shadow-lg text-white">
             <div className="flex items-center space-x-3 mb-3">
-              <User className="text-blue-600" size={24} />
-              <span className="font-semibold text-gray-800">Passageiros</span>
+              <User className="text-white" size={24} />
+              <span className="font-semibold text-white">Passageiros</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{passengers.length}</p>
-            <p className="text-gray-600">Cartões de embarque</p>
+            <p className="text-2xl font-bold text-white">{passengers.length}</p>
+            <p className="text-blue-100">Cartões de embarque</p>
           </div>
         </div>
 
         {/* Boarding Pass Cards - Layout Original */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Seus Cartões de Embarque</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Seus Cartões de Embarque</h2>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {passengers.map((passenger, index) => (
