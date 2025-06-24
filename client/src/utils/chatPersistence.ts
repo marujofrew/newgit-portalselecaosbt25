@@ -8,6 +8,7 @@ export interface ChatState {
   hasBaggage: boolean;
   timestamp: number;
   sessionId: string;
+  conversationProgress: number; // 0-100% de progresso na conversa
 }
 
 export const ChatPersistence = {
@@ -87,7 +88,8 @@ export const ChatPersistence = {
     selectedFlightOption: '',
     hasBaggage: false,
     timestamp: Date.now(),
-    sessionId: Date.now().toString()
+    sessionId: Date.now().toString(),
+    conversationProgress: 0
   }),
 
   // Limpar estado
