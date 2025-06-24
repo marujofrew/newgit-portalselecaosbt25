@@ -128,6 +128,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Sistema de datas dinâmicas implementado**: Cartões de embarque mostram a data exata da opção de voo escolhida pelo usuário
 - **Logo oficial da Azul implementada**: Cartões de embarque agora usam a logo oficial fornecida pelo usuário
 - **Sistema de estado persistente implementado**: Chat bot salva automaticamente progresso e restaura posição exata após atualizações
+- **MODELO PERFEITO DO CHATBOT**: Estado atual salvo como referência - todas as imagens funcionando (Rebeca com indicador online, bagagem do bem para avião/van, quarto de hotel para ambos fluxos), botões azuis, delays padronizados, fluxo completo de van e avião convergindo para hotel
 - **Cartões de embarque redesenhados**: Layout idêntico ao modelo original da Azul com logo oficial, QR codes reais e dados dinâmicos
 - **Modal de cartões como arquivos**: Cartões aparecem como arquivos clicáveis com visualização em modal
 - **Sistema de múltiplos candidatos implementado**: Formulário agora suporta de 1 a 5 candidatos com seções dinâmicas
@@ -155,3 +156,4 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - UI approach: Intuitive and minimal interface design
 - Development workflow: Always restore exact user position after updates, including open modals
 - State persistence: Maintain chat bot progress and modal states across application restarts
+- **MODELO PERFEITO**: Arquivo backup salvo como `ChatBot-modelo-perfeito.tsx` - usar como referência para reverter mudanças se necessário
