@@ -537,7 +537,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -630,7 +630,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -675,7 +675,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
 
                 // Adicionar link em mensagem separada
                 setTimeout(() => {
