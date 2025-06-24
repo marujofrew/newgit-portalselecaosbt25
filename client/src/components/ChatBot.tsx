@@ -533,7 +533,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+                  // Adicionar link em mensagem separada
+                  const linkMessage: Message = {
+                    id: Date.now() + 1,
+                    text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
+                    sender: 'bot',
+                    timestamp: new Date()
+                  };
+                  setMessages(prev => [...prev, linkMessage]);
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -626,7 +633,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+
+                  // Adicionar link em mensagem separada
+                  const linkMessage: Message = {
+                    id: Date.now() + 1,
+                    text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
+                    sender: 'bot',
+                    timestamp: new Date()
+                  };
+                  setMessages(prev => [...prev, linkMessage]);
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -671,10 +686,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
 
-                // Adicionar link em mensagem separada
-                setTimeout(() => {
+                  // Adicionar link em mensagem separada
                   const linkMessage: Message = {
                     id: Date.now() + 1,
                     text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
@@ -682,8 +695,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     timestamp: new Date()
                   };
                   setMessages(prev => [...prev, linkMessage]);
-                }, 500);
-
                 setTimeout(() => {
                   generateBoardingPasses();
 
@@ -1124,7 +1135,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               }, 5000);
             }, 5000);
           }, 5000);
-        }, 5000);
+        }
         break;
 
       case 'boarding-passes':
