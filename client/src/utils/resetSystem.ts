@@ -57,6 +57,7 @@ export function resetCompleteSystem() {
   
   // Limpar estado do chat usando ChatStorage
   ChatStorage.clearConversation();
+  ChatStorage.clearAllChatData();
   console.log('🗑️ Estado do chat limpo');
   
   // Limpar qualquer timer ou estado em memória
