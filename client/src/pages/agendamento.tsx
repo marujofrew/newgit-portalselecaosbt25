@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import ChatBot from '@/components/ChatBot';
 import sbtLogo from '@assets/sbt_logo.png';
@@ -7,9 +7,9 @@ export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
 
-  const [chatBotOpen, setChatBotOpen] = useState(false);
+  const [showGlobalChatBot, setShowGlobalChatBot] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   // Recuperar dados da cidade do localStorage
   const getUserCity = () => {
     try {
@@ -41,22 +41,22 @@ export default function Agendamento() {
   const gerarDatasDisponiveis = () => {
     const datas = [];
     const hoje = new Date();
-    
+
     // Começar exatamente 1 mês (30 dias) a partir de hoje
     const dataInicio = new Date(hoje);
     dataInicio.setDate(hoje.getDate() + 30);
-    
+
     // Encontrar o primeiro sábado a partir da data de início
     let proximoSabado = new Date(dataInicio);
     while (proximoSabado.getDay() !== 6) { // 6 = sábado
       proximoSabado.setDate(proximoSabado.getDate() + 1);
     }
-    
+
     // Gerar 8 sábados consecutivos
     for (let i = 0; i < 8; i++) {
       const sabado = new Date(proximoSabado);
       sabado.setDate(proximoSabado.getDate() + (i * 7)); // Adicionar 7 dias para cada sábado
-      
+
       datas.push({
         valor: sabado.toISOString().split('T')[0],
         texto: sabado.toLocaleDateString('pt-BR', {
@@ -67,7 +67,7 @@ export default function Agendamento() {
         })
       });
     }
-    
+
     return datas;
   };
 
@@ -77,17 +77,17 @@ export default function Agendamento() {
     const hoje = new Date();
     const umMesAFrente = new Date(hoje);
     umMesAFrente.setMonth(hoje.getMonth() + 1);
-    
+
     const diasDoMes = [5, 12, 19, 26];
-    
+
     diasDoMes.forEach(dia => {
       const data = new Date(umMesAFrente.getFullYear(), umMesAFrente.getMonth(), dia);
-      
+
       // Verificar se é um dia útil, se não for, ajustar para o próximo dia útil
       while (data.getDay() === 0 || data.getDay() === 6) {
         data.setDate(data.getDate() + 1);
       }
-      
+
       datas.push({
         valor: data.toISOString().split('T')[0],
         texto: data.toLocaleDateString('pt-BR', { 
@@ -98,7 +98,7 @@ export default function Agendamento() {
         })
       });
     });
-    
+
     return datas;
   };
 
@@ -119,11 +119,11 @@ export default function Agendamento() {
     }
 
     setLoading(true);
-    
+
     // Salvar dados do agendamento
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
-    
+
     // Reset chat bot state para começar conversa do zero
     localStorage.removeItem('chatbotMessages');
     localStorage.removeItem('chatbotCurrentStep');
@@ -133,14 +133,14 @@ export default function Agendamento() {
     localStorage.removeItem('chatbotShowQuickOptions');
     localStorage.removeItem('chatbotShowPaymentStatus');
     localStorage.removeItem('chatbotPaymentTimer');
-    
+
     // Marcar que chatbot deve aparecer automaticamente
     localStorage.setItem('showChatBotGlobal', 'true');
-    
+
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
       setLoading(false);
-      setChatBotOpen(true);
+      setShowGlobalChatBot(true);
       // Marcar que chatbot foi aberto pela primeira vez
       localStorage.setItem('chatBotOpened', 'true');
     }, 1000);
@@ -184,7 +184,7 @@ export default function Agendamento() {
           {/* Formulário de Agendamento */}
           <div className="bg-white p-6 border border-gray-200 rounded-lg">
             <h2 className="font-semibold text-gray-800 text-lg mb-6">Escolha sua Data e Horário</h2>
-            
+
             <div className="space-y-6">
               {/* Seleção de Data */}
               <div>
@@ -276,14 +276,16 @@ export default function Agendamento() {
         </div>
       </div>
 
-      {/* Chat Bot */}
-      <ChatBot 
-        isOpen={chatBotOpen} 
-        onClose={() => setChatBotOpen(false)}
-        userCity={getUserCity()}
-        userData={getUserData()}
-        selectedDate={dataSelecionada}
-      />
+      {/* ChatBot Global - Único ChatBot */}
+      {showGlobalChatBot && (
+        <ChatBot
+          isOpen={showGlobalChatBot}
+          onClose={() => setShowGlobalChatBot(false)}
+          userCity={getUserCity()}
+          userData={getUserData()}
+          selectedDate={dataSelecionada}
+        />
+      )}
     </main>
   );
 }

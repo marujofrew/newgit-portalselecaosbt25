@@ -45,12 +45,14 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 30 segundos de inatividade
+    // Timer para abrir chatbot após 15 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
       if (!showChatBot) {
         setShowChatBot(true);
+        // Remover flag de minimizado para que o chat abra normalmente
+        localStorage.removeItem('chatBotMinimized');
       }
-    }, 30000);
+    }, 15000);
 
     return () => {
       clearTimeout(scrollTimer);
@@ -485,18 +487,7 @@ export default function CartaoPreview() {
         </div>
       )}
 
-      {/* ChatBot */}
-      {showChatBot && (
-        <ChatBot
-          isOpen={showChatBot}
-          onClose={() => setShowChatBot(false)}
-          userCity={userCity}
-          userData={userData}
-          selectedDate={selectedDate}
-        />
-      )}
-
-      {/* ChatBot */}
+      {/* ChatBot - Instância única */}
       {showChatBot && (
         <ChatBot
           isOpen={showChatBot}
