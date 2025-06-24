@@ -194,6 +194,35 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   };
 
+  const generateCredentials = () => {
+    try {
+      // Recuperar dados do localStorage
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+      
+      const credentials = [
+        { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
+      ];
+      
+      candidatos.forEach((candidato: any, index: number) => {
+        credentials.push({
+          name: candidato.nome || `CANDIDATO ${index + 1}`,
+          type: `Candidato ${index + 1}`,
+          isMain: false
+        });
+      });
+
+      // Mostrar credenciais como documento clicável
+      addMessage("📄 **Credenciais SBT** - Clique para visualizar e fazer download", 'bot');
+      
+      // Simular abertura de modal de credenciais (similar aos cartões de embarque)
+      console.log('Gerando credenciais para:', credentials);
+      
+    } catch (error) {
+      console.error('Erro ao gerar credenciais:', error);
+    }
+  };
+
   const handleSendMessage = (messageToSend: string) => {
     if (!messageToSend.trim()) return;
 
@@ -576,53 +605,55 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'boarding-passes':
         if (messageToSend.toLowerCase().includes('continuar')) {
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
-          nextStep = 'hotel-info';
+          nextStep = 'hotel-step1';
           showOptions = false;
-        }
-        break;
-
-      case 'hotel-info':
-        botResponse = "Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!";
-        nextStep = 'hotel-details';
-        showOptions = false;
-        
-        setTimeout(() => {
-          setIsTyping(true);
+          
           setTimeout(() => {
-            setIsTyping(false);
-            addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-            
+            setIsTyping(true);
             setTimeout(() => {
-              setIsTyping(true);
+              setIsTyping(false);
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              
               setTimeout(() => {
-                setIsTyping(false);
-                addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-                
+                setIsTyping(true);
                 setTimeout(() => {
-                  setIsTyping(true);
+                  setIsTyping(false);
+                  addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
+                  
                   setTimeout(() => {
-                    setIsTyping(false);
-                    addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-                    
+                    setIsTyping(true);
                     setTimeout(() => {
-                      setIsTyping(true);
+                      setIsTyping(false);
+                      addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
+                      
                       setTimeout(() => {
-                        setIsTyping(false);
-                        addMessage("Estou finalizando sua reserva!", 'bot');
-                        
+                        setIsTyping(true);
                         setTimeout(() => {
-                          setIsTyping(true);
+                          setIsTyping(false);
+                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                          
                           setTimeout(() => {
-                            setIsTyping(false);
-                            addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-                            
+                            setIsTyping(true);
                             setTimeout(() => {
-                              setIsTyping(true);
+                              setIsTyping(false);
+                              addMessage("Estou finalizando sua reserva!", 'bot');
+                              
                               setTimeout(() => {
-                                setIsTyping(false);
-                                addMessage("Vamos finalizar sua inscrição?", 'bot');
-                                setShowQuickOptions(true);
-                                setCurrentStep('hotel-reservation');
+                                setIsTyping(true);
+                                setTimeout(() => {
+                                  setIsTyping(false);
+                                  addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                  
+                                  setTimeout(() => {
+                                    setIsTyping(true);
+                                    setTimeout(() => {
+                                      setIsTyping(false);
+                                      addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                      setShowQuickOptions(true);
+                                      setCurrentStep('hotel-reservation');
+                                    }, 5000);
+                                  }, 5000);
+                                }, 5000);
                               }, 5000);
                             }, 5000);
                           }, 5000);
@@ -634,7 +665,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               }, 5000);
             }, 5000);
           }, 5000);
-        }, 5000);
+        }
         break;
 
       case 'hotel-reservation':
@@ -690,11 +721,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           nextStep = 'inscription-pix';
           showOptions = false;
           
+          // Calcular valor total baseado no número de candidatos
+          const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+          const totalCandidatos = candidatos.length;
+          const valores = { 1: 89.90, 2: 134.85, 3: 179.80, 4: 224.75, 5: 269.70 };
+          const valorTotal = valores[Math.min(totalCandidatos, 5)] || 269.70;
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("QR Code + Chave PIX copia e cola: inscricao@sbt.com.br", 'bot');
+              addMessage(`QR Code + Chave PIX copia e cola: inscricao@sbt.com.br\nValor: R$ ${valorTotal.toFixed(2).replace('.', ',')}`, 'bot');
               
               setShowPaymentStatus(true);
               setPaymentTimer(300); // 5 minutos
@@ -712,9 +749,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage("Sua inscrição foi confirmada! Todos os dados e documentos foram enviados para seu WhatsApp. Tenha uma excelente participação no SBT!", 'bot');
-                      setCurrentStep('complete');
-                      setShowQuickOptions(false);
+                      
+                      // Gerar credenciais (similar aos cartões de embarque)
+                      generateCredentials();
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage("Sua inscrição foi confirmada! Todos os dados e documentos foram enviados para seu WhatsApp. Tenha uma excelente participação no SBT!", 'bot');
+                          
+                          setTimeout(() => {
+                            // Redirecionar para página de confirmação
+                            window.location.href = '/confirmacao-inscricao';
+                          }, 3000);
+                          
+                          setCurrentStep('complete');
+                          setShowQuickOptions(false);
+                        }, 5000);
+                      }, 3000);
                     }, 5000);
                   }, 5000);
                 }, 5000);
