@@ -57,7 +57,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
     if (savedMessages) {
       const parsedMessages = JSON.parse(savedMessages);
-      setMessages(parsedMessages);
+      // Converter timestamps de string para Date
+      const messagesWithDates = parsedMessages.map((msg: any) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp)
+      }));
+      setMessages(messagesWithDates);
     }
     if (savedCurrentStep) {
       setCurrentStep(savedCurrentStep);
@@ -1319,7 +1324,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         setCurrentStep(nextStep);
         setShowQuickOptions(showOptions);
         // Save state after setting options
-        setTimeout(() => saveCurrentState(undefined, nextStep, showOptions), 200);
+        // Estado já salvo automaticamente via useEffect
       }, 1000);
     }
   };
