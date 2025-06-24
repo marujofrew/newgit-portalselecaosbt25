@@ -109,6 +109,9 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Página oficial de cartões de embarque redesenhada**: Layout profissional com header SBT, cards informativos azuis, grid responsivo de cartões, modal detalhado, download como imagens PNG, instruções de viagem, fundo branco e chatbot integrado
 - **Download de cartões como imagens implementado**: html2canvas captura cada cartão individualmente em PNG alta qualidade
 - **Chatbot automático na página de cartões**: Abre após download ou 30 segundos de inatividade para continuar fluxo da conversa
+- **Sistema de histórico persistente do chatbot**: Conversa salva no localStorage, mantém estado entre páginas e sessões
+- **Chatbot global não-fechável**: Após agendamento, aparece em todas as páginas apenas com opção de minimizar
+- **Estado completo do chatbot salvo**: Mensagens, etapa atual, seleções de transporte, bagagem, pagamentos e timers mantidos
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação

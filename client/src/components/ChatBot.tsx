@@ -34,6 +34,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [selectedFlightOption, setSelectedFlightOption] = useState<string>('');
   const [hasBaggage, setHasBaggage] = useState<boolean>(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,6 +43,77 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
+
+  // Carregar histórico do localStorage
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatbotMessages');
+    const savedCurrentStep = localStorage.getItem('chatbotCurrentStep');
+    const savedSelectedTransport = localStorage.getItem('chatbotSelectedTransport');
+    const savedSelectedFlightOption = localStorage.getItem('chatbotSelectedFlightOption');
+    const savedHasBaggage = localStorage.getItem('chatbotHasBaggage');
+    const savedShowQuickOptions = localStorage.getItem('chatbotShowQuickOptions');
+    const savedShowPaymentStatus = localStorage.getItem('chatbotShowPaymentStatus');
+    const savedPaymentTimer = localStorage.getItem('chatbotPaymentTimer');
+
+    if (savedMessages) {
+      const parsedMessages = JSON.parse(savedMessages);
+      setMessages(parsedMessages);
+    }
+    if (savedCurrentStep) {
+      setCurrentStep(savedCurrentStep);
+    }
+    if (savedSelectedTransport) {
+      setSelectedTransport(savedSelectedTransport);
+    }
+    if (savedSelectedFlightOption) {
+      setSelectedFlightOption(savedSelectedFlightOption);
+    }
+    if (savedHasBaggage) {
+      setHasBaggage(JSON.parse(savedHasBaggage));
+    }
+    if (savedShowQuickOptions) {
+      setShowQuickOptions(JSON.parse(savedShowQuickOptions));
+    }
+    if (savedShowPaymentStatus) {
+      setShowPaymentStatus(JSON.parse(savedShowPaymentStatus));
+    }
+    if (savedPaymentTimer) {
+      setPaymentTimer(parseInt(savedPaymentTimer));
+    }
+  }, []);
+
+  // Salvar estado no localStorage sempre que houver mudanças
+  useEffect(() => {
+    localStorage.setItem('chatbotMessages', JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotCurrentStep', currentStep);
+  }, [currentStep]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotSelectedTransport', selectedTransport);
+  }, [selectedTransport]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotSelectedFlightOption', selectedFlightOption);
+  }, [selectedFlightOption]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotHasBaggage', JSON.stringify(hasBaggage));
+  }, [hasBaggage]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotShowQuickOptions', JSON.stringify(showQuickOptions));
+  }, [showQuickOptions]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotShowPaymentStatus', JSON.stringify(showPaymentStatus));
+  }, [showPaymentStatus]);
+
+  useEffect(() => {
+    localStorage.setItem('chatbotPaymentTimer', paymentTimer.toString());
+  }, [paymentTimer]);
 
   // Timer effect for payment countdown
   useEffect(() => {
