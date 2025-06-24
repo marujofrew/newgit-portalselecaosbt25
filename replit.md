@@ -205,6 +205,9 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
   - ✅ Fluxo completo: Chat → PIX → Confirmação
   - ✅ PIX real para bagagem substituindo chaves fictícias
   - ✅ Sistema de pagamento integrado no chat para kit bagagem
+  - ✅ API recriada conforme documentação oficial For4Payments
+  - ✅ Estrutura de payload correta com transaction.purchase endpoint
+  - ✅ Headers de autenticação e mapeamento de status implementados
 - **Sistema de reset completo implementado**: Limpeza automática após inscrição
   - ✅ Função resetCompleteSystem() criada para limpar tudo
   - ✅ Limpeza automática após 10 segundos na página de confirmação

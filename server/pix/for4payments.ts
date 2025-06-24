@@ -91,13 +91,11 @@ export class For4PaymentsAPI {
     try {
       console.log('🔄 Criando pagamento PIX via For4Payments...');
       console.log('📊 Dados do pagamento:', { ...data, cpf: data.cpf?.substring(0, 3) + '***' });
-      console.log('🔑 Secret key configurada:', this.secret_key ? 'SIM' : 'NÃO');
-      console.log('🌐 URL da API:', `${this.API_URL}/transaction.purchase`);
 
       const cpf = data.cpf.replace(/\D/g, "");
       const phone = data.phone?.replace(/\D/g, "") || "11999999999";
 
-      const requestBody = {
+      const paymentData = {
         name: data.name.trim(),
         email: data.email.trim(),
         cpf: cpf,
@@ -123,39 +121,29 @@ export class For4PaymentsAPI {
         utmQuery: "",
         checkoutUrl: "",
         referrerUrl: "",
-        externalId: `pix-${Date.now()}`,
+        externalId: `sbt-casting-${Date.now()}`,
         postbackUrl: "",
         fingerPrints: []
       };
 
-      console.log('📤 Enviando request:', JSON.stringify(requestBody, null, 2));
+      console.log('📤 Enviando request para:', `${this.API_URL}/transaction.purchase`);
 
       const response = await fetch(`${this.API_URL}/transaction.purchase`, {
         method: 'POST',
         headers: this.getHeaders(),
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(paymentData)
       });
 
       console.log('📡 Status da resposta:', response.status);
-      console.log('📋 Headers da resposta:', Object.fromEntries(response.headers.entries()));
-
-      const responseText = await response.text();
-      console.log('📄 Resposta raw:', responseText);
 
       if (!response.ok) {
-        console.error('❌ Erro na API For4Payments:', response.status, responseText);
-        throw new Error(`Erro da API For4Payments (${response.status}): ${responseText}`);
+        const errorMessage = await this.extractErrorMessage(response);
+        console.error('❌ Erro na API For4Payments:', errorMessage);
+        throw new Error(`Erro da API For4Payments: ${errorMessage}`);
       }
 
-      let responseData;
-      try {
-        responseData = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error('❌ Erro ao fazer parse da resposta:', parseError);
-        throw new Error(`Resposta inválida da API: ${responseText}`);
-      }
-
-      console.log('✅ Resposta da API recebida:', responseData);
+      const responseData = await response.json();
+      console.log('✅ Resposta da API recebida:', { id: responseData.id, status: responseData.status });
 
       return this.parsePaymentResponse(responseData);
 
@@ -164,87 +152,19 @@ export class For4PaymentsAPI {
       throw error;
     }
   }
-      amount: data.amount,
-      traceable: true,
-      items: [
-        {
-          title: data.description || "Inscrição SBT Casting",
-          quantity: 1,
-          unitPrice: data.amount,
-          tangible: false
-        }
-      ],
-      // Dados de endereço padrão (obrigatórios pela API)
-      cep: "01001-000",
-      street: "Rua da Sé",
-      number: "1",
-      complement: "",
-      district: "Sé", 
-      city: "São Paulo",
-      state: "SP",
-      // Metadados
-      utmQuery: "",
-      checkoutUrl: "",
-      referrerUrl: "",
-      externalId: `sbt-casting-${Date.now()}`,
-      postbackUrl: "",
-      fingerPrints: []
-    };
-
-    try {
-      console.log(`[For4Payments] Criando pagamento PIX para ${data.email}`);
-      console.log(`[For4Payments] Valor: R$ ${(data.amount / 100).toFixed(2)}`);
-
-      const response = await fetch(`${this.API_URL}/transaction.purchase`, {
-        method: "POST",
-        headers: this.getHeaders(),
-        body: JSON.stringify(paymentData)
-      });
-
-      console.log(`[For4Payments] Status HTTP: ${response.status}`);
-
-      if (!response.ok) {
-        const errorMessage = await this.extractErrorMessage(response);
-        console.log(`[For4Payments] Erro: ${errorMessage}`);
-        throw new Error(`API Error: ${errorMessage}`);
-      }
-
-      const responseData = await response.json();
-      console.log(`[For4Payments] Pagamento criado com sucesso`);
-
-      return this.parsePaymentResponse(responseData);
-
-    } catch (error) {
-      console.error(`[For4Payments] Erro na requisição:`, error);
-      throw error;
-    }
-  }
 
   private async extractErrorMessage(response: Response): Promise<string> {
-    if (response.status === 401) {
-      return "Falha na autenticação. Verifique sua chave de API.";
-    } else if (response.status === 400) {
-      return "Dados inválidos enviados para a API.";
-    } else if (response.status === 500) {
-      return "Erro interno do servidor For4Payments.";
-    }
-
     try {
       const errorData = await response.json();
-      return (
-        errorData.message ||
-        errorData.error ||
-        errorData.errors?.message ||
-        "Erro desconhecido"
-      );
+      return errorData.message || errorData.error || 'Erro desconhecido da API';
     } catch {
-      return await response.text() || "Erro desconhecido";
+      return `Erro HTTP ${response.status}: ${response.statusText}`;
     }
   }
 
   private parsePaymentResponse(responseData: any): PaymentResponse {
-    // Extrair códigos PIX com múltiplos fallbacks
-    const pix_code = (
+    // Extrair códigos PIX com múltiplos fallbacks conforme documentação
+    const pixCode = (
       responseData.pix?.code ||
       responseData.pixData?.copyPaste ||
       responseData.pixCode ||
@@ -252,8 +172,8 @@ export class For4PaymentsAPI {
       responseData.code ||
       ""
     );
-
-    const pix_qr_code = (
+    
+    const pixQrCode = (
       responseData.pix?.qrCode ||
       responseData.pix?.base64Image ||
       responseData.qrCode?.imageUrl ||
@@ -261,19 +181,14 @@ export class For4PaymentsAPI {
       responseData.pixQrCode ||
       ""
     );
-
-    // Extrair data de expiração
-    const expires_at = (
+    
+    const expiresAt = (
       responseData.expiration ||
       responseData.expiresAt ||
-      new Date(Date.now() + 30 * 60 * 1000).toISOString() // 30 minutos
+      new Date(Date.now() + 30 * 60 * 1000).toISOString()
     );
-
-    // Extrair status
-    const status = (responseData.status || "pending").toLowerCase();
-
-    // Extrair ID da transação
-    const payment_id = (
+    
+    const paymentId = (
       responseData.id ||
       responseData.transactionId ||
       responseData._id ||
@@ -281,131 +196,100 @@ export class For4PaymentsAPI {
     );
 
     return {
-      id: String(payment_id),
-      pix_code,
-      pix_qr_code,
-      expires_at,
-      status
+      id: String(paymentId),
+      pix_code: pixCode,
+      pix_qr_code: pixQrCode,
+      expires_at: expiresAt,
+      status: responseData.status?.toLowerCase() || 'pending'
     };
   }
 
   async checkPaymentStatus(payment_id: string): Promise<PaymentStatus> {
-    if (!payment_id?.trim()) {
-      throw new Error("ID do pagamento é obrigatório");
-    }
-
     try {
-      const url = `${this.API_URL}/transaction.getPayment?id=${payment_id}`;
-      console.log(`[For4Payments] Verificando status: ${payment_id}`);
-
-      const response = await fetch(url, {
+      console.log(`🔍 Verificando status do pagamento: ${payment_id}`);
+      
+      const response = await fetch(`${this.API_URL}/transaction.getPayment?id=${payment_id}`, {
+        method: 'GET',
         headers: this.getHeaders()
       });
 
-      console.log(`[For4Payments] Status HTTP: ${response.status}`);
+      console.log('📡 Status da resposta:', response.status);
 
-      // Pagamento não encontrado
       if (response.status === 404) {
-        console.log(`[For4Payments] Pagamento não encontrado`);
-        return { status: "pending", original_status: "not_found", found: false };
+        console.log('❌ Pagamento não encontrado');
+        return this.parseStatusResponse({ status: 'not_found', found: false });
       }
 
-      // Outros erros HTTP
       if (!response.ok) {
-        console.log(`[For4Payments] Erro ao verificar: ${response.status}`);
-        return { status: "pending", original_status: "error", found: false, error: `HTTP ${response.status}` };
+        const errorMessage = await this.extractErrorMessage(response);
+        console.error('❌ Erro ao verificar status:', errorMessage);
+        throw new Error(`Erro da API: ${errorMessage}`);
       }
 
-      // Processar resposta
-      const paymentData = await response.json();
-      return this.parseStatusResponse(paymentData);
+      const responseData = await response.json();
+      console.log('✅ Status verificado:', responseData);
+
+      return this.parseStatusResponse(responseData);
 
     } catch (error) {
-      console.error(`[For4Payments] Erro ao verificar status:`, error);
-      return { status: "pending", original_status: "error", found: false, error: String(error) };
+      console.error('💥 Erro ao verificar status:', error);
+      return this.parseStatusResponse({ status: 'error', error: error.message, found: false });
     }
   }
 
   private parseStatusResponse(paymentData: any): PaymentStatus {
     // Mapeamento de status da API para status padronizados
-    const statusMapping: Record<string, PaymentStatus['status']> = {
+    const statusMapping = {
       "pending": "pending",
-      "processing": "pending",
+      "processing": "pending", 
       "waiting": "pending",
       "approved": "completed",
-      "completed": "completed", 
+      "completed": "completed",
       "paid": "completed",
       "success": "completed",
-      "expired": "failed",
+      "confirmed": "completed",
       "failed": "failed",
       "error": "failed",
-      "canceled": "cancelled",
       "cancelled": "cancelled",
-      "refunded": "cancelled"
+      "canceled": "cancelled",
+      "expired": "cancelled"
     };
 
-    const currentStatus = (paymentData.status || "pending").toLowerCase();
-    const mappedStatus = statusMapping[currentStatus] || "pending";
+    const originalStatus = paymentData.status?.toLowerCase() || "pending";
+    const mappedStatus = statusMapping[originalStatus] || "pending";
 
-    // Extrair códigos PIX
-    const pixCode = (
-      paymentData.pix?.code ||
-      paymentData.pixData?.copyPaste ||
-      paymentData.pixCode ||
-      paymentData.copy_paste ||
-      paymentData.code
-    );
-
-    const pixQrCode = (
-      paymentData.pix?.qrCode ||
-      paymentData.pix?.base64Image ||
-      paymentData.qrCode?.imageUrl ||
-      paymentData.qr_code_image ||
-      paymentData.pixQrCode
-    );
-
-    // Construir resposta
     const result: PaymentStatus = {
-      status: mappedStatus,
-      original_status: currentStatus,
-      found: true
+      status: mappedStatus as 'pending' | 'completed' | 'failed' | 'cancelled',
+      original_status: originalStatus,
+      found: paymentData.found !== false,
+      error: paymentData.error
     };
 
-    // Adicionar códigos PIX se disponíveis
-    if (pixCode) result.pixCode = pixCode;
-    if (pixQrCode) result.pixQrCode = pixQrCode;
-
-    // Adicionar informações adicionais
+    // Adicionar dados extras se disponíveis
+    if (paymentData.pixCode) result.pixCode = paymentData.pixCode;
+    if (paymentData.pixQrCode) result.pixQrCode = paymentData.pixQrCode;
     if (paymentData.amount) result.amount = paymentData.amount;
     if (paymentData.paidAt) result.paidAt = paymentData.paidAt;
-    if (paymentData.expiration) result.expiresAt = paymentData.expiration;
+    if (paymentData.expiresAt) result.expiresAt = paymentData.expiresAt;
 
-    console.log(`[For4Payments] Status processado: ${mappedStatus}`);
     return result;
   }
 
   async getPaymentSummary(payment_id: string) {
-    const statusData = await this.checkPaymentStatus(payment_id);
-
+    const status = await this.checkPaymentStatus(payment_id);
     return {
-      payment_id,
-      is_paid: statusData.status === "completed",
-      is_pending: statusData.status === "pending",
-      is_failed: ["failed", "cancelled"].includes(statusData.status),
-      status: statusData.status,
-      original_status: statusData.original_status,
-      pix_code: statusData.pixCode,
-      qr_code: statusData.pixQrCode,
-      amount: statusData.amount,
-      paid_at: statusData.paidAt,
-      expires_at: statusData.expiresAt,
-      found: statusData.found,
-      error: statusData.error
+      id: payment_id,
+      is_paid: status.status === 'completed',
+      is_pending: status.status === 'pending',
+      is_failed: status.status === 'failed',
+      status: status.status,
+      original_status: status.original_status,
+      found: status.found,
+      error: status.error
     };
   }
 }
 
-// Função de conveniência para uso rápido
 export async function createQuickPixPayment(
   name: string,
   email: string,
@@ -415,15 +299,15 @@ export async function createQuickPixPayment(
   phone?: string
 ): Promise<PaymentResponse> {
   const api = For4PaymentsAPI.fromEnv();
-
+  
   const paymentData: PaymentRequestData = {
     name,
     email,
     cpf,
     amount,
-    phone,
-    description
+    description: description || "Pagamento SBT Casting",
+    phone
   };
 
-  return api.createPixPayment(paymentData);
+  return await api.createPixPayment(paymentData);
 }
