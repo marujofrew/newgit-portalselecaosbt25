@@ -1129,7 +1129,20 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       <div className="bg-white rounded-lg w-full max-w-md h-[600px] flex flex-col shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-blue-600 text-white rounded-t-lg">
-          <h3 className="font-semibold">Rebeca - Assistente SBT</h3>
+          <div className="flex items-center space-x-3">
+            {/* Foto de perfil com indicador online */}
+            <div className="relative">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                R
+              </div>
+              {/* Indicador online */}
+              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-base">Rebeca - Assistente SBT</h3>
+              <p className="text-xs text-blue-100">Online agora</p>
+            </div>
+          </div>
           <button onClick={onClose} className="text-white hover:text-gray-200">
             <X size={20} />
           </button>
