@@ -41,17 +41,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   useEffect(() => {
-    if (!isMinimized) {
-      scrollToBottom();
-    }
-  }, [messages, isTyping, isMinimized]);
+    scrollToBottom();
+  }, [messages, isTyping]);
 
-  // Scroll para a última mensagem quando o chat é expandido
+  // Scroll quando chat é expandido após minimização
   useEffect(() => {
     if (!isMinimized && messages.length > 0) {
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
+      setTimeout(scrollToBottom, 100);
     }
   }, [isMinimized]);
 
@@ -79,120 +75,35 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const shouldStartMinimized = localStorage.getItem('chatBotMinimized');
     if (shouldStartMinimized === 'true') {
       setIsMinimized(true);
-      // Limpar flag para próximas vezes
       localStorage.removeItem('chatBotMinimized');
     }
     
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
-      
-      // Tentar restaurar estado salvo primeiro
-      const savedState = restoreState();
-      
-      if (!savedState) {
-        // Só inicializar conversa nova se não houver estado salvo
-        setMessages([]);
-        setCurrentStep('greeting');
-        setShowQuickOptions(false);
-        setIsTyping(false);
-        setShowPaymentStatus(false);
-        setPaymentTimer(0);
+      setMessages([]);
+      setCurrentStep('greeting');
+      setShowQuickOptions(false);
+      setIsTyping(false);
+      setShowPaymentStatus(false);
+      setPaymentTimer(0);
 
-        // Buscar aeroporto mais próximo baseado no CEP
-        const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-        if (responsavelData.cep) {
-          findNearestAirportFromCEP(responsavelData.cep);
-        }
-
-        // Mensagem inicial
-        const welcomeMessage: Message = {
-          id: Date.now(),
-          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        setMessages([welcomeMessage]);
-        setShowQuickOptions(true);
+      // Buscar aeroporto mais próximo baseado no CEP
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      if (responsavelData.cep) {
+        findNearestAirportFromCEP(responsavelData.cep);
       }
+
+      // Mensagem inicial
+      const welcomeMessage: Message = {
+        id: Date.now(),
+        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+      setShowQuickOptions(true);
     }
   }, [isOpen, isInitialized]);
-
-  // Reset initialization when chat is closed
-  useEffect(() => {
-    if (!isOpen) {
-      setIsInitialized(false);
-    }
-  }, [isOpen]);
-
-  // Função para salvar estado
-  const saveState = () => {
-    const state = {
-      messages,
-      currentStep,
-      showQuickOptions,
-      isTyping,
-      showPaymentStatus,
-      paymentTimer,
-      selectedTransport,
-      selectedFlightOption,
-      hasBaggage,
-      nearestAirport,
-      timestamp: Date.now()
-    };
-    localStorage.setItem('chatBotState', JSON.stringify(state));
-  };
-
-  // Função para restaurar estado
-  const restoreState = () => {
-    try {
-      const savedState = localStorage.getItem('chatBotState');
-      if (savedState) {
-        const state = JSON.parse(savedState);
-        
-        // Verificar se o estado não é muito antigo (mais de 1 hora)
-        const oneHour = 60 * 60 * 1000;
-        if (Date.now() - state.timestamp > oneHour) {
-          localStorage.removeItem('chatBotState');
-          return false;
-        }
-        
-        // Restaurar mensagens com timestamp correto
-        const messagesWithDates = state.messages.map((msg: any) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp)
-        }));
-        
-        setMessages(messagesWithDates);
-        setCurrentStep(state.currentStep || 'greeting');
-        setShowQuickOptions(state.showQuickOptions || false);
-        setIsTyping(state.isTyping || false);
-        setShowPaymentStatus(state.showPaymentStatus || false);
-        setPaymentTimer(state.paymentTimer || 0);
-        setSelectedTransport(state.selectedTransport || '');
-        setSelectedFlightOption(state.selectedFlightOption || '');
-        setHasBaggage(state.hasBaggage || false);
-        setNearestAirport(state.nearestAirport || null);
-        
-        // Continuar o fluxo após restaurar o estado
-        setTimeout(() => {
-          continueFlowAfterRestore(state.currentStep);
-        }, 1000);
-        
-        return true;
-      }
-    } catch (error) {
-      console.error('Erro ao restaurar estado do chat:', error);
-      localStorage.removeItem('chatBotState');
-    }
-    return false;
-  };
-
-  // Salvar estado sempre que algo importante mudar
-  useEffect(() => {
-    if (messages.length > 0) {
-      saveState();
-    }
-  }, [messages, currentStep, showQuickOptions, selectedTransport, selectedFlightOption, hasBaggage]);
 
   const findNearestAirportFromCEP = async (cep: string) => {
     try {
@@ -232,148 +143,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       timestamp: new Date()
     };
     setMessages(prev => [...prev, newMessage]);
-  };
-
-  // Função para continuar o fluxo após restaurar o estado
-  const continueFlowAfterRestore = (currentStep: string) => {
-    // Se estava em um estado de espera ou digitação, mostrar opções
-    const stepsWithOptions = [
-      'greeting',
-      'flight-options', 
-      'baggage-offer',
-      'baggage-payment',
-      'baggage-payment-confirmed',
-      'baggage-payment-timeout',
-      'boarding-passes',
-      'van-confirmation',
-      'van-baggage-offer',
-      'van-baggage-payment',
-      'van-baggage-payment-confirmed',
-      'van-baggage-payment-timeout',
-      'hotel-reservation',
-      'inscription-info',
-      'inscription-payment'
-    ];
-    
-    // Se o step atual deve mostrar opções, ativar as opções
-    if (stepsWithOptions.includes(currentStep)) {
-      setShowQuickOptions(true);
-    }
-    
-    // Se estava esperando pagamento, continuar o timer
-    if (currentStep === 'waiting-baggage-payment' || currentStep === 'waiting-van-baggage-payment' || currentStep === 'waiting-inscription-payment') {
-      setShowPaymentStatus(true);
-      if (paymentTimer > 0) {
-        // Continuar com o timer que estava rodando
-        return;
-      }
-    }
-    
-    // Verificar se precisa continuar algum fluxo automático específico
-    switch (currentStep) {
-      case 'flight-search':
-        // Se estava buscando voos, continuar o fluxo
-        setTimeout(() => {
-          setIsTyping(true);
-          setTimeout(() => {
-            setIsTyping(false);
-            const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-            const cidadeInfo = responsavelData.cidade || userCity || 'sua cidade';
-            addMessage(`Identifiquei que você está em ${cidadeInfo}. Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
-            
-            setTimeout(() => {
-              setIsTyping(true);
-              setTimeout(() => {
-                setIsTyping(false);
-                addMessage('Encontrei duas opções de voos disponíveis:', 'bot');
-                
-                setTimeout(() => {
-                  setIsTyping(true);
-                  setTimeout(() => {
-                    setIsTyping(false);
-                    
-                    let option1Date = '';
-                    let option2Date = '';
-                    
-                    if (selectedDate) {
-                      const appointmentDate = new Date(selectedDate);
-                      const option1DateObj = new Date(appointmentDate);
-                      option1DateObj.setDate(appointmentDate.getDate() - 1);
-                      option1Date = option1DateObj.toLocaleDateString('pt-BR');
-                      
-                      const option2DateObj = new Date(appointmentDate);
-                      option2DateObj.setDate(appointmentDate.getDate() - 2);
-                      option2Date = option2DateObj.toLocaleDateString('pt-BR');
-                    }
-                    
-                    const airportCode = nearestAirport?.code || 'GYN';
-                    const airportCity = nearestAirport?.city || 'GOIÂNIA';
-                    
-                    addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: ${option1Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
-                    
-                    setTimeout(() => {
-                      setIsTyping(true);
-                      setTimeout(() => {
-                        setIsTyping(false);
-                        addMessage(`🔸 Opção 2: ${airportCity} (${airportCode}) → São Paulo\nData: ${option2Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
-                        
-                        setTimeout(() => {
-                          setIsTyping(true);
-                          setTimeout(() => {
-                            setIsTyping(false);
-                            addMessage('Qual opção você prefere?', 'bot');
-                            setShowQuickOptions(true);
-                            setCurrentStep('flight-options');
-                          }, 2000);
-                        }, 2000);
-                      }, 2000);
-                    }, 2000);
-                  }, 2000);
-                }, 2000);
-              }, 2000);
-            }, 2000);
-          }, 2000);
-        }, 1000);
-        break;
-        
-      case 'van-search':
-        // Se estava buscando van, continuar o fluxo
-        setTimeout(() => {
-          setIsTyping(true);
-          setTimeout(() => {
-            setIsTyping(false);
-            addMessage("Só mais 1 minuto...", 'bot');
-            
-            setTimeout(() => {
-              setIsTyping(true);
-              setTimeout(() => {
-                setIsTyping(false);
-                
-                let vanDate = '';
-                if (selectedDate) {
-                  const appointmentDate = new Date(selectedDate);
-                  const vanDateObj = new Date(appointmentDate);
-                  vanDateObj.setDate(appointmentDate.getDate() - 3);
-                  vanDate = vanDateObj.toLocaleDateString('pt-BR');
-                }
-                
-                addMessage(`Certo, verifiquei que dia ${vanDate || 'XX/XX'} (3 dias antes do dia da data selecionada para agendamento de teste), a nossa van que busca os candidatos em todo o Brasil, vai estar próxima à localização.`, 'bot');
-                
-                setTimeout(() => {
-                  setIsTyping(true);
-                  setTimeout(() => {
-                    setIsTyping(false);
-                    addMessage(`Então conseguimos agendar para o motorista buscar vocês dia ${vanDate || 'XX/XX'} às 13:40h, posso confirmar?`, 'bot');
-                    setShowQuickOptions(true);
-                    setCurrentStep('van-confirmation');
-                  }, 2000);
-                }, 2000);
-              }, 2000);
-            }, 2000);
-          }, 2000);
-        }, 1000);
-        break;
-    }
   };
 
   const getQuickOptions = () => {
@@ -430,7 +199,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   const generateBoardingPasses = () => {
     try {
-      // Salvar dados para a página de cartões
+      // Recuperar dados do localStorage
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
       
@@ -446,40 +215,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         });
       });
 
-      // Salvar dados dos passageiros no localStorage
-      localStorage.setItem('boardingPassData', JSON.stringify(passengers));
-      
-      // Criar link clicável que minimiza o chat e navega para a página
-      const boardingPassLink = `
-        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 350px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="
-          localStorage.setItem('chatBotMinimized', 'true');
-          window.location.href='/cartao-preview';
-        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
-              ✈️
-            </div>
-            <div style="flex: 1;">
-              <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
-                Ver Meus Cartões de Embarque
-              </div>
-              <div style="color: #64748b; font-size: 12px;">
-                📱 Clique para visualizar e baixar
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      
-      // Adicionar como mensagem HTML
-      const newMessage = {
-        id: Date.now() + Math.random(),
-        text: boardingPassLink,
-        sender: 'bot' as const,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, newMessage]);
-      
+      // Verificar se a função global existe
+      if (typeof window.openUnifiedBoardingPass === 'function') {
+        window.openUnifiedBoardingPass(passengers);
+      } else {
+        console.error('Função de cartões de embarque não encontrada');
+      }
     } catch (error) {
       console.error('Erro ao gerar cartões de embarque:', error);
     }
@@ -1513,6 +1254,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   };
 
+  // Função global para lidar com clique no link de cartões
+  React.useEffect(() => {
+    (window as any).handleCartaoPreviewClick = (event: Event) => {
+      event.preventDefault();
+      setIsMinimized(true);
+      localStorage.setItem('chatBotMinimized', 'true');
+      setTimeout(() => {
+        window.location.href = '/cartao-preview';
+      }, 300);
+    };
+    
+    return () => {
+      delete (window as any).handleCartaoPreviewClick;
+    };
+  }, []);
+
   const formatMessage = (text: string) => {
     // Se o texto contém HTML (como imagens), renderizar como HTML
     if (text.includes('<img') || text.includes('<')) {
@@ -1532,15 +1289,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   return (
     <div className={`fixed ${isMinimized ? 'bottom-4 right-4' : 'inset-0'} z-50 ${isMinimized ? '' : 'bg-black bg-opacity-50 flex items-center justify-center p-4'}`}>
-      <div className={`bg-white rounded-lg shadow-2xl ${isMinimized ? 'w-80 h-16 cursor-pointer' : 'w-full max-w-md h-[600px]'} flex flex-col`} onClick={isMinimized ? () => {
-        setIsMinimized(false);
-        // Scroll para a última mensagem após expandir
-        setTimeout(() => {
-          scrollToBottom();
-        }, 100);
-      } : undefined}>
-</div>
-    </div>
+      <div className={`bg-white rounded-lg shadow-2xl ${isMinimized ? 'w-80 h-16 cursor-pointer' : 'w-full max-w-md h-[600px]'} flex flex-col`} onClick={isMinimized ? () => setIsMinimized(false) : undefined}>
         {/* Header */}
         <div className={`flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg ${isMinimized ? '' : 'border-b'}`}>
           <div className="flex items-center space-x-3">
@@ -1559,13 +1308,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               <p className="text-xs text-blue-100">Online agora</p>
             </div>
           </div>
-          <button 
-            onClick={() => {
-              saveState(); // Salvar estado antes de minimizar
-              setIsMinimized(true);
-            }} 
-            className="text-white hover:text-gray-200 text-xl font-bold"
-          >
+          <button onClick={() => setIsMinimized(true)} className="text-white hover:text-gray-200 text-xl font-bold">
             −
           </button>
         </div>
@@ -1588,7 +1331,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
         {/* Messages - só aparece quando não minimizado */}
         {!isMinimized && (
-          <div className="flex-1 overflow-y-auto p-4 space-y-4" ref={messagesEndRef}>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message) => (
             <div
               key={message.id}
