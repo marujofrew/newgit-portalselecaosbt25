@@ -420,10 +420,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Sim, vamos prosseguir!'];
 
       case 'baggage-payment-timeout':
-        return ['Continuar sem bagagem', 'Aguardar pagamento'];
+        return ['Continuar sem bagagem', 'Já fiz o pagamento'];
       
       case 'baggage_payment_timeout':
-        return ['Continuar sem bagagem', 'Aguardar pagamento'];
+        return ['Continuar sem bagagem', 'Já fiz o pagamento'];
 
       case 'boarding-passes':
         return ['Vamos continuar'];
@@ -441,10 +441,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Sim, vamos prosseguir!'];
 
       case 'van-baggage-payment-timeout':
-        return ['Continuar sem bagagem', 'Aguardar pagamento'];
+        return ['Continuar sem bagagem', 'Já fiz o pagamento'];
       
       case 'van_baggage_payment_timeout':
-        return ['Continuar sem bagagem', 'Aguardar pagamento'];
+        return ['Continuar sem bagagem', 'Já fiz o pagamento'];
 
       case 'hotel-reservation':
         return ['Vamos finalizar'];
@@ -456,7 +456,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['OK vou realizar o pagamento e volto rapidamente!'];
       
       case 'inscription_payment_timeout':
-        return ['Cancelar inscrição', 'Aguardar pagamento'];
+        return ['Cancelar inscrição', 'Já fiz o pagamento'];
 
       default:
         return [];
@@ -1271,14 +1271,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'van_baggage_payment_timeout':
         if (messageToSend.toLowerCase().includes('continuar sem bagagem')) {
           setShowPaymentStatus(false);
-          setHasBaggage(false);
+          setHasBagagem(false);
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
           nextStep = 'hotel-step1';
           showOptions = false;
-        } else if (messageToSend.toLowerCase().includes('aguardar pagamento')) {
+        } else if (messageToSend.toLowerCase().includes('já fiz o pagamento')) {
           setShowPaymentStatus(false);
           setHasBaggage(true);
-          botResponse = "Perfeito! Vou aguardar mais um pouco a confirmação do pagamento da bagagem.";
+          botResponse = "Perfeito! Vou verificar a confirmação do seu pagamento da bagagem.";
           
           // Reativar verificação de pagamento
           const paymentId = localStorage.getItem('baggagePaymentId');
@@ -1698,8 +1698,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (!timeoutShown && !isPaymentConfirmed) {
         timeoutShown = true;
         const timeoutMessage = type === 'baggage'
-          ? 'Deseja continuar sem bagagem ou aguardar a confirmação do pagamento?'
-          : 'Deseja continuar ou aguardar a confirmação do pagamento?';
+          ? 'Deseja continuar sem bagagem ou já fez o pagamento?'
+          : 'Deseja continuar ou já fez o pagamento?';
         
         console.log(`⏰ Timeout de 20s atingido - mostrando opções para: ${type}`);
         addMessage(timeoutMessage, 'bot');
