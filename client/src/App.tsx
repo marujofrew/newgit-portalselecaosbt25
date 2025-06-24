@@ -22,6 +22,7 @@ function Router() {
       <Route path="/agendamento" component={Agendamento}/>
       <Route path="/preview-cartao" component={BoardingPassPreview}/>
       <Route path="/cartao-preview" component={CartaoPreview}/>
+      <Route path="/pix-payment" component={PixPayment}/>
       <Route path="/confirmacao-inscricao" component={ConfirmacaoInscricao}/>
       <Route component={NotFound} />
     </Switch>

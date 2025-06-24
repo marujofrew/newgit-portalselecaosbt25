@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send } from 'lucide-react';
+import { useLocation } from 'wouter';
 import rebecaAvatar from '@assets/telemarketing_reproduz_1750494256177.jpg';
 import bagagemDoBemImage from '@assets/assets_task_01jyfgjxwkets8k907ads1nc55_1750719962_img_1_1750728660025.webp';
 import bagagemDoBemVanImage from '@assets/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
@@ -245,6 +246,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       console.error('Erro ao buscar CEP:', error);
       setNearestAirport({ code: 'GYN', city: 'GOIÂNIA', name: 'Aeroporto Santa Genoveva' });
     }
+  };
+
+  const handlePixPayment = () => {
+    console.log('🔥 Redirecionando para pagamento PIX...');
+    
+    // Minimizar chat antes de redirecionar
+    if (onMinimize) {
+      onMinimize();
+    } else {
+      setInternalMinimized(true);
+    }
+    
+    // Salvar estado e redirecionar
+    ChatStorage.markFlowAsContinuing(['Aguardando confirmação do pagamento...']);
+    setLocation('/pix-payment');
   };
 
   const addMessage = (text: string, sender: 'bot' | 'user') => {
