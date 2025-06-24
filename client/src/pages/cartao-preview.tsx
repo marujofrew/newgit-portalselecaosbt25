@@ -39,6 +39,14 @@ export default function CartaoPreview() {
   useEffect(() => {
     loadBoardingPassData();
     
+    // Verificar se deve mostrar chatbot (só se agendamento foi confirmado)
+    const agendamentoConfirmado = localStorage.getItem('agendamentoConfirmado');
+    if (agendamentoConfirmado === 'true') {
+      // Mostrar chatbot minimizado automaticamente
+      setShowChatBot(true);
+      setChatBotMinimized(true);
+    }
+    
     // Scroll automático para o botão de download após 4 segundos
     const scrollTimer = setTimeout(() => {
       const downloadButton = document.querySelector('#download-button-below');
@@ -50,8 +58,17 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
+    // Timer para abrir chatbot após 20 segundos de inatividade
+    let chatBotTimer: NodeJS.Timeout;
+    if (agendamentoConfirmado === 'true') {
+      chatBotTimer = setTimeout(() => {
+        setChatBotMinimized(false);
+      }, 20000);
+    }
+
     return () => {
       clearTimeout(scrollTimer);
+      if (chatBotTimer) clearTimeout(chatBotTimer);
     };
   }, []);
 
@@ -184,7 +201,10 @@ export default function CartaoPreview() {
               </div>
             </div>
             <button
-              onClick={downloadAllCards}
+              onClick={() => {
+                downloadAllCards();
+                setChatBotMinimized(false);
+              }}
               className="flex items-center space-x-2 text-white px-6 py-3 rounded-lg transition-colors font-semibold hover:opacity-90"
               style={{ backgroundColor: '#001f3f' }}
             >
@@ -380,7 +400,10 @@ export default function CartaoPreview() {
           <div className="flex justify-center mt-8">
             <button
               id="download-button-below"
-              onClick={downloadAllCards}
+              onClick={() => {
+                downloadAllCards();
+                setChatBotMinimized(false);
+              }}
               className="flex items-center space-x-3 text-white px-8 py-4 rounded-xl transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 duration-300 hover:opacity-90"
               style={{ backgroundColor: '#001f3f' }}
             >
