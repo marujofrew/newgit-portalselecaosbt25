@@ -1220,7 +1220,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 <button
                   key={index}
                   onClick={() => handleSendMessage(option)}
-                  className="w-full p-3 text-left bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
+                  className="w-full p-3 text-left bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm"
                 >
                   {option}
                 </button>
