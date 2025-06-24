@@ -302,14 +302,15 @@ export default function CartaoPreview() {
                         justifyContent: 'center',
                         marginBottom: '8px'
                       }}>
-                        <div style={{
-                          fontSize: '24px',
-                          color: '#000',
-                          fontFamily: 'monospace',
-                          lineHeight: '1.2'
-                        }}>
-                          {generateQRPattern()}
-                        </div>
+                        <img 
+                          src="/qr-code.png" 
+                          alt="QR Code" 
+                          style={{
+                            width: '110px',
+                            height: '110px',
+                            objectFit: 'cover'
+                          }}
+                        />
                       </div>
                       <div style={{ 
                         fontSize: '12px', 
