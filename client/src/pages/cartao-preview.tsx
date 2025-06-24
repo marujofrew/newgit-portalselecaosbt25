@@ -117,7 +117,7 @@ export default function CartaoPreview() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center text-gray-800">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderBottomColor: '#001f3f' }}></div>
           <p className="text-xl">Carregando seus cartões de embarque...</p>
         </div>
       </div>
@@ -139,7 +139,8 @@ export default function CartaoPreview() {
             </div>
             <button
               onClick={downloadAllCards}
-              className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold"
+              className="flex items-center space-x-2 text-white px-6 py-3 rounded-lg transition-colors font-semibold hover:opacity-90"
+              style={{ backgroundColor: '#001f3f' }}
             >
               <Download size={20} />
               <span>Baixar Todos</span>
@@ -152,7 +153,7 @@ export default function CartaoPreview() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-blue-600 rounded-xl p-6 shadow-lg text-white">
+          <div className="rounded-xl p-6 shadow-lg text-white" style={{ backgroundColor: '#001f3f' }}>
             <div className="flex items-center space-x-3 mb-3">
               <Calendar className="text-white" size={24} />
               <span className="font-semibold text-white">Data do Voo</span>
@@ -160,10 +161,10 @@ export default function CartaoPreview() {
             <p className="text-2xl font-bold text-white">
               {flightData?.flightDate.toLocaleDateString('pt-BR')}
             </p>
-            <p className="text-blue-100">Horário: {flightData?.flightTime}</p>
+            <p className="text-gray-300">Horário: {flightData?.flightTime}</p>
           </div>
 
-          <div className="bg-blue-600 rounded-xl p-6 shadow-lg text-white">
+          <div className="rounded-xl p-6 shadow-lg text-white" style={{ backgroundColor: '#001f3f' }}>
             <div className="flex items-center space-x-3 mb-3">
               <MapPin className="text-white" size={24} />
               <span className="font-semibold text-white">Rota</span>
@@ -171,16 +172,16 @@ export default function CartaoPreview() {
             <p className="text-lg font-bold text-white">
               {flightData?.originCode} → {flightData?.destinationCode}
             </p>
-            <p className="text-blue-100">{flightData?.originCity} - {flightData?.destinationCity}</p>
+            <p className="text-gray-300">{flightData?.originCity} - {flightData?.destinationCity}</p>
           </div>
 
-          <div className="bg-blue-600 rounded-xl p-6 shadow-lg text-white">
+          <div className="rounded-xl p-6 shadow-lg text-white" style={{ backgroundColor: '#001f3f' }}>
             <div className="flex items-center space-x-3 mb-3">
               <User className="text-white" size={24} />
               <span className="font-semibold text-white">Passageiros</span>
             </div>
             <p className="text-2xl font-bold text-white">{passengers.length}</p>
-            <p className="text-blue-100">Cartões de embarque</p>
+            <p className="text-gray-300">Cartões de embarque</p>
           </div>
         </div>
 
@@ -331,7 +332,8 @@ export default function CartaoPreview() {
           <div className="flex justify-center mt-8">
             <button
               onClick={downloadAllCards}
-              className="flex items-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 duration-300"
+              className="flex items-center space-x-3 text-white px-8 py-4 rounded-xl transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 duration-300 hover:opacity-90"
+              style={{ backgroundColor: '#001f3f' }}
             >
               <Download size={24} />
               <span>Baixar Todos os Cartões</span>
