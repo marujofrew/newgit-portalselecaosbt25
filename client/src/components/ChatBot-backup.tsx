@@ -836,53 +836,48 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setIsTyping(false);
                       addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
                       
+                      // Adicionar imagem do quarto de hotel específica para fluxo de van imediatamente
+                      const imageMessage: Message = {
+                        id: Date.now() + 1,
+                        text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                        sender: 'bot',
+                        timestamp: new Date()
+                      };
+                      setMessages(prev => [...prev, imageMessage]);
+                      
                       setTimeout(() => {
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          // Adicionar imagem do quarto de hotel específica para fluxo de van
-                          const imageMessage: Message = {
-                            id: Date.now() + 1,
-                            text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
-                            sender: 'bot',
-                            timestamp: new Date()
-                          };
-                          setMessages(prev => [...prev, imageMessage]);
-                          
-                          setTimeout(() => {
-                            setIsTyping(true);
+                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                            
                             setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-                              
+                              setIsTyping(true);
                               setTimeout(() => {
-                                setIsTyping(true);
+                                setIsTyping(false);
+                                addMessage("Estou finalizando sua reserva!", 'bot');
+                                
                                 setTimeout(() => {
-                                  setIsTyping(false);
-                                  addMessage("Estou finalizando sua reserva!", 'bot');
-                                  
+                                  setIsTyping(true);
                                   setTimeout(() => {
-                                    setIsTyping(true);
+                                    setIsTyping(false);
+                                    addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                    
                                     setTimeout(() => {
-                                      setIsTyping(false);
-                                      addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-                                      
+                                      setIsTyping(true);
                                       setTimeout(() => {
-                                        setIsTyping(true);
-                                        setTimeout(() => {
-                                          setIsTyping(false);
-                                          addMessage("Vamos finalizar sua inscrição?", 'bot');
-                                          setShowQuickOptions(true);
-                                          setCurrentStep('hotel-reservation');
-                                        }, 5000);
+                                        setIsTyping(false);
+                                        addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                        setShowQuickOptions(true);
+                                        setCurrentStep('hotel-reservation');
                                       }, 5000);
                                     }, 5000);
                                   }, 5000);
                                 }, 5000);
                               }, 5000);
                             }, 5000);
-                          }, 3000);
-                        }, 5000);
+                          }, 5000);
+                        }, 3000);
                       }, 2000);
                     }, 5000);
                   }, 5000);
