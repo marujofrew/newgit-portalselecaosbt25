@@ -54,6 +54,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const savedShowQuickOptions = localStorage.getItem('chatbotShowQuickOptions');
     const savedShowPaymentStatus = localStorage.getItem('chatbotShowPaymentStatus');
     const savedPaymentTimer = localStorage.getItem('chatbotPaymentTimer');
+    const savedMinimized = localStorage.getItem('chatBotMinimized');
 
     if (savedMessages) {
       const parsedMessages = JSON.parse(savedMessages);
