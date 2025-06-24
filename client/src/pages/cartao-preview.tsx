@@ -32,9 +32,6 @@ export default function CartaoPreview() {
   const [selectedDate, setSelectedDate] = useState<string>('');
 
   useEffect(() => {
-    // Garantir que o chatbot permaneça minimizado nesta página
-    localStorage.setItem('chatBotMinimized', 'true');
-    
     loadBoardingPassData();
     
     // Scroll automático para o botão de download após 4 segundos

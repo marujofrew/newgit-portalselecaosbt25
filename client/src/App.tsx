@@ -60,14 +60,16 @@ function App() {
   useEffect(() => {
     // Verificar se deve iniciar minimizado na página de cartões
     const isCartaoPage = window.location.pathname.includes('cartao-preview');
+    const wasMinimized = localStorage.getItem('chatBotMinimized') === 'true';
+    
     if (isCartaoPage) {
       setIsChatBotMinimized(true);
       localStorage.setItem('chatBotMinimized', 'true');
     } else {
-      setIsChatBotMinimized(false);
-      localStorage.removeItem('chatBotMinimized');
+      // Manter estado minimizado se já estava minimizado
+      setIsChatBotMinimized(wasMinimized);
     }
-  }, [window.location.pathname]);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

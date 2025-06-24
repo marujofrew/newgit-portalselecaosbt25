@@ -89,10 +89,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
     if (savedMinimized === 'true') {
       setIsMinimized(true);
-      // Não remover a flag se estivermos na página de cartões
-      if (!window.location.pathname.includes('cartao-preview')) {
-        localStorage.removeItem('chatBotMinimized');
-      }
+      // Manter flag para preservar estado minimizado
     }
   }, []);
 
@@ -1360,6 +1357,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setIsMinimized(true); // Minimizar o chat
       // Marcar que deve permanecer minimizado na próxima página
       localStorage.setItem('chatBotMinimized', 'true');
+      // Salvar estado atual completo antes de navegar
+      localStorage.setItem('chatbotMessages', JSON.stringify(messages));
+      localStorage.setItem('chatbotCurrentStep', currentStep);
+      localStorage.setItem('chatbotSelectedTransport', selectedTransport);
+      localStorage.setItem('chatbotSelectedFlightOption', selectedFlightOption);
+      localStorage.setItem('chatbotHasBaggage', hasBaggage.toString());
+      localStorage.setItem('chatbotShowQuickOptions', showQuickOptions.toString());
+      localStorage.setItem('chatbotShowPaymentStatus', showPaymentStatus.toString());
+      localStorage.setItem('chatbotPaymentTimer', paymentTimer.toString());
+      
       setTimeout(() => {
         window.location.href = '/cartao-preview'; // Redirecionar na mesma janela
       }, 300);
@@ -1368,7 +1375,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     return () => {
       delete (window as any).handleCartaoPreviewClick;
     };
-  }, []);
+  }, [messages, currentStep, selectedTransport, selectedFlightOption, hasBaggage, showQuickOptions, showPaymentStatus, paymentTimer]);
 
   if (!isOpen) return null;
 
