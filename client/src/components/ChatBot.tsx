@@ -796,7 +796,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(false);
               addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
 
-              setTimeout(() => {
+              setTimeout```python
+(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
