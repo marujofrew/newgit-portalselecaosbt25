@@ -326,6 +326,17 @@ export default function CartaoPreview() {
               </div>
             ))}
           </div>
+          
+          {/* Download Button Below Cards */}
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={downloadAllCards}
+              className="flex items-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 duration-300"
+            >
+              <Download size={24} />
+              <span>Baixar Todos os Cartões</span>
+            </button>
+          </div>
         </div>
 
         {/* Instructions */}
