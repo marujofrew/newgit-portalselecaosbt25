@@ -85,18 +85,10 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 15 segundos se ainda não foi aberto
-    let chatBotTimer: NodeJS.Timeout;
-    if (agendamentoConfirmado === 'true' && chatBotMinimized) {
-      chatBotTimer = setTimeout(() => {
-        console.log('⏰ Abrindo chat automaticamente após 15 segundos');
-        setChatBotMinimized(false);
-      }, 15000);
-    }
+    // Timer automático removido - chat controlado pelo usuário
 
     return () => {
       clearTimeout(scrollTimer);
-      // if (chatBotTimer) clearTimeout(chatBotTimer);
     };
   }, [chatBotMinimized]);
 
@@ -542,8 +534,14 @@ export default function CartaoPreview() {
           userData={userData}
           selectedDate={selectedDate}
           isMinimized={chatBotMinimized}
-          onMinimize={() => setChatBotMinimized(true)}
-          onExpand={() => setChatBotMinimized(false)}
+          onMinimize={() => {
+            console.log('🔧 Página: Minimizando chat');
+            setChatBotMinimized(true);
+          }}
+          onExpand={() => {
+            console.log('🔧 Página: Expandindo chat - setChatBotMinimized(false)');
+            setChatBotMinimized(false);
+          }}
         />
       )}
     </div>
