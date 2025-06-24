@@ -105,9 +105,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               timestamp: new Date()
             };
             setMessages(prev => [...prev, continuationMsg]);
-            setShowQuickOptions(true);
+            
+            // Determinar qual etapa continuar baseado no estado salvo
+            let nextStep = savedState.currentStep;
+            
+            // Se estava no greeting (primeira mensagem), avançar para transport
+            if (savedState.currentStep === 'greeting') {
+              nextStep = 'transport';
+              setCurrentStep('transport');
+            }
+            
+            // Ativar opções após a mensagem de continuação
+            setTimeout(() => {
+              setShowQuickOptions(true);
+              console.log('📋 Opções ativadas para continuação na etapa:', nextStep);
+            }, 1000);
+            
             ChatPersistence.save({ 
               messages: [...savedState.messages, continuationMsg],
+              currentStep: nextStep,
               showQuickOptions: true 
             });
           }, 1500);
@@ -115,6 +131,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           // Restaurar opções se necessário
           setTimeout(() => {
             setShowQuickOptions(savedState.showQuickOptions);
+            console.log('🔄 Opções restauradas:', savedState.showQuickOptions);
           }, 1000);
         }
         
