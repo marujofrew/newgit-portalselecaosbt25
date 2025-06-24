@@ -493,7 +493,7 @@ export default function CartaoPreview() {
 
       {/* ChatBot - Continua de onde parou */}
       {showChatBot && (
-        <ChatBot
+        <ChatBotNovo
           isOpen={showChatBot}
           onClose={() => setShowChatBot(false)}
           userCity={userCity}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import ChatBot from '@/components/ChatBot';
+import ChatBotNovo from '../components/ChatBot-NOVO';
 import sbtLogo from '@assets/sbt_logo.png';
 
 export default function Agendamento() {
