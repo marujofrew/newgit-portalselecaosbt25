@@ -41,8 +41,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Auto-save state function
   const saveCurrentState = (currentMessages?: Message[], step?: string, quickOptions?: boolean) => {
+    const messagesToSave = (currentMessages || messages).map(msg => ({
+      ...msg,
+      timestamp: msg.timestamp instanceof Date ? msg.timestamp.toISOString() : msg.timestamp
+    }));
+    
     const stateToSave = {
-      messages: currentMessages || messages,
+      messages: messagesToSave,
       currentStep: step || currentStep,
       selectedTransport,
       selectedFlightOption,
@@ -96,7 +101,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           const state = JSON.parse(savedState);
           console.log('✅ Estado encontrado:', { step: state.currentStep, messages: state.messages?.length || 0 });
           
-          setMessages(state.messages || []);
+          // Restaurar mensagens convertendo timestamps string para Date
+          const restoredMessages = (state.messages || []).map((msg: any) => ({
+            ...msg,
+            timestamp: typeof msg.timestamp === 'string' ? new Date(msg.timestamp) : msg.timestamp
+          }));
+          
+          setMessages(restoredMessages);
           setCurrentStep(state.currentStep || 'greeting');
           setSelectedTransport(state.selectedTransport || '');
           setSelectedFlightOption(state.selectedFlightOption || '');
@@ -107,7 +118,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setIsInitialized(true);
           
           // Se há mensagens, scroll para baixo
-          if (state.messages && state.messages.length > 0) {
+          if (restoredMessages && restoredMessages.length > 0) {
             setTimeout(() => scrollToBottom(), 500);
           }
           
