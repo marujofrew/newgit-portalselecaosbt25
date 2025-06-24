@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
+import sbtLogo from '@assets/sbt_logo.png';
 
 export default function ConfirmacaoInscricao() {
   return (
@@ -7,7 +8,7 @@ export default function ConfirmacaoInscricao() {
       {/* Header com logo SBT */}
       <div className="flex justify-center pt-12 pb-8">
         <img 
-          src="/sbt_logo.png" 
+          src={sbtLogo} 
           alt="SBT Logo" 
           className="h-24 w-auto"
         />

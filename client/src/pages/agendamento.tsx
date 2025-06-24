@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import ChatBot from '@/components/ChatBot';
+import sbtLogo from '@assets/sbt_logo.png';
 
 export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');
@@ -158,7 +159,7 @@ export default function Agendamento() {
           {/* Header */}
           <div className="text-center mb-8">
             <img 
-              src="attached_assets/sbt_logo.png" 
+              src={sbtLogo} 
               alt="SBT Logo" 
               className="h-16 mx-auto mb-4"
             />
