@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import ChatBot from '@/components/ChatBot';
+import ChatBotMonitor from '@/components/ChatBotMonitor';
 import sbtLogo from '@assets/sbt_logo.png';
 
 export default function Agendamento() {
@@ -272,6 +273,9 @@ export default function Agendamento() {
         userData={getUserData()}
         selectedDate={dataSelecionada}
       />
+
+      {/* ChatBot Monitor - apenas em desenvolvimento */}
+      <ChatBotMonitor />
     </main>
   );
 }
