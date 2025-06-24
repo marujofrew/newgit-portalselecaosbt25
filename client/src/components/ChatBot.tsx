@@ -112,21 +112,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (savedSelectedFlightOption) {
       setSelectedFlightOption(savedSelectedFlightOption);
     }
-    if (savedHasBaggage) {
+    if (savedHasBaggage !== null) {
       try {
         setHasBaggage(JSON.parse(savedHasBaggage));
       } catch (error) {
         setHasBaggage(false);
       }
     }
-    if (savedShowQuickOptions) {
+    if (savedShowQuickOptions !== null) {
       try {
         setShowQuickOptions(JSON.parse(savedShowQuickOptions));
       } catch (error) {
         setShowQuickOptions(false);
       }
     }
-    if (savedShowPaymentStatus) {
+    if (savedShowPaymentStatus !== null) {
       try {
         setShowPaymentStatus(JSON.parse(savedShowPaymentStatus));
       } catch (error) {
@@ -231,19 +231,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         if (messages.length > 0) {
           console.log('ChatBot: Continuando conversa existente com', messages.length, 'mensagens');
           
-          // Restaurar opções se necessário
+          // Verificar se deveria mostrar opções baseado no passo atual
           const options = getQuickOptions();
-          if (options.length > 0 && !showQuickOptions) {
-            console.log('ChatBot: Restaurando opções para o passo:', currentStep);
+          if (options.length > 0) {
             setShowQuickOptions(true);
+            console.log('ChatBot: Opções restauradas para o passo:', currentStep);
           }
           
           // Scroll para última mensagem após um pequeno delay
           setTimeout(() => {
             scrollToBottom();
           }, 200);
-        } else {
-          // Só inicializar conversa nova se não há mensagens salvas
+        } else if (currentStep === 'greeting') {
+          // Só inicializar conversa nova se não há mensagens salvas E está no passo inicial
           console.log('ChatBot: Iniciando nova conversa');
           // Buscar aeroporto mais próximo baseado no CEP
           const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
@@ -264,7 +264,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
       }, 100);
     }
-  }, [isOpen, isInitialized]); // Remove messages.length da dependência
+  }, [isOpen, isInitialized, currentStep]); // Adiciona currentStep como dependência
 
   const continueConversationFlow = () => {
     // Esta função verifica se a conversa precisa continuar automaticamente

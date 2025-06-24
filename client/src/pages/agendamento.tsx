@@ -29,9 +29,9 @@ export default function Agendamento() {
       });
       
       if (responsavelData) {
-        const userData = JSON.parse(responsavelData);
-        setUserData(userData);
-        console.log('Agendamento: Dados do usuário carregados:', userData.nome);
+        const parsedUserData = JSON.parse(responsavelData);
+        setUserData(parsedUserData);
+        console.log('Agendamento: Dados do usuário carregados:', parsedUserData.nome);
       }
       
       if (cityData) {

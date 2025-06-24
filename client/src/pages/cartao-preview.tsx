@@ -85,8 +85,9 @@ export default function CartaoPreview() {
       });
       
       if (responsavelData) {
-        setUserData(responsavelData);
-        console.log('CartaoPreview: Dados do usuário carregados:', responsavelData.nome);
+        const parsedUserData = JSON.parse(responsavelData);
+        setUserData(parsedUserData);
+        console.log('CartaoPreview: Dados do usuário carregados:', parsedUserData.nome);
       }
       
       if (cityData) {
