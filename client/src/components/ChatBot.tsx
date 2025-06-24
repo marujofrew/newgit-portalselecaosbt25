@@ -185,7 +185,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   const generateBoardingPasses = () => {
     try {
-      // Recuperar dados do localStorage
+      // Salvar dados para a página de cartões
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
       
@@ -201,12 +201,37 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         });
       });
 
-      // Verificar se a função global existe
-      if (typeof window.openUnifiedBoardingPass === 'function') {
-        window.openUnifiedBoardingPass(passengers);
-      } else {
-        console.error('Função de cartões de embarque não encontrada');
-      }
+      // Salvar dados dos passageiros no localStorage
+      localStorage.setItem('boardingPassData', JSON.stringify(passengers));
+      
+      // Criar link clicável que navega para a página na mesma janela
+      const boardingPassLink = `
+        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 10px 0; max-width: 350px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="window.location.href='/cartao-preview'" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 12px; border-radius: 8px; color: white; font-size: 20px; min-width: 48px; text-align: center;">
+              ✈️
+            </div>
+            <div style="flex: 1;">
+              <div style="font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 4px;">
+                Ver Meus Cartões de Embarque
+              </div>
+              <div style="color: #64748b; font-size: 12px;">
+                📱 Clique para visualizar e baixar
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Adicionar como mensagem HTML
+      const newMessage = {
+        id: Date.now() + Math.random(),
+        text: boardingPassLink,
+        sender: 'bot' as const,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, newMessage]);
+      
     } catch (error) {
       console.error('Erro ao gerar cartões de embarque:', error);
     }
