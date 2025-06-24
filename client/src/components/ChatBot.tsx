@@ -815,7 +815,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'van-baggage-payment-confirmed':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('prosseguir')) {
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
-          nextStep = 'hotel-step1';
+          nextStep = 'van-hotel-step1';
           showOptions = false;
           
           setTimeout(() => {
@@ -853,31 +853,32 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                             addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
                             
                             setTimeout(() => {
-                            setIsTyping(true);
-                            setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage("Estou finalizando sua reserva!", 'bot');
-                              
+                              setIsTyping(true);
                               setTimeout(() => {
-                                setIsTyping(true);
+                                setIsTyping(false);
+                                addMessage("Estou finalizando sua reserva!", 'bot');
+                                
                                 setTimeout(() => {
-                                  setIsTyping(false);
-                                  addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-                                  
+                                  setIsTyping(true);
                                   setTimeout(() => {
-                                    setIsTyping(true);
+                                    setIsTyping(false);
+                                    addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                    
                                     setTimeout(() => {
-                                      setIsTyping(false);
-                                      addMessage("Vamos finalizar sua inscrição?", 'bot');
-                                      setShowQuickOptions(true);
-                                      setCurrentStep('hotel-reservation');
+                                      setIsTyping(true);
+                                      setTimeout(() => {
+                                        setIsTyping(false);
+                                        addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                        setShowQuickOptions(true);
+                                        setCurrentStep('hotel-reservation');
+                                      }, 5000);
                                     }, 5000);
                                   }, 5000);
                                 }, 5000);
                               }, 5000);
                             }, 5000);
                           }, 5000);
-                        }, 5000);
+                        }, 3000);
                       }, 5000);
                     }, 5000);
                   }, 5000);
