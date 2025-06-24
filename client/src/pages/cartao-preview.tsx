@@ -1,296 +1,353 @@
 import React, { useState, useEffect } from 'react';
+import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
+import azulLogo from '@assets/azul-logo-02_1750506382633.png';
+import sbtLogo from '@assets/sbt_logo.png';
+
+interface Passenger {
+  name: string;
+  type: string;
+  isMain: boolean;
+}
+
+interface FlightData {
+  flightDate: Date;
+  flightTime: string;
+  boardingTime: string;
+  originCode: string;
+  originCity: string;
+  destinationCode: string;
+  destinationCity: string;
+}
 
 export default function CartaoPreview() {
-  // Recuperar dados reais do localStorage
-  const [passengerData, setPassengerData] = useState<any>(null);
-  const [flightData, setFlightData] = useState<any>(null);
+  const [passengers, setPassengers] = useState<Passenger[]>([]);
+  const [flightData, setFlightData] = useState<FlightData | null>(null);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Recuperar dados do passageiro
-    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-    const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{}');
-    const selectedDate = localStorage.getItem('selectedDate');
-    
-    // Calcular data do voo baseado na data de agendamento
-    let flightDate = new Date();
-    let flightTime = '13:20';
-    
-    if (selectedDate) {
-      const appointmentDate = new Date(selectedDate);
-      // Por padrão, usar opção 1 (2 dias antes)
-      flightDate = new Date(appointmentDate);
-      flightDate.setDate(appointmentDate.getDate() - 2);
-    }
-    
-    // Calcular horário de embarque (25 minutos antes)
-    const flightTimeparts = flightTime.split(':');
-    const flightHour = parseInt(flightTimeparts[0]);
-    const flightMinute = parseInt(flightTimeparts[1]);
-    
-    let boardingHour = flightHour;
-    let boardingMinute = flightMinute - 25;
-    
-    if (boardingMinute < 0) {
-      boardingMinute += 60;
-      boardingHour -= 1;
-    }
-    
-    const boardingTime = `${boardingHour.toString().padStart(2, '0')}:${boardingMinute.toString().padStart(2, '0')}`;
-    
-    // Determinar aeroporto de origem
-    let originCode = 'GRU';
-    let originCity = 'SÃO PAULO';
-    
-    if (cidadeInfo.localidade) {
-      const cityLower = cidadeInfo.localidade.toLowerCase();
-      if (cityLower.includes('goiânia') || cityLower.includes('goiania')) {
-        originCode = 'GYN';
-        originCity = 'GOIÂNIA';
-      } else if (cityLower.includes('brasília') || cityLower.includes('brasilia')) {
-        originCode = 'BSB';
-        originCity = 'BRASÍLIA';
-      } else if (cityLower.includes('recife')) {
-        originCode = 'REC';
-        originCity = 'RECIFE';
-      } else if (cityLower.includes('salvador')) {
-        originCode = 'SSA';
-        originCity = 'SALVADOR';
-      } else if (cityLower.includes('belo horizonte')) {
-        originCode = 'CNF';
-        originCity = 'BELO HORIZONTE';
-      } else if (cityLower.includes('fortaleza')) {
-        originCode = 'FOR';
-        originCity = 'FORTALEZA';
-      } else if (cityLower.includes('manaus')) {
-        originCode = 'MAO';
-        originCity = 'MANAUS';
-      } else if (cityLower.includes('belém')) {
-        originCode = 'BEL';
-        originCity = 'BELÉM';
-      } else if (cityLower.includes('porto alegre')) {
-        originCode = 'POA';
-        originCity = 'PORTO ALEGRE';
-      } else if (cityLower.includes('curitiba')) {
-        originCode = 'CWB';
-        originCity = 'CURITIBA';
-      } else if (cityLower.includes('campo grande')) {
-        originCode = 'CGR';
-        originCity = 'CAMPO GRANDE';
-      } else if (cityLower.includes('florianópolis')) {
-        originCode = 'FLN';
-        originCity = 'FLORIANÓPOLIS';
-      } else if (cityLower.includes('vitória')) {
-        originCode = 'VIX';
-        originCity = 'VITÓRIA';
-      } else {
-        originCity = cidadeInfo.localidade.toUpperCase();
-      }
-    }
-    
-    // CONFIRMAÇÃO: Verificar se há dados reais ou mostrar "-"
-    const hasRealData = responsavelData.nome && responsavelData.nome !== "PASSAGEIRO EXEMPLO";
-    const displayName = hasRealData ? responsavelData.nome : "-";
-    
-    console.log('CartaoPreview - Dados encontrados:', responsavelData);
-    console.log('CartaoPreview - Tem dados reais?', hasRealData);
-    console.log('CartaoPreview - Nome a exibir:', displayName);
-    console.log('CONFIRMAÇÃO:', displayName === '-' ? 'SISTEMA FUNCIONANDO - MOSTRANDO TRAÇO' : 'DADOS REAIS ENCONTRADOS');
-    
-    setPassengerData({
-      name: displayName,
-      seatNumber: "1D"
-    });
-    
-    setFlightData({
-      date: flightDate,
-      originCode,
-      originCity,
-      boardingTime,
-      flightTime,
-      ticketCode: `${originCode}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`
-    });
+    loadBoardingPassData();
   }, []);
 
-  if (!passengerData || !flightData) {
-    return <div>Carregando...</div>;
+  const loadBoardingPassData = () => {
+    try {
+      // Carregar dados do responsável
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      const candidatosData = JSON.parse(localStorage.getItem('candidatos') || '[]');
+      const selectedDate = localStorage.getItem('selectedDate');
+      const userCity = localStorage.getItem('userCity');
+
+      // Criar lista de passageiros
+      const passengersList: Passenger[] = [];
+      
+      if (responsavelData.nome) {
+        passengersList.push({
+          name: responsavelData.nome.toUpperCase(),
+          type: 'Responsável',
+          isMain: true
+        });
+      }
+
+      candidatosData.forEach((candidato: any, index: number) => {
+        if (candidato.nome) {
+          passengersList.push({
+            name: candidato.nome.toUpperCase(),
+            type: `Candidato ${index + 1}`,
+            isMain: false
+          });
+        }
+      });
+
+      setPassengers(passengersList);
+
+      // Calcular dados do voo
+      if (selectedDate) {
+        const flightDate = new Date(selectedDate);
+        flightDate.setDate(flightDate.getDate() - 1); // Um dia antes do agendamento
+        
+        const boardingDate = new Date(flightDate);
+        boardingDate.setMinutes(boardingDate.getMinutes() - 25); // 25 min antes
+
+        setFlightData({
+          flightDate,
+          flightTime: "08:30",
+          boardingTime: boardingDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          originCode: "GYN",
+          originCity: userCity?.toUpperCase() || "GOIÂNIA",
+          destinationCode: "GRU",
+          destinationCity: "SÃO PAULO"
+        });
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Erro ao carregar dados dos cartões:', error);
+      setLoading(false);
+    }
+  };
+
+  const generateQRPattern = () => {
+    const patterns = ['█▄█▄', '▄█▄█', '█▄▄█', '▄██▄', '█▄█▄'];
+    return patterns[Math.floor(Math.random() * patterns.length)];
+  };
+
+  const downloadAllCards = () => {
+    const element = document.createElement('a');
+    const content = passengers.map((passenger, index) => 
+      `CARTÃO DE EMBARQUE ${index + 1}\n` +
+      `Nome: ${passenger.name}\n` +
+      `Voo: AD${1200 + index}\n` +
+      `Data: ${flightData?.flightDate.toLocaleDateString('pt-BR')}\n` +
+      `Horário: ${flightData?.flightTime}\n` +
+      `Embarque: ${flightData?.boardingTime}\n` +
+      `Origem: ${flightData?.originCode} - ${flightData?.originCity}\n` +
+      `Destino: ${flightData?.destinationCode} - ${flightData?.destinationCity}\n` +
+      `Assento: ${index + 1}D\n\n`
+    ).join('');
+    
+    const file = new Blob([content], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'cartoes-embarque-sbt.txt';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 flex items-center justify-center">
+        <div className="text-center text-white">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-xl">Carregando seus cartões de embarque...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      backgroundColor: '#f1f5f9', 
-      padding: '40px 20px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'system-ui, sans-serif'
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ 
-          fontSize: '24px', 
-          fontWeight: 'bold', 
-          marginBottom: '20px',
-          color: '#1e293b'
-        }}>
-          Modelo do Cartão de Embarque - Azul
-        </h1>
-        <p style={{ 
-          fontSize: '14px', 
-          color: '#64748b', 
-          marginBottom: '30px'
-        }}>
-          Layout baseado no modelo oficial da Azul conforme prints fornecidos
-        </p>
-        
-        {/* Cartão de embarque - Modelo Oficial Azul */}
-        <div style={{
-          width: '300px', 
-          height: '520px', 
-          background: '#001f3f', 
-          borderRadius: '12px', 
-          padding: '20px', 
-          color: 'white', 
-          fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif", 
-          position: 'relative', 
-          margin: '0 auto', 
-          boxShadow: '0 12px 32px rgba(0,0,0,0.4)'
-        }}>
-          
-          {/* Header - Layout oficial */}
-          <div style={{
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
-            marginBottom: '18px'
-          }}>
-            <img src="/attached_assets/azul-logo-02_1750506382633.png" alt="Azul" style={{ height: '24px', width: 'auto' }} />
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', textAlign: 'center' }}>
-              <div>
-                <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>DATA</div>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{flightData.date.toLocaleDateString('pt-BR')}</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>VOO</div>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>2768</div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
+      {/* Header */}
+      <div className="bg-white shadow-lg">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <img src={sbtLogo} alt="SBT" className="h-12" />
+              <div className="border-l border-gray-300 pl-4">
+                <h1 className="text-2xl font-bold text-gray-800">Cartões de Embarque</h1>
+                <p className="text-gray-600">Sistema Brasileiro de Televisão</p>
               </div>
             </div>
+            <button
+              onClick={downloadAllCards}
+              className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold"
+            >
+              <Download size={20} />
+              <span>Baixar Todos</span>
+            </button>
           </div>
-          
-          {/* Aeroportos */}
-          <div style={{ marginBottom: '25px' }}>
-            {/* Nomes das cidades em uma linha */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>{flightData.originCity}</div>
-              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>SAO PAULO - GUARULHOS</div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Info Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl p-6 shadow-lg">
+            <div className="flex items-center space-x-3 mb-3">
+              <Calendar className="text-blue-600" size={24} />
+              <span className="font-semibold text-gray-800">Data do Voo</span>
             </div>
-            
-            {/* Códigos dos aeroportos alinhados */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>{flightData.originCode}</div>
-              
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 15px' }}>
-                <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>
-              </div>
-              
-              <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>GRU</div>
-            </div>
+            <p className="text-2xl font-bold text-gray-900">
+              {flightData?.flightDate.toLocaleDateString('pt-BR')}
+            </p>
+            <p className="text-gray-600">Horário: {flightData?.flightTime}</p>
           </div>
-          
-          {/* Linha de informações de embarque */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>INÍCIO EMBARQUE</div>
-                <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>12:55</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>FIM EMBARQUE</div>
-                <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>13:20</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>SEÇÃO</div>
-                <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>D</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>ASSENTO</div>
-                <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>{passengerData.seatNumber}</div>
-              </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-lg">
+            <div className="flex items-center space-x-3 mb-3">
+              <MapPin className="text-blue-600" size={24} />
+              <span className="font-semibold text-gray-800">Rota</span>
             </div>
+            <p className="text-lg font-bold text-gray-900">
+              {flightData?.originCode} → {flightData?.destinationCode}
+            </p>
+            <p className="text-gray-600">{flightData?.originCity} - {flightData?.destinationCity}</p>
           </div>
-          
-          {/* Cliente e Status */}
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <div>
-                <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>CLIENTE</div>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{passengerData.name === '-' ? '-' : passengerData.name.toUpperCase()}</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '11px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
-              </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-lg">
+            <div className="flex items-center space-x-3 mb-3">
+              <User className="text-blue-600" size={24} />
+              <span className="font-semibold text-gray-800">Passageiros</span>
             </div>
-          </div>
-          
-          {/* QR Code centralizado na parte inferior */}
-          <div style={{
-            position: 'absolute',
-            bottom: '25px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '120px',
-              height: '120px',
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '8px'
-            }}>
-              <img 
-                src="/qr-code.png" 
-                alt="QR Code" 
-                style={{
-                  width: '110px',
-                  height: '110px',
-                  objectFit: 'cover'
-                }}
-              />
-            </div>
-            <div style={{ 
-              fontSize: '12px', 
-              fontWeight: '600', 
-              color: 'white',
-              letterSpacing: '1px'
-            }}>
-              {flightData.ticketCode}
-            </div>
+            <p className="text-2xl font-bold text-gray-900">{passengers.length}</p>
+            <p className="text-gray-600">Cartões de embarque</p>
           </div>
         </div>
 
-        <div style={{ 
-          marginTop: '30px', 
-          padding: '20px', 
-          backgroundColor: 'white', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px', color: '#1e293b' }}>
-            Especificações do Layout
-          </h3>
-          <ul style={{ textAlign: 'left', color: '#64748b', fontSize: '12px', lineHeight: '1.5' }}>
-            <li>• <strong>Primeira Parte:</strong> Header com logo oficial e "BOARDING PASS / CARTÃO DE EMBARQUE"</li>
-            <li>• <strong>Segunda Parte:</strong> Aeroportos grandes (36px) com data do voo + linha PASSAGEIRO/VOO/ASSENTO</li>
-            <li>• <strong>Terceira Parte:</strong> 3 linhas organizadas com todas as informações de embarque</li>
-            <li>• <strong>Quarta Parte:</strong> QR Code profissional no canto inferior direito</li>
-            <li>• <strong>Cor:</strong> Azul escuro oficial da Azul (#003d82 → #0052a3)</li>
-            <li>• <strong>Fonte:</strong> Segoe UI para máxima legibilidade</li>
-            <li>• <strong>Alinhamento:</strong> Todas as informações organizadas em linhas perfeitamente alinhadas</li>
-          </ul>
+        {/* Boarding Pass Cards */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-white mb-6">Seus Cartões de Embarque</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {passengers.map((passenger, index) => (
+              <div key={index} className="relative">
+                <div 
+                  className="bg-white rounded-2xl shadow-2xl overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl"
+                  onClick={() => setSelectedCard(index)}
+                >
+                  {/* Boarding Pass Header */}
+                  <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
+                    <div className="flex items-center justify-between">
+                      <img src={azulLogo} alt="Azul" className="h-8" />
+                      <div className="text-white text-right">
+                        <p className="text-sm font-medium">Voo AD{1200 + index}</p>
+                        <p className="text-xs opacity-90">{flightData?.flightDate.toLocaleDateString('pt-BR')}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Passenger Info */}
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-6">
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Passageiro</p>
+                        <p className="text-xl font-bold text-gray-900 mt-1">{passenger.name}</p>
+                        <p className="text-sm text-blue-600 font-medium">{passenger.type}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Assento</p>
+                        <p className="text-2xl font-bold text-gray-900">{index + 1}D</p>
+                      </div>
+                    </div>
+
+                    {/* Flight Details */}
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Origem</p>
+                        <p className="text-lg font-bold text-gray-900">{flightData?.originCode}</p>
+                        <p className="text-sm text-gray-600">{flightData?.originCity}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Destino</p>
+                        <p className="text-lg font-bold text-gray-900">{flightData?.destinationCode}</p>
+                        <p className="text-sm text-gray-600">{flightData?.destinationCity}</p>
+                      </div>
+                    </div>
+
+                    {/* Boarding Info */}
+                    <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                      <div className="flex items-center space-x-4">
+                        <div>
+                          <p className="text-xs text-gray-500">Embarque</p>
+                          <p className="text-sm font-semibold">{flightData?.boardingTime}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500">Voo</p>
+                          <p className="text-sm font-semibold">{flightData?.flightTime}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <QrCode size={20} className="text-gray-400" />
+                        <span className="text-xs font-mono text-gray-500">{generateQRPattern()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Instructions */}
+        <div className="bg-white rounded-xl p-6 mt-8 shadow-lg">
+          <div className="flex items-start space-x-3">
+            <FileText className="text-blue-600 mt-1" size={24} />
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">Instruções Importantes</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>Chegue ao aeroporto com pelo menos 2 horas de antecedência</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>Apresente documento de identidade original com foto</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>Mantenha este cartão de embarque até o final da viagem</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>Em caso de dúvidas, procure o balcão da Azul no aeroporto</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Modal for detailed view */}
+      {selectedCard !== null && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-800">Cartão de Embarque</h3>
+                <button 
+                  onClick={() => setSelectedCard(null)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-500 uppercase tracking-wide">Passageiro</p>
+                  <p className="text-lg font-bold text-gray-900">{passengers[selectedCard]?.name}</p>
+                  <p className="text-sm text-blue-600">{passengers[selectedCard]?.type}</p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Voo</p>
+                    <p className="font-semibold">AD{1200 + selectedCard}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Assento</p>
+                    <p className="font-semibold">{selectedCard + 1}D</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Data</p>
+                    <p className="font-semibold">{flightData?.flightDate.toLocaleDateString('pt-BR')}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Horário</p>
+                    <p className="font-semibold">{flightData?.flightTime}</p>
+                  </div>
+                </div>
+                
+                <div className="pt-4 border-t">
+                  <p className="text-sm text-gray-500 mb-2">Rota</p>
+                  <p className="font-semibold">{flightData?.originCode} → {flightData?.destinationCode}</p>
+                  <p className="text-sm text-gray-600">{flightData?.originCity} - {flightData?.destinationCity}</p>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => setSelectedCard(null)}
+                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
