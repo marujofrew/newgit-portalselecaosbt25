@@ -1371,32 +1371,34 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   // Balão minimizado
   if (isMinimized) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-50 group">
         <div 
-          className="bg-blue-600 hover:bg-blue-700 rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg transition-all duration-300 hover:scale-110"
+          className="relative bg-blue-600 hover:bg-blue-700 rounded-full w-14 h-14 flex items-center justify-center cursor-pointer shadow-lg transition-all duration-200 hover:shadow-xl"
           onClick={() => setIsMinimized(false)}
         >
-          {/* Ícone de balão de fala */}
+          {/* Ícone de chat mais simples */}
           <svg 
-            className="w-8 h-8 text-white" 
-            fill="currentColor" 
+            className="w-6 h-6 text-white" 
+            fill="none" 
+            stroke="currentColor" 
             viewBox="0 0 24 24"
           >
-            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3.04 1.05 4.36L1 22l5.64-2.05C8.96 20.64 10.46 21 12 21c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.29 0-2.55-.3-3.64-.85l-.35-.18-2.83 1.03 1.03-2.83-.18-.35C5.3 14.55 5 13.29 5 12c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7z"/>
-            <circle cx="9" cy="12" r="1"/>
-            <circle cx="12" cy="12" r="1"/>
-            <circle cx="15" cy="12" r="1"/>
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" 
+            />
           </svg>
           
-          {/* Indicador de mensagens não lidas (opcional) */}
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-          </div>
+          {/* Indicador online */}
+          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
         </div>
         
-        {/* Tooltip */}
-        <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-800 text-white text-sm rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-          Clique para abrir o chat
+        {/* Tooltip que aparece no hover */}
+        <div className="absolute bottom-full right-0 mb-3 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+          Rebeca - Assistente SBT
+          <div className="absolute top-full right-2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-gray-900"></div>
         </div>
       </div>
     );
