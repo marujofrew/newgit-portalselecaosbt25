@@ -1356,6 +1356,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   React.useEffect(() => {
     (window as any).handleCartaoPreviewClick = (event: Event) => {
       event.preventDefault();
+      // Salvar estado completo antes de minimizar
+      saveBackupState();
       if (onMinimize) {
         onMinimize();
       } else {
