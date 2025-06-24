@@ -57,8 +57,8 @@ export default function CartaoPreview() {
       setShowChatBot(true);
       
       if (hasExistingChat) {
-        console.log('✅ Chat com conversa anterior encontrado - mantendo minimizado');
-        setChatBotMinimized(true); // Manter minimizado inicialmente
+        console.log('✅ Chat com conversa anterior encontrado - minimizado por padrão');
+        // Estado já inicializado como true, não precisa redefinir
         
         // Debug: mostrar detalhes da conversa
         const state = ChatStorage.getState();
@@ -69,8 +69,8 @@ export default function CartaoPreview() {
           vooSelecionado: state.selectedFlightOption
         });
       } else {
-        console.log('⚠️ Nenhuma conversa anterior encontrada');
-        setChatBotMinimized(true);
+        console.log('⚠️ Nenhuma conversa anterior encontrada - chat minimizado');
+        // Estado já inicializado como true
       }
     }
     
@@ -90,7 +90,7 @@ export default function CartaoPreview() {
     return () => {
       clearTimeout(scrollTimer);
     };
-  }, [chatBotMinimized]);
+  }, []); // Removida dependência que causava loop
 
   const loadBoardingPassData = () => {
     try {
