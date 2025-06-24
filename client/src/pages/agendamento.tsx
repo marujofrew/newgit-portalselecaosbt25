@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import ChatBotNovo from '../components/ChatBot-NOVO';
+import ChatBot from '@/components/ChatBot';
 import sbtLogo from '@assets/sbt_logo.png';
 
 export default function Agendamento() {
@@ -124,11 +124,8 @@ export default function Agendamento() {
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
     
-    // Limpar COMPLETAMENTE o estado do chat para nova conversa
-    console.log('🗑️ Limpando estado do chat para novo agendamento');
-    import('../utils/chatPersistence').then(({ ChatPersistence }) => {
-      ChatPersistence.clear();
-    });
+    // Limpar estado anterior do chat bot para reiniciar do zero
+    localStorage.removeItem('chatBotState');
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
@@ -268,7 +265,7 @@ export default function Agendamento() {
       </div>
 
       {/* Chat Bot */}
-      <ChatBotNovo 
+      <ChatBot 
         isOpen={chatBotOpen} 
         onClose={() => setChatBotOpen(false)}
         userCity={getUserCity()}

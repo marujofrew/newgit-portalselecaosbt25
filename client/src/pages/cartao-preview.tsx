@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import ChatBotNovo from '../components/ChatBot-NOVO';
+import ChatBot from '../components/ChatBot';
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
 import sbtLogo from '@assets/sbt_logo.png';
 
@@ -47,11 +47,21 @@ export default function CartaoPreview() {
 
     // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
-      console.log('⏰ Timer 30s: abrindo chatbot');
-      import('../utils/chatPersistence').then(({ ChatPersistence }) => {
-        ChatPersistence.markAtBoardingPass();
-        setShowChatBot(true);
-      });
+      // Verificar se há conversa em andamento antes de abrir
+      const savedState = localStorage.getItem('chatBotState');
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState);
+          const stateAge = Date.now() - (state.timestamp || 0);
+          // Se há estado recente (menos de 1 hora), abrir chatbot
+          if (state.messages && state.messages.length > 0 && stateAge < 3600000) {
+            console.log('Abrindo chatbot com conversa salva...');
+            setShowChatBot(true);
+          }
+        } catch (error) {
+          console.error('Erro ao verificar estado do chat:', error);
+        }
+      }
     }, 30000);
 
     return () => {
@@ -155,11 +165,8 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
-        console.log('📥 Download concluído: abrindo chatbot');
-        import('../utils/chatPersistence').then(({ ChatPersistence }) => {
-          ChatPersistence.markAtBoardingPass();
-          setShowChatBot(true);
-        });
+        console.log('Download concluído, abrindo chatbot para continuar conversa...');
+        setShowChatBot(true);
       }, 2000);
       
     } catch (error) {
@@ -493,7 +500,7 @@ export default function CartaoPreview() {
 
       {/* ChatBot - Continua de onde parou */}
       {showChatBot && (
-        <ChatBotNovo
+        <ChatBot
           isOpen={showChatBot}
           onClose={() => setShowChatBot(false)}
           userCity={userCity}

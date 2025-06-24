@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send } from 'lucide-react';
-import { ChatPersistence } from '../utils/chatPersistence';
 import rebecaAvatar from '@assets/telemarketing_reproduz_1750494256177.jpg';
 import bagagemDoBemImage from '@assets/assets_task_01jyfgjxwkets8k907ads1nc55_1750719962_img_1_1750728660025.webp';
 import bagagemDoBemVanImage from '@assets/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
@@ -63,126 +62,33 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     };
   }, [showPaymentStatus, paymentTimer]);
 
-  // Sistema robusto de persistência
   useEffect(() => {
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
-      
-      console.log('🚀 === CHATBOT INICIALIZANDO ===');
-      
-      // Carregar estado salvo
-      const savedState = ChatPersistence.load();
-      const isFromBoardingPass = ChatPersistence.isFromBoardingPass();
-      
-      console.log('📊 Estado atual:', {
-        hasMessages: savedState.messages.length > 0,
-        step: savedState.currentStep,
-        transport: savedState.selectedTransport,
-        fromBoardingPass: isFromBoardingPass,
-        page: window.location.pathname
-      });
-      
-      // Se há conversa ativa, restaurar
-      if (savedState.messages.length > 0) {
-        console.log('🔄 Restaurando conversa ativa...');
-        
-        setMessages(savedState.messages);
-        setCurrentStep(savedState.currentStep);
-        setSelectedTransport(savedState.selectedTransport);
-        setSelectedFlightOption(savedState.selectedFlightOption);
-        setHasBaggage(savedState.hasBaggage);
-        setIsTyping(false);
-        setShowPaymentStatus(false);
-        setPaymentTimer(0);
-        
-        // Se vem da página de cartões, apenas mostrar opções para continuar
-        if (isFromBoardingPass && window.location.pathname === '/cartao-preview') {
-          // Não adicionar nova mensagem, apenas ativar opções baseado no estado atual
-          let currentStepToUse = savedState.currentStep;
-          
-          // Se estava no greeting, avançar para transport para dar opções de transporte
-          if (savedState.currentStep === 'greeting') {
-            currentStepToUse = 'transport';
-            setCurrentStep('transport');
-          }
-          
-          setTimeout(() => {
-            setShowQuickOptions(true);
-            console.log('📋 Ativando opções para continuar na etapa:', currentStepToUse);
-          }, 1000);
-          
-          ChatPersistence.save({ 
-            currentStep: currentStepToUse,
-            showQuickOptions: true 
-          });
-        } else {
-          // Restaurar opções normalmente
-          setTimeout(() => {
-            setShowQuickOptions(savedState.showQuickOptions);
-            console.log('🔄 Opções restauradas:', savedState.showQuickOptions);
-          }, 1000);
-        }
-        
-        return;
-      }
-      
-      // NOVA CONVERSA
-      console.log('✨ Iniciando nova conversa...');
-      
-      const initialState = ChatPersistence.getDefaultState();
-      setMessages(initialState.messages);
-      setCurrentStep(initialState.currentStep);
-      setSelectedTransport(initialState.selectedTransport);
-      setSelectedFlightOption(initialState.selectedFlightOption);
-      setHasBaggage(initialState.hasBaggage);
+      setMessages([]);
+      setCurrentStep('greeting');
+      setShowQuickOptions(false);
       setIsTyping(false);
       setShowPaymentStatus(false);
       setPaymentTimer(0);
-      setShowQuickOptions(false);
 
-      // Buscar aeroporto
+      // Buscar aeroporto mais próximo baseado no CEP
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       if (responsavelData.cep) {
         findNearestAirportFromCEP(responsavelData.cep);
       }
 
       // Mensagem inicial
-      setTimeout(() => {
-        const welcomeMessage: Message = {
-          id: Date.now(),
-          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        
-        setMessages([welcomeMessage]);
-        setShowQuickOptions(true);
-        setCurrentStep('transport');
-        
-        ChatPersistence.save({
-          messages: [welcomeMessage],
-          currentStep: 'transport',
-          showQuickOptions: true
-        });
-        
-        console.log('💬 Conversa iniciada com primeira mensagem');
-      }, 2000);
+      const welcomeMessage: Message = {
+        id: Date.now(),
+        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+      setShowQuickOptions(true);
     }
   }, [isOpen, isInitialized]);
-
-  // Auto-save robusto
-  useEffect(() => {
-    if (isInitialized && messages.length > 0) {
-      ChatPersistence.save({
-        messages,
-        currentStep,
-        showQuickOptions,
-        selectedTransport,
-        selectedFlightOption,
-        hasBaggage
-      });
-    }
-  }, [messages, currentStep, showQuickOptions, selectedTransport, selectedFlightOption, hasBaggage, isInitialized]);
 
   const findNearestAirportFromCEP = async (cep: string) => {
     try {
