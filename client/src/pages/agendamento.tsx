@@ -10,32 +10,28 @@ export default function Agendamento() {
   const [showGlobalChatBot, setShowGlobalChatBot] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Recuperar dados da cidade do localStorage
-  const getUserCity = () => {
+  // Estados para dados do usuário
+  const [userCity, setUserCity] = useState<string>('');
+  const [userData, setUserData] = useState<any>(null);
+
+  // Carregar dados do usuário
+  useEffect(() => {
     try {
+      const responsavelData = localStorage.getItem('responsavelData');
       const cityData = localStorage.getItem('userCityData');
+      
+      if (responsavelData) {
+        setUserData(JSON.parse(responsavelData));
+      }
+      
       if (cityData) {
         const parsed = JSON.parse(cityData);
-        return `${parsed.cidade} - ${parsed.uf}`;
+        setUserCity(`${parsed.cidade} - ${parsed.uf}`);
       }
     } catch (error) {
-      console.error('Erro ao recuperar dados da cidade:', error);
+      console.error('Erro ao carregar dados do usuário:', error);
     }
-    return 'São Paulo - SP'; // fallback
-  };
-
-  // Recuperar dados completos do usuário
-  const getUserData = () => {
-    try {
-      const cityData = localStorage.getItem('userCityData');
-      if (cityData) {
-        return JSON.parse(cityData);
-      }
-    } catch (error) {
-      console.error('Erro ao recuperar dados do usuário:', error);
-    }
-    return null;
-  };
+  }, []);
 
   // Gerar datas disponíveis apenas aos sábados começando 1 mês no futuro
   const gerarDatasDisponiveis = () => {
@@ -281,8 +277,8 @@ export default function Agendamento() {
         <ChatBot
           isOpen={showGlobalChatBot}
           onClose={() => setShowGlobalChatBot(false)}
-          userCity={getUserCity()}
-          userData={getUserData()}
+          userCity={userCity}
+          userData={userData}
           selectedDate={dataSelecionada}
         />
       )}

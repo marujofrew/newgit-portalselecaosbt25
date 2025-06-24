@@ -56,6 +56,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Carregar histórico do localStorage
   useEffect(() => {
+    console.log('ChatBot: Carregando estado do localStorage...');
     const savedMessages = localStorage.getItem('chatbotMessages');
     const savedCurrentStep = localStorage.getItem('chatbotCurrentStep');
     const savedSelectedTransport = localStorage.getItem('chatbotSelectedTransport');
@@ -66,6 +67,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const savedPaymentTimer = localStorage.getItem('chatbotPaymentTimer');
     const savedMinimized = localStorage.getItem('chatBotMinimized');
 
+    console.log('ChatBot: Dados salvos encontrados:', {
+      messages: !!savedMessages,
+      currentStep: savedCurrentStep,
+      minimized: savedMinimized,
+      pathname: window.location.pathname
+    });
+
     if (savedMessages) {
       const parsedMessages = JSON.parse(savedMessages);
       // Converter timestamps de string para Date
@@ -74,9 +82,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         timestamp: new Date(msg.timestamp)
       }));
       setMessages(messagesWithDates);
+      console.log('ChatBot: Mensagens carregadas:', messagesWithDates.length);
     }
     if (savedCurrentStep) {
       setCurrentStep(savedCurrentStep);
+      console.log('ChatBot: Passo atual carregado:', savedCurrentStep);
     }
     if (savedSelectedTransport) {
       setSelectedTransport(savedSelectedTransport);
@@ -98,7 +108,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
     if (savedMinimized === 'true') {
       setIsMinimized(true);
-      // Manter flag para preservar estado minimizado
+      console.log('ChatBot: Iniciando minimizado');
     }
   }, []);
 

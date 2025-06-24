@@ -66,11 +66,16 @@ export default function CartaoPreview() {
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatosData = JSON.parse(localStorage.getItem('candidatos') || '[]');
       const storedSelectedDate = localStorage.getItem('selectedDate');
-      const storedUserCity = localStorage.getItem('userCity');
+      const cityData = localStorage.getItem('userCityData');
 
-      // Salvar dados para o chatbot
+      // Salvar dados para o chatbot (usar mesma fonte que outras páginas)
       setUserData(responsavelData);
-      setUserCity(storedUserCity || '');
+      
+      if (cityData) {
+        const parsed = JSON.parse(cityData);
+        setUserCity(`${parsed.cidade} - ${parsed.uf}`);
+      }
+      
       setSelectedDate(storedSelectedDate || '');
 
       // Criar lista de passageiros
