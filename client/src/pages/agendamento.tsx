@@ -141,8 +141,8 @@ export default function Agendamento() {
     setTimeout(() => {
       setLoading(false);
       setChatBotOpen(true);
-      // Força reload da página para ativar o chatbot global
-      window.location.reload();
+      // Marcar que chatbot foi aberto pela primeira vez
+      localStorage.setItem('chatBotOpened', 'true');
     }, 1000);
   };
 

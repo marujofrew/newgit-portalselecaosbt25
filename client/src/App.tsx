@@ -38,7 +38,9 @@ function App() {
   useEffect(() => {
     // Verificar se chatbot deve aparecer globalmente
     const shouldShowChatBot = localStorage.getItem('showChatBotGlobal');
-    if (shouldShowChatBot === 'true') {
+    const chatBotOpened = localStorage.getItem('chatBotOpened');
+    
+    if (shouldShowChatBot === 'true' && chatBotOpened === 'true') {
       setShowGlobalChatBot(true);
       
       // Carregar dados do usuário
