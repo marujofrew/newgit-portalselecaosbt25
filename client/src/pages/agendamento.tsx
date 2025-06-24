@@ -125,10 +125,10 @@ export default function Agendamento() {
     localStorage.setItem('selectedTime', horarioSelecionado);
     
     // Limpar COMPLETAMENTE o estado do chat para nova conversa
-    console.log('=== LIMPANDO ESTADO DO CHAT ===');
-    localStorage.removeItem('chatBotState');
-    localStorage.removeItem('chatBotAtBoardingPass');
-    console.log('Estado do chat limpo para nova conversa');
+    console.log('🗑️ Limpando estado do chat para novo agendamento');
+    import('../utils/chatPersistence').then(({ ChatPersistence }) => {
+      ChatPersistence.clear();
+    });
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {

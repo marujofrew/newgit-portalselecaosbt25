@@ -47,21 +47,11 @@ export default function CartaoPreview() {
 
     // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
-      // Verificar se há conversa em andamento antes de abrir
-      const savedState = localStorage.getItem('chatBotState');
-      if (savedState) {
-        try {
-          const state = JSON.parse(savedState);
-          const stateAge = Date.now() - (state.timestamp || 0);
-          // Se há estado recente (menos de 1 hora), abrir chatbot
-          if (state.messages && state.messages.length > 0 && stateAge < 3600000) {
-            console.log('Abrindo chatbot com conversa salva...');
-            setShowChatBot(true);
-          }
-        } catch (error) {
-          console.error('Erro ao verificar estado do chat:', error);
-        }
-      }
+      console.log('⏰ Timer 30s: abrindo chatbot');
+      import('../utils/chatPersistence').then(({ ChatPersistence }) => {
+        ChatPersistence.markAtBoardingPass();
+        setShowChatBot(true);
+      });
     }, 30000);
 
     return () => {
@@ -165,8 +155,11 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
-        console.log('Download concluído, abrindo chatbot para continuar conversa...');
-        setShowChatBot(true);
+        console.log('📥 Download concluído: abrindo chatbot');
+        import('../utils/chatPersistence').then(({ ChatPersistence }) => {
+          ChatPersistence.markAtBoardingPass();
+          setShowChatBot(true);
+        });
       }, 2000);
       
     } catch (error) {
