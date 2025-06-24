@@ -839,64 +839,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               }, 5000);
             }, 5000);
           }, 5000);
-
-          setTimeout(() => {
-            setIsTyping(true);
-            setTimeout(() => {
-              setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
-
-              setTimeout(() => {
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-                  addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-
-                      setTimeout(() => {
-                        setIsTyping(true);
-                        setTimeout(() => {
-                          setIsTyping(false);
-                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-
-                          setTimeout(() => {
-                            setIsTyping(true);
-                            setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage("Estou finalizando sua reserva!", 'bot');
-
-                              setTimeout(() => {
-                                setIsTyping(true);
-                                setTimeout(() => {
-                                  setIsTyping(false);
-                                  addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-
-                                  setTimeout(() => {
-                                    setIsTyping(true);
-                                    setTimeout(() => {
-                                      setIsTyping(false);
-                                      addMessage("Vamos finalizar sua inscrição?", 'bot');
-                                      setShowQuickOptions(true);
-                                      setCurrentStep('hotel-reservation');
-                                    }, 5000);
-                                  }, 5000);
-                                }, 5000);
-                              }, 5000);
-                            }, 5000);
-                          }, 5000);
-                        }, 5000);
-                      }, 5000);
-                    }, 5000);
-                  }, 5000);
-                }, 5000);
-              }, 5000);
-            }, 5000);
-          }, 5000);
         }
         break;
 
