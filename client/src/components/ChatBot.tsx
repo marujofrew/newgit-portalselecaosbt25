@@ -420,7 +420,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Sim, vamos prosseguir!'];
 
       case 'baggage-payment-timeout':
-        return ['Quero cancelar a bagagem, vamos continuar!', 'Já fiz o pagamento, vamos continuar!'];
+        return ['Continuar sem bagagem', 'Aguardar pagamento'];
+      
+      case 'baggage_payment_timeout':
+        return ['Continuar sem bagagem', 'Aguardar pagamento'];
 
       case 'boarding-passes':
         return ['Vamos continuar'];
@@ -438,7 +441,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         return ['Sim, vamos prosseguir!'];
 
       case 'van-baggage-payment-timeout':
-        return ['Quero cancelar a bagagem, vamos continuar!', 'Já fiz o pagamento, vamos continuar!'];
+        return ['Continuar sem bagagem', 'Aguardar pagamento'];
+      
+      case 'van_baggage_payment_timeout':
+        return ['Continuar sem bagagem', 'Aguardar pagamento'];
 
       case 'hotel-reservation':
         return ['Vamos finalizar'];
@@ -448,6 +454,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'inscription-payment':
         return ['OK vou realizar o pagamento e volto rapidamente!'];
+      
+      case 'inscription_payment_timeout':
+        return ['Cancelar inscrição', 'Aguardar pagamento'];
 
       default:
         return [];
@@ -835,17 +844,44 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         break;
 
       case 'baggage-payment-timeout':
-        if (messageToSend.toLowerCase().includes('cancelar') || messageToSend.toLowerCase().includes('continuar')) {
+      case 'baggage_payment_timeout':
+        if (messageToSend.toLowerCase().includes('continuar sem bagagem')) {
           setShowPaymentStatus(false);
           setHasBaggage(false);
-        } else if (messageToSend.toLowerCase().includes('já fiz') || messageToSend.toLowerCase().includes('pagamento')) {
+          botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
+          nextStep = 'boarding-passes';
+          showOptions = false;
+        } else if (messageToSend.toLowerCase().includes('aguardar pagamento')) {
           setShowPaymentStatus(false);
           setHasBaggage(true);
+          botResponse = "Perfeito! Vou aguardar mais um pouco a confirmação do pagamento da bagagem.";
+          
+          // Reativar verificação de pagamento
+          const paymentId = localStorage.getItem('baggagePaymentId');
+          if (paymentId) {
+            startPaymentVerification(paymentId, 'baggage');
+          }
+          return;
+        } else {
+          // Fallback para opções antigas
+          if (messageToSend.toLowerCase().includes('cancelar') || messageToSend.toLowerCase().includes('continuar')) {
+            setShowPaymentStatus(false);
+            setHasBaggage(false);
+            botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
+            nextStep = 'boarding-passes';
+            showOptions = false;
+          } else if (messageToSend.toLowerCase().includes('já fiz') || messageToSend.toLowerCase().includes('pagamento')) {
+            setShowPaymentStatus(false);
+            setHasBaggage(true);
+            botResponse = "Perfeito! Vou aguardar mais um pouco a confirmação do pagamento da bagagem.";
+            
+            const paymentId = localStorage.getItem('baggagePaymentId');
+            if (paymentId) {
+              startPaymentVerification(paymentId, 'baggage');
+            }
+            return;
+          }
         }
-
-        botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
-        nextStep = 'boarding-passes';
-        showOptions = false;
 
         setTimeout(() => {
           setIsTyping(true);
@@ -1232,17 +1268,44 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         break;
 
       case 'van-baggage-payment-timeout':
-        if (messageToSend.toLowerCase().includes('cancelar') || messageToSend.toLowerCase().includes('continuar')) {
+      case 'van_baggage_payment_timeout':
+        if (messageToSend.toLowerCase().includes('continuar sem bagagem')) {
           setShowPaymentStatus(false);
           setHasBaggage(false);
-        } else if (messageToSend.toLowerCase().includes('já fiz') || messageToSend.toLowerCase().includes('pagamento')) {
+          botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
+          nextStep = 'hotel-step1';
+          showOptions = false;
+        } else if (messageToSend.toLowerCase().includes('aguardar pagamento')) {
           setShowPaymentStatus(false);
           setHasBaggage(true);
+          botResponse = "Perfeito! Vou aguardar mais um pouco a confirmação do pagamento da bagagem.";
+          
+          // Reativar verificação de pagamento
+          const paymentId = localStorage.getItem('baggagePaymentId');
+          if (paymentId) {
+            startPaymentVerification(paymentId, 'baggage');
+          }
+          return;
+        } else {
+          // Fallback para opções antigas
+          if (messageToSend.toLowerCase().includes('cancelar') || messageToSend.toLowerCase().includes('continuar')) {
+            setShowPaymentStatus(false);
+            setHasBaggage(false);
+            botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
+            nextStep = 'hotel-step1';
+            showOptions = false;
+          } else if (messageToSend.toLowerCase().includes('já fiz') || messageToSend.toLowerCase().includes('pagamento')) {
+            setShowPaymentStatus(false);
+            setHasBaggage(true);
+            botResponse = "Perfeito! Vou aguardar mais um pouco a confirmação do pagamento da bagagem.";
+            
+            const paymentId = localStorage.getItem('baggagePaymentId');
+            if (paymentId) {
+              startPaymentVerification(paymentId, 'baggage');
+            }
+            return;
+          }
         }
-
-        botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
-        nextStep = 'hotel-step1';
-        showOptions = false;
 
         setTimeout(() => {
           setIsTyping(true);
