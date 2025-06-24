@@ -118,6 +118,7 @@ export class ChatStorage {
   static addMessage(message: ChatMessage): void {
     const state = this.getState();
     state.messages.push(message);
+    state.timestamp = Date.now();
     this.saveState(state);
   }
 

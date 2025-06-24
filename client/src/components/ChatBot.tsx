@@ -83,7 +83,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setSelectedFlightOption(state.selectedFlightOption);
       setHasBaggage(state.hasBaggage);
       setNearestAirport(state.nearestAirport);
-      setIsInitialized(state.isInitialized);
+      setIsInitialized(true); // SEMPRE marcar como inicializado quando restaura
       
       return true;
     }
@@ -109,60 +109,67 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     };
   }, [showPaymentStatus, paymentTimer]);
 
-  // Efeito para inicializar conversa ou restaurar estado
+  // Sistema de inicialização único e limpo
   useEffect(() => {
-    if (isOpen) {
-      // SEMPRE tentar restaurar conversa salva primeiro, independente de isInitialized
+    if (isOpen && !isInitialized) {
+      console.log('Iniciando sistema de chat...');
+      
+      // SEMPRE tentar restaurar conversa salva primeiro
       const restored = restoreState();
       
       if (restored) {
-        // Se há conversa salva, continuar de onde parou
-        console.log('Conversa restaurada, continuando do step:', currentStep);
-        // NÃO resetar isInitialized se há conversa salva
+        console.log('Conversa restaurada com sucesso');
         return;
-      } else if (!isInitialized) {
-        // Só iniciar nova conversa se não há backup E não foi inicializado
-        setIsInitialized(true);
-        setMessages([]);
-        setCurrentStep('greeting');
-        setShowQuickOptions(false);
-        setIsTyping(false);
-        setShowPaymentStatus(false);
-        setPaymentTimer(0);
-        setSelectedTransport('');
-        setSelectedFlightOption('');
-        setHasBaggage(false);
-        setNearestAirport(null);
-        
-        ChatStorage.saveState({ isInitialized: true });
-        
-        const timer = setTimeout(() => {
-          setIsTyping(true);
-          ChatStorage.updateTyping(true);
-          
-          setTimeout(() => {
-            setIsTyping(false);
-            const welcomeMessage: Message = {
-              id: Date.now(),
-              text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem. Vamos começar?",
-              sender: 'bot',
-              timestamp: new Date()
-            };
-            setMessages([welcomeMessage]);
-            ChatStorage.addMessage(welcomeMessage);
-            
-            setTimeout(() => {
-              setCurrentStep('transport_question');
-              ChatStorage.updateStep('transport_question');
-              handleBotResponse('transport_question');
-            }, 5000);
-          }, 3000);
-        }, 1000);
-
-        return () => clearTimeout(timer);
       }
+      
+      // Se não há conversa salva, iniciar nova conversa
+      console.log('Iniciando nova conversa');
+      setIsInitialized(true);
+      
+      // Buscar aeroporto baseado no CEP
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      if (responsavelData.cep) {
+        findNearestAirportFromCEP(responsavelData.cep);
+      }
+      
+      // Inicializar estado
+      setMessages([]);
+      setCurrentStep('greeting');
+      setShowQuickOptions(false);
+      setIsTyping(false);
+      setShowPaymentStatus(false);
+      setPaymentTimer(0);
+      setSelectedTransport('');
+      setSelectedFlightOption('');
+      setHasBaggage(false);
+      setNearestAirport(null);
+      
+      ChatStorage.saveState({ isInitialized: true });
+      
+      const timer = setTimeout(() => {
+        setIsTyping(true);
+        ChatStorage.updateTyping(true);
+        
+        setTimeout(() => {
+          setIsTyping(false);
+          const welcomeMessage: Message = {
+            id: Date.now(),
+            text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+            sender: 'bot',
+            timestamp: new Date()
+          };
+          setMessages([welcomeMessage]);
+          setCurrentStep('greeting');
+          setShowQuickOptions(true);
+          ChatStorage.addMessage(welcomeMessage);
+          ChatStorage.updateStep('greeting');
+          ChatStorage.updateQuickOptions(true);
+        }, 3000);
+      }, 1000);
+
+      return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, isInitialized]);
 
   // Salvar estado a cada mudança importante
   useEffect(() => {
@@ -171,33 +178,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   }, [messages, currentStep, selectedTransport, selectedFlightOption, hasBaggage, showPaymentStatus, isTyping, showQuickOptions, isInitialized]);
 
-  useEffect(() => {
-    if (isOpen && !isInitialized) {
-      setIsInitialized(true);
-      setMessages([]);
-      setCurrentStep('greeting');
-      setShowQuickOptions(false);
-      setIsTyping(false);
-      setShowPaymentStatus(false);
-      setPaymentTimer(0);
-
-      // Buscar aeroporto mais próximo baseado no CEP
-      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-      if (responsavelData.cep) {
-        findNearestAirportFromCEP(responsavelData.cep);
-      }
-
-      // Mensagem inicial
-      const welcomeMessage: Message = {
-        id: Date.now(),
-        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages([welcomeMessage]);
-      setShowQuickOptions(true);
-    }
-  }, [isOpen, isInitialized]);
+  // REMOVIDO - Sistema antigo conflitante
 
   const findNearestAirportFromCEP = async (cep: string) => {
     try {
