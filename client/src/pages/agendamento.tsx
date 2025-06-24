@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'wouter';
 import ChatBot from '@/components/ChatBot';
 import sbtLogo from '@assets/sbt_logo.png';
@@ -7,69 +7,56 @@ export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
 
-  const [showGlobalChatBot, setShowGlobalChatBot] = useState(false);
+  const [chatBotOpen, setChatBotOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // Estados para dados do usuário
-  const [userCity, setUserCity] = useState<string>('');
-  const [userData, setUserData] = useState<any>(null);
-
-  // Carregar dados do usuário (usar EXATAMENTE a mesma fonte que cartao-preview)
-  useEffect(() => {
+  
+  // Recuperar dados da cidade do localStorage
+  const getUserCity = () => {
     try {
-      const responsavelData = localStorage.getItem('responsavelData');
       const cityData = localStorage.getItem('userCityData');
-      const storedSelectedDate = localStorage.getItem('selectedDate');
-      
-      console.log('Agendamento: Carregando dados para chat:', {
-        responsavel: !!responsavelData,
-        city: !!cityData,
-        selectedDate: storedSelectedDate,
-        pathname: window.location.pathname
-      });
-      
-      if (responsavelData) {
-        const parsedUserData = JSON.parse(responsavelData);
-        setUserData(parsedUserData);
-        console.log('Agendamento: Dados do usuário carregados:', parsedUserData.nome);
-      }
-      
       if (cityData) {
         const parsed = JSON.parse(cityData);
-        const cityString = `${parsed.cidade} - ${parsed.uf}`;
-        setUserCity(cityString);
-        console.log('Agendamento: Cidade carregada:', cityString);
-      }
-      
-      if (storedSelectedDate) {
-        setDataSelecionada(storedSelectedDate);
-        console.log('Agendamento: Data selecionada carregada:', storedSelectedDate);
+        return `${parsed.cidade} - ${parsed.uf}`;
       }
     } catch (error) {
-      console.error('Erro ao carregar dados do usuário:', error);
+      console.error('Erro ao recuperar dados da cidade:', error);
     }
-  }, []);
+    return 'São Paulo - SP'; // fallback
+  };
+
+  // Recuperar dados completos do usuário
+  const getUserData = () => {
+    try {
+      const cityData = localStorage.getItem('userCityData');
+      if (cityData) {
+        return JSON.parse(cityData);
+      }
+    } catch (error) {
+      console.error('Erro ao recuperar dados do usuário:', error);
+    }
+    return null;
+  };
 
   // Gerar datas disponíveis apenas aos sábados começando 1 mês no futuro
   const gerarDatasDisponiveis = () => {
     const datas = [];
     const hoje = new Date();
-
+    
     // Começar exatamente 1 mês (30 dias) a partir de hoje
     const dataInicio = new Date(hoje);
     dataInicio.setDate(hoje.getDate() + 30);
-
+    
     // Encontrar o primeiro sábado a partir da data de início
     let proximoSabado = new Date(dataInicio);
     while (proximoSabado.getDay() !== 6) { // 6 = sábado
       proximoSabado.setDate(proximoSabado.getDate() + 1);
     }
-
+    
     // Gerar 8 sábados consecutivos
     for (let i = 0; i < 8; i++) {
       const sabado = new Date(proximoSabado);
       sabado.setDate(proximoSabado.getDate() + (i * 7)); // Adicionar 7 dias para cada sábado
-
+      
       datas.push({
         valor: sabado.toISOString().split('T')[0],
         texto: sabado.toLocaleDateString('pt-BR', {
@@ -80,7 +67,7 @@ export default function Agendamento() {
         })
       });
     }
-
+    
     return datas;
   };
 
@@ -90,17 +77,17 @@ export default function Agendamento() {
     const hoje = new Date();
     const umMesAFrente = new Date(hoje);
     umMesAFrente.setMonth(hoje.getMonth() + 1);
-
+    
     const diasDoMes = [5, 12, 19, 26];
-
+    
     diasDoMes.forEach(dia => {
       const data = new Date(umMesAFrente.getFullYear(), umMesAFrente.getMonth(), dia);
-
+      
       // Verificar se é um dia útil, se não for, ajustar para o próximo dia útil
       while (data.getDay() === 0 || data.getDay() === 6) {
         data.setDate(data.getDate() + 1);
       }
-
+      
       datas.push({
         valor: data.toISOString().split('T')[0],
         texto: data.toLocaleDateString('pt-BR', { 
@@ -111,7 +98,7 @@ export default function Agendamento() {
         })
       });
     });
-
+    
     return datas;
   };
 
@@ -132,31 +119,28 @@ export default function Agendamento() {
     }
 
     setLoading(true);
-
+    
     // Salvar dados do agendamento
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
-
-    // Reset chat bot state para começar conversa do zero APENAS se não há conversa ativa
-    const existingMessages = localStorage.getItem('chatbotMessages');
-    if (!existingMessages || JSON.parse(existingMessages).length === 0) {
-      localStorage.removeItem('chatbotMessages');
-      localStorage.removeItem('chatbotCurrentStep');
-      localStorage.removeItem('chatbotSelectedTransport');
-      localStorage.removeItem('chatbotSelectedFlightOption');
-      localStorage.removeItem('chatbotHasBaggage');
-      localStorage.removeItem('chatbotShowQuickOptions');
-      localStorage.removeItem('chatbotShowPaymentStatus');
-      localStorage.removeItem('chatbotPaymentTimer');
-    }
-
+    
+    // Reset chat bot state para começar conversa do zero
+    localStorage.removeItem('chatbotMessages');
+    localStorage.removeItem('chatbotCurrentStep');
+    localStorage.removeItem('chatbotSelectedTransport');
+    localStorage.removeItem('chatbotSelectedFlightOption');
+    localStorage.removeItem('chatbotHasBaggage');
+    localStorage.removeItem('chatbotShowQuickOptions');
+    localStorage.removeItem('chatbotShowPaymentStatus');
+    localStorage.removeItem('chatbotPaymentTimer');
+    
     // Marcar que chatbot deve aparecer automaticamente
     localStorage.setItem('showChatBotGlobal', 'true');
-
+    
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
       setLoading(false);
-      setShowGlobalChatBot(true);
+      setChatBotOpen(true);
       // Marcar que chatbot foi aberto pela primeira vez
       localStorage.setItem('chatBotOpened', 'true');
     }, 1000);
@@ -200,7 +184,7 @@ export default function Agendamento() {
           {/* Formulário de Agendamento */}
           <div className="bg-white p-6 border border-gray-200 rounded-lg">
             <h2 className="font-semibold text-gray-800 text-lg mb-6">Escolha sua Data e Horário</h2>
-
+            
             <div className="space-y-6">
               {/* Seleção de Data */}
               <div>
@@ -292,16 +276,14 @@ export default function Agendamento() {
         </div>
       </div>
 
-      {/* ChatBot Global - Único ChatBot */}
-      {showGlobalChatBot && (
-        <ChatBot
-          isOpen={showGlobalChatBot}
-          onClose={() => setShowGlobalChatBot(false)}
-          userCity={userCity}
-          userData={userData}
-          selectedDate={dataSelecionada}
-        />
-      )}
+      {/* Chat Bot */}
+      <ChatBot 
+        isOpen={chatBotOpen} 
+        onClose={() => setChatBotOpen(false)}
+        userCity={getUserCity()}
+        userData={getUserData()}
+        selectedDate={dataSelecionada}
+      />
     </main>
   );
 }

@@ -19,10 +19,9 @@ interface ChatBotProps {
   userCity?: string;
   userData?: any;
   selectedDate?: string;
-  initialMinimized?: boolean;
 }
 
-export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate, initialMinimized = false }: ChatBotProps) {
+export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentStep, setCurrentStep] = useState<string>('greeting');
   const [showQuickOptions, setShowQuickOptions] = useState(false);
@@ -35,18 +34,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [selectedFlightOption, setSelectedFlightOption] = useState<string>('');
   const [hasBaggage, setHasBaggage] = useState<boolean>(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
-  const [isMinimized, setIsMinimized] = useState(initialMinimized);
-
-  // Debug: verificar props recebidas
-  useEffect(() => {
-    console.log('ChatBot: Props recebidas:', {
-      userCity,
-      userName: userData?.nome,
-      selectedDate,
-      isOpen,
-      pathname: window.location.pathname
-    });
-  }, [userCity, userData, selectedDate, isOpen]);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,20 +44,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     scrollToBottom();
   }, [messages, isTyping]);
 
-  // Auto scroll para última mensagem quando o chat é aberto
+  // Carregar histórico do localStorage
   useEffect(() => {
-    if (isOpen && !isMinimized && messages.length > 0) {
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-    }
-  }, [isOpen, isMinimized, messages.length]);
-
-  // Carregar histórico do localStorage - EXECUTAR APENAS UMA VEZ
-  useEffect(() => {
-    if (isInitialized) return; // Evita recarregar se já foi inicializado
-    
-    console.log('ChatBot: Carregando estado do localStorage...');
     const savedMessages = localStorage.getItem('chatbotMessages');
     const savedCurrentStep = localStorage.getItem('chatbotCurrentStep');
     const savedSelectedTransport = localStorage.getItem('chatbotSelectedTransport');
@@ -80,31 +56,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const savedPaymentTimer = localStorage.getItem('chatbotPaymentTimer');
     const savedMinimized = localStorage.getItem('chatBotMinimized');
 
-    console.log('ChatBot: Dados salvos encontrados:', {
-      messages: !!savedMessages,
-      currentStep: savedCurrentStep,
-      minimized: savedMinimized,
-      pathname: window.location.pathname
-    });
-
     if (savedMessages) {
-      try {
-        const parsedMessages = JSON.parse(savedMessages);
-        // Converter timestamps de string para Date
-        const messagesWithDates = parsedMessages.map((msg: any) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp)
-        }));
-        setMessages(messagesWithDates);
-        console.log('ChatBot: Mensagens carregadas:', messagesWithDates.length);
-      } catch (error) {
-        console.error('Erro ao carregar mensagens:', error);
-        setMessages([]);
-      }
+      const parsedMessages = JSON.parse(savedMessages);
+      // Converter timestamps de string para Date
+      const messagesWithDates = parsedMessages.map((msg: any) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp)
+      }));
+      setMessages(messagesWithDates);
     }
     if (savedCurrentStep) {
       setCurrentStep(savedCurrentStep);
-      console.log('ChatBot: Passo atual carregado:', savedCurrentStep);
     }
     if (savedSelectedTransport) {
       setSelectedTransport(savedSelectedTransport);
@@ -112,40 +74,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (savedSelectedFlightOption) {
       setSelectedFlightOption(savedSelectedFlightOption);
     }
-    if (savedHasBaggage !== null) {
-      try {
-        setHasBaggage(JSON.parse(savedHasBaggage));
-      } catch (error) {
-        setHasBaggage(false);
-      }
+    if (savedHasBaggage) {
+      setHasBaggage(JSON.parse(savedHasBaggage));
     }
-    if (savedShowQuickOptions !== null) {
-      try {
-        setShowQuickOptions(JSON.parse(savedShowQuickOptions));
-      } catch (error) {
-        setShowQuickOptions(false);
-      }
+    if (savedShowQuickOptions) {
+      setShowQuickOptions(JSON.parse(savedShowQuickOptions));
     }
-    if (savedShowPaymentStatus !== null) {
-      try {
-        setShowPaymentStatus(JSON.parse(savedShowPaymentStatus));
-      } catch (error) {
-        setShowPaymentStatus(false);
-      }
+    if (savedShowPaymentStatus) {
+      setShowPaymentStatus(JSON.parse(savedShowPaymentStatus));
     }
     if (savedPaymentTimer) {
-      const timer = parseInt(savedPaymentTimer);
-      if (!isNaN(timer)) {
-        setPaymentTimer(timer);
-      }
+      setPaymentTimer(parseInt(savedPaymentTimer));
     }
     if (savedMinimized === 'true') {
       setIsMinimized(true);
-      console.log('ChatBot: Iniciando minimizado');
+      localStorage.removeItem('chatBotMinimized'); // Limpar flag
     }
-    
-    setIsInitialized(true);
-  }, []); // Remove dependências para executar apenas uma vez
+  }, []);
 
   // Salvar estado no localStorage sempre que houver mudanças
   useEffect(() => {
@@ -180,25 +125,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     localStorage.setItem('chatbotPaymentTimer', paymentTimer.toString());
   }, [paymentTimer]);
 
-  // Verificar se deve permanecer minimizado na página de cartões
-  useEffect(() => {
-    if (window.location.pathname.includes('cartao-preview')) {
-      const shouldStayMinimized = localStorage.getItem('chatBotMinimized');
-      if (shouldStayMinimized === 'true') {
-        setIsMinimized(true);
-      }
-    }
-  }, []);
-
-  // Scroll para última mensagem quando minimizado é reaberto
-  useEffect(() => {
-    if (!isMinimized && messages.length > 0) {
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-    }
-  }, [isMinimized]);
-
   // Timer effect for payment countdown
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -219,72 +145,32 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   }, [showPaymentStatus, paymentTimer]);
 
   useEffect(() => {
-    if (isOpen && isInitialized) {
-      console.log('ChatBot: Chat aberto e inicializado. Verificando estado...', {
-        messagesCount: messages.length,
-        currentStep,
-        showQuickOptions
-      });
+    if (isOpen && !isInitialized) {
+      setIsInitialized(true);
+      setMessages([]);
+      setCurrentStep('greeting');
+      setShowQuickOptions(false);
+      setIsTyping(false);
+      setShowPaymentStatus(false);
+      setPaymentTimer(0);
 
-      // Aguardar um pouco para garantir que o estado foi carregado
-      setTimeout(() => {
-        if (messages.length > 0) {
-          console.log('ChatBot: Continuando conversa existente com', messages.length, 'mensagens');
-          
-          // Verificar se deveria mostrar opções baseado no passo atual
-          const options = getQuickOptions();
-          if (options.length > 0) {
-            setShowQuickOptions(true);
-            console.log('ChatBot: Opções restauradas para o passo:', currentStep);
-          }
-          
-          // Scroll para última mensagem após um pequeno delay
-          setTimeout(() => {
-            scrollToBottom();
-          }, 200);
-        } else if (currentStep === 'greeting') {
-          // Só inicializar conversa nova se não há mensagens salvas E está no passo inicial
-          console.log('ChatBot: Iniciando nova conversa');
-          // Buscar aeroporto mais próximo baseado no CEP
-          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-          if (responsavelData.cep) {
-            findNearestAirportFromCEP(responsavelData.cep);
-          }
+      // Buscar aeroporto mais próximo baseado no CEP
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      if (responsavelData.cep) {
+        findNearestAirportFromCEP(responsavelData.cep);
+      }
 
-          // Mensagem inicial
-          const welcomeMessage: Message = {
-            id: Date.now(),
-            text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-            sender: 'bot',
-            timestamp: new Date()
-          };
-          setMessages([welcomeMessage]);
-          setShowQuickOptions(true);
-          setCurrentStep('greeting');
-        }
-      }, 100);
-    }
-  }, [isOpen, isInitialized, currentStep]); // Adiciona currentStep como dependência
-
-  const continueConversationFlow = () => {
-    // Esta função verifica se a conversa precisa continuar automaticamente
-    // baseada no estado atual (currentStep) e se há opções pendentes
-    
-    // Se não está mostrando opções mas deveria estar baseado no passo atual
-    if (!showQuickOptions && getQuickOptions().length > 0) {
+      // Mensagem inicial
+      const welcomeMessage: Message = {
+        id: Date.now(),
+        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
       setShowQuickOptions(true);
     }
-    
-    // Se estava aguardando pagamento, reativar o timer se necessário
-    if (showPaymentStatus && paymentTimer > 0) {
-      // Timer já está rodando via useEffect
-    }
-    
-    // Scroll para a última mensagem
-    setTimeout(() => {
-      scrollToBottom();
-    }, 100);
-  };
+  }, [isOpen, isInitialized]);
 
   const findNearestAirportFromCEP = async (cep: string) => {
     try {
@@ -1470,18 +1356,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setIsMinimized(true); // Minimizar o chat
       // Marcar que deve permanecer minimizado na próxima página
       localStorage.setItem('chatBotMinimized', 'true');
-      // Marcar que deve continuar a conversa de onde parou
-      localStorage.setItem('chatbotShouldContinue', 'true');
-      // Salvar estado atual completo antes de navegar
-      localStorage.setItem('chatbotMessages', JSON.stringify(messages));
-      localStorage.setItem('chatbotCurrentStep', currentStep);
-      localStorage.setItem('chatbotSelectedTransport', selectedTransport);
-      localStorage.setItem('chatbotSelectedFlightOption', selectedFlightOption);
-      localStorage.setItem('chatbotHasBaggage', hasBaggage.toString());
-      localStorage.setItem('chatbotShowQuickOptions', showQuickOptions.toString());
-      localStorage.setItem('chatbotShowPaymentStatus', showPaymentStatus.toString());
-      localStorage.setItem('chatbotPaymentTimer', paymentTimer.toString());
-      
       setTimeout(() => {
         window.location.href = '/cartao-preview'; // Redirecionar na mesma janela
       }, 300);
@@ -1490,7 +1364,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     return () => {
       delete (window as any).handleCartaoPreviewClick;
     };
-  }, [messages, currentStep, selectedTransport, selectedFlightOption, hasBaggage, showQuickOptions, showPaymentStatus, paymentTimer]);
+  }, []);
 
   if (!isOpen) return null;
 
