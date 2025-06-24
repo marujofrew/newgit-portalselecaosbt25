@@ -485,7 +485,7 @@ export default function CartaoPreview() {
         </div>
       )}
 
-      {/* ChatBot */}
+      {/* ChatBot - Continua de onde parou */}
       {showChatBot && (
         <ChatBot
           isOpen={showChatBot}
