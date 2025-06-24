@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import ChatBot from '../components/ChatBot';
 
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
 import sbtLogo from '@assets/sbt_logo.png';
@@ -26,6 +27,7 @@ export default function CartaoPreview() {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showChatBot, setShowChatBot] = useState(false);
 
   const [userCity, setUserCity] = useState<string>('');
   const [userData, setUserData] = useState<any>(null);

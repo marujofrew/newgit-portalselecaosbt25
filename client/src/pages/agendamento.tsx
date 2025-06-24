@@ -134,9 +134,8 @@ export default function Agendamento() {
     localStorage.removeItem('chatbotShowPaymentStatus');
     localStorage.removeItem('chatbotPaymentTimer');
     
-    // Marcar que agendamento foi confirmado
+    // Marcar que agendamento foi confirmado - chatbot só funciona a partir daqui
     localStorage.setItem('agendamentoConfirmado', 'true');
-    localStorage.setItem('showChatBotGlobal', 'true');
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {

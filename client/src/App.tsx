@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import ChatBot from "@/components/ChatBot";
 import Home from "@/pages/home";
 import Loading from "@/pages/loading";
 import Cadastro from "@/pages/cadastro";
@@ -30,47 +28,11 @@ function Router() {
 }
 
 function App() {
-  const [showGlobalChatBot, setShowGlobalChatBot] = useState(false);
-  const [userCity, setUserCity] = useState('');
-  const [userData, setUserData] = useState(null);
-  const [selectedDate, setSelectedDate] = useState('');
-
-  useEffect(() => {
-    // Verificar se chatbot deve aparecer globalmente APENAS após agendamento
-    const shouldShowChatBot = localStorage.getItem('showChatBotGlobal');
-    const chatBotOpened = localStorage.getItem('chatBotOpened');
-    const agendamentoConfirmado = localStorage.getItem('agendamentoConfirmado');
-    
-    if (shouldShowChatBot === 'true' && chatBotOpened === 'true' && agendamentoConfirmado === 'true') {
-      setShowGlobalChatBot(true);
-      
-      // Carregar dados do usuário
-      const storedUserCity = localStorage.getItem('userCity');
-      const storedUserData = localStorage.getItem('responsavelData');
-      const storedSelectedDate = localStorage.getItem('selectedDate');
-      
-      if (storedUserCity) setUserCity(storedUserCity);
-      if (storedUserData) setUserData(JSON.parse(storedUserData));
-      if (storedSelectedDate) setSelectedDate(storedSelectedDate);
-    }
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Router />
-        
-        {/* ChatBot Global - aparece em todas as páginas após agendamento */}
-        {showGlobalChatBot && (
-          <ChatBot
-            isOpen={showGlobalChatBot}
-            onClose={() => {}} // Não pode ser fechado
-            userCity={userCity}
-            userData={userData}
-            selectedDate={selectedDate}
-          />
-        )}
       </TooltipProvider>
     </QueryClientProvider>
   );
