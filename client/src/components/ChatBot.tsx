@@ -340,7 +340,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setTimeout(() => {
               setIsTyping(false);
               const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-              const cidadeInfo = responsavelData.cidade || userCity || 'sua cidade';
+              const userCityData = JSON.parse(localStorage.getItem('userCityData') || '{}');
+              const cidadeInfo = responsavelData.cidade || userCityData.cidade || userCity || 'sua cidade';
               addMessage(`Identifiquei que você está em ${cidadeInfo}. Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
 
               setTimeout(() => {
