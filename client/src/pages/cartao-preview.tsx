@@ -184,7 +184,7 @@ export default function CartaoPreview() {
           </div>
         </div>
 
-        {/* Boarding Pass Cards */}
+        {/* Boarding Pass Cards - Layout Original */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white mb-6">Seus Cartões de Embarque</h2>
           
@@ -192,63 +192,132 @@ export default function CartaoPreview() {
             {passengers.map((passenger, index) => (
               <div key={index} className="relative">
                 <div 
-                  className="bg-white rounded-2xl shadow-2xl overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl"
+                  className="cursor-pointer transform transition-all duration-300 hover:scale-105"
                   onClick={() => setSelectedCard(index)}
                 >
-                  {/* Boarding Pass Header */}
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
-                    <div className="flex items-center justify-between">
-                      <img src={azulLogo} alt="Azul" className="h-8" />
-                      <div className="text-white text-right">
-                        <p className="text-sm font-medium">Voo AD{1200 + index}</p>
-                        <p className="text-xs opacity-90">{flightData?.flightDate.toLocaleDateString('pt-BR')}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Passenger Info */}
-                  <div className="p-6">
-                    <div className="flex justify-between items-start mb-6">
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Passageiro</p>
-                        <p className="text-xl font-bold text-gray-900 mt-1">{passenger.name}</p>
-                        <p className="text-sm text-blue-600 font-medium">{passenger.type}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Assento</p>
-                        <p className="text-2xl font-bold text-gray-900">{index + 1}D</p>
-                      </div>
-                    </div>
-
-                    {/* Flight Details */}
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Origem</p>
-                        <p className="text-lg font-bold text-gray-900">{flightData?.originCode}</p>
-                        <p className="text-sm text-gray-600">{flightData?.originCity}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Destino</p>
-                        <p className="text-lg font-bold text-gray-900">{flightData?.destinationCode}</p>
-                        <p className="text-sm text-gray-600">{flightData?.destinationCity}</p>
-                      </div>
-                    </div>
-
-                    {/* Boarding Info */}
-                    <div className="flex justify-between items-center pt-4 border-t border-gray-200">
-                      <div className="flex items-center space-x-4">
+                  {/* Cartão de embarque - Modelo Oficial Azul Original */}
+                  <div style={{
+                    width: '300px', 
+                    height: '520px', 
+                    background: '#001f3f', 
+                    borderRadius: '12px', 
+                    padding: '20px', 
+                    color: 'white', 
+                    fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif", 
+                    position: 'relative', 
+                    margin: '0 auto', 
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.4)'
+                  }}>
+                    
+                    {/* Header - Layout oficial */}
+                    <div style={{
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'space-between', 
+                      marginBottom: '18px'
+                    }}>
+                      <img src={azulLogo} alt="Azul" style={{ height: '24px', width: 'auto' }} />
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', textAlign: 'center' }}>
                         <div>
-                          <p className="text-xs text-gray-500">Embarque</p>
-                          <p className="text-sm font-semibold">{flightData?.boardingTime}</p>
+                          <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>DATA</div>
+                          <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{flightData?.flightDate.toLocaleDateString('pt-BR')}</div>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500">Voo</p>
-                          <p className="text-sm font-semibold">{flightData?.flightTime}</p>
+                          <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginBottom: '2px' }}>VOO</div>
+                          <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>AD{1200 + index}</div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <QrCode size={20} className="text-gray-400" />
-                        <span className="text-xs font-mono text-gray-500">{generateQRPattern()}</span>
+                    </div>
+                    
+                    {/* Aeroportos */}
+                    <div style={{ marginBottom: '25px' }}>
+                      {/* Nomes das cidades em uma linha */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                        <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>{flightData?.originCity}</div>
+                        <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>SAO PAULO - GUARULHOS</div>
+                      </div>
+                      
+                      {/* Códigos dos aeroportos alinhados */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>{flightData?.originCode}</div>
+                        
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 15px' }}>
+                          <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>
+                        </div>
+                        
+                        <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>GRU</div>
+                      </div>
+                    </div>
+                    
+                    {/* Linha de informações de embarque */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                        <div style={{ textAlign: 'left' }}>
+                          <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>INÍCIO EMBARQUE</div>
+                          <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>{flightData?.boardingTime}</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>FIM EMBARQUE</div>
+                          <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>{flightData?.flightTime}</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>SEÇÃO</div>
+                          <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>D</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>ASSENTO</div>
+                          <div style={{ fontSize: '12px', fontWeight: '600', color: 'white' }}>{index + 1}D</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Cliente e Status */}
+                    <div style={{ marginBottom: '40px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                        <div>
+                          <div style={{ fontSize: '8px', color: '#94a3b8', fontWeight: '500', marginBottom: '1px' }}>CLIENTE</div>
+                          <div style={{ fontSize: '11px', fontWeight: '600', color: 'white' }}>{passenger.name}</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '11px', fontWeight: '600', color: '#60a5fa' }}>Diamante</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* QR Code centralizado na parte inferior */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '25px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{
+                        width: '120px',
+                        height: '120px',
+                        backgroundColor: 'white',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '8px'
+                      }}>
+                        <div style={{
+                          fontSize: '24px',
+                          color: '#000',
+                          fontFamily: 'monospace',
+                          lineHeight: '1.2'
+                        }}>
+                          {generateQRPattern()}
+                        </div>
+                      </div>
+                      <div style={{ 
+                        fontSize: '12px', 
+                        fontWeight: '600', 
+                        color: 'white',
+                        letterSpacing: '1px'
+                      }}>
+                        {flightData?.originCode}{Math.floor(Math.random() * 1000).toString().padStart(3, '0')}
                       </div>
                     </div>
                   </div>
