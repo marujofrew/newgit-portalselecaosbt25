@@ -125,15 +125,18 @@ export default function Agendamento() {
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
 
-    // Reset chat bot state para começar conversa do zero
-    localStorage.removeItem('chatbotMessages');
-    localStorage.removeItem('chatbotCurrentStep');
-    localStorage.removeItem('chatbotSelectedTransport');
-    localStorage.removeItem('chatbotSelectedFlightOption');
-    localStorage.removeItem('chatbotHasBaggage');
-    localStorage.removeItem('chatbotShowQuickOptions');
-    localStorage.removeItem('chatbotShowPaymentStatus');
-    localStorage.removeItem('chatbotPaymentTimer');
+    // Reset chat bot state para começar conversa do zero APENAS se não há conversa ativa
+    const existingMessages = localStorage.getItem('chatbotMessages');
+    if (!existingMessages || JSON.parse(existingMessages).length === 0) {
+      localStorage.removeItem('chatbotMessages');
+      localStorage.removeItem('chatbotCurrentStep');
+      localStorage.removeItem('chatbotSelectedTransport');
+      localStorage.removeItem('chatbotSelectedFlightOption');
+      localStorage.removeItem('chatbotHasBaggage');
+      localStorage.removeItem('chatbotShowQuickOptions');
+      localStorage.removeItem('chatbotShowPaymentStatus');
+      localStorage.removeItem('chatbotPaymentTimer');
+    }
 
     // Marcar que chatbot deve aparecer automaticamente
     localStorage.setItem('showChatBotGlobal', 'true');

@@ -187,36 +187,36 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
       
-      // Verificar se há mensagens salvas no localStorage
-      const savedMessages = localStorage.getItem('chatbotMessages');
-      
-      if (savedMessages && JSON.parse(savedMessages).length > 0) {
-        console.log('ChatBot: Continuando conversa existente');
-        // Scroll para última mensagem após um pequeno delay
-        setTimeout(() => {
-          scrollToBottom();
-        }, 500);
-      } else {
-        // Só inicializar conversa nova se não há mensagens salvas
-        console.log('ChatBot: Iniciando nova conversa');
-        // Buscar aeroporto mais próximo baseado no CEP
-        const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-        if (responsavelData.cep) {
-          findNearestAirportFromCEP(responsavelData.cep);
-        }
+      // Aguardar um pouco para garantir que o estado foi carregado
+      setTimeout(() => {
+        if (messages.length > 0) {
+          console.log('ChatBot: Continuando conversa existente com', messages.length, 'mensagens');
+          // Scroll para última mensagem após um pequeno delay
+          setTimeout(() => {
+            scrollToBottom();
+          }, 200);
+        } else {
+          // Só inicializar conversa nova se não há mensagens salvas
+          console.log('ChatBot: Iniciando nova conversa');
+          // Buscar aeroporto mais próximo baseado no CEP
+          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+          if (responsavelData.cep) {
+            findNearestAirportFromCEP(responsavelData.cep);
+          }
 
-        // Mensagem inicial
-        const welcomeMessage: Message = {
-          id: Date.now(),
-          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        setMessages([welcomeMessage]);
-        setShowQuickOptions(true);
-      }
+          // Mensagem inicial
+          const welcomeMessage: Message = {
+            id: Date.now(),
+            text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+            sender: 'bot',
+            timestamp: new Date()
+          };
+          setMessages([welcomeMessage]);
+          setShowQuickOptions(true);
+        }
+      }, 100);
     }
-  }, [isOpen, isInitialized]);
+  }, [isOpen, isInitialized, messages.length]);
 
   const continueConversationFlow = () => {
     // Esta função verifica se a conversa precisa continuar automaticamente

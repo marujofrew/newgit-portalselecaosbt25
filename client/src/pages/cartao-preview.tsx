@@ -34,6 +34,14 @@ export default function CartaoPreview() {
   useEffect(() => {
     loadBoardingPassData();
 
+    // Verificar se deve mostrar chatbot imediatamente
+    const shouldShowChatBot = localStorage.getItem('showChatBotGlobal') === 'true';
+    const chatBotOpened = localStorage.getItem('chatBotOpened') === 'true';
+    
+    if (shouldShowChatBot && chatBotOpened) {
+      setShowChatBot(true);
+    }
+
     // Scroll automático para o botão de download após 4 segundos
     const scrollTimer = setTimeout(() => {
       const downloadButton = document.querySelector('#download-button-below');
@@ -45,9 +53,9 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 15 segundos de inatividade
+    // Timer para abrir chatbot após 15 segundos de inatividade (apenas se não estiver aberto)
     const chatBotTimer = setTimeout(() => {
-      if (!showChatBot) {
+      if (!showChatBot && !shouldShowChatBot) {
         setShowChatBot(true);
         // Remover flag de minimizado para que o chat abra normalmente
         localStorage.removeItem('chatBotMinimized');
@@ -76,7 +84,9 @@ export default function CartaoPreview() {
         setUserCity(`${parsed.cidade} - ${parsed.uf}`);
       }
       
-      setSelectedDate(storedSelectedDate || '');
+      if (storedSelectedDate) {
+        setSelectedDate(storedSelectedDate);
+      }
 
       // Criar lista de passageiros
       const passengersList: Passenger[] = [];
