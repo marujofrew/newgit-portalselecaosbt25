@@ -51,6 +51,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [selectedFlightOption, setSelectedFlightOption] = useState<string>('');
   const [hasBaggage, setHasBaggage] = useState<boolean>(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
+  const [showBoardingPassModal, setShowBoardingPassModal] = useState(false);
+  const [boardingPassData, setBoardingPassData] = useState<{passengers: Passenger[], flightData: FlightData} | null>(null);
 
   // Função para gerar padrão visual de QR Code
   const generateQRVisualPattern = (): string => {
@@ -1591,49 +1593,34 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const handleBoardingPassClick = () => {
         console.log('Clique no cartão de embarque detectado');
         
-        // Modal básico primeiro - teste simples
-        const modalHTML = `
-          <div id="boarding-pass-modal-test" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-lg max-w-md w-full p-6">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold">Cartões de Embarque</h3>
-                <button id="close-modal-test" class="text-gray-500 hover:text-gray-700">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                  </svg>
-                </button>
-              </div>
-              <div class="text-center">
-                <p class="text-gray-600">Modal aberto com sucesso!</p>
-                <p class="text-sm text-gray-500 mt-2">Esta é uma versão de teste do modal.</p>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        // Remover modal existente se houver
-        const existingModal = document.getElementById('boarding-pass-modal-test');
-        if (existingModal) {
-          existingModal.remove();
+        try {
+          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+          const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+          
+          const fullPassengers = [
+            { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
+          ];
+          
+          candidatos.forEach((candidato: any, index: number) => {
+            fullPassengers.push({
+              name: candidato.nome || `CANDIDATO ${index + 1}`,
+              type: `Candidato ${index + 1}`,
+              isMain: false
+            });
+          });
+
+          const flightData = calculateFlightData(selectedDate, userCity);
+          
+          // Usar state do React para controlar modal
+          setBoardingPassData({ passengers: fullPassengers, flightData });
+          setShowBoardingPassModal(true);
+          
+        } catch (error) {
+          console.error('Erro ao preparar dados do modal:', error);
+          // Fallback: modal básico de teste
+          setShowBoardingPassModal(true);
+          setBoardingPassData(null);
         }
-        
-        // Adicionar modal ao DOM
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        // Adicionar eventos
-        const modal = document.getElementById('boarding-pass-modal-test');
-        const closeBtn = document.getElementById('close-modal-test');
-        
-        if (closeBtn) {
-          closeBtn.onclick = () => modal?.remove();
-        }
-        
-        // Fechar modal clicando fora
-        modal?.addEventListener('click', (e) => {
-          if (e.target === modal) {
-            modal.remove();
-          }
-        });
       };
       
       return (
@@ -1680,6 +1667,132 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   if (!isOpen) return null;
+
+  // Modal de cartões de embarque
+  const BoardingPassModal = () => {
+    if (!showBoardingPassModal) return null;
+
+    const handleCloseModal = () => {
+      setShowBoardingPassModal(false);
+      setBoardingPassData(null);
+    };
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+            <h3 className="text-lg font-semibold">
+              {boardingPassData ? `Cartões de Embarque - ${boardingPassData.passengers.length} ${boardingPassData.passengers.length === 1 ? 'Passageiro' : 'Passageiros'}` : 'Cartões de Embarque'}
+            </h3>
+            <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+          
+          <div className="p-6">
+            {boardingPassData ? (
+              <>
+                {boardingPassData.passengers.map((passenger, index) => {
+                  const seatNumber = `${index + 1}D`;
+                  const passengerId = `SBT${String(Math.floor(Math.random() * 900000) + 100000)}`;
+                  const qrPattern = generateQRVisualPattern();
+                  
+                  return (
+                    <div key={index} className="boarding-pass bg-white border border-gray-300 rounded-lg shadow-lg p-6 mb-6 max-w-md mx-auto" style={{width: '400px', fontFamily: 'Arial, sans-serif'}}>
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-4">
+                        <img src="/azul-logo.png" alt="Azul" className="h-6" />
+                        <div className="text-right">
+                          <div className="text-xs font-semibold">{boardingPassData.flightData.flightDate ? new Date(boardingPassData.flightData.flightDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : new Date().toLocaleDateString('pt-BR')}</div>
+                          <div className="text-xs text-gray-600">VOO AD4455</div>
+                        </div>
+                      </div>
+
+                      {/* Passenger Info */}
+                      <div className="mb-4">
+                        <div className="text-xs text-gray-600 mb-1">PASSAGEIRO/PASSENGER</div>
+                        <div className="font-bold text-sm uppercase">{passenger.name}</div>
+                      </div>
+
+                      {/* Flight Route */}
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold">{boardingPassData.flightData.originCode}</div>
+                          <div className="text-xs uppercase">{boardingPassData.flightData.originCity}</div>
+                        </div>
+                        <div className="flex-1 mx-4">
+                          <div className="border-t border-dashed border-gray-400 relative">
+                            <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2">
+                              <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold">{boardingPassData.flightData.destinationCode}</div>
+                          <div className="text-xs uppercase">{boardingPassData.flightData.destinationCity}</div>
+                        </div>
+                      </div>
+
+                      {/* Flight Details */}
+                      <div className="grid grid-cols-4 gap-2 text-xs mb-4">
+                        <div>
+                          <div className="text-gray-600">PORTÃO/GATE</div>
+                          <div className="font-semibold">12</div>
+                        </div>
+                        <div>
+                          <div className="text-gray-600">ASSENTO/SEAT</div>
+                          <div className="font-semibold">{seatNumber}</div>
+                        </div>
+                        <div>
+                          <div className="text-gray-600">EMBARQUE/BOARDING</div>
+                          <div className="font-semibold">{boardingPassData.flightData.boardingTime}</div>
+                        </div>
+                        <div>
+                          <div className="text-gray-600">PARTIDA/DEPARTURE</div>
+                          <div className="font-semibold">{boardingPassData.flightData.flightTime}</div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Section */}
+                      <div className="flex justify-between items-end">
+                        <div className="text-xs">
+                          <div className="text-gray-600">LOCALIZADOR/RECORD LOCATOR</div>
+                          <div className="font-semibold">{passengerId}</div>
+                        </div>
+                        <div className="text-right text-xs leading-3" style={{fontFamily: 'monospace'}}>
+                          <pre className="text-xs">{qrPattern}</pre>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                <div className="text-center mt-6 space-y-3">
+                  <button 
+                    onClick={() => downloadBoardingPasses(boardingPassData.passengers, boardingPassData.flightData)}
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full"
+                  >
+                    Baixar Todos os Cartões
+                  </button>
+                  <p className="text-sm text-gray-600">Apresente estes cartões no aeroporto para embarque</p>
+                </div>
+              </>
+            ) : (
+              <div className="text-center">
+                <p className="text-gray-600">Modal de teste aberto com sucesso!</p>
+                <p className="text-sm text-gray-500 mt-2">O sistema de cartões está funcionando.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -1792,6 +1905,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
         </div>
       </div>
+      
+      {/* Modal de cartões de embarque */}
+      <BoardingPassModal />
     </div>
   );
 }
