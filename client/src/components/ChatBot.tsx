@@ -331,6 +331,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         // Salvar dados do pagamento para verificação posterior
         localStorage.setItem('baggagePaymentId', data.payment.id);
+        
+        // Iniciar verificação de pagamento com gateway
+        startPaymentVerification(data.payment.id, 'baggage');
         console.log('💳 PIX bagagem criado:', data.payment.id);
       } else {
         addMessage('Chave PIX copia e cola: [Erro ao gerar PIX]', 'bot');
@@ -375,6 +378,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         // Salvar dados do pagamento para verificação posterior
         localStorage.setItem('inscriptionPaymentId', data.payment.id);
+        
+        // Iniciar verificação de pagamento com gateway
+        startPaymentVerification(data.payment.id, 'inscription');
         console.log('💳 PIX inscrição criado:', data.payment.id);
       } else {
         addMessage(`QR Code + Chave PIX copia e cola: [Erro ao gerar PIX]\nValor: R$ ${valorTotal.toFixed(2).replace('.', ',')}`, 'bot');
@@ -1129,21 +1135,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   setIsTyping(false);
                   addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
 
-                  setShowPaymentStatus(true);
-                  setPaymentTimer(300); // 5 minutos
                   setCurrentStep('waiting-van-baggage-payment');
 
-                  // Simular confirmação de pagamento após 30 segundos
-                  setTimeout(() => {
-                    setShowPaymentStatus(false);
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Seu pagamento foi confirmado, vamos continuar?", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('van-baggage-payment-confirmed');
-                    }, 5000);
-                  }, 30000);
+                  // Sistema de verificação real implementado via startPaymentVerification
 
                   // Timeout após 2 minutos
                   setTimeout(() => {
