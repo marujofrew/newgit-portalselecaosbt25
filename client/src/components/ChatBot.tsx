@@ -62,9 +62,39 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     };
   }, [showPaymentStatus, paymentTimer]);
 
+  // Estado persistente - salvar e carregar do localStorage  
   useEffect(() => {
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
+      
+      // Carregar estado salvo
+      const savedState = localStorage.getItem('chatBotState');
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState);
+          setMessages(state.messages || []);
+          setCurrentStep(state.currentStep || 'greeting');
+          setShowQuickOptions(state.showQuickOptions || false);
+          setSelectedTransport(state.selectedTransport || '');
+          setSelectedFlightOption(state.selectedFlightOption || '');
+          setHasBaggage(state.hasBaggage || false);
+          setIsTyping(false);
+          setShowPaymentStatus(false);
+          setPaymentTimer(0);
+          
+          // Se já temos mensagens salvas, mostrar opções se necessário
+          if (state.messages && state.messages.length > 0) {
+            setTimeout(() => {
+              setShowQuickOptions(state.showQuickOptions || false);
+            }, 500);
+          }
+          return;
+        } catch (error) {
+          console.error('Erro ao carregar estado do chat:', error);
+        }
+      }
+
+      // Se não há estado salvo, iniciar do zero
       setMessages([]);
       setCurrentStep('greeting');
       setShowQuickOptions(false);
@@ -89,6 +119,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setShowQuickOptions(true);
     }
   }, [isOpen, isInitialized]);
+
+  // Salvar estado sempre que houver mudanças
+  useEffect(() => {
+    if (isInitialized && messages.length > 0) {
+      const state = {
+        messages,
+        currentStep,
+        showQuickOptions,
+        selectedTransport,
+        selectedFlightOption,
+        hasBaggage,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('chatBotState', JSON.stringify(state));
+    }
+  }, [messages, currentStep, showQuickOptions, selectedTransport, selectedFlightOption, hasBaggage, isInitialized]);
 
   const findNearestAirportFromCEP = async (cep: string) => {
     try {
