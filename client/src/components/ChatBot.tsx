@@ -593,7 +593,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!\n\n<a href=\"/cartao-preview\" target=\"_blank\" style=\"display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;\">🎫 Ver Cartões de Embarque</a>", 'bot');
+                const messageWithLink: Message = {
+                  id: Date.now(),
+                  text: `Faça o download dos seus cartões de embarque para facilitar o seu embarque!<br/><br/><a href="/cartao-preview" target="_blank" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
+                  sender: 'bot',
+                  timestamp: new Date()
+                };
+                setMessages(prev => [...prev, messageWithLink]);
                 
                 setTimeout(() => {
                   generateBoardingPasses();
@@ -1240,8 +1246,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const formatMessage = (text: string) => {
-    // Se o texto contém HTML (como imagens), renderizar como HTML
-    if (text.includes('<img') || text.includes('<')) {
+    // Se o texto contém HTML (como imagens ou links), renderizar como HTML
+    if (text.includes('<img') || text.includes('<a') || text.includes('<')) {
       return <div dangerouslySetInnerHTML={{ __html: text }} />;
     }
     
