@@ -1280,21 +1280,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     (window as any).handleCartaoPreviewClick = (event: Event) => {
       event.preventDefault();
       // Salvar estado completo antes de minimizar
-      const backupState = {
-        messages,
-        currentStep,
-        showQuickOptions,
-        isTyping,
-        showPaymentStatus,
-        paymentTimer,
-        selectedTransport,
-        selectedFlightOption,
-        hasBaggage,
-        nearestAirport,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('chatBotBackup', JSON.stringify(backupState));
-      console.log('Estado salvo antes de navegar:', backupState);
+      saveBackupState();
       
       if (onMinimize) {
         onMinimize();
@@ -1382,6 +1368,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
           <button 
             onClick={() => {
+              saveBackupState();
               if (onMinimize) {
                 onMinimize();
               } else {
