@@ -176,3 +176,5 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Download integrado ao fluxo**: Botão de download marca continuidade e abre chat automaticamente
 - **Problema resolvido**: Chat agora mostra conversa da página de agendamento quando carrega página de cartões
 - **Chat minimizado por padrão**: Na página de cartões, chat inicia minimizado mas mantém toda a conversa anterior restaurada
+- **Sistema de minimização funcional**: Botões de minimizar e expandir funcionam corretamente com logs de debug
+- **Backup completo operacional**: Sistema de continuidade de conversa entre páginas totalmente funcional

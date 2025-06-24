@@ -1489,6 +1489,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           </div>
           <button 
             onClick={() => {
+              console.log('🔧 Clique em minimizar - salvando estado');
               saveCurrentState();
               if (onMinimize) {
                 onMinimize();
@@ -1497,6 +1498,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               }
             }} 
             className="text-white hover:text-gray-200 text-xl font-bold"
+            title="Minimizar"
           >
             −
           </button>
