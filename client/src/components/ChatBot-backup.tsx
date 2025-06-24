@@ -94,11 +94,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
-
+      
       if (data && !data.erro) {
         // Lógica simplificada para alguns aeroportos principais
         const cityState = `${data.localidade}-${data.uf}`.toLowerCase();
-
+        
         if (cityState.includes('goiânia') || cityState.includes('goiania')) {
           setNearestAirport({ code: 'GYN', city: 'GOIÂNIA', name: 'Aeroporto Santa Genoveva' });
         } else if (cityState.includes('brasília') || cityState.includes('brasilia')) {
@@ -134,49 +134,49 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     switch (currentStep) {
       case 'greeting':
         return ['Avião', 'Van'];
-
+      
       case 'flight-options':
         return ['Opção 1', 'Opção 2'];
-
+      
       case 'baggage-offer':
         return ['Sim, adicionar kit bagagem', 'Não quero bagagem'];
-
+      
       case 'baggage-payment':
         return ['OK, vou realizar o pagamento e volto rapidamente'];
-
+      
       case 'baggage-payment-confirmed':
         return ['Sim, vamos prosseguir!'];
-
+      
       case 'baggage-payment-timeout':
         return ['Quero cancelar a bagagem, vamos continuar!', 'Já fiz o pagamento, vamos continuar!'];
-
+      
       case 'boarding-passes':
         return ['Vamos continuar'];
-
+      
       case 'van-confirmation':
         return ['Sim, pode confirmar!'];
-
+      
       case 'van-baggage-offer':
         return ['Sim, adicionar kit bagagem', 'Não quero bagagem'];
-
+      
       case 'van-baggage-payment':
         return ['OK, vou realizar o pagamento e volto rapidamente'];
-
+      
       case 'van-baggage-payment-confirmed':
         return ['Sim, vamos prosseguir!'];
-
+      
       case 'van-baggage-payment-timeout':
         return ['Quero cancelar a bagagem, vamos continuar!', 'Já fiz o pagamento, vamos continuar!'];
-
+      
       case 'hotel-reservation':
         return ['Vamos finalizar'];
-
+      
       case 'inscription-info':
         return ['OK, eu entendi!'];
-
+      
       case 'inscription-payment':
         return ['OK vou realizar o pagamento e volto rapidamente!'];
-
+      
       default:
         return [];
     }
@@ -187,11 +187,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       // Recuperar dados do localStorage
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-
+      
       const passengers = [
         { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
       ];
-
+      
       candidatos.forEach((candidato: any, index: number) => {
         passengers.push({
           name: candidato.nome || `CANDIDATO ${index + 1}`,
@@ -216,11 +216,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       // Recuperar dados do localStorage
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
       const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-
+      
       const credentials = [
         { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
       ];
-
+      
       candidatos.forEach((candidato: any, index: number) => {
         credentials.push({
           name: candidato.nome || `CANDIDATO ${index + 1}`,
@@ -231,10 +231,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       // Mostrar credenciais como documento clicável
       addMessage("📄 **Credenciais SBT** - Clique para visualizar e fazer download", 'bot');
-
+      
       // Simular abertura de modal de credenciais (similar aos cartões de embarque)
       console.log('Gerando credenciais para:', credentials);
-
+      
     } catch (error) {
       console.error('Erro ao gerar credenciais:', error);
     }
@@ -244,7 +244,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (!messageToSend.trim()) return;
 
     addMessage(messageToSend, 'user');
-
+    
     let botResponse = "";
     let nextStep = currentStep;
     let showOptions = false;
@@ -256,7 +256,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Perfeito! Voo é mais rápido. Vou buscar os melhores voos saindo do aeroporto mais próximo de você para São Paulo.";
           nextStep = 'flight-search';
           showOptions = false;
-
+          
           // Sequência de mensagens com delay de 5 segundos
           setTimeout(() => {
             setIsTyping(true);
@@ -265,44 +265,44 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
               const cidadeInfo = responsavelData.cidade || userCity || 'sua cidade';
               addMessage(`Identifiquei que você está em ${cidadeInfo}. Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage('Encontrei duas opções de voos disponíveis:', 'bot');
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-
+                      
                       // Calcular datas baseadas no agendamento
                       let option1Date = '';
                       let option2Date = '';
-
+                      
                       if (selectedDate) {
                         const appointmentDate = new Date(selectedDate);
                         const option1DateObj = new Date(appointmentDate);
                         option1DateObj.setDate(appointmentDate.getDate() - 1);
                         option1Date = option1DateObj.toLocaleDateString('pt-BR');
-
+                        
                         const option2DateObj = new Date(appointmentDate);
                         option2DateObj.setDate(appointmentDate.getDate() - 2);
                         option2Date = option2DateObj.toLocaleDateString('pt-BR');
                       }
-
+                      
                       const airportCode = nearestAirport?.code || 'GYN';
                       const airportCity = nearestAirport?.city || 'GOIÂNIA';
-
+                      
                       addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: ${option1Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
-
+                      
                       setTimeout(() => {
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
                           addMessage(`🔸 Opção 2: ${airportCity} (${airportCode}) → São Paulo\nData: ${option2Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
-
+                          
                           setTimeout(() => {
                             setIsTyping(true);
                             setTimeout(() => {
@@ -325,18 +325,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Ok, vou verificar a rota de nossa Van, para encaixar sua localização!";
           nextStep = 'van-search';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Só mais 1 minuto...", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-
+                  
                   let vanDate = '';
                   if (selectedDate) {
                     const appointmentDate = new Date(selectedDate);
@@ -344,9 +344,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     vanDateObj.setDate(appointmentDate.getDate() - 3);
                     vanDate = vanDateObj.toLocaleDateString('pt-BR');
                   }
-
+                  
                   addMessage(`Certo, verifiquei que dia ${vanDate || 'XX/XX'} (3 dias antes do dia da data selecionada para agendamento de teste), a nossa van que busca os candidatos em todo o Brasil, vai estar próxima à localização.`, 'bot');
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
@@ -371,24 +371,24 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setSelectedFlightOption('2');
           localStorage.setItem('selectedFlightOption', '2');
         }
-
+        
         const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
         botResponse = `Senhor(a) ${responsavelData.nome || ''}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`;
         nextStep = 'flight-payment-info';
         showOptions = false;
-
+        
         setTimeout(() => {
           setIsTyping(true);
           setTimeout(() => {
             setIsTyping(false);
             addMessage('Antes de finalizar a compra de suas passagens, tenho que te dar um aviso importante.', 'bot');
-
+            
             setTimeout(() => {
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
                 addMessage('Na passagem não está incluso bagagem. Caso precise levar uma bagagem temos um programa em parceria com a AZUL, chamado "Bagagem do Bem" que por apenas R$ 29,90 você tem direito ao kit bagagem e todo o valor arrecadado é doado ao TELETON 2025.', 'bot');
-
+                
                 // Adicionar imagem promocional após a mensagem sobre bagagem
                 setTimeout(() => {
                   const imageMessage: Message = {
@@ -398,7 +398,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     timestamp: new Date()
                   };
                   setMessages(prev => [...prev, imageMessage]);
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
@@ -421,13 +421,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
           nextStep = 'baggage-payment-info';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Vou te enviar a chave PIX copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
@@ -444,22 +444,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
           nextStep = 'boarding-passes';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Pronto, suas passagens estão compradas, vou te enviar os seus cartões de embarque!", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
-
+                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!", 'bot');
+                  
                   setTimeout(() => {
                     generateBoardingPasses();
-
+                    
                     setTimeout(() => {
                       setIsTyping(true);
                       setTimeout(() => {
@@ -482,23 +482,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Tabom, vou te enviar a chave Pix para você efetuar o pagamento!";
           nextStep = 'baggage-pix';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Chave PIX copia e cola: bagagem@sbt.com.br", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
-
+                  
                   setShowPaymentStatus(true);
                   setPaymentTimer(300); // 5 minutos
                   setCurrentStep('waiting-baggage-payment');
-
+                  
                   // Simular confirmação de pagamento após 30 segundos
                   setTimeout(() => {
                     setShowPaymentStatus(false);
@@ -510,7 +510,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setCurrentStep('baggage-payment-confirmed');
                     }, 5000);
                   }, 30000);
-
+                  
                   // Timeout após 2 minutos
                   setTimeout(() => {
                     if (currentStep === 'waiting-baggage-payment') {
@@ -524,7 +524,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       }, 5000);
                     }
                   }, 120000);
-
+                  
                 }, 5000);
               }, 5000);
             }, 5000);
@@ -537,22 +537,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
           nextStep = 'boarding-passes';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Pronto, suas passagens estão compradas, vou te enviar os seus cartões de embarque!", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
-
+                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!", 'bot');
+                  
                   setTimeout(() => {
                     generateBoardingPasses();
-
+                    
                     setTimeout(() => {
                       setIsTyping(true);
                       setTimeout(() => {
@@ -578,37 +578,26 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setShowPaymentStatus(false);
           setHasBaggage(true);
         }
-
+        
         botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
         nextStep = 'boarding-passes';
         showOptions = false;
-
+        
         setTimeout(() => {
           setIsTyping(true);
           setTimeout(() => {
             setIsTyping(false);
             addMessage("Pronto, suas passagens estão compradas, vou te enviar os seus cartões de embarque!", 'bot');
-
+            
             setTimeout(() => {
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview' target='_blank' style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
-
-                // Adicionar link em mensagem separada
-                setTimeout(() => {
-                  const linkMessage: Message = {
-                    id: Date.now() + 1,
-                    text: `<a href="/cartao-preview" target="_blank" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
-                    sender: 'bot',
-                    timestamp: new Date()
-                  };
-                  setMessages(prev => [...prev, linkMessage]);
-                }, 500);
-
+                addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!", 'bot');
+                
                 setTimeout(() => {
                   generateBoardingPasses();
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
@@ -618,7 +607,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setCurrentStep('boarding-passes');
                     }, 5000);
                   }, 3000);
-                }, 3000);
+                }, 5000);
               }, 5000);
             }, 5000);
           }, 5000);
@@ -634,23 +623,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             vanDateObj.setDate(appointmentDate.getDate() - 3);
             vanDate = vanDateObj.toLocaleDateString('pt-BR');
           }
-
+          
           botResponse = `Tudo certo, sua viagem já está agendada, e dia ${vanDate || 'XX/XX'} às 13:40h o motorista do SBT junto com a Van estará em sua porta, para te buscar!`;
           nextStep = 'van-baggage-info';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Antes de prosseguir quero te dar uma informação importante!", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("Como nosso espaço em van é reduzido, precisamos levar outra Van onde fica responsável para transportar apenas bagagens de nossos candidatos. Caso precise levar uma bagagem temos um programa chamado \"Bagagem do Bem\" que por apenas R$ 29,90 você tem direito ao kit bagagem e todo o valor arrecadado é doado ao TELETON 2025.", 'bot');
-
+                  
                   // Adicionar imagem promocional da van após a mensagem sobre bagagem
                   setTimeout(() => {
                     const imageMessage: Message = {
@@ -660,7 +649,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       timestamp: new Date()
                     };
                     setMessages(prev => [...prev, imageMessage]);
-
+                    
                     setTimeout(() => {
                       setIsTyping(true);
                       setTimeout(() => {
@@ -684,13 +673,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
           nextStep = 'van-baggage-payment-info';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Vou te enviar a chave PIX copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
@@ -707,116 +696,43 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
           nextStep = 'hotel-step1';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
                       addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-
-                      setTimeout(() => {
-                        setIsTyping(true);
-                        setTimeout(() => {
-                          setIsTyping(false);
-                          // Adicionar imagem do quarto de hotel específica para fluxo de van
-                          const imageMessage: Message = {
-                            id: Date.now() + 1,
-                            text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
-                            sender: 'bot',
-                            timestamp: new Date()
-                          };
-                          setMessages(prev => [...prev, imageMessage]);
-
-                          setTimeout(() => {
-                            setIsTyping(true);
-                            setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-
-                              setTimeout(() => {
-                                setIsTyping(true);
-                                setTimeout(() => {
-                                  setIsTyping(false);
-                                  addMessage("Estou finalizando sua reserva!", 'bot');
-
-                                  setTimeout(() => {
-                                    setIsTyping(true);
-                                    setTimeout(() => {
-                                      setIsTyping(false);
-                                      addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-
-                                      setTimeout(() => {
-                                        setIsTyping(true);
-                                        setTimeout(() => {
-                                          setIsTyping(false);
-                                          addMessage("Vamos finalizar sua inscrição?", 'bot');
-                                          setShowQuickOptions(true);
-                                          setCurrentStep('hotel-reservation');
-                                        }, 5000);
-                                      }, 5000);
-                                    }, 5000);
-                                  }, 5000);
-                                }, 5000);
-                              }, 5000);
-                            }, 5000);
-                          }, 3000);
-                        }, 5000);
-                      }, 2000);
-                    }, 5000);
-                  }, 5000);
-                }, 5000);
-              }, 5000);
-            }, 5000);
-          }, 5000);
-
-          setTimeout(() => {
-            setIsTyping(true);
-            setTimeout(() => {
-              setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
-
-              setTimeout(() => {
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-                  addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-
+                      
                       setTimeout(() => {
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
                           addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-
+                          
                           setTimeout(() => {
                             setIsTyping(true);
                             setTimeout(() => {
                               setIsTyping(false);
                               addMessage("Estou finalizando sua reserva!", 'bot');
-
+                              
                               setTimeout(() => {
                                 setIsTyping(true);
                                 setTimeout(() => {
                                   setIsTyping(false);
                                   addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-
+                                  
                                   setTimeout(() => {
                                     setIsTyping(true);
                                     setTimeout(() => {
@@ -846,23 +762,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Tabom, vou te enviar a chave Pix para você efetuar o pagamento!";
           nextStep = 'van-baggage-pix';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Chave PIX copia e cola: bagagem@sbt.com.br", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
-
+                  
                   setShowPaymentStatus(true);
                   setPaymentTimer(300); // 5 minutos
                   setCurrentStep('waiting-van-baggage-payment');
-
+                  
                   // Simular confirmação de pagamento após 30 segundos
                   setTimeout(() => {
                     setShowPaymentStatus(false);
@@ -874,7 +790,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setCurrentStep('van-baggage-payment-confirmed');
                     }, 5000);
                   }, 30000);
-
+                  
                   // Timeout após 2 minutos
                   setTimeout(() => {
                     if (currentStep === 'waiting-van-baggage-payment') {
@@ -888,7 +804,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       }, 5000);
                     }
                   }, 120000);
-
+                  
                 }, 5000);
               }, 5000);
             }, 5000);
@@ -901,72 +817,67 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
           nextStep = 'hotel-step1';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
                       addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-
+                      
+                      // Adicionar imagem do quarto de hotel específica para fluxo de van imediatamente
+                      const imageMessage: Message = {
+                        id: Date.now() + 1,
+                        text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                        sender: 'bot',
+                        timestamp: new Date()
+                      };
+                      setMessages(prev => [...prev, imageMessage]);
+                      
                       setTimeout(() => {
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          // Adicionar imagem do quarto de hotel específica para fluxo de van
-                          const imageMessage: Message = {
-                            id: Date.now() + 1,
-                            text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
-                            sender: 'bot',
-                            timestamp: new Date()
-                          };
-                          setMessages(prev => [...prev, imageMessage]);
-
-                          setTimeout(() => {
-                            setIsTyping(true);
+                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                            
                             setTimeout(() => {
-                              setIsTyping(false);
-                              addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-
+                              setIsTyping(true);
                               setTimeout(() => {
-                                setIsTyping(true);
+                                setIsTyping(false);
+                                addMessage("Estou finalizando sua reserva!", 'bot');
+                                
                                 setTimeout(() => {
-                                  setIsTyping(false);
-                                  addMessage("Estou finalizando sua reserva!", 'bot');
-
+                                  setIsTyping(true);
                                   setTimeout(() => {
-                                    setIsTyping(true);
+                                    setIsTyping(false);
+                                    addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                    
                                     setTimeout(() => {
-                                      setIsTyping(false);
-                                      addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-
+                                      setIsTyping(true);
                                       setTimeout(() => {
-                                        setIsTyping(true);
-                                        setTimeout(() => {
-                                          setIsTyping(false);
-                                          addMessage("Vamos finalizar sua inscrição?", 'bot');
-                                          setShowQuickOptions(true);
-                                          setCurrentStep('hotel-reservation');
-                                        }, 5000);
+                                        setIsTyping(false);
+                                        addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                        setShowQuickOptions(true);
+                                        setCurrentStep('hotel-reservation');
                                       }, 5000);
                                     }, 5000);
                                   }, 5000);
                                 }, 5000);
                               }, 5000);
                             }, 5000);
-                          }, 3000);
-                        }, 5000);
+                          }, 5000);
+                        }, 3000);
                       }, 2000);
                     }, 5000);
                   }, 5000);
@@ -985,47 +896,47 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setShowPaymentStatus(false);
           setHasBaggage(true);
         }
-
+        
         botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
         nextStep = 'hotel-step1';
         showOptions = false;
-
+        
         setTimeout(() => {
           setIsTyping(true);
           setTimeout(() => {
             setIsTyping(false);
             addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
-
+            
             setTimeout(() => {
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
                 addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-
+                
                 setTimeout(() => {
                   setIsTyping(true);
                   setTimeout(() => {
                     setIsTyping(false);
                     addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-
+                    
                     setTimeout(() => {
                       setIsTyping(true);
                       setTimeout(() => {
                         setIsTyping(false);
                         addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-
+                        
                         setTimeout(() => {
                           setIsTyping(true);
                           setTimeout(() => {
                             setIsTyping(false);
                             addMessage("Estou finalizando sua reserva!", 'bot');
-
+                            
                             setTimeout(() => {
                               setIsTyping(true);
                               setTimeout(() => {
                                 setIsTyping(false);
                                 addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-
+                                
                                 setTimeout(() => {
                                   setIsTyping(true);
                                   setTimeout(() => {
@@ -1054,25 +965,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
           nextStep = 'hotel-step1';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
                       addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
-
+                      
                       // Adicionar imagem do quarto de hotel após a mensagem
                       setTimeout(() => {
                         const imageMessage: Message = {
@@ -1082,25 +993,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                           timestamp: new Date()
                         };
                         setMessages(prev => [...prev, imageMessage]);
-
+                        
                         setTimeout(() => {
                           setIsTyping(true);
                           setTimeout(() => {
                             setIsTyping(false);
                             addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-
+                            
                             setTimeout(() => {
                               setIsTyping(true);
                               setTimeout(() => {
                                 setIsTyping(false);
                                 addMessage("Estou finalizando sua reserva!", 'bot');
-
+                                
                                 setTimeout(() => {
                                   setIsTyping(true);
                                   setTimeout(() => {
                                     setIsTyping(false);
                                     addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
-
+                                    
                                     setTimeout(() => {
                                       setIsTyping(true);
                                       setTimeout(() => {
@@ -1131,22 +1042,22 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           // Calcular valor da inscrição baseado no número de candidatos
           const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
           const totalCandidatos = candidatos.length;
-
+          
           if (totalCandidatos > 1) {
             botResponse = `O valor de inscrição de cada candidato é de R$ 89,90, como você está inscrevendo ${totalCandidatos} candidatos, o SBT tem um desconto como forma de incentivar mais candidatos a participar!`;
           } else {
             botResponse = "O valor de inscrição de cada candidato é de R$ 89,90 e você inscreveu apenas 1 candidato!";
           }
-
+          
           nextStep = 'inscription-details';
           showOptions = false;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage("Lembrando que após o pagamento vamos te enviar a sua credencial, para que você apresente na entrada do SBT e sua entrada seja liberada.", 'bot');
-
+              
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
@@ -1178,23 +1089,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           botResponse = "Aqui está o QR code e a chave PIX copia e cola, para que você efetue o pagamento da inscrição!";
           nextStep = 'inscription-pix';
           showOptions = false;
-
+          
           // Calcular valor total baseado no número de candidatos
           const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
           const totalCandidatos = candidatos.length;
           const valores = { 1: 89.90, 2: 134.85, 3: 179.80, 4: 224.75, 5: 269.70 };
           const valorTotal = valores[Math.min(totalCandidatos, 5)] || 269.70;
-
+          
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
               addMessage(`QR Code + Chave PIX copia e cola: inscricao@sbt.com.br\nValor: R$ ${valorTotal.toFixed(2).replace('.', ',')}`, 'bot');
-
+              
               setShowPaymentStatus(true);
               setPaymentTimer(300); // 5 minutos
               setCurrentStep('waiting-inscription-payment');
-
+              
               // Simular confirmação após 45 segundos
               setTimeout(() => {
                 setShowPaymentStatus(false);
@@ -1202,26 +1113,26 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setTimeout(() => {
                   setIsTyping(false);
                   addMessage("Seu pagamento foi confirmado, vou te enviar a sua credencial!", 'bot');
-
+                  
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-
+                      
                       // Gerar credenciais (similar aos cartões de embarque)
                       generateCredentials();
-
+                      
                       setTimeout(() => {
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
                           addMessage("Sua inscrição foi confirmada! Todos os dados e documentos foram enviados para seu WhatsApp. Tenha uma excelente participação no SBT!", 'bot');
-
+                          
                           setTimeout(() => {
                             // Redirecionar para página de confirmação
                             window.location.href = '/confirmacao-inscricao';
                           }, 3000);
-
+                          
                           setCurrentStep('complete');
                           setShowQuickOptions(false);
                         }, 5000);
@@ -1230,12 +1141,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   }, 5000);
                 }, 5000);
               }, 45000);
-
+              
             }, 5000);
           }, 5000);
         }
         break;
-
+      
       default:
         botResponse = "Desculpe, não entendi. Pode repetir?";
         showOptions = true;
@@ -1246,18 +1157,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         addMessage(botResponse, 'bot');
         setCurrentStep(nextStep);
         setShowQuickOptions(showOptions);
-        // Save state after setting options
-        setTimeout(() => saveCurrentState(undefined, nextStep, showOptions), 200);
       }, 1000);
     }
   };
 
   const formatMessage = (text: string) => {
-    // Se o texto contém HTML (como imagens ou links), renderizar como HTML
-    if (text.includes('<img') || text.includes('<a href') || text.includes('<br')) {
+    // Se o texto contém HTML (como imagens), renderizar como HTML
+    if (text.includes('<img') || text.includes('<')) {
       return <div dangerouslySetInnerHTML={{ __html: text }} />;
     }
-
+    
     // Caso contrário, processar quebras de linha normalmente
     return text.split('\n').map((line, index) => (
       <span key={index}>
