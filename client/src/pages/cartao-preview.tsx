@@ -41,12 +41,22 @@ export default function CartaoPreview() {
   useEffect(() => {
     loadBoardingPassData();
     
+    // Marcar página como ativa imediatamente
+    ChatStorage.markAsActive('/cartao-preview');
+    
     // Verificar se deve mostrar chatbot (só se agendamento foi confirmado)
     const agendamentoConfirmado = localStorage.getItem('agendamentoConfirmado');
     if (agendamentoConfirmado === 'true') {
-      // Mostrar chatbot minimizado automaticamente
+      // Mostrar chatbot automaticamente
       setShowChatBot(true);
-      setChatBotMinimized(true);
+      
+      // Se há conversa salva, abrir chat imediatamente
+      if (ChatStorage.hasConversation()) {
+        console.log('Conversa encontrada na página de cartões, abrindo chat...');
+        setChatBotMinimized(false);
+      } else {
+        setChatBotMinimized(true);
+      }
     }
     
     // Scroll automático para o botão de download após 4 segundos

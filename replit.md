@@ -169,3 +169,9 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - Development workflow: Always restore exact user position after updates, including open modals
 - State persistence: Maintain chat bot progress and modal states across application restarts
 - **MODELO PERFEITO**: Arquivo backup salvo como `ChatBot-modelo-perfeito.tsx` - usar como referência para reverter mudanças se necessário
+- **Sistema de continuidade completo implementado**: ChatStorage com campos de fluxo, mensagens pendentes, contexto do usuário e marcação de atividade
+- **Chat abre automaticamente na página de cartões**: Se há conversa salva, chat abre imediatamente ao carregar página de cartões
+- **Continuidade perfeita entre páginas**: Estado salvo automaticamente, contexto preservado, fluxo continua exato onde parou
+- **Sistema de marcação de atividade global**: App.tsx marca todas as páginas como ativas automaticamente
+- **Download integrado ao fluxo**: Botão de download marca continuidade e abre chat automaticamente
+- **Problema resolvido**: Chat agora mostra conversa da página de agendamento quando carrega página de cartões
