@@ -54,7 +54,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     };
     
     localStorage.setItem('chatBotState', JSON.stringify(stateToSave));
-    console.log('💾 Estado salvo:', { step: stateToSave.currentStep, messages: stateToSave.messages.length });
+    console.log('💾 Estado salvo:', { 
+      step: stateToSave.currentStep, 
+      messages: stateToSave.messages.length,
+      transport: stateToSave.selectedTransport,
+      showOptions: stateToSave.showQuickOptions
+    });
   };
 
   useEffect(() => {
@@ -82,6 +87,39 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   useEffect(() => {
     if (isOpen && !isInitialized) {
+      console.log('🔄 ChatBot aberto - verificando estado salvo...');
+      
+      // Primeiro, tentar restaurar estado salvo
+      const savedState = localStorage.getItem('chatBotState');
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState);
+          console.log('✅ Estado encontrado:', { step: state.currentStep, messages: state.messages?.length || 0 });
+          
+          setMessages(state.messages || []);
+          setCurrentStep(state.currentStep || 'greeting');
+          setSelectedTransport(state.selectedTransport || '');
+          setSelectedFlightOption(state.selectedFlightOption || '');
+          setHasBaggage(state.hasBaggage || false);
+          setShowQuickOptions(state.showQuickOptions || false);
+          setShowPaymentStatus(state.showPaymentStatus || false);
+          setPaymentTimer(state.paymentTimer || 0);
+          setIsInitialized(true);
+          
+          // Se há mensagens, scroll para baixo
+          if (state.messages && state.messages.length > 0) {
+            setTimeout(() => scrollToBottom(), 500);
+          }
+          
+          return;
+        } catch (error) {
+          console.error('❌ Erro ao restaurar estado:', error);
+          localStorage.removeItem('chatBotState');
+        }
+      }
+      
+      // Se não há estado salvo, inicializar nova conversa
+      console.log('🆕 Nenhum estado salvo - iniciando nova conversa');
       setIsInitialized(true);
       setMessages([]);
       setCurrentStep('greeting');
@@ -105,6 +143,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       };
       setMessages([welcomeMessage]);
       setShowQuickOptions(true);
+      
+      // Salvar estado inicial
+      setTimeout(() => saveCurrentState([welcomeMessage], 'greeting', true), 200);
     }
   }, [isOpen, isInitialized]);
 
@@ -145,7 +186,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       sender,
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, newMessage]);
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
+    
+    // Salvar estado imediatamente após adicionar mensagem
+    setTimeout(() => saveCurrentState(updatedMessages), 100);
+    
+    // Scroll para baixo
+    setTimeout(() => scrollToBottom(), 200);
   };
 
   const getQuickOptions = () => {
@@ -1264,7 +1312,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         addMessage(botResponse, 'bot');
         setCurrentStep(nextStep);
         setShowQuickOptions(showOptions);
-        // Save state after setting options
+        // Salvar estado após definir opções
         setTimeout(() => saveCurrentState(undefined, nextStep, showOptions), 200);
       }, 1000);
     }

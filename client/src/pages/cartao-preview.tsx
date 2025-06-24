@@ -48,6 +48,7 @@ export default function CartaoPreview() {
     // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
       if (!showChatBot) {
+        console.log('🤖 Abrindo chatbot após 30s de inatividade');
         setShowChatBot(true);
       }
     }, 30000);
@@ -153,6 +154,7 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
+        console.log('🤖 Abrindo chatbot após download dos cartões');
         setShowChatBot(true);
       }, 1000);
       
