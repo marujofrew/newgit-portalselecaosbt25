@@ -88,7 +88,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
     if (savedMinimized === 'true') {
       setIsMinimized(true);
-      localStorage.removeItem('chatBotMinimized'); // Limpar flag
+      // Não remover a flag se estivermos na página de cartões
+      if (!window.location.pathname.includes('cartao-preview')) {
+        localStorage.removeItem('chatBotMinimized');
+      }
     }
   }, []);
 
