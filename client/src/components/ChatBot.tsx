@@ -676,7 +676,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setTimeout(() => {
                   const linkMessage: Message = {
                     id: Date.now() + 1,
-                    text: `<a href="/cartao-preview" target="_blank" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
+                    text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
                     sender: 'bot',
                     timestamp: new Date()
                   };
@@ -1343,6 +1343,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       </span>
     ));
   };
+
+  // Função global para lidar com clique no link de cartões
+  React.useEffect(() => {
+    (window as any).handleCartaoPreviewClick = (event: Event) => {
+      event.preventDefault();
+      setIsMinimized(true); // Minimizar o chat
+      setTimeout(() => {
+        window.location.href = '/cartao-preview'; // Redirecionar
+      }, 300);
+    };
+    
+    return () => {
+      delete (window as any).handleCartaoPreviewClick;
+    };
+  }, []);
 
   if (!isOpen) return null;
 
