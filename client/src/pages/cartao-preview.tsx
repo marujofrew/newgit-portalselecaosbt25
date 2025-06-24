@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
+import html2canvas from 'html2canvas';
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
 import sbtLogo from '@assets/sbt_logo.png';
 
@@ -104,26 +105,35 @@ export default function CartaoPreview() {
     return patterns[Math.floor(Math.random() * patterns.length)];
   };
 
-  const downloadAllCards = () => {
-    const element = document.createElement('a');
-    const content = passengers.map((passenger, index) => 
-      `CARTÃO DE EMBARQUE ${index + 1}\n` +
-      `Nome: ${passenger.name}\n` +
-      `Voo: AD${1200 + index}\n` +
-      `Data: ${flightData?.flightDate.toLocaleDateString('pt-BR')}\n` +
-      `Horário: ${flightData?.flightTime}\n` +
-      `Embarque: ${flightData?.boardingTime}\n` +
-      `Origem: ${flightData?.originCode} - ${flightData?.originCity}\n` +
-      `Destino: ${flightData?.destinationCode} - ${flightData?.destinationCity}\n` +
-      `Assento: ${index + 1}D\n\n`
-    ).join('');
-    
-    const file = new Blob([content], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = 'cartoes-embarque-sbt.txt';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+  const downloadAllCards = async () => {
+    try {
+      for (let i = 0; i < passengers.length; i++) {
+        const cardElement = document.querySelector(`#boarding-card-${i}`);
+        if (cardElement) {
+          const canvas = await html2canvas(cardElement as HTMLElement, {
+            backgroundColor: null,
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            width: 300,
+            height: 520
+          });
+          
+          const link = document.createElement('a');
+          link.download = `cartao-embarque-${passengers[i].name.replace(/\s+/g, '-')}.png`;
+          link.href = canvas.toDataURL('image/png');
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          // Pequeno delay entre downloads
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao baixar cartões:', error);
+      alert('Erro ao gerar imagens dos cartões. Tente novamente.');
+    }
   };
 
   if (loading) {
@@ -210,7 +220,9 @@ export default function CartaoPreview() {
                   onClick={() => setSelectedCard(index)}
                 >
                   {/* Cartão de embarque - Modelo Oficial Azul Original */}
-                  <div style={{
+                  <div 
+                    id={`boarding-card-${index}`}
+                    style={{
                     width: '300px', 
                     height: '520px', 
                     background: '#001f3f', 
