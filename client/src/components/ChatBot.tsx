@@ -941,17 +941,54 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!", 'bot');
                 
                 setTimeout(() => {
-                  generateBoardingPasses();
-                  
-                  setTimeout(() => {
-                    setIsTyping(true);
+                  // Gerar cartões de embarque individuais como imagens
+                  try {
+                    const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+                    const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+                    
+                    const passengers = [
+                      { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
+                    ];
+                    
+                    candidatos.forEach((candidato: any, index: number) => {
+                      passengers.push({
+                        name: candidato.nome || `CANDIDATO ${index + 1}`,
+                        type: `Candidato ${index + 1}`,
+                        isMain: false
+                      });
+                    });
+
+                    const flightData = calculateFlightData(selectedDate, userCity);
+                    
+                    // Enviar cartões individuais com delay entre eles
+                    passengers.forEach((passenger, index) => {
+                      setTimeout(() => {
+                        const cardMessage: Message = {
+                          id: Date.now() + index,
+                          text: `BOARDING_PASS_CARD:${JSON.stringify({passenger, flightData, index})}`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        };
+                        setMessages(prev => [...prev, cardMessage]);
+                      }, index * 2000); // 2 segundos entre cada cartão
+                    });
+                    
+                    // Aguardar todos os cartões serem enviados antes da próxima mensagem
+                    const delayForAllCards = passengers.length * 2000 + 3000; // 2s por cartão + 3s extra
+                    
                     setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('boarding-passes');
-                    }, 5000);
-                  }, 3000);
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
+                        setShowQuickOptions(true);
+                        setCurrentStep('boarding-passes');
+                      }, 5000);
+                    }, delayForAllCards);
+                    
+                  } catch (error) {
+                    console.error('Erro ao gerar cartões:', error);
+                  }
                 }, 5000);
               }, 5000);
             }, 5000);
