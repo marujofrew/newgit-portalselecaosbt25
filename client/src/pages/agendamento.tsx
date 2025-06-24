@@ -268,7 +268,7 @@ export default function Agendamento() {
       </div>
 
       {/* Chat Bot */}
-      <ChatBot 
+      <ChatBotNovo 
         isOpen={chatBotOpen} 
         onClose={() => setChatBotOpen(false)}
         userCity={getUserCity()}
