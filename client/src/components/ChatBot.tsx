@@ -111,12 +111,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Efeito para inicializar conversa ou restaurar estado
   useEffect(() => {
-    if (isOpen && !isInitialized) {
-      // Tentar restaurar conversa salva primeiro
+    if (isOpen) {
+      // SEMPRE tentar restaurar conversa salva primeiro, independente de isInitialized
       const restored = restoreState();
       
-      if (!restored) {
-        // Se não há conversa salva, iniciar nova conversa
+      if (restored) {
+        // Se há conversa salva, continuar de onde parou
+        console.log('Conversa restaurada, continuando do step:', currentStep);
+        // NÃO resetar isInitialized se há conversa salva
+        return;
+      } else if (!isInitialized) {
+        // Só iniciar nova conversa se não há backup E não foi inicializado
         setIsInitialized(true);
         setMessages([]);
         setCurrentStep('greeting');
@@ -155,21 +160,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }, 1000);
 
         return () => clearTimeout(timer);
-      } else {
-        // Se há conversa salva, continuar de onde parou
-        console.log('Conversa restaurada, continuando do step:', currentStep);
-        
-        // Se estava digitando, continuar digitação
-        if (isTyping) {
-          setTimeout(() => {
-            setIsTyping(false);
-            ChatStorage.updateTyping(false);
-            handleBotResponse(currentStep);
-          }, 2000);
-        }
       }
     }
-  }, [isOpen, isInitialized]);
+  }, [isOpen]);
 
   // Salvar estado a cada mudança importante
   useEffect(() => {

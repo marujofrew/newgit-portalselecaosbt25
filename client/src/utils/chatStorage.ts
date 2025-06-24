@@ -93,8 +93,19 @@ export class ChatStorage {
 
   // Verificar se existe conversa salva
   static hasConversation(): boolean {
-    const state = this.getState();
-    return state.messages.length > 0 && state.isInitialized;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return false;
+    
+    try {
+      const state = JSON.parse(saved);
+      const hasMessages = state.messages && state.messages.length > 0;
+      const isInitialized = state.isInitialized;
+      console.log('Verificando conversa existente:', { hasMessages, isInitialized, messagesCount: state.messages?.length });
+      return hasMessages && isInitialized;
+    } catch (error) {
+      console.error('Erro ao verificar conversa:', error);
+      return false;
+    }
   }
 
   // Limpar conversa (apenas quando necessário)
