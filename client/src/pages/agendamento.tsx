@@ -124,8 +124,11 @@ export default function Agendamento() {
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
     
-    // Limpar estado anterior do chat bot para reiniciar do zero
+    // Limpar COMPLETAMENTE o estado do chat para nova conversa
+    console.log('=== LIMPANDO ESTADO DO CHAT ===');
     localStorage.removeItem('chatBotState');
+    localStorage.removeItem('chatBotAtBoardingPass');
+    console.log('Estado do chat limpo para nova conversa');
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
