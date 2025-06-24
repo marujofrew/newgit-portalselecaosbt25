@@ -34,6 +34,12 @@ export default function CartaoPreview() {
   useEffect(() => {
     loadBoardingPassData();
     
+    // Verificar se chat deve iniciar minimizado
+    const shouldStartMinimized = localStorage.getItem('chatBotMinimized');
+    if (shouldStartMinimized === 'true') {
+      setShowChatBot(true); // Mostrar o chat, mas minimizado
+    }
+    
     // Scroll automático para o botão de download após 4 segundos
     const scrollTimer = setTimeout(() => {
       const downloadButton = document.querySelector('#download-button-below');
@@ -45,7 +51,7 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 15 segundos de inatividade
+    // Timer para abrir chatbot após 15 segundos de inatividade (só se não estiver já aberto)
     const chatBotTimer = setTimeout(() => {
       if (!showChatBot) {
         setShowChatBot(true);
@@ -56,7 +62,7 @@ export default function CartaoPreview() {
       clearTimeout(scrollTimer);
       clearTimeout(chatBotTimer);
     };
-  }, [showChatBot]);
+  }, []);
 
   const loadBoardingPassData = () => {
     try {
