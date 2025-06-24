@@ -1623,40 +1623,100 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const formatMessage = (text: string) => {
-    // Verificar se é um componente de cartão de embarque
-    if (text.startsWith('BOARDING_PASS_COMPONENT:')) {
-      const data = JSON.parse(text.replace('BOARDING_PASS_COMPONENT:', ''));
-      const { passengers } = data;
+    // Verificar se é um cartão de embarque individual
+    if (text.startsWith('BOARDING_PASS_CARD:')) {
+      const data = JSON.parse(text.replace('BOARDING_PASS_CARD:', ''));
+      const { passenger, flightData, index } = data;
+      
+      const seatNumber = `${index + 1}D`;
+      const passengerId = `SBT${String(Math.floor(Math.random() * 900000) + 100000)}`;
+      const qrPattern = generateQRVisualPattern();
+      
+      const handleDownloadCard = () => {
+        downloadBoardingPasses([passenger], flightData);
+      };
       
       return (
-        <div 
-          className="bg-blue-50 border border-blue-200 rounded-lg p-4 cursor-pointer hover:bg-blue-100 transition-colors mb-3"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Evento de clique capturado');
-            handleBoardingPassClick();
-          }}
-        >
-          <div className="flex items-center space-x-3">
-            <div className="bg-blue-500 text-white p-2 rounded">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M4 3a2 2 0 00-2 2v1.5h16V5a2 2 0 00-2-2H4z"/>
-                <path fillRule="evenodd" d="M18 8.5H2V15a2 2 0 002 2h12a2 2 0 002-2V8.5zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd"/>
-              </svg>
+        <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4 mb-3 max-w-md mx-auto">
+          {/* Cartão de embarque como imagem */}
+          <div className="boarding-pass bg-white border border-gray-300 rounded-lg shadow-lg p-6 mb-4" style={{width: '400px', fontFamily: 'Arial, sans-serif'}}>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <img src="/azul-logo.png" alt="Azul" className="h-6" />
+              <div className="text-right">
+                <div className="text-xs font-semibold">{flightData.flightDate ? new Date(flightData.flightDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : new Date().toLocaleDateString('pt-BR')}</div>
+                <div className="text-xs text-gray-600">VOO AD4455</div>
+              </div>
             </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">Cartões de Embarque - {passengers.length} {passengers.length === 1 ? 'Passageiro' : 'Passageiros'}</h4>
-              <p className="text-sm text-gray-600">
-                {passengers.map((p: any) => p.name).join(', ')}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">Clique para visualizar e baixar</p>
+
+            {/* Passenger Info */}
+            <div className="mb-4">
+              <div className="text-xs text-gray-600 mb-1">PASSAGEIRO/PASSENGER</div>
+              <div className="font-bold text-sm uppercase">{passenger.name}</div>
             </div>
-            <div className="text-blue-600">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
+
+            {/* Flight Route */}
+            <div className="flex justify-between items-center mb-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold">{flightData.originCode}</div>
+                <div className="text-xs uppercase">{flightData.originCity}</div>
+              </div>
+              <div className="flex-1 mx-4">
+                <div className="border-t border-dashed border-gray-400 relative">
+                  <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2">
+                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                      <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold">{flightData.destinationCode}</div>
+                <div className="text-xs uppercase">{flightData.destinationCity}</div>
+              </div>
             </div>
+
+            {/* Flight Details */}
+            <div className="grid grid-cols-4 gap-2 text-xs mb-4">
+              <div>
+                <div className="text-gray-600">PORTÃO/GATE</div>
+                <div className="font-semibold">12</div>
+              </div>
+              <div>
+                <div className="text-gray-600">ASSENTO/SEAT</div>
+                <div className="font-semibold">{seatNumber}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">EMBARQUE/BOARDING</div>
+                <div className="font-semibold">{flightData.boardingTime}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">PARTIDA/DEPARTURE</div>
+                <div className="font-semibold">{flightData.flightTime}</div>
+              </div>
+            </div>
+
+            {/* Bottom Section */}
+            <div className="flex justify-between items-end">
+              <div className="text-xs">
+                <div className="text-gray-600">LOCALIZADOR/RECORD LOCATOR</div>
+                <div className="font-semibold">{passengerId}</div>
+              </div>
+              <div className="text-right text-xs leading-3" style={{fontFamily: 'monospace'}}>
+                <pre className="text-xs">{qrPattern}</pre>
+              </div>
+            </div>
+          </div>
+          
+          {/* Botão de download */}
+          <div className="text-center">
+            <button 
+              onClick={handleDownloadCard}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+            >
+              📥 Baixar Cartão - {passenger.name}
+            </button>
           </div>
         </div>
       );
