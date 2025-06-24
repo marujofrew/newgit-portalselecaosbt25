@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import ChatBot from '../components/ChatBot';
-import ChatBotMonitor from '../components/ChatBotMonitor';
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
 import sbtLogo from '@assets/sbt_logo.png';
 
@@ -49,7 +48,6 @@ export default function CartaoPreview() {
     // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
       if (!showChatBot) {
-        console.log('⏰ Abrindo chatbot automaticamente após 30 segundos');
         setShowChatBot(true);
       }
     }, 30000);
@@ -155,7 +153,6 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
-        console.log('📥 Download concluído, abrindo chatbot para continuar conversa');
         setShowChatBot(true);
       }, 1000);
       
@@ -509,9 +506,6 @@ export default function CartaoPreview() {
           selectedDate={selectedDate}
         />
       )}
-
-      {/* ChatBot Monitor - apenas em desenvolvimento */}
-      <ChatBotMonitor />
     </div>
   );
 }
