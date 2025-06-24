@@ -274,14 +274,7 @@ export default function Agendamento() {
         </div>
       </div>
 
-      {/* Chat Bot */}
-      <ChatBot 
-        isOpen={chatBotOpen} 
-        onClose={() => setChatBotOpen(false)}
-        userCity={getUserCity()}
-        userData={getUserData()}
-        selectedDate={dataSelecionada}
-      />
+
     </main>
   );
 }
