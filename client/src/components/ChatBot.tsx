@@ -64,6 +64,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   }, [showPaymentStatus, paymentTimer]);
 
   useEffect(() => {
+    // Verificar se chat deve iniciar minimizado
+    const shouldStartMinimized = localStorage.getItem('chatBotMinimized');
+    if (shouldStartMinimized === 'true') {
+      setIsMinimized(true);
+      // Limpar flag para próximas vezes
+      localStorage.removeItem('chatBotMinimized');
+    }
+    
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
       setMessages([]);
