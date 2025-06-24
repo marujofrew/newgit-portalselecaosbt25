@@ -155,6 +155,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   }, []);
 
+  // Scroll para última mensagem quando minimizado é reaberto
+  useEffect(() => {
+    if (!isMinimized && messages.length > 0) {
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+  }, [isMinimized]);
+
   // Timer effect for payment countdown
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -178,8 +187,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
       
-      // Só inicializar conversa se não há mensagens salvas E não há estado anterior
-      if (messages.length === 0 && currentStep === 'greeting') {
+      // Se há mensagens salvas, continue a conversa de onde parou
+      if (messages.length > 0) {
+        console.log('ChatBot: Continuando conversa existente com', messages.length, 'mensagens');
+        // Verificar se deveria estar digitando ou mostrando opções
+        const shouldContinueFlow = localStorage.getItem('chatbotShouldContinue');
+        if (shouldContinueFlow === 'true') {
+          localStorage.removeItem('chatbotShouldContinue');
+          // Continue o fluxo baseado no currentStep atual
+          setTimeout(() => {
+            continueConversationFlow();
+          }, 1000);
+        }
+        // Scroll para última mensagem
+        setTimeout(() => {
+          scrollToBottom();
+        }, 500);
+      } else if (currentStep === 'greeting') {
+        // Só inicializar conversa nova se não há mensagens salvas
+        console.log('ChatBot: Iniciando nova conversa');
         // Buscar aeroporto mais próximo baseado no CEP
         const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
         if (responsavelData.cep) {
@@ -195,20 +221,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         };
         setMessages([welcomeMessage]);
         setShowQuickOptions(true);
-      } else if (messages.length > 0) {
-        // Se há mensagens salvas, continue a conversa de onde parou
-        // Verificar se deveria estar digitando ou mostrando opções
-        const shouldContinueFlow = localStorage.getItem('chatbotShouldContinue');
-        if (shouldContinueFlow === 'true') {
-          localStorage.removeItem('chatbotShouldContinue');
-          // Continue o fluxo baseado no currentStep atual
-          setTimeout(() => {
-            continueConversationFlow();
-          }, 1000);
-        }
       }
     }
-  }, [isOpen, isInitialized, messages.length, currentStep]);
+  }, [isOpen, isInitialized]);
 
   const continueConversationFlow = () => {
     // Esta função verifica se a conversa precisa continuar automaticamente
