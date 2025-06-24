@@ -166,13 +166,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
       }
       
-      // SEMPRE iniciar nova conversa na página de agendamento
+      // Iniciar nova conversa se necessário
       console.log('🆕 Iniciando nova conversa na página:', currentPage);
       
-      // Limpar TUDO - estado anterior
-      console.log('🧹 Limpeza total do estado do chat...');
-      ChatStorage.clearConversation();
-      ChatStorage.clearAllChatData();
+      // Limpar estado anterior apenas se estivermos na página de agendamento
+      if (currentPage === '/agendamento') {
+        console.log('🧹 Limpeza do estado do chat para nova conversa...');
+        ChatStorage.clearConversation();
+      }
       
       // Resetar completamente todos os estados
       setMessages([]);

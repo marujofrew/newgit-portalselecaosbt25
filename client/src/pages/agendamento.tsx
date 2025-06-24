@@ -127,11 +127,16 @@ export default function Agendamento() {
     // Reset AGRESSIVO do chat bot para começar conversa do zero
     console.log('🔄 Limpando TODAS as chaves do chat para nova conversa');
     
-    // Limpar TODAS as chaves do localStorage que possam conter dados do chat
-    const allKeys = Object.keys(localStorage);
-    allKeys.forEach(key => {
-      if (key.includes('chat') || key.includes('Chat') || key.includes('bot') || 
-          key.includes('message') || key.includes('conversation') || key.includes('backup')) {
+    // Limpar apenas chaves específicas do chat para não quebrar outras funcionalidades
+    const chatKeysToRemove = [
+      'chatState', 'chatbotMessages', 'chatbotCurrentStep', 'chatbotSelectedTransport',
+      'chatbotSelectedFlightOption', 'chatbotHasBaggage', 'chatbotShowQuickOptions',
+      'chatbotShowPaymentStatus', 'chatbotPaymentTimer', 'chatMessages', 'chatStep',
+      'chatTransport', 'chatFlight', 'chatBaggage', 'chatPayment'
+    ];
+    
+    chatKeysToRemove.forEach(key => {
+      if (localStorage.getItem(key)) {
         localStorage.removeItem(key);
         console.log(`🗑️ Removido: ${key}`);
       }
@@ -155,13 +160,9 @@ export default function Agendamento() {
     setTimeout(() => {
       setLoading(false);
       
-      // Força um timestamp único para garantir que o componente seja completamente recriado
-      const chatTimestamp = Date.now();
-      localStorage.setItem('chatForceNew', chatTimestamp.toString());
-      
       setChatBotOpen(true);
       localStorage.setItem('chatBotOpened', 'true');
-      console.log('🎯 ChatBot aberto após agendamento - timestamp:', chatTimestamp);
+      console.log('🎯 ChatBot aberto após agendamento');
     }, 1000);
   };
 
@@ -298,7 +299,7 @@ export default function Agendamento() {
       {/* Chat Bot */}
       {chatBotOpen && (
         <ChatBot 
-          key={`chat-new-${localStorage.getItem('chatForceNew') || Date.now()}`}
+          key={`agendamento-chat-${Date.now()}`}
           isOpen={chatBotOpen} 
           onClose={() => setChatBotOpen(false)}
           userCity={getUserCity()}
