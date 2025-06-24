@@ -151,6 +151,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'van-confirmation':
         return ['Sim, pode confirmar!'];
       
+      case 'van-baggage-offer':
+        return ['Sim, adicionar kit bagagem', 'Não quero bagagem'];
+      
+      case 'van-baggage-payment':
+        return ['OK, vou realizar o pagamento e volto rapidamente'];
+      
+      case 'van-baggage-payment-confirmed':
+        return ['Sim, vamos prosseguir!'];
+      
+      case 'van-baggage-payment-timeout':
+        return ['Quero cancelar a bagagem, vamos continuar!', 'Já fiz o pagamento, vamos continuar!'];
+      
       case 'hotel-reservation':
         return ['Vamos finalizar'];
       
@@ -597,9 +609,318 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }
           
           botResponse = `Tudo certo, sua viagem já está agendada, e dia ${vanDate || 'XX/XX'} às 13:40h o motorista do SBT junto com a Van estará em sua porta, para te buscar!`;
-          nextStep = 'hotel-info';
+          nextStep = 'van-baggage-info';
           showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Antes de prosseguir quero te dar uma informação importante!", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Como nosso espaço em van é reduzido, precisamos levar outra Van onde fica responsável para transportar apenas bagagens de nossos candidatos. Caso precise levar uma bagagem temos um programa chamado \"Bagagem do Bem\" que por apenas R$ 29,90 você tem direito ao kit bagagem e todo o valor arrecadado é doado ao TELETON 2025.", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Você gostaria de incluir bagagem por R$ 29,90 ou prefere viajar apenas com bagagem de mão?", 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('van-baggage-offer');
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
         }
+        break;
+
+      case 'van-baggage-offer':
+        if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
+          setHasBaggage(true);
+          botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
+          nextStep = 'van-baggage-payment-info';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Vou te enviar a chave PIX copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Nosso chat irá se encerrar automaticamente em 5 minutos se não houver nenhuma atividade ou retorno. Realize o pagamento e volte antes de 5 minutos para evitar de recomeçar o cadastro do início.", 'bot');
+                  setShowQuickOptions(true);
+                  setCurrentStep('van-baggage-payment');
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+        } else {
+          setHasBaggage(false);
+          botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
+          nextStep = 'hotel-step1';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                          
+                          setTimeout(() => {
+                            setIsTyping(true);
+                            setTimeout(() => {
+                              setIsTyping(false);
+                              addMessage("Estou finalizando sua reserva!", 'bot');
+                              
+                              setTimeout(() => {
+                                setIsTyping(true);
+                                setTimeout(() => {
+                                  setIsTyping(false);
+                                  addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                  
+                                  setTimeout(() => {
+                                    setIsTyping(true);
+                                    setTimeout(() => {
+                                      setIsTyping(false);
+                                      addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                      setShowQuickOptions(true);
+                                      setCurrentStep('hotel-reservation');
+                                    }, 5000);
+                                  }, 5000);
+                                }, 5000);
+                              }, 5000);
+                            }, 5000);
+                          }, 5000);
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+        }
+        break;
+
+      case 'van-baggage-payment':
+        if (messageToSend.toLowerCase().includes('ok') || messageToSend.toLowerCase().includes('rapidamente')) {
+          botResponse = "Tabom, vou te enviar a chave Pix para você efetuar o pagamento!";
+          nextStep = 'van-baggage-pix';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Chave PIX copia e cola: bagagem@sbt.com.br", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("Lembre-se: assim que realizar o pagamento, volte aqui para concluirmos o cadastro por completo. Te aguardo!", 'bot');
+                  
+                  setShowPaymentStatus(true);
+                  setPaymentTimer(300); // 5 minutos
+                  setCurrentStep('waiting-van-baggage-payment');
+                  
+                  // Simular confirmação de pagamento após 30 segundos
+                  setTimeout(() => {
+                    setShowPaymentStatus(false);
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Seu pagamento foi confirmado, vamos continuar?", 'bot');
+                      setShowQuickOptions(true);
+                      setCurrentStep('van-baggage-payment-confirmed');
+                    }, 5000);
+                  }, 30000);
+                  
+                  // Timeout após 2 minutos
+                  setTimeout(() => {
+                    if (currentStep === 'waiting-van-baggage-payment') {
+                      setShowPaymentStatus(false);
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage("Não consegui confirmar seu pagamento, vamos continuar sem adicionar o kit bagagem?", 'bot');
+                        setShowQuickOptions(true);
+                        setCurrentStep('van-baggage-payment-timeout');
+                      }, 5000);
+                    }
+                  }, 120000);
+                  
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+        }
+        break;
+
+      case 'van-baggage-payment-confirmed':
+        if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('prosseguir')) {
+          botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
+          nextStep = 'hotel-step1';
+          showOptions = false;
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
+                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                          
+                          setTimeout(() => {
+                            setIsTyping(true);
+                            setTimeout(() => {
+                              setIsTyping(false);
+                              addMessage("Estou finalizando sua reserva!", 'bot');
+                              
+                              setTimeout(() => {
+                                setIsTyping(true);
+                                setTimeout(() => {
+                                  setIsTyping(false);
+                                  addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                  
+                                  setTimeout(() => {
+                                    setIsTyping(true);
+                                    setTimeout(() => {
+                                      setIsTyping(false);
+                                      addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                      setShowQuickOptions(true);
+                                      setCurrentStep('hotel-reservation');
+                                    }, 5000);
+                                  }, 5000);
+                                }, 5000);
+                              }, 5000);
+                            }, 5000);
+                          }, 5000);
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+        }
+        break;
+
+      case 'van-baggage-payment-timeout':
+        if (messageToSend.toLowerCase().includes('cancelar') || messageToSend.toLowerCase().includes('continuar')) {
+          setShowPaymentStatus(false);
+          setHasBaggage(false);
+        } else if (messageToSend.toLowerCase().includes('já fiz') || messageToSend.toLowerCase().includes('pagamento')) {
+          setShowPaymentStatus(false);
+          setHasBaggage(true);
+        }
+        
+        botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
+        nextStep = 'hotel-step1';
+        showOptions = false;
+        
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+            
+            setTimeout(() => {
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
+                
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
+                    
+                    setTimeout(() => {
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                        
+                        setTimeout(() => {
+                          setIsTyping(true);
+                          setTimeout(() => {
+                            setIsTyping(false);
+                            addMessage("Estou finalizando sua reserva!", 'bot');
+                            
+                            setTimeout(() => {
+                              setIsTyping(true);
+                              setTimeout(() => {
+                                setIsTyping(false);
+                                addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                
+                                setTimeout(() => {
+                                  setIsTyping(true);
+                                  setTimeout(() => {
+                                    setIsTyping(false);
+                                    addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                    setShowQuickOptions(true);
+                                    setCurrentStep('hotel-reservation');
+                                  }, 5000);
+                                }, 5000);
+                              }, 5000);
+                            }, 5000);
+                          }, 5000);
+                        }, 5000);
+                      }, 5000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+        }, 5000);
         break;
 
       case 'boarding-passes':
