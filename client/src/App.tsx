@@ -53,6 +53,17 @@ function App() {
       if (storedSelectedDate) setSelectedDate(storedSelectedDate);
     }
   }, []);
+  
+  // Estado do chatbot minimizado
+  const [isChatBotMinimized, setIsChatBotMinimized] = useState(false);
+  
+  useEffect(() => {
+    // Verificar se deve iniciar minimizado na página de cartões
+    if (window.location.pathname.includes('cartao-preview')) {
+      setIsChatBotMinimized(true);
+      localStorage.setItem('chatBotMinimized', 'true');
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -68,6 +79,7 @@ function App() {
             userCity={userCity}
             userData={userData}
             selectedDate={selectedDate}
+            initialMinimized={isChatBotMinimized}
           />
         )}
       </TooltipProvider>

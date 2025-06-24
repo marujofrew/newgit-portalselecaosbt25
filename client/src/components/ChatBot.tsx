@@ -19,9 +19,10 @@ interface ChatBotProps {
   userCity?: string;
   userData?: any;
   selectedDate?: string;
+  initialMinimized?: boolean;
 }
 
-export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate }: ChatBotProps) {
+export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate, initialMinimized = false }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentStep, setCurrentStep] = useState<string>('greeting');
   const [showQuickOptions, setShowQuickOptions] = useState(false);
@@ -34,7 +35,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [selectedFlightOption, setSelectedFlightOption] = useState<string>('');
   const [hasBaggage, setHasBaggage] = useState<boolean>(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(initialMinimized);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
