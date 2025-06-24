@@ -85,6 +85,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (savedPaymentTimer) {
       setPaymentTimer(parseInt(savedPaymentTimer));
     }
+    if (savedMinimized === 'true') {
+      setIsMinimized(true);
+      localStorage.removeItem('chatBotMinimized'); // Limpar flag
+    }
   }, []);
 
   // Salvar estado no localStorage sempre que houver mudanças
@@ -1349,8 +1353,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     (window as any).handleCartaoPreviewClick = (event: Event) => {
       event.preventDefault();
       setIsMinimized(true); // Minimizar o chat
+      // Marcar que deve permanecer minimizado na próxima página
+      localStorage.setItem('chatBotMinimized', 'true');
       setTimeout(() => {
-        window.location.href = '/cartao-preview'; // Redirecionar
+        window.location.href = '/cartao-preview'; // Redirecionar na mesma janela
       }, 300);
     };
     
