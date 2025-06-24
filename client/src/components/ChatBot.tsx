@@ -321,12 +321,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const data = await response.json();
       
       if (data.success) {
-        // Criar mensagem com interface de PIX simplificada
-        const pixMessage = `<div style="background: #f0f8ff; border: 2px solid #2563eb; border-radius: 8px; padding: 12px; margin: 8px 0;">
-<div style="color: #2563eb; font-weight: bold; margin-bottom: 8px;">💳 Chave PIX - ${data.payment.formatted_amount}</div>
-<div style="background: white; border: 1px solid #ddd; border-radius: 4px; padding: 8px; font-family: monospace; font-size: 11px; word-break: break-all; margin-bottom: 8px;">${data.payment.pix_code}</div>
-<button onclick="window.copyPixKey && window.copyPixKey('${data.payment.pix_code}')" style="background: #2563eb; color: white; border: none; border-radius: 4px; padding: 8px 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 12px;">📋 Copiar Chave PIX</button>
-</div>`;
+        // Criar mensagem simplificada que será renderizada como JSX
+        const pixMessage = `PIX_COMPONENT:${JSON.stringify({
+          type: 'baggage',
+          amount: data.payment.formatted_amount,
+          pixCode: data.payment.pix_code
+        })}`;
         addMessage(pixMessage, 'bot');
         
         // Salvar dados do pagamento para verificação posterior
@@ -365,12 +365,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const data = await response.json();
       
       if (data.success) {
-        // Criar mensagem com interface de PIX para inscrição
-        const pixMessage = `<div style="background: #f0f8ff; border: 2px solid #2563eb; border-radius: 8px; padding: 12px; margin: 8px 0;">
-<div style="color: #2563eb; font-weight: bold; margin-bottom: 8px;">💳 Chave PIX Inscrição - ${data.payment.formatted_amount}</div>
-<div style="background: white; border: 1px solid #ddd; border-radius: 4px; padding: 8px; font-family: monospace; font-size: 11px; word-break: break-all; margin-bottom: 8px;">${data.payment.pix_code}</div>
-<button onclick="window.copyPixKey && window.copyPixKey('${data.payment.pix_code}')" style="background: #2563eb; color: white; border: none; border-radius: 4px; padding: 8px 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 12px;">📋 Copiar Chave PIX</button>
-</div>`;
+        // Criar mensagem para inscrição que será renderizada como JSX
+        const pixMessage = `PIX_COMPONENT:${JSON.stringify({
+          type: 'inscription',
+          amount: data.payment.formatted_amount,
+          pixCode: data.payment.pix_code
+        })}`;
         addMessage(pixMessage, 'bot');
         
         // Salvar dados do pagamento para verificação posterior
@@ -1524,7 +1524,57 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const formatMessage = (text: string) => {
-    // Se o texto contém HTML (como imagens ou links), renderizar como HTML
+    // Componente PIX customizado
+    if (text.startsWith('PIX_COMPONENT:')) {
+      const pixData = JSON.parse(text.replace('PIX_COMPONENT:', ''));
+      return (
+        <div style={{ 
+          background: '#f0f8ff', 
+          border: '2px solid #2563eb', 
+          borderRadius: '8px', 
+          padding: '12px', 
+          margin: '8px 0' 
+        }}>
+          <div style={{ 
+            color: '#2563eb', 
+            fontWeight: 'bold', 
+            marginBottom: '8px' 
+          }}>
+            💳 Chave PIX {pixData.type === 'inscription' ? 'Inscrição' : ''} - {pixData.amount}
+          </div>
+          <div style={{ 
+            background: 'white', 
+            border: '1px solid #ddd', 
+            borderRadius: '4px', 
+            padding: '8px', 
+            fontFamily: 'monospace', 
+            fontSize: '11px', 
+            wordBreak: 'break-all', 
+            marginBottom: '8px' 
+          }}>
+            {pixData.pixCode}
+          </div>
+          <button 
+            onClick={() => copyPixKey(pixData.pixCode)}
+            style={{ 
+              background: '#2563eb', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '4px', 
+              padding: '8px 12px', 
+              fontWeight: 'bold', 
+              cursor: 'pointer', 
+              width: '100%', 
+              fontSize: '12px' 
+            }}
+          >
+            📋 Copiar Chave PIX
+          </button>
+        </div>
+      );
+    }
+
+    // Se o texto contém HTML (como imagens, links), renderizar como HTML
     if (text.includes('<img') || text.includes('<a href') || text.includes('<br')) {
       return <div dangerouslySetInnerHTML={{ __html: text }} />;
     }
@@ -1536,6 +1586,24 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         {index < text.split('\n').length - 1 && <br />}
       </span>
     ));
+  };
+
+  // Função para copiar PIX
+  const copyPixKey = async (pixKey: string) => {
+    try {
+      await navigator.clipboard.writeText(pixKey);
+      console.log('Chave PIX copiada para área de transferência');
+      // Feedback visual poderia ser adicionado aqui
+    } catch (error) {
+      console.error('Erro ao copiar chave PIX:', error);
+      // Fallback para dispositivos que não suportam clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = pixKey;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
   };
 
   // Função global para lidar com clique no link de cartões
