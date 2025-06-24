@@ -110,6 +110,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Download de cartões como imagens implementado**: html2canvas captura cada cartão individualmente em PNG alta qualidade
 - **Chatbot automático na página de cartões**: Abre após download ou 30 segundos de inatividade para continuar fluxo da conversa
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
+- **Sistema de estado persistente implementado**: Chat bot salva automaticamente progresso e restaura posição exata após atualizações
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação

@@ -135,8 +135,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
           // Se está no step boarding-passes, mostrar botões de continuar
           if (state.currentStep === 'boarding-passes') {
-            setTimeout(() => setShowQuickOptions(true), 1000);
-            console.log('🎯 Forçando exibição de botões para boarding-passes');
+            setTimeout(() => {
+              setShowQuickOptions(true);
+              console.log('🎯 Forçando exibição de botões para boarding-passes');
+            }, 1000);
           }
           
           // Se há mensagens, scroll para baixo
@@ -222,8 +224,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
     
-    // Salvar estado imediatamente após adicionar mensagem
-    setTimeout(() => saveCurrentState(updatedMessages), 100);
+    // Salvar estado após adicionar mensagem
+    setTimeout(() => saveCurrentState(updatedMessages), 300);
     
     // Scroll para baixo
     setTimeout(() => scrollToBottom(), 200);
@@ -1153,15 +1155,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'boarding-passes':
         if (messageToSend.toLowerCase().includes('continuar')) {
-          botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
-          nextStep = 'hotel-step1';
-          showOptions = false;
+          botResponse = "Agora vou organizar sua hospedagem. Em nossa sede temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência.";
+          nextStep = 'hotel-info';
+          showOptions = true;
 
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              const imageMessage: Message = {
+                id: Date.now() + 1,
+                text: `<img src="${hotelRoomImage}" alt="Quarto de hotel SBT" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                sender: 'bot',
+                timestamp: new Date()
+              };
+              setMessages(prev => [...prev, imageMessage]);
+              setShowQuickOptions(true);
+              setCurrentStep('hotel-info');
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -1349,7 +1359,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         setCurrentStep(nextStep);
         setShowQuickOptions(showOptions);
         // Salvar estado após definir opções
-        setTimeout(() => saveCurrentState(undefined, nextStep, showOptions), 200);
+        setTimeout(() => saveCurrentState(undefined, nextStep, showOptions), 500);
       }, 1000);
     }
   };
