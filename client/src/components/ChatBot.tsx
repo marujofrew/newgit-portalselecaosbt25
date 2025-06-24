@@ -529,18 +529,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(false);
               addMessage("Pronto, suas passagens estão compradas, vou te enviar os seus cartões de embarque!", 'bot');
 
-              setTimeout(() => {
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-                  // Adicionar link em mensagem separada
-                  const linkMessage: Message = {
-                    id: Date.now() + 1,
-                    text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
-                    sender: 'bot',
-                    timestamp: new Date()
-                  };
-                  setMessages(prev => [...prev, linkMessage]);
+              addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque:", 'bot');
+
+                  // Adicionar link como botão
+                  setTimeout(() => {
+                    const linkMessage: Message = {
+                      id: Date.now() + 1,
+                      text: `<span onclick="window.location.href='/cartao-preview'" style="color: #3b82f6; text-decoration: underline; cursor: pointer; font-weight: 500;">🎫 Ver Cartões de Embarque</span>`,
+                      sender: 'bot',
+                      timestamp: new Date()
+                    };
+                    setMessages(prev => [...prev, linkMessage]);
+                  }, 500);
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -555,8 +555,6 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       }, 5000);
                     }, 3000);
                   }, 5000);
-                }, 5000);
-              }, 5000);
             }, 5000);
           }, 5000);
         }
@@ -629,34 +627,31 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(false);
               addMessage("Pronto, suas passagens estão compradas, vou te enviar os seus cartões de embarque!", 'bot');
 
+              addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque:", 'bot');
+
+              // Adicionar link como botão
               setTimeout(() => {
-                setIsTyping(true);
+                const linkMessage: Message = {
+                  id: Date.now() + 1,
+                  text: `<span onclick="window.location.href='/cartao-preview'" style="color: #3b82f6; text-decoration: underline; cursor: pointer; font-weight: 500;">🎫 Ver Cartões de Embarque</span>`,
+                  sender: 'bot',
+                  timestamp: new Date()
+                };
+                setMessages(prev => [...prev, linkMessage]);
+              }, 500);
+
+              setTimeout(() => {
+                generateBoardingPasses();
+
                 setTimeout(() => {
-                  setIsTyping(false);
-
-                  // Adicionar link em mensagem separada
-                  const linkMessage: Message = {
-                    id: Date.now() + 1,
-                    text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
-                    sender: 'bot',
-                    timestamp: new Date()
-                  };
-                  setMessages(prev => [...prev, linkMessage]);
-
+                  setIsTyping(true);
                   setTimeout(() => {
-                    generateBoardingPasses();
-
-                    setTimeout(() => {
-                      setIsTyping(true);
-                      setTimeout(() => {
-                        setIsTyping(false);
-                        addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
-                        setShowQuickOptions(true);
-                        setCurrentStep('boarding-passes');
-                      }, 5000);
-                    }, 3000);
+                    setIsTyping(false);
+                    addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
+                    setShowQuickOptions(true);
+                    setCurrentStep('boarding-passes');
                   }, 5000);
-                }, 5000);
+                }, 3000);
               }, 5000);
             }, 5000);
           }, 5000);
@@ -682,36 +677,34 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(false);
             addMessage("Pronto, suas passagens estão compradas, vou te enviar os seus cartões de embarque!", 'bot');
 
-            setTimeout(() => {
-              setIsTyping(true);
+            addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque:", 'bot');
+
+              // Adicionar link como botão
               setTimeout(() => {
-                setIsTyping(false);
+                const linkMessage: Message = {
+                  id: Date.now() + 1,
+                  text: `<span onclick="window.location.href='/cartao-preview'" style="color: #3b82f6; text-decoration: underline; cursor: pointer; font-weight: 500;">🎫 Ver Cartões de Embarque</span>`,
+                  sender: 'bot',
+                  timestamp: new Date()
+                };
+                setMessages(prev => [...prev, linkMessage]);
+              }, 500);
 
-                  // Adicionar link em mensagem separada
-                  const linkMessage: Message = {
-                    id: Date.now() + 1,
-                    text: `<a href="#" onclick="handleCartaoPreviewClick(event)" style="display: inline-block; background-color: #2563eb; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; width: 100%; margin-top: 8px;">🎫 Ver Cartões de Embarque</a>`,
-                    sender: 'bot',
-                    timestamp: new Date()
-                  };
-                  setMessages(prev => [...prev, linkMessage]);
+              setTimeout(() => {
+                generateBoardingPasses();
+
                 setTimeout(() => {
-                  generateBoardingPasses();
-
+                  setIsTyping(true);
                   setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('boarding-passes');
-                    }, 5000);
-                  }, 3000);
+                    setIsTyping(false);
+                    addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
+                    setShowQuickOptions(true);
+                    setCurrentStep('boarding-passes');
+                  }, 5000);
                 }, 3000);
               }, 5000);
             }, 5000);
           }, 5000);
-        }, 5000);
         break;
 
       case 'van-confirmation':
