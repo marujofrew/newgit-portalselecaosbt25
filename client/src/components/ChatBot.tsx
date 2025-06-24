@@ -815,7 +815,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'van-baggage-payment-confirmed':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('prosseguir')) {
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
-          nextStep = 'van-hotel-step1';
+          nextStep = 'hotel-step1';
           showOptions = false;
           
           setTimeout(() => {
@@ -836,21 +836,20 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setIsTyping(false);
                       addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
                       
-                      // Adicionar imagem do quarto de hotel específica para fluxo de van
+                      // Adicionar imagem do quarto de hotel específica para fluxo de van imediatamente
+                      const imageMessage: Message = {
+                        id: Date.now() + 1,
+                        text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                        sender: 'bot',
+                        timestamp: new Date()
+                      };
+                      setMessages(prev => [...prev, imageMessage]);
+                      
                       setTimeout(() => {
-                        const imageMessage: Message = {
-                          id: Date.now(),
-                          text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
-                          sender: 'bot',
-                          timestamp: new Date()
-                        };
-                        setMessages(prev => [...prev, imageMessage]);
-                        
+                        setIsTyping(true);
                         setTimeout(() => {
-                          setIsTyping(true);
-                          setTimeout(() => {
-                            setIsTyping(false);
-                            addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                          setIsTyping(false);
+                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
                             
                             setTimeout(() => {
                               setIsTyping(true);
