@@ -1588,10 +1588,36 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const data = JSON.parse(text.replace('BOARDING_PASS_COMPONENT:', ''));
       const { passengers } = data;
       
+      const handleBoardingPassClick = () => {
+        console.log('Clique no cartão de embarque detectado');
+        try {
+          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+          const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+          
+          const fullPassengers = [
+            { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
+          ];
+          
+          candidatos.forEach((candidato: any, index: number) => {
+            fullPassengers.push({
+              name: candidato.nome || `CANDIDATO ${index + 1}`,
+              type: `Candidato ${index + 1}`,
+              isMain: false
+            });
+          });
+
+          const flightData = calculateFlightData(selectedDate, userCity);
+          console.log('Abrindo modal com dados:', { fullPassengers, flightData });
+          createBoardingPassModal(fullPassengers, flightData);
+        } catch (error) {
+          console.error('Erro ao abrir modal:', error);
+        }
+      };
+      
       return (
         <div 
           className="bg-blue-50 border border-blue-200 rounded-lg p-4 cursor-pointer hover:bg-blue-100 transition-colors mb-3"
-          onClick={() => openBoardingPassModal()}
+          onClick={handleBoardingPassClick}
         >
           <div className="flex items-center space-x-3">
             <div className="bg-blue-500 text-white p-2 rounded">
