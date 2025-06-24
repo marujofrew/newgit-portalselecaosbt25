@@ -1368,11 +1368,45 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   if (!isOpen) return null;
 
+  // Balão minimizado
+  if (isMinimized) {
+    return (
+      <div className="fixed bottom-6 right-6 z-50">
+        <div 
+          className="bg-blue-600 hover:bg-blue-700 rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg transition-all duration-300 hover:scale-110"
+          onClick={() => setIsMinimized(false)}
+        >
+          {/* Ícone de balão de fala */}
+          <svg 
+            className="w-8 h-8 text-white" 
+            fill="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3.04 1.05 4.36L1 22l5.64-2.05C8.96 20.64 10.46 21 12 21c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.29 0-2.55-.3-3.64-.85l-.35-.18-2.83 1.03 1.03-2.83-.18-.35C5.3 14.55 5 13.29 5 12c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7z"/>
+            <circle cx="9" cy="12" r="1"/>
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="15" cy="12" r="1"/>
+          </svg>
+          
+          {/* Indicador de mensagens não lidas (opcional) */}
+          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+          </div>
+        </div>
+        
+        {/* Tooltip */}
+        <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-800 text-white text-sm rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+          Clique para abrir o chat
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`fixed ${isMinimized ? 'bottom-4 right-4' : 'inset-0'} z-50 ${isMinimized ? '' : 'bg-black bg-opacity-50 flex items-center justify-center p-4'}`}>
-      <div className={`bg-white rounded-lg shadow-2xl ${isMinimized ? 'w-80 h-16 cursor-pointer' : 'w-full max-w-md h-[600px]'} flex flex-col`} onClick={isMinimized ? () => setIsMinimized(false) : undefined}>
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-md h-[600px] flex flex-col">
         {/* Header */}
-        <div className={`flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg ${isMinimized ? '' : 'border-b'}`}>
+        <div className="flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg border-b">
           <div className="flex items-center space-x-3">
             {/* Foto de perfil com indicador online */}
             <div className="relative">
@@ -1395,7 +1429,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         </div>
 
         {/* Payment Status */}
-        {!isMinimized && showPaymentStatus && (
+        {showPaymentStatus && (
           <div className="bg-yellow-100 border border-yellow-300 p-3 m-4 rounded-lg">
             <div className="flex items-center justify-between">
               <span className="text-yellow-800 text-sm font-medium">
@@ -1410,9 +1444,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
 
 
-        {/* Messages - só aparece quando não minimizado */}
-        {!isMinimized && (
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -1455,10 +1488,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
           <div ref={messagesEndRef} />
         </div>
-        )}
 
         {/* Quick Options */}
-        {!isMinimized && showQuickOptions && getQuickOptions().length > 0 && (
+        {showQuickOptions && getQuickOptions().length > 0 && (
           <div className="p-4 border-t bg-gray-50">
             <div className="space-y-2">
               {getQuickOptions().map((option, index) => (
@@ -1475,13 +1507,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         )}
 
         {/* Input disabled - only quick options work */}
-        {!isMinimized && (
-          <div className="p-4 border-t bg-gray-50">
-            <div className="text-center text-sm text-gray-500">
-              Use as opções de resposta acima para continuar
-            </div>
+        <div className="p-4 border-t bg-gray-50">
+          <div className="text-center text-sm text-gray-500">
+            Use as opções de resposta acima para continuar
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

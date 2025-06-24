@@ -112,7 +112,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Sistema de histórico persistente do chatbot**: Conversa salva no localStorage, mantém estado entre páginas e sessões
 - **Chatbot global não-fechável**: Após agendamento, aparece em todas as páginas apenas com opção de minimizar
 - **Estado completo do chatbot salvo**: Mensagens, etapa atual, seleções de transporte, bagagem, pagamentos e timers mantidos
-- **Sistema de minimização do chatbot**: Botão "−" para minimizar, clique no balão minimizado para expandir, mantém conversa
+- **Sistema de minimização do chatbot**: Botão "−" para minimizar, balão fixo no canto direito com ícone de chat, clique no balão para expandir
 - **Sistema de backup completo implementado**: Estado total do chatbot salvo no localStorage com timestamp para restauração perfeita da conversa
 - **ChatBot completamente isolado**: Removido do App.tsx global, só aparece em agendamento e cartão-preview após confirmação
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
