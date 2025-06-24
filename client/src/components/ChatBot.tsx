@@ -596,18 +596,29 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque!", 'bot');
                 
                 setTimeout(() => {
-                  generateBoardingPasses();
+                  // Adicionar link para página de cartões de embarque
+                  const linkMessage: Message = {
+                    id: Date.now() + 1,
+                    text: `<a href="/cartao-preview" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors text-center w-full">🎫 Ver Cartões de Embarque</a>`,
+                    sender: 'bot',
+                    timestamp: new Date()
+                  };
+                  setMessages(prev => [...prev, linkMessage]);
                   
                   setTimeout(() => {
-                    setIsTyping(true);
+                    generateBoardingPasses();
+                    
                     setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('boarding-passes');
-                    }, 5000);
-                  }, 3000);
-                }, 5000);
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
+                        setShowQuickOptions(true);
+                        setCurrentStep('boarding-passes');
+                      }, 5000);
+                    }, 3000);
+                  }, 5000);
+                }, 2000);
               }, 5000);
             }, 5000);
           }, 5000);
