@@ -155,6 +155,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         setHasBaggage(state.hasBaggage || false);
         setNearestAirport(state.nearestAirport || null);
         
+        // Continuar o fluxo após restaurar o estado
+        setTimeout(() => {
+          continueFlowAfterRestore(state.currentStep);
+        }, 1000);
+        
         return true;
       }
     } catch (error) {
@@ -209,6 +214,148 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       timestamp: new Date()
     };
     setMessages(prev => [...prev, newMessage]);
+  };
+
+  // Função para continuar o fluxo após restaurar o estado
+  const continueFlowAfterRestore = (currentStep: string) => {
+    // Se estava em um estado de espera ou digitação, mostrar opções
+    const stepsWithOptions = [
+      'greeting',
+      'flight-options', 
+      'baggage-offer',
+      'baggage-payment',
+      'baggage-payment-confirmed',
+      'baggage-payment-timeout',
+      'boarding-passes',
+      'van-confirmation',
+      'van-baggage-offer',
+      'van-baggage-payment',
+      'van-baggage-payment-confirmed',
+      'van-baggage-payment-timeout',
+      'hotel-reservation',
+      'inscription-info',
+      'inscription-payment'
+    ];
+    
+    // Se o step atual deve mostrar opções, ativar as opções
+    if (stepsWithOptions.includes(currentStep)) {
+      setShowQuickOptions(true);
+    }
+    
+    // Se estava esperando pagamento, continuar o timer
+    if (currentStep === 'waiting-baggage-payment' || currentStep === 'waiting-van-baggage-payment' || currentStep === 'waiting-inscription-payment') {
+      setShowPaymentStatus(true);
+      if (paymentTimer > 0) {
+        // Continuar com o timer que estava rodando
+        return;
+      }
+    }
+    
+    // Verificar se precisa continuar algum fluxo automático específico
+    switch (currentStep) {
+      case 'flight-search':
+        // Se estava buscando voos, continuar o fluxo
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+            const cidadeInfo = responsavelData.cidade || userCity || 'sua cidade';
+            addMessage(`Identifiquei que você está em ${cidadeInfo}. Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
+            
+            setTimeout(() => {
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                addMessage('Encontrei duas opções de voos disponíveis:', 'bot');
+                
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    
+                    let option1Date = '';
+                    let option2Date = '';
+                    
+                    if (selectedDate) {
+                      const appointmentDate = new Date(selectedDate);
+                      const option1DateObj = new Date(appointmentDate);
+                      option1DateObj.setDate(appointmentDate.getDate() - 1);
+                      option1Date = option1DateObj.toLocaleDateString('pt-BR');
+                      
+                      const option2DateObj = new Date(appointmentDate);
+                      option2DateObj.setDate(appointmentDate.getDate() - 2);
+                      option2Date = option2DateObj.toLocaleDateString('pt-BR');
+                    }
+                    
+                    const airportCode = nearestAirport?.code || 'GYN';
+                    const airportCity = nearestAirport?.city || 'GOIÂNIA';
+                    
+                    addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: ${option1Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+                    
+                    setTimeout(() => {
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage(`🔸 Opção 2: ${airportCity} (${airportCode}) → São Paulo\nData: ${option2Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+                        
+                        setTimeout(() => {
+                          setIsTyping(true);
+                          setTimeout(() => {
+                            setIsTyping(false);
+                            addMessage('Qual opção você prefere?', 'bot');
+                            setShowQuickOptions(true);
+                            setCurrentStep('flight-options');
+                          }, 2000);
+                        }, 2000);
+                      }, 2000);
+                    }, 2000);
+                  }, 2000);
+                }, 2000);
+              }, 2000);
+            }, 2000);
+          }, 2000);
+        }, 1000);
+        break;
+        
+      case 'van-search':
+        // Se estava buscando van, continuar o fluxo
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            addMessage("Só mais 1 minuto...", 'bot');
+            
+            setTimeout(() => {
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                
+                let vanDate = '';
+                if (selectedDate) {
+                  const appointmentDate = new Date(selectedDate);
+                  const vanDateObj = new Date(appointmentDate);
+                  vanDateObj.setDate(appointmentDate.getDate() - 3);
+                  vanDate = vanDateObj.toLocaleDateString('pt-BR');
+                }
+                
+                addMessage(`Certo, verifiquei que dia ${vanDate || 'XX/XX'} (3 dias antes do dia da data selecionada para agendamento de teste), a nossa van que busca os candidatos em todo o Brasil, vai estar próxima à localização.`, 'bot');
+                
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    addMessage(`Então conseguimos agendar para o motorista buscar vocês dia ${vanDate || 'XX/XX'} às 13:40h, posso confirmar?`, 'bot');
+                    setShowQuickOptions(true);
+                    setCurrentStep('van-confirmation');
+                  }, 2000);
+                }, 2000);
+              }, 2000);
+            }, 2000);
+          }, 2000);
+        }, 1000);
+        break;
+    }
   };
 
   const getQuickOptions = () => {
