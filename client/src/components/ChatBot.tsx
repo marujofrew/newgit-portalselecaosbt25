@@ -50,6 +50,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     scrollToBottom();
   }, [messages, isTyping]);
 
+  // Debug - log estado atual
+  useEffect(() => {
+    console.log('🔍 Estado atual do chat:', {
+      isOpen,
+      isInitialized,
+      messagesCount: messages.length,
+      currentStep,
+      showQuickOptions,
+      isTyping
+    });
+  }, [isOpen, isInitialized, messages.length, currentStep, showQuickOptions, isTyping]);
+
   // Remover sistema antigo de localStorage - substituído pelo backup unificado
 
   // Salvar estado atual no armazenamento
@@ -196,29 +208,37 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       
       setIsInitialized(true);
       
-      // Iniciar conversa IMEDIATAMENTE sem delay
-      console.log('🚀 Iniciando nova conversa IMEDIATAMENTE...');
-      setIsTyping(true);
+      // Iniciar conversa com animação de digitação
+      console.log('🚀 Iniciando nova conversa...');
       
-      const timer = setTimeout(() => {
-        setIsTyping(false);
-        const welcomeMessage: Message = {
-          id: Date.now(),
-          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        console.log('📨 Enviando mensagem de boas-vindas NOVA');
-        setMessages([welcomeMessage]);
-        setCurrentStep('greeting');
-        setShowQuickOptions(true);
-        ChatStorage.addMessage(welcomeMessage);
-        ChatStorage.updateStep('greeting');
-        ChatStorage.updateQuickOptions(true);
-        console.log('✅ Chat NOVO inicializado com sucesso - Mensagens:', [welcomeMessage]);
-      }, 1500);
-
-      return () => clearTimeout(timer);
+      const initializeChat = () => {
+        setIsTyping(true);
+        
+        setTimeout(() => {
+          setIsTyping(false);
+          const welcomeMessage: Message = {
+            id: Date.now(),
+            text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+            sender: 'bot',
+            timestamp: new Date()
+          };
+          
+          console.log('📨 Enviando mensagem de boas-vindas');
+          setMessages([welcomeMessage]);
+          setCurrentStep('greeting');
+          setShowQuickOptions(true);
+          
+          // Salvar no storage apenas após a mensagem ser definida
+          ChatStorage.addMessage(welcomeMessage);
+          ChatStorage.updateStep('greeting');
+          ChatStorage.updateQuickOptions(true);
+          
+          console.log('✅ Chat inicializado com sucesso');
+        }, 2000);
+      };
+      
+      // Executar imediatamente
+      initializeChat();
     }
   }, [isOpen, isInitialized]);
 
