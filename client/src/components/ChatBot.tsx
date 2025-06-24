@@ -1420,6 +1420,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   if (!isOpen) return null;
 
   const currentMinimized = onMinimize ? isMinimized : internalMinimized;
+  
+  console.log('🎯 Estado do chat:', { isOpen, currentMinimized, isMinimized, internalMinimized });
 
   // Balão minimizado
   if (currentMinimized) {
@@ -1428,6 +1430,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         <div 
           className="relative bg-blue-600 hover:bg-blue-700 rounded-full w-14 h-14 flex items-center justify-center cursor-pointer shadow-lg transition-all duration-200 hover:shadow-xl"
           onClick={() => {
+            console.log('🔧 Clique no balão - expandindo chat');
             if (onExpand) {
               onExpand();
             } else {

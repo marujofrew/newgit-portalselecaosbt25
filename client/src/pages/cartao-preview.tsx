@@ -57,8 +57,8 @@ export default function CartaoPreview() {
       setShowChatBot(true);
       
       if (hasExistingChat) {
-        console.log('✅ Abrindo chat com conversa anterior da página de agendamento');
-        setChatBotMinimized(false); // Abrir expandido para mostrar a conversa
+        console.log('✅ Chat com conversa anterior encontrado - mantendo minimizado');
+        setChatBotMinimized(true); // Manter minimizado inicialmente
         
         // Debug: mostrar detalhes da conversa
         const state = ChatStorage.getState();
