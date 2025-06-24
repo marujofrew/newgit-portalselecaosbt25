@@ -1616,9 +1616,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         // Verificar se ainda tem tentativas
         if (attempts >= maxAttempts) {
-          // Timeout - mostrar opções
+          // Timeout - sempre mostrar opções independente do status
           const timeoutMessage = type === 'baggage'
-            ? 'Não conseguimos confirmar seu pagamento. Deseja continuar sem bagagem?'
+            ? 'Não conseguimos confirmar seu pagamento. Deseja continuar sem bagagem ou aguardar mais?'
             : 'Não conseguimos confirmar seu pagamento da inscrição. O que deseja fazer?';
           
           addMessage(timeoutMessage, 'bot');
@@ -1636,7 +1636,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         // Em caso de erro, continuar tentando até o timeout
         if (attempts >= maxAttempts) {
           const errorMessage = type === 'baggage'
-            ? 'Tivemos problemas para verificar seu pagamento. Deseja continuar sem bagagem?'
+            ? 'Tivemos problemas para verificar seu pagamento. Deseja continuar sem bagagem ou aguardar mais?'
             : 'Tivemos problemas para verificar seu pagamento da inscrição. O que deseja fazer?';
           
           addMessage(errorMessage, 'bot');
