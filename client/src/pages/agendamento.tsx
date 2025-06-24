@@ -124,7 +124,8 @@ export default function Agendamento() {
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
     
-    // Reset chat bot state para começar conversa do zero
+    // Reset completo do chat bot para começar conversa do zero
+    localStorage.removeItem('chatState');
     localStorage.removeItem('chatbotMessages');
     localStorage.removeItem('chatbotCurrentStep');
     localStorage.removeItem('chatbotSelectedTransport');
@@ -143,6 +144,7 @@ export default function Agendamento() {
       setChatBotOpen(true);
       // Marcar que chatbot foi aberto pela primeira vez
       localStorage.setItem('chatBotOpened', 'true');
+      console.log('🎯 ChatBot aberto após agendamento');
     }, 1000);
   };
 
