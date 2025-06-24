@@ -187,23 +187,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
       
-      // Se há mensagens salvas, continue a conversa de onde parou
-      if (messages.length > 0) {
-        console.log('ChatBot: Continuando conversa existente com', messages.length, 'mensagens');
-        // Verificar se deveria estar digitando ou mostrando opções
-        const shouldContinueFlow = localStorage.getItem('chatbotShouldContinue');
-        if (shouldContinueFlow === 'true') {
-          localStorage.removeItem('chatbotShouldContinue');
-          // Continue o fluxo baseado no currentStep atual
-          setTimeout(() => {
-            continueConversationFlow();
-          }, 1000);
-        }
-        // Scroll para última mensagem
+      // Verificar se há mensagens salvas no localStorage
+      const savedMessages = localStorage.getItem('chatbotMessages');
+      
+      if (savedMessages && JSON.parse(savedMessages).length > 0) {
+        console.log('ChatBot: Continuando conversa existente');
+        // Scroll para última mensagem após um pequeno delay
         setTimeout(() => {
           scrollToBottom();
         }, 500);
-      } else if (currentStep === 'greeting') {
+      } else {
         // Só inicializar conversa nova se não há mensagens salvas
         console.log('ChatBot: Iniciando nova conversa');
         // Buscar aeroporto mais próximo baseado no CEP
