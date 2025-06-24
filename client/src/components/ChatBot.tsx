@@ -1583,6 +1583,40 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   const formatMessage = (text: string) => {
+    // Verificar se é um componente de cartão de embarque
+    if (text.startsWith('BOARDING_PASS_COMPONENT:')) {
+      const data = JSON.parse(text.replace('BOARDING_PASS_COMPONENT:', ''));
+      const { passengers } = data;
+      
+      return (
+        <div 
+          className="bg-blue-50 border border-blue-200 rounded-lg p-4 cursor-pointer hover:bg-blue-100 transition-colors mb-3"
+          onClick={() => openBoardingPassModal()}
+        >
+          <div className="flex items-center space-x-3">
+            <div className="bg-blue-500 text-white p-2 rounded">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 3a2 2 0 00-2 2v1.5h16V5a2 2 0 00-2-2H4z"/>
+                <path fillRule="evenodd" d="M18 8.5H2V15a2 2 0 002 2h12a2 2 0 002-2V8.5zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd"/>
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Cartões de Embarque - {passengers.length} {passengers.length === 1 ? 'Passageiro' : 'Passageiros'}</h4>
+              <p className="text-sm text-gray-600">
+                {passengers.map((p: any) => p.name).join(', ')}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">Clique para visualizar e baixar</p>
+            </div>
+            <div className="text-blue-600">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
     // Se o texto contém HTML (como imagens), renderizar como HTML
     if (text.includes('<img') || text.includes('<')) {
       return <div dangerouslySetInnerHTML={{ __html: text }} />;
