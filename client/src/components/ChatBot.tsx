@@ -99,7 +99,14 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (savedState) {
         try {
           const state = JSON.parse(savedState);
-          console.log('✅ Estado encontrado:', { step: state.currentStep, messages: state.messages?.length || 0 });
+          console.log('✅ Estado encontrado:', { 
+            step: state.currentStep, 
+            messages: state.messages?.length || 0,
+            transport: state.selectedTransport,
+            flightOption: state.selectedFlightOption,
+            showOptions: state.showQuickOptions,
+            showPayment: state.showPaymentStatus
+          });
           
           // Restaurar mensagens convertendo timestamps string para Date
           const restoredMessages = (state.messages || []).map((msg: any) => ({
@@ -116,6 +123,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setShowPaymentStatus(state.showPaymentStatus || false);
           setPaymentTimer(state.paymentTimer || 0);
           setIsInitialized(true);
+          
+          // Debug: mostrar estado atual
+          console.log('🔄 Estado restaurado:', {
+            currentStep: state.currentStep,
+            showQuickOptions: state.showQuickOptions,
+            showPaymentStatus: state.showPaymentStatus,
+            selectedTransport: state.selectedTransport,
+            messagesCount: restoredMessages.length
+          });
           
           // Se há mensagens, scroll para baixo
           if (restoredMessages && restoredMessages.length > 0) {

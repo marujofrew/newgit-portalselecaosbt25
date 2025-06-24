@@ -112,6 +112,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
+- **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
 - **Fluxo de van corrigido**: Sequência completa de mensagens sobre bagagem após confirmação da viagem de van implementada
 - **Sistema de bagagem específico para van**: Programa "Bagagem do Bem" adaptado para limitações de espaço em van
