@@ -47,20 +47,8 @@ export default function CartaoPreview() {
 
     // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
-      // Verificar se há conversa em andamento antes de abrir
-      const savedState = localStorage.getItem('chatBotState');
-      if (savedState) {
-        try {
-          const state = JSON.parse(savedState);
-          const stateAge = Date.now() - (state.timestamp || 0);
-          // Se há estado recente (menos de 1 hora), abrir chatbot
-          if (state.messages && state.messages.length > 0 && stateAge < 3600000) {
-            console.log('Abrindo chatbot com conversa salva...');
-            setShowChatBot(true);
-          }
-        } catch (error) {
-          console.error('Erro ao verificar estado do chat:', error);
-        }
+      if (!showChatBot) {
+        setShowChatBot(true);
       }
     }, 30000);
 
@@ -165,9 +153,8 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
-        console.log('Download concluído, abrindo chatbot para continuar conversa...');
         setShowChatBot(true);
-      }, 2000);
+      }, 1000);
       
     } catch (error) {
       console.error('Erro ao baixar cartões:', error);
@@ -498,7 +485,7 @@ export default function CartaoPreview() {
         </div>
       )}
 
-      {/* ChatBot - Continua de onde parou */}
+      {/* ChatBot */}
       {showChatBot && (
         <ChatBot
           isOpen={showChatBot}
