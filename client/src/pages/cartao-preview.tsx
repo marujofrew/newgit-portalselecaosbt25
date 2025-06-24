@@ -47,15 +47,7 @@ export default function CartaoPreview() {
 
     // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
-      if (!showChatBot) {
-        // Verificar se existe estado salvo e se está na parte dos cartões
-        const savedState = localStorage.getItem('chatBotState');
-        const atBoardingPass = localStorage.getItem('chatBotAtBoardingPass');
-        
-        if (savedState && atBoardingPass === 'true') {
-          setShowChatBot(true);
-        }
-      }
+      setShowChatBot(true);
     }, 30000);
 
     return () => {
@@ -157,15 +149,10 @@ export default function CartaoPreview() {
         }
       }
       
-      // Abrir chatbot após download concluído se existe conversa em andamento
-      const savedState = localStorage.getItem('chatBotState');
-      const atBoardingPass = localStorage.getItem('chatBotAtBoardingPass');
-      
-      if (savedState && atBoardingPass === 'true') {
-        setTimeout(() => {
-          setShowChatBot(true);
-        }, 1000);
-      }
+      // Abrir chatbot após download concluído
+      setTimeout(() => {
+        setShowChatBot(true);
+      }, 2000);
       
     } catch (error) {
       console.error('Erro ao baixar cartões:', error);
