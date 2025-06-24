@@ -124,7 +124,20 @@ export default function Agendamento() {
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
     
-    // Reset completo do chat bot para começar conversa do zero
+    // Reset AGRESSIVO do chat bot para começar conversa do zero
+    console.log('🔄 Limpando TODAS as chaves do chat para nova conversa');
+    
+    // Limpar TODAS as chaves do localStorage que possam conter dados do chat
+    const allKeys = Object.keys(localStorage);
+    allKeys.forEach(key => {
+      if (key.includes('chat') || key.includes('Chat') || key.includes('bot') || 
+          key.includes('message') || key.includes('conversation') || key.includes('backup')) {
+        localStorage.removeItem(key);
+        console.log(`🗑️ Removido: ${key}`);
+      }
+    });
+    
+    // Remover chaves específicas conhecidas
     localStorage.removeItem('chatState');
     localStorage.removeItem('chatbotMessages');
     localStorage.removeItem('chatbotCurrentStep');
@@ -135,19 +148,20 @@ export default function Agendamento() {
     localStorage.removeItem('chatbotShowPaymentStatus');
     localStorage.removeItem('chatbotPaymentTimer');
     
-    // Garantir que o chat inicie completamente do zero
-    console.log('🔄 Limpando todas as chaves do chat para nova conversa');
-    
     // Marcar que agendamento foi confirmado - chatbot só funciona a partir daqui
     localStorage.setItem('agendamentoConfirmado', 'true');
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
       setLoading(false);
+      
+      // Força um timestamp único para garantir que o componente seja completamente recriado
+      const chatTimestamp = Date.now();
+      localStorage.setItem('chatForceNew', chatTimestamp.toString());
+      
       setChatBotOpen(true);
-      // Marcar que chatbot foi aberto pela primeira vez
       localStorage.setItem('chatBotOpened', 'true');
-      console.log('🎯 ChatBot aberto após agendamento');
+      console.log('🎯 ChatBot aberto após agendamento - timestamp:', chatTimestamp);
     }, 1000);
   };
 
@@ -284,7 +298,7 @@ export default function Agendamento() {
       {/* Chat Bot */}
       {chatBotOpen && (
         <ChatBot 
-          key={`chat-${Date.now()}`} // Força reinicialização completa
+          key={`chat-new-${localStorage.getItem('chatForceNew') || Date.now()}`}
           isOpen={chatBotOpen} 
           onClose={() => setChatBotOpen(false)}
           userCity={getUserCity()}

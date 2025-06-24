@@ -135,82 +135,89 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const currentPage = window.location.pathname;
       ChatStorage.markAsActive(currentPage);
       
-      // Verificar se há conversa salva - mas apenas se não estivermos na página de agendamento
-      const hasExistingConversation = ChatStorage.hasConversation();
-      console.log('📋 Verificando conversa existente:', hasExistingConversation);
-      
-      if (hasExistingConversation && currentPage !== '/agendamento') {
-        console.log('✅ Restaurando conversa completa para página:', currentPage);
-        const restored = restoreState();
-        
-        if (restored) {
-          console.log('🎯 Conversa restaurada - Total de mensagens:', messages.length);
-          
-          // Se estivermos na página de cartão preview e há conversa, 
-          // garantir que continue do passo correto
-          if (currentPage === '/cartao-preview' && currentStep === 'greeting') {
-            console.log('🔧 Corrigindo passo para continuar na página de cartões...');
-            // Se o usuário chegou nos cartões, deve estar no passo de cartões de embarque
-            setCurrentStep('boarding-passes');
-            setShowQuickOptions(true);
-            ChatStorage.updateStep('boarding-passes');
-            ChatStorage.updateQuickOptions(true);
-          }
-          
-          return;
-        }
-      }
-      
-      // Iniciar nova conversa se estivermos na página de agendamento OU se não há conversa existente
-      if (currentPage === '/agendamento' || !hasExistingConversation) {
-        console.log('🆕 Iniciando nova conversa na página:', currentPage);
-        
-        // Limpar completamente o estado anterior
-        ChatStorage.clearConversation();
-        setMessages([]);
-        setCurrentStep('greeting');
-        setShowQuickOptions(false);
-        setIsTyping(false);
-        
-        const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-        ChatStorage.setUserContext(responsavelData);
-        
-        if (responsavelData.cep) {
-          findNearestAirportFromCEP(responsavelData.cep);
-        }
-        
-        setIsInitialized(true);
-        
-        // Iniciar conversa com delay
-        const timer = setTimeout(() => {
-          console.log('🚀 Iniciando animação de digitação...');
-          setIsTyping(true);
-          
-          setTimeout(() => {
-            setIsTyping(false);
-            const welcomeMessage: Message = {
-              id: Date.now(),
-              text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-              sender: 'bot',
-              timestamp: new Date()
-            };
-            console.log('📨 Enviando mensagem de boas-vindas');
-            setMessages([welcomeMessage]);
-            setCurrentStep('greeting');
-            setShowQuickOptions(true);
-            ChatStorage.addMessage(welcomeMessage);
-            ChatStorage.updateStep('greeting');
-            ChatStorage.updateQuickOptions(true);
-            console.log('✅ Chat inicializado com sucesso');
-          }, 2000);
-        }, 500);
-
-        return () => clearTimeout(timer);
+      // Se estivermos na página de agendamento, SEMPRE iniciar nova conversa (ignorar backup)
+      if (currentPage === '/agendamento') {
+        console.log('🆕 PÁGINA DE AGENDAMENTO - Ignorando qualquer backup e iniciando nova conversa');
+        // Pular verificação de conversa existente na página de agendamento
       } else {
-        // Se estivermos em outra página sem conversa, apenas marcar como inicializado
-        console.log('📍 Marcando como inicializado para página:', currentPage);
-        setIsInitialized(true);
+        // Verificar se há conversa salva apenas para outras páginas
+        const hasExistingConversation = ChatStorage.hasConversation();
+        console.log('📋 Verificando conversa existente para página:', currentPage, hasExistingConversation);
+        
+        if (hasExistingConversation) {
+          console.log('✅ Restaurando conversa completa para página:', currentPage);
+          const restored = restoreState();
+          
+          if (restored) {
+            console.log('🎯 Conversa restaurada - Total de mensagens:', messages.length);
+            
+            // Se estivermos na página de cartão preview e há conversa, 
+            // garantir que continue do passo correto
+            if (currentPage === '/cartao-preview' && currentStep === 'greeting') {
+              console.log('🔧 Corrigindo passo para continuar na página de cartões...');
+              setCurrentStep('boarding-passes');
+              setShowQuickOptions(true);
+              ChatStorage.updateStep('boarding-passes');
+              ChatStorage.updateQuickOptions(true);
+            }
+            
+            return;
+          }
+        }
       }
+      
+      // SEMPRE iniciar nova conversa na página de agendamento
+      console.log('🆕 Iniciando nova conversa na página:', currentPage);
+      
+      // Limpar TUDO - estado anterior
+      console.log('🧹 Limpeza total do estado do chat...');
+      ChatStorage.clearConversation();
+      ChatStorage.clearAllChatData();
+      
+      // Resetar completamente todos os estados
+      setMessages([]);
+      setCurrentStep('greeting');
+      setShowQuickOptions(false);
+      setIsTyping(false);
+      setShowPaymentStatus(false);
+      setPaymentTimer(0);
+      setSelectedTransport('');
+      setSelectedFlightOption('');
+      setHasBaggage(false);
+      setNearestAirport(null);
+      
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      ChatStorage.setUserContext(responsavelData);
+      
+      if (responsavelData.cep) {
+        findNearestAirportFromCEP(responsavelData.cep);
+      }
+      
+      setIsInitialized(true);
+      
+      // Iniciar conversa IMEDIATAMENTE sem delay
+      console.log('🚀 Iniciando nova conversa IMEDIATAMENTE...');
+      setIsTyping(true);
+      
+      const timer = setTimeout(() => {
+        setIsTyping(false);
+        const welcomeMessage: Message = {
+          id: Date.now(),
+          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        console.log('📨 Enviando mensagem de boas-vindas NOVA');
+        setMessages([welcomeMessage]);
+        setCurrentStep('greeting');
+        setShowQuickOptions(true);
+        ChatStorage.addMessage(welcomeMessage);
+        ChatStorage.updateStep('greeting');
+        ChatStorage.updateQuickOptions(true);
+        console.log('✅ Chat NOVO inicializado com sucesso - Mensagens:', [welcomeMessage]);
+      }, 1500);
+
+      return () => clearTimeout(timer);
     }
   }, [isOpen, isInitialized]);
 
