@@ -9,6 +9,7 @@ import Cadastro from "@/pages/cadastro";
 import Agendamento from "@/pages/agendamento";
 import BoardingPassPreview from "@/pages/boarding-pass-preview";
 import CartaoPreview from "@/pages/cartao-preview";
+import ConfirmacaoInscricao from "@/pages/confirmacao-inscricao";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/agendamento" component={Agendamento}/>
       <Route path="/preview-cartao" component={BoardingPassPreview}/>
       <Route path="/cartao-preview" component={CartaoPreview}/>
+      <Route path="/confirmacao-inscricao" component={ConfirmacaoInscricao}/>
       <Route component={NotFound} />
     </Switch>
   );

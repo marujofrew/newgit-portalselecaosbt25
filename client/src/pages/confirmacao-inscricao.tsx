@@ -1,75 +1,51 @@
 import React from 'react';
-import { CheckCircle, Download, WhatsApp } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 export default function ConfirmacaoInscricao() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8">
-        {/* Header com logo SBT */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col">
+      {/* Header com logo SBT */}
+      <div className="flex justify-center pt-12 pb-8">
+        <img 
+          src="/sbt_logo.png" 
+          alt="SBT Logo" 
+          className="h-24 w-auto"
+        />
+      </div>
+
+      {/* Conteúdo principal centralizado */}
+      <div className="flex-1 flex items-center justify-center px-4">
+        <div className="text-center max-w-lg">
+          {/* Ícone de confirmação */}
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Inscrição Confirmada!
+          
+          {/* Mensagem principal */}
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Sua inscrição foi confirmada!
           </h1>
-          <p className="text-lg text-gray-600">
-            Parabéns! Sua inscrição foi realizada com sucesso.
+          
+          <p className="text-xl text-gray-700 mb-8 leading-relaxed">
+            Parabéns! Todos os dados e documentos foram enviados para seu WhatsApp. 
+            Tenha uma excelente participação no SBT!
           </p>
-        </div>
 
-        {/* Informações importantes */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-blue-900 mb-3">
-            Próximos Passos
-          </h2>
-          <div className="space-y-3 text-blue-800">
-            <div className="flex items-start">
-              <span className="inline-block w-6 h-6 bg-blue-600 text-white rounded-full text-sm font-bold text-center mr-3 mt-0.5">1</span>
-              <p>Todos os documentos foram enviados para seu WhatsApp</p>
-            </div>
-            <div className="flex items-start">
-              <span className="inline-block w-6 h-6 bg-blue-600 text-white rounded-full text-sm font-bold text-center mr-3 mt-0.5">2</span>
-              <p>Apresente sua credencial na entrada do SBT no dia do teste</p>
-            </div>
-            <div className="flex items-start">
-              <span className="inline-block w-6 h-6 bg-blue-600 text-white rounded-full text-sm font-bold text-center mr-3 mt-0.5">3</span>
-              <p>Chegue com 30 minutos de antecedência</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Botões de ação */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <button className="flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-            <WhatsApp className="w-5 h-5 mr-2" />
-            Abrir WhatsApp
-          </button>
-          <button className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <Download className="w-5 h-5 mr-2" />
-            Download Documentos
-          </button>
-        </div>
-
-        {/* Informações de contato */}
-        <div className="border-t pt-6 text-center">
-          <p className="text-gray-600 mb-2">
-            Em caso de dúvidas, entre em contato:
-          </p>
-          <p className="text-blue-600 font-semibold">
-            📞 (11) 4004-4040 | 📧 casting@sbt.com.br
-          </p>
-        </div>
-
-        {/* Botão voltar */}
-        <div className="text-center mt-6">
+          {/* Botão para voltar */}
           <button 
             onClick={() => window.location.href = '/'}
-            className="text-gray-500 hover:text-gray-700 underline"
+            className="inline-flex items-center px-8 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
           >
             Voltar ao início
           </button>
         </div>
+      </div>
+
+      {/* Rodapé com informações de contato */}
+      <div className="text-center pb-8 px-4">
+        <p className="text-gray-600 text-sm">
+          Em caso de dúvidas: (11) 4004-4040 | casting@sbt.com.br
+        </p>
       </div>
     </div>
   );
