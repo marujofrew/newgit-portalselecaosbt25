@@ -64,9 +64,10 @@ function App() {
     
     if (isCartaoPage) {
       setIsChatBotMinimized(true);
-      localStorage.setItem('chatBotMinimized', 'true');
+      if (!wasMinimized) {
+        localStorage.setItem('chatBotMinimized', 'true');
+      }
     } else {
-      // Manter estado minimizado se já estava minimizado
       setIsChatBotMinimized(wasMinimized);
     }
   }, []);
