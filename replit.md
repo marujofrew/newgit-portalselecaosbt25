@@ -208,6 +208,9 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
   - ✅ API recriada conforme documentação oficial For4Payments
   - ✅ Estrutura de payload correta com transaction.purchase endpoint
   - ✅ Headers de autenticação e mapeamento de status implementados
+  - ✅ Interface PIX aprimorada com quadro visual e botão de cópia
+  - ✅ Feedback visual ao copiar (botão verde "Copiado!" por 2 segundos)
+  - ✅ Fallback para dispositivos que não suportam clipboard API
 - **Sistema de reset completo implementado**: Limpeza automática após inscrição
   - ✅ Função resetCompleteSystem() criada para limpar tudo
   - ✅ Limpeza automática após 10 segundos na página de confirmação

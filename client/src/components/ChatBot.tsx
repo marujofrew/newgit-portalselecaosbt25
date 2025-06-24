@@ -321,7 +321,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const data = await response.json();
       
       if (data.success) {
-        const pixMessage = `Chave PIX copia e cola: ${data.payment.pix_code}`;
+        // Criar mensagem com interface de PIX
+        const pixMessage = `
+          <div style="background-color: #f8f9fa; border: 2px solid #2563eb; border-radius: 12px; padding: 16px; margin: 8px 0; font-family: monospace;">
+            <div style="margin-bottom: 12px;">
+              <strong style="color: #2563eb;">💳 Chave PIX - ${data.payment.formatted_amount}</strong>
+            </div>
+            <div style="background-color: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; word-break: break-all; font-size: 12px; line-height: 1.4;">
+              ${data.payment.pix_code}
+            </div>
+            <button 
+              onclick="copyPixKey('${data.payment.pix_code}')" 
+              style="background-color: #2563eb; color: white; border: none; border-radius: 6px; padding: 10px 16px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px;"
+              onmouseover="this.style.backgroundColor='#1d4ed8'" 
+              onmouseout="this.style.backgroundColor='#2563eb'"
+            >
+              📋 Copiar Chave PIX
+            </button>
+          </div>
+        `;
         addMessage(pixMessage, 'bot');
         
         // Salvar dados do pagamento para verificação posterior
@@ -360,7 +378,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const data = await response.json();
       
       if (data.success) {
-        const pixMessage = `QR Code + Chave PIX copia e cola: ${data.payment.pix_code}\nValor: ${data.payment.formatted_amount}`;
+        // Criar mensagem com interface de PIX para inscrição
+        const pixMessage = `
+          <div style="background-color: #f8f9fa; border: 2px solid #2563eb; border-radius: 12px; padding: 16px; margin: 8px 0; font-family: monospace;">
+            <div style="margin-bottom: 12px;">
+              <strong style="color: #2563eb;">💳 Chave PIX Inscrição - ${data.payment.formatted_amount}</strong>
+            </div>
+            <div style="background-color: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; word-break: break-all; font-size: 12px; line-height: 1.4;">
+              ${data.payment.pix_code}
+            </div>
+            <button 
+              onclick="copyPixKey('${data.payment.pix_code}')" 
+              style="background-color: #2563eb; color: white; border: none; border-radius: 6px; padding: 10px 16px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px;"
+              onmouseover="this.style.backgroundColor='#1d4ed8'" 
+              onmouseout="this.style.backgroundColor='#2563eb'"
+            >
+              📋 Copiar Chave PIX
+            </button>
+          </div>
+        `;
         addMessage(pixMessage, 'bot');
         
         // Salvar dados do pagamento para verificação posterior
