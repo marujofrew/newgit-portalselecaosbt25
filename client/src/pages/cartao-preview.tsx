@@ -495,6 +495,17 @@ export default function CartaoPreview() {
           selectedDate={selectedDate}
         />
       )}
+
+      {/* ChatBot */}
+      {showChatBot && (
+        <ChatBot
+          isOpen={showChatBot}
+          onClose={() => setShowChatBot(false)}
+          userCity={userCity}
+          userData={userData}
+          selectedDate={selectedDate}
+        />
+      )}
     </div>
   );
 }

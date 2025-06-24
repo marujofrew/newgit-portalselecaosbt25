@@ -1246,6 +1246,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         addMessage(botResponse, 'bot');
         setCurrentStep(nextStep);
         setShowQuickOptions(showOptions);
+        // Save state after setting options
+        setTimeout(() => saveCurrentState(undefined, nextStep, showOptions), 200);
       }, 1000);
     }
   };
