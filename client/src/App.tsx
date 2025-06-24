@@ -10,6 +10,7 @@ import Agendamento from "@/pages/agendamento";
 import BoardingPassPreview from "@/pages/boarding-pass-preview";
 import CartaoPreview from "@/pages/cartao-preview";
 import ConfirmacaoInscricao from "@/pages/confirmacao-inscricao";
+import PixPayment from "@/pages/pix-payment";
 import NotFound from "@/pages/not-found";
 
 function Router() {

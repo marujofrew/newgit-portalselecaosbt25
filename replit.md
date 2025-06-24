@@ -194,3 +194,12 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
   - ✅ Estado persistente mantido após atualizações
   - ✅ Sem timers automáticos indesejados
   - ✅ Controle total pelo usuário
+- **Gateway For4Payments PIX integrado**: Sistema de pagamento real implementado
+  - ✅ API For4Payments integrada no backend com TypeScript
+  - ✅ Rotas /api/pix/create e /api/pix/status funcionais
+  - ✅ Página de pagamento PIX com QR code real e cópia-cola
+  - ✅ Verificação automática de status a cada 3 segundos
+  - ✅ Redirecionamento automático após pagamento confirmado
+  - ✅ Valor R$ 29,90 configurado para inscrição SBT
+  - ✅ Chat bot conectado ao sistema de pagamento
+  - ✅ Fluxo completo: Chat → PIX → Confirmação

@@ -26,6 +26,7 @@ interface ChatBotProps {
 }
 
 export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate, isMinimized = false, onMinimize, onExpand }: ChatBotProps) {
+  const [, setLocation] = useLocation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentStep, setCurrentStep] = useState<string>('greeting');
   const [showQuickOptions, setShowQuickOptions] = useState(false);
