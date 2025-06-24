@@ -1590,28 +1590,50 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       
       const handleBoardingPassClick = () => {
         console.log('Clique no cartão de embarque detectado');
-        try {
-          const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-          const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-          
-          const fullPassengers = [
-            { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
-          ];
-          
-          candidatos.forEach((candidato: any, index: number) => {
-            fullPassengers.push({
-              name: candidato.nome || `CANDIDATO ${index + 1}`,
-              type: `Candidato ${index + 1}`,
-              isMain: false
-            });
-          });
-
-          const flightData = calculateFlightData(selectedDate, userCity);
-          console.log('Abrindo modal com dados:', { fullPassengers, flightData });
-          createBoardingPassModal(fullPassengers, flightData);
-        } catch (error) {
-          console.error('Erro ao abrir modal:', error);
+        
+        // Modal básico primeiro - teste simples
+        const modalHTML = `
+          <div id="boarding-pass-modal-test" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Cartões de Embarque</h3>
+                <button id="close-modal-test" class="text-gray-500 hover:text-gray-700">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="text-center">
+                <p class="text-gray-600">Modal aberto com sucesso!</p>
+                <p class="text-sm text-gray-500 mt-2">Esta é uma versão de teste do modal.</p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Remover modal existente se houver
+        const existingModal = document.getElementById('boarding-pass-modal-test');
+        if (existingModal) {
+          existingModal.remove();
         }
+        
+        // Adicionar modal ao DOM
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Adicionar eventos
+        const modal = document.getElementById('boarding-pass-modal-test');
+        const closeBtn = document.getElementById('close-modal-test');
+        
+        if (closeBtn) {
+          closeBtn.onclick = () => modal?.remove();
+        }
+        
+        // Fechar modal clicando fora
+        modal?.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        });
       };
       
       return (
