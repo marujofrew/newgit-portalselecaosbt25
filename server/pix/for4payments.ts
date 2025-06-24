@@ -60,8 +60,7 @@ export class For4PaymentsAPI {
       "Authorization": this.secret_key,
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "User-Agent": "SBT-Casting-Platform/1.0.0",
-      "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7"
+      "User-Agent": "For4Payments-NodeJS-SDK/1.0.0"
     };
   }
 
@@ -89,15 +88,82 @@ export class For4PaymentsAPI {
   async createPixPayment(data: PaymentRequestData): Promise<PaymentResponse> {
     this.validatePaymentData(data);
 
-    const cpf = data.cpf.replace(/\D/g, "");
-    const phone = data.phone?.replace(/\D/g, "") || "11999999999";
+    try {
+      console.log('🔄 Criando pagamento PIX via For4Payments...');
+      console.log('📊 Dados do pagamento:', { ...data, cpf: data.cpf?.substring(0, 3) + '***' });
+      console.log('🔑 Secret key configurada:', this.secret_key ? 'SIM' : 'NÃO');
+      console.log('🌐 URL da API:', `${this.API_URL}/transaction.purchase`);
 
-    const paymentData = {
-      name: data.name.trim(),
-      email: data.email.trim(),
-      cpf: cpf,
-      phone: phone,
-      paymentMethod: "PIX",
+      const cpf = data.cpf.replace(/\D/g, "");
+      const phone = data.phone?.replace(/\D/g, "") || "11999999999";
+
+      const requestBody = {
+        name: data.name.trim(),
+        email: data.email.trim(),
+        cpf: cpf,
+        phone: phone,
+        paymentMethod: "PIX",
+        amount: data.amount,
+        traceable: true,
+        items: [
+          {
+            title: data.description || "Pagamento SBT",
+            quantity: 1,
+            unitPrice: data.amount,
+            tangible: false
+          }
+        ],
+        cep: "01001-000",
+        street: "Rua da Sé",
+        number: "1",
+        complement: "",
+        district: "Sé",
+        city: "São Paulo",
+        state: "SP",
+        utmQuery: "",
+        checkoutUrl: "",
+        referrerUrl: "",
+        externalId: `pix-${Date.now()}`,
+        postbackUrl: "",
+        fingerPrints: []
+      };
+
+      console.log('📤 Enviando request:', JSON.stringify(requestBody, null, 2));
+
+      const response = await fetch(`${this.API_URL}/transaction.purchase`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify(requestBody)
+      });
+
+      console.log('📡 Status da resposta:', response.status);
+      console.log('📋 Headers da resposta:', Object.fromEntries(response.headers.entries()));
+
+      const responseText = await response.text();
+      console.log('📄 Resposta raw:', responseText);
+
+      if (!response.ok) {
+        console.error('❌ Erro na API For4Payments:', response.status, responseText);
+        throw new Error(`Erro da API For4Payments (${response.status}): ${responseText}`);
+      }
+
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('❌ Erro ao fazer parse da resposta:', parseError);
+        throw new Error(`Resposta inválida da API: ${responseText}`);
+      }
+
+      console.log('✅ Resposta da API recebida:', responseData);
+
+      return this.parsePaymentResponse(responseData);
+
+    } catch (error) {
+      console.error('💥 Erro ao criar pagamento PIX:', error);
+      throw error;
+    }
+  }
       amount: data.amount,
       traceable: true,
       items: [
