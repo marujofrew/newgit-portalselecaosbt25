@@ -786,7 +786,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           nextStep = 'hotel-step1';
           showOptions = false;
 
-          setTimeout(() => {
+          setTimeout(()=> {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
@@ -1354,7 +1354,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         window.location.href = '/cartao-preview'; // Redirecionar
       }, 300);
     };
-    
+
     return () => {
       delete (window as any).handleCartaoPreviewClick;
     };
