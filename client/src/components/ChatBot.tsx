@@ -299,6 +299,44 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     setLocation('/pix-payment');
   };
 
+  const createBaggagePixPayment = async () => {
+    try {
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      
+      const response = await fetch('/api/pix/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: responsavelData.nome || 'Cliente SBT',
+          email: responsavelData.email || 'cliente@sbt.com.br',
+          cpf: responsavelData.cpf || '00000000000',
+          amount: 2990, // R$ 29,90 em centavos
+          description: 'Kit Bagagem SBT - Programa Bagagem do Bem',
+          phone: responsavelData.telefone || '11999999999'
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        const pixMessage = `QR Code + Chave PIX copia e cola:\n${data.payment.pix_code}\n\nValor: ${data.payment.formatted_amount}`;
+        addMessage(pixMessage, 'bot');
+        
+        // Salvar dados do pagamento para verificação posterior
+        localStorage.setItem('baggagePaymentId', data.payment.id);
+        console.log('💳 PIX bagagem criado:', data.payment.id);
+      } else {
+        addMessage('QR Code + Chave PIX copia e cola: [Erro ao gerar PIX]\nValor: R$ 29,90', 'bot');
+        console.error('Erro ao criar PIX:', data.error);
+      }
+    } catch (error) {
+      console.error('Erro ao criar PIX para bagagem:', error);
+      addMessage('QR Code + Chave PIX copia e cola: [Erro de conexão]\nValor: R$ 29,90', 'bot');
+    }
+  };
+
   const addMessage = (text: string, sender: 'bot' | 'user') => {
     const newMessage: Message = {
       id: Date.now() + Math.random(),
