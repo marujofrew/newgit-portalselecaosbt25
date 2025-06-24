@@ -108,6 +108,10 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Fluxo completo do chatbot implementado**: Script exato seguido com correções ortográficas, incluindo transporte (avião/van), bagagens, hotel, inscrição e pagamento PIX
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
+- **Fluxo de van corrigido**: Sequência completa de mensagens sobre bagagem após confirmação da viagem de van implementada
+- **Sistema de bagagem específico para van**: Programa "Bagagem do Bem" adaptado para limitações de espaço em van
+- **Timer PIX para bagagem van**: Sistema de pagamento com timeout e confirmação automática específico para fluxo de van
+- **Convergência de fluxos**: Ambos os fluxos (avião e van) convergem para hotel após suas respectivas etapas de bagagem
 - **Sistema de cartões de embarque aprimorado**: Documento único mostra quantidade de passageiros e lista todos os nomes, geração automática após pagamento, modal completo com navegação lateral, download empilhado, fechamento automático após 30 segundos
 - **Assentos sequenciais implementados**: Responsável e candidatos ficam em assentos adjacentes (1D, 2D, 3D, 4D...) na mesma fileira, letra D fixa
 - **Dados sincronizados implementados**: Data real do voo baseada na opção escolhida no chat, cidade/aeroporto do CEP preenchido, horários de embarque calculados (25min antes), nomes dos cadastrados
