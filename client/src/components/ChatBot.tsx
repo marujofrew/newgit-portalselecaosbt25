@@ -529,6 +529,30 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
 
+  // Função para abrir modal de cartões de embarque
+  const openBoardingPassModal = () => {
+    try {
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+      
+      const passengers = [
+        { name: responsavelData.nome || 'RESPONSÁVEL', type: 'Responsável', isMain: true }
+      ];
+      
+      candidatos.forEach((candidato: any, index: number) => {
+        passengers.push({
+          name: candidato.nome || `CANDIDATO ${index + 1}`,
+          type: `Candidato ${index + 1}`,
+          isMain: false
+        });
+      });
+
+      const flightData = calculateFlightData(selectedDate, userCity);
+      createBoardingPassModal(passengers, flightData);
+    } catch (error) {
+      console.error('Erro ao abrir modal de cartões:', error);
+    }
+  };
 
   const generateCredentials = () => {
     try {
