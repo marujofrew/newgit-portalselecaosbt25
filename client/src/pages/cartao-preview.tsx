@@ -478,18 +478,6 @@ export default function CartaoPreview() {
           </div>
         </div>
       )}
-
-          userCity={userCity}
-          userData={userData}
-          selectedDate={selectedDate}
-        />
-      )}
-
-          userCity={userCity}
-          userData={userData}
-          selectedDate={selectedDate}
-        />
-      )}
     </div>
   );
 }
