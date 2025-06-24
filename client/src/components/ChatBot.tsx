@@ -1356,7 +1356,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   React.useEffect(() => {
     (window as any).handleCartaoPreviewClick = (event: Event) => {
       event.preventDefault();
-      setIsMinimized(true); // Minimizar o chat
+      if (onMinimize) {
+        onMinimize();
+      } else {
+        setInternalMinimized(true);
+      } // Minimizar o chat
       // Marcar que deve permanecer minimizado na próxima página
       localStorage.setItem('chatBotMinimized', 'true');
       setTimeout(() => {
@@ -1436,7 +1440,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               <p className="text-xs text-blue-100">Online agora</p>
             </div>
           </div>
-          <button onClick={() => setIsMinimized(true)} className="text-white hover:text-gray-200 text-xl font-bold">
+          <button 
+            onClick={() => {
+              if (onMinimize) {
+                onMinimize();
+              } else {
+                setInternalMinimized(true);
+              }
+            }} 
+            className="text-white hover:text-gray-200 text-xl font-bold"
+          >
             −
           </button>
         </div>
