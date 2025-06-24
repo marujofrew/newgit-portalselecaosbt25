@@ -96,7 +96,7 @@ export default function CartaoPreview() {
 
     return () => {
       clearTimeout(scrollTimer);
-      if (chatBotTimer) clearTimeout(chatBotTimer);
+      // if (chatBotTimer) clearTimeout(chatBotTimer);
     };
   }, [chatBotMinimized]);
 
