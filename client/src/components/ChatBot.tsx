@@ -126,6 +126,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     localStorage.setItem('chatbotPaymentTimer', paymentTimer.toString());
   }, [paymentTimer]);
 
+  // Verificar se deve permanecer minimizado na página de cartões
+  useEffect(() => {
+    if (window.location.pathname.includes('cartao-preview')) {
+      const shouldStayMinimized = localStorage.getItem('chatBotMinimized');
+      if (shouldStayMinimized === 'true') {
+        setIsMinimized(true);
+      }
+    }
+  }, []);
+
   // Timer effect for payment countdown
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -148,30 +158,33 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   useEffect(() => {
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
-      setMessages([]);
-      setCurrentStep('greeting');
-      setShowQuickOptions(false);
-      setIsTyping(false);
-      setShowPaymentStatus(false);
-      setPaymentTimer(0);
+      
+      // Só inicializar conversa se não há mensagens salvas
+      if (messages.length === 0) {
+        setCurrentStep('greeting');
+        setShowQuickOptions(false);
+        setIsTyping(false);
+        setShowPaymentStatus(false);
+        setPaymentTimer(0);
 
-      // Buscar aeroporto mais próximo baseado no CEP
-      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-      if (responsavelData.cep) {
-        findNearestAirportFromCEP(responsavelData.cep);
+        // Buscar aeroporto mais próximo baseado no CEP
+        const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+        if (responsavelData.cep) {
+          findNearestAirportFromCEP(responsavelData.cep);
+        }
+
+        // Mensagem inicial
+        const welcomeMessage: Message = {
+          id: Date.now(),
+          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+        setShowQuickOptions(true);
       }
-
-      // Mensagem inicial
-      const welcomeMessage: Message = {
-        id: Date.now(),
-        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages([welcomeMessage]);
-      setShowQuickOptions(true);
     }
-  }, [isOpen, isInitialized]);
+  }, [isOpen, isInitialized, messages.length]);
 
   const findNearestAirportFromCEP = async (cep: string) => {
     try {
