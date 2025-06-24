@@ -743,7 +743,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Chave PIX copia e cola: bagagem@sbt.com.br", 'bot');
+              
+              // Gerar PIX real para bagagem (rota avião)
+              createBaggagePixPayment();
 
               setTimeout(() => {
                 setIsTyping(true);
