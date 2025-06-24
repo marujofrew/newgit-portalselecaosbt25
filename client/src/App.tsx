@@ -41,8 +41,8 @@ function App() {
     const chatBotOpened = localStorage.getItem('chatBotOpened');
     const currentPath = window.location.pathname;
     
-    // Não mostrar chatbot na página inicial
-    if (currentPath === '/') {
+    // Não mostrar chatbot na página inicial nem na página de agendamento antes da confirmação
+    if (currentPath === '/' || currentPath === '/agendamento') {
       return;
     }
     

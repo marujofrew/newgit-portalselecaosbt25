@@ -135,12 +135,12 @@ export default function Agendamento() {
     // Marcar que chatbot deve aparecer automaticamente
     localStorage.setItem('showChatBotGlobal', 'true');
     
-    // Marcar que chatbot foi aberto pela primeira vez e redirecionar
+    // Marcar que chatbot foi aberto pela primeira vez e ativar
     setTimeout(() => {
       setLoading(false);
       localStorage.setItem('chatBotOpened', 'true');
-      // Redirecionar para página onde chatbot aparecerá automaticamente
-      window.location.href = '/agendamento';
+      // Forçar reload para ativar chatbot global
+      window.location.reload();
     }, 1000);
   };
 
