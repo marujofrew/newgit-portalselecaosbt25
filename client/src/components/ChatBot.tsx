@@ -4,6 +4,7 @@ import rebecaAvatar from '@assets/telemarketing_reproduz_1750494256177.jpg';
 import bagagemDoBemImage from '@assets/assets_task_01jyfgjxwkets8k907ads1nc55_1750719962_img_1_1750728660025.webp';
 import bagagemDoBemVanImage from '@assets/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
 import hotelRoomImage from '@assets/Leon-Park-157-1024x680_1750729457567.jpg';
+import hotelRoomVanImage from '@assets/Leon-Park-157-1024x680_1750730216204.jpg';
 
 interface Message {
   id: number;
@@ -835,13 +836,23 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setIsTyping(false);
                       addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
                       
+                      // Adicionar imagem do quarto de hotel específica para fluxo de van
                       setTimeout(() => {
-                        setIsTyping(true);
+                        const imageMessage: Message = {
+                          id: Date.now(),
+                          text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        };
+                        setMessages(prev => [...prev, imageMessage]);
+                        
                         setTimeout(() => {
-                          setIsTyping(false);
-                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
-                          
+                          setIsTyping(true);
                           setTimeout(() => {
+                            setIsTyping(false);
+                            addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                            
+                            setTimeout(() => {
                             setIsTyping(true);
                             setTimeout(() => {
                               setIsTyping(false);
