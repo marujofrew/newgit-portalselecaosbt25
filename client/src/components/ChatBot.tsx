@@ -133,6 +133,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             messagesCount: restoredMessages.length
           });
           
+          // Se está no step boarding-passes, mostrar botões de continuar
+          if (state.currentStep === 'boarding-passes') {
+            setTimeout(() => setShowQuickOptions(true), 1000);
+            console.log('🎯 Forçando exibição de botões para boarding-passes');
+          }
+          
           // Se há mensagens, scroll para baixo
           if (restoredMessages && restoredMessages.length > 0) {
             setTimeout(() => scrollToBottom(), 500);
@@ -245,6 +251,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'boarding-passes':
         return ['Vamos continuar'];
+        
+      case 'hotel-info':
+        return ['Perfeito, vamos para a próxima etapa!'];
 
       case 'van-confirmation':
         return ['Sim, pode confirmar!'];
