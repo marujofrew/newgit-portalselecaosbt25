@@ -19,9 +19,12 @@ interface ChatBotProps {
   userCity?: string;
   userData?: any;
   selectedDate?: string;
+  isMinimized?: boolean;
+  onMinimize?: () => void;
+  onExpand?: () => void;
 }
 
-export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate }: ChatBotProps) {
+export default function ChatBot({ isOpen, onClose, userCity, userData, selectedDate, isMinimized = false, onMinimize, onExpand }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentStep, setCurrentStep] = useState<string>('greeting');
   const [showQuickOptions, setShowQuickOptions] = useState(false);
@@ -34,7 +37,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [selectedFlightOption, setSelectedFlightOption] = useState<string>('');
   const [hasBaggage, setHasBaggage] = useState<boolean>(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [internalMinimized, setInternalMinimized] = useState(isMinimized);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -1368,13 +1371,21 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   if (!isOpen) return null;
 
+  const currentMinimized = onMinimize ? isMinimized : internalMinimized;
+
   // Balão minimizado
-  if (isMinimized) {
+  if (currentMinimized) {
     return (
       <div className="fixed bottom-6 right-6 z-50 group">
         <div 
           className="relative bg-blue-600 hover:bg-blue-700 rounded-full w-14 h-14 flex items-center justify-center cursor-pointer shadow-lg transition-all duration-200 hover:shadow-xl"
-          onClick={() => setIsMinimized(false)}
+          onClick={() => {
+            if (onExpand) {
+              onExpand();
+            } else {
+              setInternalMinimized(false);
+            }
+          }}
         >
           {/* Ícone de chat mais simples */}
           <svg 

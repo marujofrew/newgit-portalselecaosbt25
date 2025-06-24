@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import ChatBot from '../components/ChatBot';
 
 
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
@@ -27,6 +28,8 @@ export default function CartaoPreview() {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showChatBot, setShowChatBot] = useState(false);
+  const [chatBotMinimized, setChatBotMinimized] = useState(true);
 
 
   const [userCity, setUserCity] = useState<string>('');
@@ -147,7 +150,7 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
-
+        setChatBotMinimized(false);
       }, 1000);
       
     } catch (error) {
@@ -477,6 +480,20 @@ export default function CartaoPreview() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ChatBot */}
+      {showChatBot && (
+        <ChatBot
+          isOpen={showChatBot}
+          onClose={() => setShowChatBot(false)}
+          userCity={userCity}
+          userData={userData}
+          selectedDate={selectedDate}
+          isMinimized={chatBotMinimized}
+          onMinimize={() => setChatBotMinimized(true)}
+          onExpand={() => setChatBotMinimized(false)}
+        />
       )}
     </div>
   );
