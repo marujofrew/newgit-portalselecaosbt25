@@ -46,15 +46,30 @@ export default function CartaoPreview() {
     
     // Verificar se deve mostrar chatbot (só se agendamento foi confirmado)
     const agendamentoConfirmado = localStorage.getItem('agendamentoConfirmado');
+    console.log('🎯 Agendamento confirmado:', agendamentoConfirmado);
+    
     if (agendamentoConfirmado === 'true') {
+      // Verificar se há conversa da página de agendamento
+      const hasExistingChat = ChatStorage.hasConversation();
+      console.log('📋 Conversa da página anterior encontrada:', hasExistingChat);
+      
       // Mostrar chatbot automaticamente
       setShowChatBot(true);
       
-      // Se há conversa salva, abrir chat imediatamente
-      if (ChatStorage.hasConversation()) {
-        console.log('Conversa encontrada na página de cartões, abrindo chat...');
-        setChatBotMinimized(false);
+      if (hasExistingChat) {
+        console.log('✅ Abrindo chat com conversa anterior da página de agendamento');
+        setChatBotMinimized(false); // Abrir expandido para mostrar a conversa
+        
+        // Debug: mostrar detalhes da conversa
+        const state = ChatStorage.getState();
+        console.log('📊 Detalhes da conversa:', {
+          totalMensagens: state.messages?.length,
+          passoAtual: state.currentStep,
+          transporteSelecionado: state.selectedTransport,
+          vooSelecionado: state.selectedFlightOption
+        });
       } else {
+        console.log('⚠️ Nenhuma conversa anterior encontrada');
         setChatBotMinimized(true);
       }
     }
@@ -70,19 +85,20 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 20 segundos de inatividade
+    // Timer para abrir chatbot após 15 segundos se ainda não foi aberto
     let chatBotTimer: NodeJS.Timeout;
-    if (agendamentoConfirmado === 'true') {
+    if (agendamentoConfirmado === 'true' && chatBotMinimized) {
       chatBotTimer = setTimeout(() => {
+        console.log('⏰ Abrindo chat automaticamente após 15 segundos');
         setChatBotMinimized(false);
-      }, 20000);
+      }, 15000);
     }
 
     return () => {
       clearTimeout(scrollTimer);
       if (chatBotTimer) clearTimeout(chatBotTimer);
     };
-  }, []);
+  }, [chatBotMinimized]);
 
   const loadBoardingPassData = () => {
     try {

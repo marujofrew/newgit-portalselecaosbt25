@@ -102,19 +102,32 @@ export class ChatStorage {
     };
   }
 
-  // Verificar se existe conversa salva
+  // Verificar se existe conversa salva válida
   static hasConversation(): boolean {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return false;
+    if (!saved) {
+      console.log('❌ Nenhum dado salvo encontrado');
+      return false;
+    }
     
     try {
       const state = JSON.parse(saved);
-      const hasMessages = state.messages && state.messages.length > 0;
-      const isInitialized = state.isInitialized;
-      console.log('Verificando conversa existente:', { hasMessages, isInitialized, messagesCount: state.messages?.length });
-      return hasMessages && isInitialized;
+      const hasMessages = state.messages && Array.isArray(state.messages) && state.messages.length > 0;
+      const isInitialized = state.isInitialized === true;
+      const isRecent = state.timestamp && (Date.now() - state.timestamp) < 24 * 60 * 60 * 1000; // 24 horas
+      
+      console.log('🔍 Verificando conversa:', { 
+        hasMessages, 
+        isInitialized, 
+        isRecent,
+        messagesCount: state.messages?.length,
+        lastStep: state.currentStep,
+        timestamp: new Date(state.timestamp).toLocaleString()
+      });
+      
+      return hasMessages && isInitialized && isRecent;
     } catch (error) {
-      console.error('Erro ao verificar conversa:', error);
+      console.error('❌ Erro ao verificar conversa:', error);
       return false;
     }
   }
