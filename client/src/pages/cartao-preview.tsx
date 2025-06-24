@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import ChatBot from '../components/ChatBot';
+import { ChatStorage } from '../utils/chatStorage';
 
 
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
@@ -29,7 +30,8 @@ export default function CartaoPreview() {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [showChatBot, setShowChatBot] = useState(false);
-  const [chatBotMinimized, setChatBotMinimized] = useState(true);
+  // Chat deve abrir imediatamente se há conversa salva
+  const [chatBotMinimized, setChatBotMinimized] = useState(!ChatStorage.hasConversation());
 
 
   const [userCity, setUserCity] = useState<string>('');

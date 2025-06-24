@@ -84,6 +84,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setHasBaggage(state.hasBaggage);
       setNearestAirport(state.nearestAirport);
       setIsInitialized(true); // SEMPRE marcar como inicializado quando restaura
+      console.log('Chat restaurado com', state.messages.length, 'mensagens');
       
       return true;
     }
