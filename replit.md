@@ -140,6 +140,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Link para cartões de embarque implementado**: Botão clicável enviado após mensagem de download direcionando para `/cartao-preview`
 - **Redirecionamento com minimização**: Link de cartões minimiza chat e redireciona mantendo estado da conversa
 - **Chat minimizado persistente**: Na página de cartões, chat permanece minimizado até download ou 15 segundos de inatividade
+- **Chatbot restrito pós-agendamento**: Não aparece na página inicial, apenas após confirmação de agendamento
 - **Cartões de embarque redesenhados**: Layout idêntico ao modelo original da Azul com logo oficial, QR codes reais e dados dinâmicos
 - **Modal de cartões como arquivos**: Cartões aparecem como arquivos clicáveis com visualização em modal
 - **Sistema de múltiplos candidatos implementado**: Formulário agora suporta de 1 a 5 candidatos com seções dinâmicas

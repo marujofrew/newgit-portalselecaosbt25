@@ -36,9 +36,15 @@ function App() {
   const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
-    // Verificar se chatbot deve aparecer globalmente
+    // Verificar se chatbot deve aparecer globalmente (mas não na página inicial)
     const shouldShowChatBot = localStorage.getItem('showChatBotGlobal');
     const chatBotOpened = localStorage.getItem('chatBotOpened');
+    const currentPath = window.location.pathname;
+    
+    // Não mostrar chatbot na página inicial
+    if (currentPath === '/') {
+      return;
+    }
     
     if (shouldShowChatBot === 'true' && chatBotOpened === 'true') {
       setShowGlobalChatBot(true);
