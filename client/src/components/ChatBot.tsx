@@ -1655,18 +1655,20 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   // Sistema de verificação de pagamento
   const startPaymentVerification = (paymentId: string, type: 'baggage' | 'inscription') => {
-    const maxAttempts = 30; // 30 verificações em 1,5 minutos (3 segundos cada)
-    let attempts = 0;
+    let isPaymentConfirmed = false;
+    let timeoutShown = false;
+    
+    console.log(`🚀 Iniciando verificação de pagamento: ${paymentId} (${type})`);
     
     const checkPayment = async () => {
-      attempts++;
+      if (isPaymentConfirmed) return;
       
       try {
         const response = await fetch(`/api/pix/status/${paymentId}`);
         const data = await response.json();
         
         if (data.is_paid) {
-          // Pagamento confirmado
+          isPaymentConfirmed = true;
           const confirmMessage = type === 'baggage' 
             ? '💚 Pagamento confirmado! Vamos continuar?'
             : '💚 Pagamento da inscrição confirmado! Vamos prosseguir?';
@@ -1674,44 +1676,39 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           addMessage(confirmMessage, 'bot');
           setShowQuickOptions(true);
           setCurrentStep(type === 'baggage' ? 'baggage_payment_confirmed' : 'inscription_payment_confirmed');
+          console.log(`✅ Pagamento confirmado: ${paymentId}`);
           return;
         }
         
-        // Verificar se ainda tem tentativas
-        if (attempts >= maxAttempts) {
-          // Timeout - sempre mostrar opções independente do status
-          const timeoutMessage = type === 'baggage'
-            ? 'Não conseguimos confirmar seu pagamento. Deseja continuar sem bagagem ou aguardar mais?'
-            : 'Não conseguimos confirmar seu pagamento da inscrição. O que deseja fazer?';
-          
-          addMessage(timeoutMessage, 'bot');
-          setShowQuickOptions(true);
-          setCurrentStep(type === 'baggage' ? 'baggage_payment_timeout' : 'inscription_payment_timeout');
-          return;
+        // Continuar verificando se não confirmado
+        if (!isPaymentConfirmed) {
+          setTimeout(checkPayment, 3000);
         }
-        
-        // Continuar verificando
-        setTimeout(checkPayment, 3000); // Verificar novamente em 3 segundos
         
       } catch (error) {
         console.error('Erro ao verificar pagamento:', error);
-        
-        // Em caso de erro, continuar tentando até o timeout
-        if (attempts >= maxAttempts) {
-          const errorMessage = type === 'baggage'
-            ? 'Tivemos problemas para verificar seu pagamento. Deseja continuar sem bagagem ou aguardar mais?'
-            : 'Tivemos problemas para verificar seu pagamento da inscrição. O que deseja fazer?';
-          
-          addMessage(errorMessage, 'bot');
-          setShowQuickOptions(true);
-          setCurrentStep(type === 'baggage' ? 'baggage_payment_timeout' : 'inscription_payment_timeout');
-        } else {
+        if (!isPaymentConfirmed) {
           setTimeout(checkPayment, 3000);
         }
       }
     };
     
-    // Iniciar primeira verificação após 3 segundos
+    // Timer de 20 segundos para mostrar opções
+    setTimeout(() => {
+      if (!timeoutShown && !isPaymentConfirmed) {
+        timeoutShown = true;
+        const timeoutMessage = type === 'baggage'
+          ? 'Deseja continuar sem bagagem ou aguardar a confirmação do pagamento?'
+          : 'Deseja continuar ou aguardar a confirmação do pagamento?';
+        
+        console.log(`⏰ Timeout de 20s atingido - mostrando opções para: ${type}`);
+        addMessage(timeoutMessage, 'bot');
+        setShowQuickOptions(true);
+        setCurrentStep(type === 'baggage' ? 'baggage_payment_timeout' : 'inscription_payment_timeout');
+      }
+    }, 20000);
+    
+    // Iniciar verificação após 3 segundos
     setTimeout(checkPayment, 3000);
   };
 
