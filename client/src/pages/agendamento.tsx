@@ -24,7 +24,8 @@ export default function Agendamento() {
       console.log('Agendamento: Carregando dados para chat:', {
         responsavel: !!responsavelData,
         city: !!cityData,
-        selectedDate: storedSelectedDate
+        selectedDate: storedSelectedDate,
+        pathname: window.location.pathname
       });
       
       if (responsavelData) {

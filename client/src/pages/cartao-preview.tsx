@@ -80,11 +80,14 @@ export default function CartaoPreview() {
       console.log('CartaoPreview: Carregando dados para chat:', {
         responsavel: !!responsavelData,
         city: !!cityData,
-        selectedDate: storedSelectedDate
+        selectedDate: storedSelectedDate,
+        pathname: window.location.pathname
       });
       
-      setUserData(responsavelData);
-      console.log('CartaoPreview: Dados do usuário carregados:', responsavelData.nome);
+      if (responsavelData) {
+        setUserData(responsavelData);
+        console.log('CartaoPreview: Dados do usuário carregados:', responsavelData.nome);
+      }
       
       if (cityData) {
         const parsed = JSON.parse(cityData);

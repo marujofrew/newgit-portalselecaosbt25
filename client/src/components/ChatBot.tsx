@@ -88,14 +88,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     });
 
     if (savedMessages) {
-      const parsedMessages = JSON.parse(savedMessages);
-      // Converter timestamps de string para Date
-      const messagesWithDates = parsedMessages.map((msg: any) => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp)
-      }));
-      setMessages(messagesWithDates);
-      console.log('ChatBot: Mensagens carregadas:', messagesWithDates.length);
+      try {
+        const parsedMessages = JSON.parse(savedMessages);
+        // Converter timestamps de string para Date
+        const messagesWithDates = parsedMessages.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setMessages(messagesWithDates);
+        console.log('ChatBot: Mensagens carregadas:', messagesWithDates.length);
+      } catch (error) {
+        console.error('Erro ao carregar mensagens:', error);
+        setMessages([]);
+      }
     }
     if (savedCurrentStep) {
       setCurrentStep(savedCurrentStep);
@@ -108,16 +113,31 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       setSelectedFlightOption(savedSelectedFlightOption);
     }
     if (savedHasBaggage) {
-      setHasBaggage(JSON.parse(savedHasBaggage));
+      try {
+        setHasBaggage(JSON.parse(savedHasBaggage));
+      } catch (error) {
+        setHasBaggage(false);
+      }
     }
     if (savedShowQuickOptions) {
-      setShowQuickOptions(JSON.parse(savedShowQuickOptions));
+      try {
+        setShowQuickOptions(JSON.parse(savedShowQuickOptions));
+      } catch (error) {
+        setShowQuickOptions(false);
+      }
     }
     if (savedShowPaymentStatus) {
-      setShowPaymentStatus(JSON.parse(savedShowPaymentStatus));
+      try {
+        setShowPaymentStatus(JSON.parse(savedShowPaymentStatus));
+      } catch (error) {
+        setShowPaymentStatus(false);
+      }
     }
     if (savedPaymentTimer) {
-      setPaymentTimer(parseInt(savedPaymentTimer));
+      const timer = parseInt(savedPaymentTimer);
+      if (!isNaN(timer)) {
+        setPaymentTimer(timer);
+      }
     }
     if (savedMinimized === 'true') {
       setIsMinimized(true);
@@ -200,16 +220,30 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   useEffect(() => {
     if (isOpen && isInitialized) {
+      console.log('ChatBot: Chat aberto e inicializado. Verificando estado...', {
+        messagesCount: messages.length,
+        currentStep,
+        showQuickOptions
+      });
+
       // Aguardar um pouco para garantir que o estado foi carregado
       setTimeout(() => {
         if (messages.length > 0) {
           console.log('ChatBot: Continuando conversa existente com', messages.length, 'mensagens');
+          
+          // Restaurar opções se necessário
+          const options = getQuickOptions();
+          if (options.length > 0 && !showQuickOptions) {
+            console.log('ChatBot: Restaurando opções para o passo:', currentStep);
+            setShowQuickOptions(true);
+          }
+          
           // Scroll para última mensagem após um pequeno delay
           setTimeout(() => {
             scrollToBottom();
           }, 200);
         } else {
-          // Só inicializar conversa nova se não há mensagens salvas E ainda não foi inicializado
+          // Só inicializar conversa nova se não há mensagens salvas
           console.log('ChatBot: Iniciando nova conversa');
           // Buscar aeroporto mais próximo baseado no CEP
           const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
@@ -226,6 +260,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           };
           setMessages([welcomeMessage]);
           setShowQuickOptions(true);
+          setCurrentStep('greeting');
         }
       }, 100);
     }
