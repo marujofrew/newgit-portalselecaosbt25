@@ -65,28 +65,50 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   useEffect(() => {
     if (isOpen && !isInitialized) {
       setIsInitialized(true);
-      setMessages([]);
-      setCurrentStep('greeting');
-      setShowQuickOptions(false);
-      setIsTyping(false);
-      setShowPaymentStatus(false);
-      setPaymentTimer(0);
 
-      // Buscar aeroporto mais próximo baseado no CEP
-      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-      if (responsavelData.cep) {
-        findNearestAirportFromCEP(responsavelData.cep);
+      // Verificar se o chatbot deve continuar da página de cartões de embarque
+      const continueFromBoardingPass = localStorage.getItem('chatBotAtBoardingPass') === 'true';
+
+      if (continueFromBoardingPass) {
+        // Se deve continuar, definir o estado para boarding-passes
+        setCurrentStep('boarding-passes');
+        setShowQuickOptions(true);
+
+        // Limpar o indicador
+        localStorage.removeItem('chatBotAtBoardingPass');
+
+        // Adicionar mensagem
+        setMessages([{
+          id: Date.now(),
+          text: "Olá! Vejo que você retornou. Deseja continuar de onde parou?",
+          sender: 'bot',
+          timestamp: new Date()
+        }]);
+      } else {
+        // Se não deve continuar, iniciar do zero
+        setMessages([]);
+        setCurrentStep('greeting');
+        setShowQuickOptions(false);
+        setIsTyping(false);
+        setShowPaymentStatus(false);
+        setPaymentTimer(0);
+
+        // Buscar aeroporto mais próximo baseado no CEP
+        const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+        if (responsavelData.cep) {
+          findNearestAirportFromCEP(responsavelData.cep);
+        }
+
+        // Mensagem inicial
+        const welcomeMessage: Message = {
+          id: Date.now(),
+          text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+        setShowQuickOptions(true);
       }
-
-      // Mensagem inicial
-      const welcomeMessage: Message = {
-        id: Date.now(),
-        text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages([welcomeMessage]);
-      setShowQuickOptions(true);
     }
   }, [isOpen, isInitialized]);
 
@@ -467,6 +489,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
                         setShowQuickOptions(true);
                         setCurrentStep('boarding-passes');
+
+                        // Marcar que chegou aos cartões de embarque
+                        localStorage.setItem('chatBotAtBoardingPass', 'true');
                       }, 5000);
                     }, 3000);
                   }, 5000);
@@ -560,6 +585,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
                         setShowQuickOptions(true);
                         setCurrentStep('boarding-passes');
+
+                        // Marcar que chegou aos cartões de embarque
+                        localStorage.setItem('chatBotAtBoardingPass', 'true');
                       }, 5000);
                     }, 3000);
                   }, 5000);
@@ -616,6 +644,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
                       setShowQuickOptions(true);
                       setCurrentStep('boarding-passes');
+
+                      // Marcar que chegou aos cartões de embarque
+                      localStorage.setItem('chatBotAtBoardingPass', 'true');
                     }, 5000);
                   }, 3000);
                 }, 3000);
@@ -1046,7 +1077,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               }, 5000);
             }, 5000);
           }, 5000);
-        }, 5000);
+        }
         break;
 
       case 'boarding-passes':
