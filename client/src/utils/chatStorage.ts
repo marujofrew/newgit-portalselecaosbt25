@@ -21,6 +21,12 @@ interface ChatState {
   nearestAirport: any;
   isInitialized: boolean;
   timestamp: number;
+  // Novos campos para continuidade
+  shouldContinueFlow: boolean;
+  pendingMessages: string[];
+  userContext: any;
+  isActive: boolean;
+  lastPage: string;
 }
 
 const STORAGE_KEY = 'sbt_chat_state';
@@ -87,7 +93,12 @@ export class ChatStorage {
       hasBaggage: false,
       nearestAirport: null,
       isInitialized: false,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      shouldContinueFlow: false,
+      pendingMessages: [],
+      userContext: {},
+      isActive: false,
+      lastPage: ''
     };
   }
 
@@ -145,5 +156,56 @@ export class ChatStorage {
   // Debug: mostrar estado atual
   static debugState(): void {
     console.log('Estado atual do chat:', this.getState());
+  }
+
+  // Novos métodos para continuidade de fluxo
+  static markFlowAsContinuing(pendingMessages: string[] = []): void {
+    this.saveState({ 
+      shouldContinueFlow: true, 
+      pendingMessages,
+      isActive: true 
+    });
+  }
+
+  static shouldContinueFlow(): boolean {
+    const state = this.getState();
+    return state.shouldContinueFlow && state.isActive;
+  }
+
+  static getPendingMessages(): string[] {
+    const state = this.getState();
+    return state.pendingMessages || [];
+  }
+
+  static clearPendingMessages(): void {
+    this.saveState({ 
+      pendingMessages: [],
+      shouldContinueFlow: false 
+    });
+  }
+
+  static setUserContext(context: any): void {
+    this.saveState({ userContext: context });
+  }
+
+  static getUserContext(): any {
+    const state = this.getState();
+    return state.userContext || {};
+  }
+
+  static markAsActive(page: string): void {
+    this.saveState({ 
+      isActive: true,
+      lastPage: page 
+    });
+  }
+
+  static markAsInactive(): void {
+    this.saveState({ isActive: false });
+  }
+
+  static getLastPage(): string {
+    const state = this.getState();
+    return state.lastPage || '';
   }
 }

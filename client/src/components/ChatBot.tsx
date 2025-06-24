@@ -109,16 +109,38 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     };
   }, [showPaymentStatus, paymentTimer]);
 
-  // Sistema de inicialização único e limpo
+  // Sistema de inicialização com continuidade de fluxo
   useEffect(() => {
     if (isOpen && !isInitialized) {
       console.log('Iniciando sistema de chat...');
+      
+      // Marcar como ativo na página atual
+      const currentPage = window.location.pathname;
+      ChatStorage.markAsActive(currentPage);
       
       // SEMPRE tentar restaurar conversa salva primeiro
       const restored = restoreState();
       
       if (restored) {
         console.log('Conversa restaurada com sucesso');
+        
+        // Verificar se deve continuar o fluxo
+        if (ChatStorage.shouldContinueFlow()) {
+          console.log('Continuando fluxo automaticamente...');
+          const pendingMessages = ChatStorage.getPendingMessages();
+          
+          if (pendingMessages.length > 0) {
+            // Processar mensagens pendentes
+            setTimeout(() => {
+              pendingMessages.forEach((message, index) => {
+                setTimeout(() => {
+                  addMessage(message, 'bot');
+                }, index * 2000);
+              });
+              ChatStorage.clearPendingMessages();
+            }, 1000);
+          }
+        }
         return;
       }
       
@@ -126,8 +148,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       console.log('Iniciando nova conversa');
       setIsInitialized(true);
       
-      // Buscar aeroporto baseado no CEP
+      // Salvar contexto do usuário
       const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      ChatStorage.setUserContext(responsavelData);
+      
+      // Buscar aeroporto baseado no CEP
       if (responsavelData.cep) {
         findNearestAirportFromCEP(responsavelData.cep);
       }
@@ -171,10 +196,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     }
   }, [isOpen, isInitialized]);
 
-  // Salvar estado a cada mudança importante
+  // Salvar estado a cada mudança importante com contexto
   useEffect(() => {
     if (isInitialized && messages.length > 0) {
       saveCurrentState();
+      // Salvar contexto adicional
+      const userContext = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      ChatStorage.setUserContext(userContext);
     }
   }, [messages, currentStep, selectedTransport, selectedFlightOption, hasBaggage, showPaymentStatus, isTyping, showQuickOptions, isInitialized]);
 
