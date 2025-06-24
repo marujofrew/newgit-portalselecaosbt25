@@ -34,6 +34,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const [selectedFlightOption, setSelectedFlightOption] = useState<string>('');
   const [hasBaggage, setHasBaggage] = useState<boolean>(false);
   const [nearestAirport, setNearestAirport] = useState<any>(null);
+  const [isMinimized, setIsMinimized] = useState<boolean>(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -1260,7 +1261,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     <div className={`fixed ${isMinimized ? 'bottom-4 right-4' : 'inset-0'} z-50 ${isMinimized ? '' : 'bg-black bg-opacity-50 flex items-center justify-center p-4'}`}>
       <div className={`bg-white rounded-lg shadow-2xl ${isMinimized ? 'w-80 h-16 cursor-pointer' : 'w-full max-w-md h-[600px]'} flex flex-col`} onClick={isMinimized ? () => setIsMinimized(false) : undefined}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-blue-600 text-white rounded-t-lg">
+        <div className={`flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg ${isMinimized ? '' : 'border-b'}`}>
           <div className="flex items-center space-x-3">
             {/* Foto de perfil com indicador online */}
             <div className="relative">
@@ -1283,7 +1284,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         </div>
 
         {/* Payment Status */}
-        {showPaymentStatus && (
+        {!isMinimized && showPaymentStatus && (
           <div className="bg-yellow-100 border border-yellow-300 p-3 m-4 rounded-lg">
             <div className="flex items-center justify-between">
               <span className="text-yellow-800 text-sm font-medium">
@@ -1298,8 +1299,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
 
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Messages - só aparece quando não minimizado */}
+        {!isMinimized && (
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -1343,8 +1345,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           <div ref={messagesEndRef} />
         </div>
 
+        )}
+
         {/* Quick Options */}
-        {showQuickOptions && getQuickOptions().length > 0 && (
+        {!isMinimized && showQuickOptions && getQuickOptions().length > 0 && (
           <div className="p-4 border-t bg-gray-50">
             <div className="space-y-2">
               {getQuickOptions().map((option, index) => (
@@ -1361,11 +1365,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         )}
 
         {/* Input disabled - only quick options work */}
-        <div className="p-4 border-t bg-gray-50">
-          <div className="text-center text-sm text-gray-500">
-            Use as opções de resposta acima para continuar
+        {!isMinimized && (
+          <div className="p-4 border-t bg-gray-50">
+            <div className="text-center text-sm text-gray-500">
+              Use as opções de resposta acima para continuar
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
