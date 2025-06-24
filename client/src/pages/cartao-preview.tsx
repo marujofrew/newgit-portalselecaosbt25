@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Plane, Calendar, Clock, MapPin, QrCode, User, FileText, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import ChatBot from '../components/ChatBot';
+
 
 import azulLogo from '@assets/azul-logo-02_1750506382633.png';
 import sbtLogo from '@assets/sbt_logo.png';
@@ -27,7 +27,7 @@ export default function CartaoPreview() {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showChatBot, setShowChatBot] = useState(false);
+
 
   const [userCity, setUserCity] = useState<string>('');
   const [userData, setUserData] = useState<any>(null);
@@ -47,18 +47,10 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 30 segundos de inatividade
-    const chatBotTimer = setTimeout(() => {
-      if (!showChatBot) {
-        setShowChatBot(true);
-      }
-    }, 30000);
-
     return () => {
       clearTimeout(scrollTimer);
-      clearTimeout(chatBotTimer);
     };
-  }, [showChatBot]);
+  }, []);
 
   const loadBoardingPassData = () => {
     try {
@@ -155,7 +147,7 @@ export default function CartaoPreview() {
       
       // Abrir chatbot após download concluído
       setTimeout(() => {
-        setShowChatBot(true);
+
       }, 1000);
       
     } catch (error) {
@@ -487,22 +479,12 @@ export default function CartaoPreview() {
         </div>
       )}
 
-      {/* ChatBot */}
-      {showChatBot && (
-        <ChatBot
-          isOpen={showChatBot}
-          onClose={() => setShowChatBot(false)}
           userCity={userCity}
           userData={userData}
           selectedDate={selectedDate}
         />
       )}
 
-      {/* ChatBot */}
-      {showChatBot && (
-        <ChatBot
-          isOpen={showChatBot}
-          onClose={() => setShowChatBot(false)}
           userCity={userCity}
           userData={userData}
           selectedDate={selectedDate}
