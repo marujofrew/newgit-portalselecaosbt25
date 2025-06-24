@@ -33,7 +33,7 @@ export default function CartaoPreview() {
 
   useEffect(() => {
     loadBoardingPassData();
-    
+
     // Scroll automático para o botão de download após 4 segundos
     const scrollTimer = setTimeout(() => {
       const downloadButton = document.querySelector('#download-button-below');
@@ -65,7 +65,7 @@ export default function CartaoPreview() {
       const candidatosData = JSON.parse(localStorage.getItem('candidatos') || '[]');
       const storedSelectedDate = localStorage.getItem('selectedDate');
       const storedUserCity = localStorage.getItem('userCity');
-      
+
       // Salvar dados para o chatbot
       setUserData(responsavelData);
       setUserCity(storedUserCity || '');
@@ -73,7 +73,7 @@ export default function CartaoPreview() {
 
       // Criar lista de passageiros
       const passengersList: Passenger[] = [];
-      
+
       if (responsavelData.nome) {
         passengersList.push({
           name: responsavelData.nome.toUpperCase(),
@@ -98,7 +98,7 @@ export default function CartaoPreview() {
       if (storedSelectedDate) {
         const flightDate = new Date(storedSelectedDate);
         flightDate.setDate(flightDate.getDate() - 1); // Um dia antes do agendamento
-        
+
         const boardingDate = new Date(flightDate);
         boardingDate.setMinutes(boardingDate.getMinutes() - 25); // 25 min antes
 
@@ -138,24 +138,24 @@ export default function CartaoPreview() {
             width: 300,
             height: 520
           });
-          
+
           const link = document.createElement('a');
           link.download = `cartao-embarque-${passengers[i].name.replace(/\s+/g, '-')}.png`;
           link.href = canvas.toDataURL('image/png');
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-          
+
           // Pequeno delay entre downloads
           await new Promise(resolve => setTimeout(resolve, 500));
         }
       }
-      
+
       // Abrir chatbot após download concluído
-      setTimeout(() => {
-        setShowChatBot(true);
-      }, 1000);
-      
+      setShowChatBot(true);
+      // Remover flag de minimizado para que o chat abra normalmente
+      localStorage.removeItem('chatBotMinimized');
+
     } catch (error) {
       console.error('Erro ao baixar cartões:', error);
       alert('Erro ao gerar imagens dos cartões. Tente novamente.');
@@ -237,7 +237,7 @@ export default function CartaoPreview() {
         {/* Boarding Pass Cards - Layout Original */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Seus Cartões de Embarque</h2>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {passengers.map((passenger, index) => (
               <div key={index} className="relative">
@@ -260,7 +260,7 @@ export default function CartaoPreview() {
                     margin: '0 auto', 
                     boxShadow: '0 12px 32px rgba(0,0,0,0.4)'
                   }}>
-                    
+
                     {/* Header - Layout oficial */}
                     <div style={{
                       display: 'flex', 
@@ -280,7 +280,7 @@ export default function CartaoPreview() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Aeroportos */}
                     <div style={{ marginBottom: '25px' }}>
                       {/* Nomes das cidades em uma linha */}
@@ -288,19 +288,19 @@ export default function CartaoPreview() {
                         <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>{flightData?.originCity}</div>
                         <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>SAO PAULO - GUARULHOS</div>
                       </div>
-                      
+
                       {/* Códigos dos aeroportos alinhados */}
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>{flightData?.originCode}</div>
-                        
+
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 15px' }}>
                           <div style={{ fontSize: '20px', color: '#60a5fa' }}>✈</div>
                         </div>
-                        
+
                         <div style={{ fontSize: '48px', fontWeight: '400', lineHeight: '1', color: 'white' }}>GRU</div>
                       </div>
                     </div>
-                    
+
                     {/* Linha de informações de embarque */}
                     <div style={{ marginBottom: '20px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -322,7 +322,7 @@ export default function CartaoPreview() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Cliente e Status */}
                     <div style={{ marginBottom: '40px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -335,7 +335,7 @@ export default function CartaoPreview() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* QR Code centralizado na parte inferior */}
                     <div style={{
                       position: 'absolute',
@@ -378,7 +378,7 @@ export default function CartaoPreview() {
               </div>
             ))}
           </div>
-          
+
           {/* Download Button Below Cards */}
           <div className="flex justify-center mt-8">
             <button
@@ -436,14 +436,14 @@ export default function CartaoPreview() {
                   <X size={24} />
                 </button>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
                   <p className="text-sm text-gray-500 uppercase tracking-wide">Passageiro</p>
                   <p className="text-lg font-bold text-gray-900">{passengers[selectedCard]?.name}</p>
                   <p className="text-sm text-blue-600">{passengers[selectedCard]?.type}</p>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Voo</p>
@@ -454,7 +454,7 @@ export default function CartaoPreview() {
                     <p className="font-semibold">{selectedCard + 1}D</p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Data</p>
@@ -465,14 +465,14 @@ export default function CartaoPreview() {
                     <p className="font-semibold">{flightData?.flightTime}</p>
                   </div>
                 </div>
-                
+
                 <div className="pt-4 border-t">
                   <p className="text-sm text-gray-500 mb-2">Rota</p>
                   <p className="font-semibold">{flightData?.originCode} → {flightData?.destinationCode}</p>
                   <p className="text-sm text-gray-600">{flightData?.originCity} - {flightData?.destinationCity}</p>
                 </div>
               </div>
-              
+
               <button
                 onClick={() => setSelectedCard(null)}
                 className="w-full mt-6 text-white py-3 rounded-lg font-semibold transition-colors hover:opacity-90"
