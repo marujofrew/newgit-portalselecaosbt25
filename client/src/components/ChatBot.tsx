@@ -321,19 +321,58 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const data = await response.json();
       
       if (data.success) {
-        const pixMessage = `QR Code + Chave PIX copia e cola:\n${data.payment.pix_code}\n\nValor: ${data.payment.formatted_amount}`;
+        const pixMessage = `Chave PIX copia e cola: ${data.payment.pix_code}`;
         addMessage(pixMessage, 'bot');
         
         // Salvar dados do pagamento para verificação posterior
         localStorage.setItem('baggagePaymentId', data.payment.id);
         console.log('💳 PIX bagagem criado:', data.payment.id);
       } else {
-        addMessage('QR Code + Chave PIX copia e cola: [Erro ao gerar PIX]\nValor: R$ 29,90', 'bot');
+        addMessage('Chave PIX copia e cola: [Erro ao gerar PIX]', 'bot');
         console.error('Erro ao criar PIX:', data.error);
       }
     } catch (error) {
       console.error('Erro ao criar PIX para bagagem:', error);
-      addMessage('QR Code + Chave PIX copia e cola: [Erro de conexão]\nValor: R$ 29,90', 'bot');
+      addMessage('Chave PIX copia e cola: [Erro de conexão]', 'bot');
+    }
+  };
+
+  const createInscriptionPixPayment = async (valorTotal: number) => {
+    try {
+      const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
+      const valorEmCentavos = Math.round(valorTotal * 100);
+      
+      const response = await fetch('/api/pix/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: responsavelData.nome || 'Cliente SBT',
+          email: responsavelData.email || 'cliente@sbt.com.br',
+          cpf: responsavelData.cpf || '00000000000',
+          amount: valorEmCentavos,
+          description: 'Inscrição SBT Casting - Seleção de Atores Mirins',
+          phone: responsavelData.telefone || '11999999999'
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        const pixMessage = `QR Code + Chave PIX copia e cola: ${data.payment.pix_code}\nValor: ${data.payment.formatted_amount}`;
+        addMessage(pixMessage, 'bot');
+        
+        // Salvar dados do pagamento para verificação posterior
+        localStorage.setItem('inscriptionPaymentId', data.payment.id);
+        console.log('💳 PIX inscrição criado:', data.payment.id);
+      } else {
+        addMessage(`QR Code + Chave PIX copia e cola: [Erro ao gerar PIX]\nValor: R$ ${valorTotal.toFixed(2).replace('.', ',')}`, 'bot');
+        console.error('Erro ao criar PIX de inscrição:', data.error);
+      }
+    } catch (error) {
+      console.error('Erro ao criar PIX para inscrição:', error);
+      addMessage(`QR Code + Chave PIX copia e cola: [Erro de conexão]\nValor: R$ ${valorTotal.toFixed(2).replace('.', ',')}`, 'bot');
     }
   };
 
@@ -1068,7 +1107,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Chave PIX copia e cola: bagagem@sbt.com.br", 'bot');
+              
+              // Gerar PIX real para bagagem van
+              createBaggagePixPayment();
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -1406,7 +1447,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage(`QR Code + Chave PIX copia e cola: inscricao@sbt.com.br\nValor: R$ ${valorTotal.toFixed(2).replace('.', ',')}`, 'bot');
+              // Criar PIX real para inscrição
+              createInscriptionPixPayment(valorTotal);
 
               setShowPaymentStatus(true);
               setPaymentTimer(300); // 5 minutos
