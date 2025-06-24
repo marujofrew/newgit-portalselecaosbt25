@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Send } from 'lucide-react';
 import rebecaAvatar from '@assets/telemarketing_reproduz_1750494256177.jpg';
 import bagagemDoBemImage from '@assets/assets_task_01jyfgjxwkets8k907ads1nc55_1750719962_img_1_1750728660025.webp';
+import bagagemDoBemVanImage from '@assets/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
 
 interface Message {
   id: number;
@@ -637,15 +638,26 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                   setIsTyping(false);
                   addMessage("Como nosso espaço em van é reduzido, precisamos levar outra Van onde fica responsável para transportar apenas bagagens de nossos candidatos. Caso precise levar uma bagagem temos um programa chamado \"Bagagem do Bem\" que por apenas R$ 29,90 você tem direito ao kit bagagem e todo o valor arrecadado é doado ao TELETON 2025.", 'bot');
                   
+                  // Adicionar imagem promocional da van após a mensagem sobre bagagem
                   setTimeout(() => {
-                    setIsTyping(true);
+                    const imageMessage: Message = {
+                      id: Date.now(),
+                      text: `<img src="${bagagemDoBemVanImage}" alt="Bagagem do Bem - Van SBT + Teleton" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                      sender: 'bot',
+                      timestamp: new Date()
+                    };
+                    setMessages(prev => [...prev, imageMessage]);
+                    
                     setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage("Você gostaria de incluir bagagem por R$ 29,90 ou prefere viajar apenas com bagagem de mão?", 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('van-baggage-offer');
-                    }, 5000);
-                  }, 5000);
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        addMessage("Você gostaria de incluir bagagem por R$ 29,90 ou prefere viajar apenas com bagagem de mão?", 'bot');
+                        setShowQuickOptions(true);
+                        setCurrentStep('van-baggage-offer');
+                      }, 5000);
+                    }, 3000);
+                  }, 2000);
                 }, 5000);
               }, 5000);
             }, 5000);
