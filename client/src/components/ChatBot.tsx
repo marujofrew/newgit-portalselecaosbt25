@@ -879,7 +879,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                             }, 5000);
                           }, 5000);
                         }, 3000);
-                      }, 5000);
+                      }, 2000);
                     }, 5000);
                   }, 5000);
                 }, 5000);
