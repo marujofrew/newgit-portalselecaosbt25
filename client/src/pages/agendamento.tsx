@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
+import ChatBot from '@/components/ChatBot';
 import sbtLogo from '@assets/sbt_logo.png';
 
 export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');
   const [horarioSelecionado, setHorarioSelecionado] = useState('');
 
+  const [chatBotOpen, setChatBotOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   
   // Recuperar dados da cidade do localStorage
@@ -134,14 +136,13 @@ export default function Agendamento() {
     
     // Marcar que chatbot deve aparecer automaticamente
     localStorage.setItem('showChatBotGlobal', 'true');
-    localStorage.setItem('agendamentoConfirmado', 'true');
     
-    // Marcar que chatbot foi aberto pela primeira vez e ativar
+    // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
       setLoading(false);
+      setChatBotOpen(true);
+      // Marcar que chatbot foi aberto pela primeira vez
       localStorage.setItem('chatBotOpened', 'true');
-      // Forçar reload para ativar chatbot global
-      window.location.reload();
     }, 1000);
   };
 
@@ -275,7 +276,14 @@ export default function Agendamento() {
         </div>
       </div>
 
-
+      {/* Chat Bot */}
+      <ChatBot 
+        isOpen={chatBotOpen} 
+        onClose={() => setChatBotOpen(false)}
+        userCity={getUserCity()}
+        userData={getUserData()}
+        selectedDate={dataSelecionada}
+      />
     </main>
   );
 }

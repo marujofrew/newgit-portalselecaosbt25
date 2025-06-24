@@ -963,10 +963,7 @@ export default function Cadastro() {
                               nomeMae,
                               sexo,
                               grauParentesco,
-                              telefone,
-                              cidade: cidadeInfo?.localidade || '',
-                              uf: cidadeInfo?.uf || '',
-                              cep: cepValue
+                              telefone
                             };
                             
                             localStorage.setItem('responsavelData', JSON.stringify(responsavelData));

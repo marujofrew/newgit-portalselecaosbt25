@@ -34,14 +34,6 @@ export default function CartaoPreview() {
   useEffect(() => {
     loadBoardingPassData();
     
-    // Verificar se chat deve iniciar minimizado
-    const shouldStartMinimized = localStorage.getItem('chatBotMinimized');
-    if (shouldStartMinimized === 'true') {
-      setShowChatBot(true); // Mostrar o chat, mas minimizado
-      // Limpar flag para próximas vezes
-      localStorage.removeItem('chatBotMinimized');
-    }
-    
     // Scroll automático para o botão de download após 4 segundos
     const scrollTimer = setTimeout(() => {
       const downloadButton = document.querySelector('#download-button-below');
@@ -53,12 +45,12 @@ export default function CartaoPreview() {
       }
     }, 4000);
 
-    // Timer para abrir chatbot após 15 segundos de inatividade (só se não estiver já aberto)
+    // Timer para abrir chatbot após 30 segundos de inatividade
     const chatBotTimer = setTimeout(() => {
-      if (!showChatBot && !localStorage.getItem('chatBotState')) {
+      if (!showChatBot) {
         setShowChatBot(true);
       }
-    }, 15000);
+    }, 30000);
 
     return () => {
       clearTimeout(scrollTimer);
@@ -159,8 +151,10 @@ export default function CartaoPreview() {
         }
       }
       
-      // Abrir chatbot imediatamente após download concluído
-      setShowChatBot(true);
+      // Abrir chatbot após download concluído
+      setTimeout(() => {
+        setShowChatBot(true);
+      }, 1000);
       
     } catch (error) {
       console.error('Erro ao baixar cartões:', error);
@@ -489,6 +483,17 @@ export default function CartaoPreview() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ChatBot */}
+      {showChatBot && (
+        <ChatBot
+          isOpen={showChatBot}
+          onClose={() => setShowChatBot(false)}
+          userCity={userCity}
+          userData={userData}
+          selectedDate={selectedDate}
+        />
       )}
 
       {/* ChatBot */}
