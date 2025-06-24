@@ -71,6 +71,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Rotas PIX For4Payments
+  app.post('/api/pix/create', async (req, res) => {
+    try {
+      console.log('=== INÍCIO CRIAÇÃO PIX ===');
+      console.log('Body recebido:', JSON.stringify(req.body, null, 2));
+
+      const { name, email, cpf, amount, description, phone } = req.body;
+
+      if (!name || !email || !cpf || !amount) {
+        console.log('❌ Dados obrigatórios ausentes');
+        return res.status(400).json({
+          success: false,
+          error: 'Dados obrigatórios: name, email, cpf, amount'
+        });
+      }
+
+      console.log('🚀 Iniciando criação de pagamento...');
+      const api = For4PaymentsAPI.fromEnv();
+      
+      console.log('🔑 API inicializada, criando pagamento...');
+      const payment = await api.createPixPayment({
+        name,
+        email,
+        cpf,
+        amount,
+        description,
+        phone
+      });
+
+      console.log('✅ PIX criado com sucesso!');
+      console.log('ID:', payment.id);
+      console.log('PIX Code:', payment.pix_code ? 'PRESENTE' : 'AUSENTE');
+
+      const response = {
+        success: true,
+        payment: {
+          id: payment.id,
+          pix_code: payment.pix_code,
+          pix_qr_code: payment.pix_qr_code,
+          expires_at: payment.expires_at,
+          status: payment.status,
+          formatted_amount: `R$ ${(amount / 100).toFixed(2).replace('.', ',')}`
+        }
+      };
+
+      console.log('📤 Enviando resposta:', JSON.stringify(response, null, 2));
+      res.json(response);
+
+    } catch (error) {
+      console.error('❌ ERRO COMPLETO na criação PIX:');
+      console.error('Tipo:', error.constructor.name);
+      console.error('Mensagem:', error.message);
+      console.error('Stack:', error.stack);
+      
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Erro interno do servidor',
+        type: error.constructor.name
+      });
+    }
+  });
+
+  app.get('/api/pix/status/:payment_id', async (req, res) => {
+    try {
+      const { payment_id } = req.params;
+      console.log('🔍 Verificando status PIX:', payment_id);
+
+      const api = For4PaymentsAPI.fromEnv();
+      const status = await api.getPaymentSummary(payment_id);
+
+      console.log('📊 Status PIX:', status);
+
+      res.json(status);
+
+    } catch (error) {
+      console.error('❌ Erro ao verificar status PIX:', error);
+      res.status(500).json({
+        error: error.message || 'Erro interno do servidor'
+      });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
