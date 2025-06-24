@@ -73,8 +73,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         try {
           const state = JSON.parse(savedState);
           
-          // Restaurar estado completo
-          setMessages(state.messages || []);
+          // Restaurar estado completo - converter timestamps de volta para Date
+          const restoredMessages = (state.messages || []).map((msg: any) => ({
+            ...msg,
+            timestamp: typeof msg.timestamp === 'string' ? new Date(msg.timestamp) : msg.timestamp
+          }));
+          
+          setMessages(restoredMessages);
           setCurrentStep(state.currentStep || 'greeting');
           setShowQuickOptions(state.showQuickOptions !== undefined ? state.showQuickOptions : false);
           setSelectedTransport(state.selectedTransport || '');
@@ -92,7 +97,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }
           
           console.log('Estado restaurado:', {
-            messagesCount: state.messages?.length || 0,
+            messagesCount: restoredMessages.length,
             currentStep: state.currentStep,
             showQuickOptions: state.showQuickOptions,
             selectedTransport: state.selectedTransport
