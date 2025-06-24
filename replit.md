@@ -112,6 +112,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Sistema de histórico persistente do chatbot**: Conversa salva no localStorage, mantém estado entre páginas e sessões
 - **Chatbot global não-fechável**: Após agendamento, aparece em todas as páginas apenas com opção de minimizar
 - **Estado completo do chatbot salvo**: Mensagens, etapa atual, seleções de transporte, bagagem, pagamentos e timers mantidos
+- **Sistema de minimização do chatbot**: Botão "−" para minimizar, clique no balão minimizado para expandir, mantém conversa
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
