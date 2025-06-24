@@ -719,6 +719,79 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
+                          // Adicionar imagem do quarto de hotel específica para fluxo de van
+                          const imageMessage: Message = {
+                            id: Date.now() + 1,
+                            text: `<img src="${hotelRoomVanImage}" alt="Quarto de hotel SBT - Conforto e excelência" class="w-full max-w-sm mx-auto rounded-lg shadow-md" />`,
+                            sender: 'bot',
+                            timestamp: new Date()
+                          };
+                          setMessages(prev => [...prev, imageMessage]);
+                          
+                          setTimeout(() => {
+                            setIsTyping(true);
+                            setTimeout(() => {
+                              setIsTyping(false);
+                              addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                              
+                              setTimeout(() => {
+                                setIsTyping(true);
+                                setTimeout(() => {
+                                  setIsTyping(false);
+                                  addMessage("Estou finalizando sua reserva!", 'bot');
+                                  
+                                  setTimeout(() => {
+                                    setIsTyping(true);
+                                    setTimeout(() => {
+                                      setIsTyping(false);
+                                      addMessage("Pronto, sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!", 'bot');
+                                      
+                                      setTimeout(() => {
+                                        setIsTyping(true);
+                                        setTimeout(() => {
+                                          setIsTyping(false);
+                                          addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                          setShowQuickOptions(true);
+                                          setCurrentStep('hotel-reservation');
+                                        }, 5000);
+                                      }, 5000);
+                                    }, 5000);
+                                  }, 5000);
+                                }, 5000);
+                              }, 5000);
+                            }, 5000);
+                          }, 3000);
+                        }, 5000);
+                      }, 2000);
+                    }, 5000);
+                  }, 5000);
+                }, 5000);
+              }, 5000);
+            }, 5000);
+          }, 5000);
+          
+          setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+              setIsTyping(false);
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              
+              setTimeout(() => {
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  addMessage("A única coisa que preciso fazer é deixar reservada sua estadia, só um minuto que já estou cuidando disso!", 'bot');
+                  
+                  setTimeout(() => {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                      setIsTyping(false);
+                      addMessage("Esse é o quarto que você e os candidatos vão ficar:", 'bot');
+                      
+                      setTimeout(() => {
+                        setIsTyping(true);
+                        setTimeout(() => {
+                          setIsTyping(false);
                           addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
                           
                           setTimeout(() => {
