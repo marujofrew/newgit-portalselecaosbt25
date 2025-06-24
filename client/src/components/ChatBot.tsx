@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send } from 'lucide-react';
+import rebecaAvatar from '@assets/telemarketing_reproduz_1750494256177.jpg';
 
 interface Message {
   id: number;
@@ -1132,11 +1133,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           <div className="flex items-center space-x-3">
             {/* Foto de perfil com indicador online */}
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
-                R
-              </div>
+              <img 
+                src={rebecaAvatar} 
+                alt="Rebeca"
+                className="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+              />
               {/* Indicador online */}
-              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full animate-pulse"></div>
             </div>
             <div>
               <h3 className="font-semibold text-base">Rebeca - Assistente SBT</h3>
