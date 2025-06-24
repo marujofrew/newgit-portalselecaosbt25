@@ -475,13 +475,25 @@ export default function CartaoPreview() {
               
               <button
                 onClick={() => setSelectedCard(null)}
-                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                className="w-full mt-6 text-white py-3 rounded-lg font-semibold transition-colors hover:opacity-90"
+                style={{ backgroundColor: '#001f3f' }}
               >
                 Fechar
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* ChatBot */}
+      {showChatBot && (
+        <ChatBot
+          isOpen={showChatBot}
+          onClose={() => setShowChatBot(false)}
+          userCity={userCity}
+          userData={userData}
+          selectedDate={selectedDate}
+        />
       )}
     </div>
   );
