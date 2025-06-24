@@ -135,12 +135,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       const currentPage = window.location.pathname;
       ChatStorage.markAsActive(currentPage);
       
-      // Verificar se há conversa salva da página de agendamento
+      // Verificar se há conversa salva - mas apenas se não estivermos na página de agendamento
       const hasExistingConversation = ChatStorage.hasConversation();
       console.log('📋 Verificando conversa existente:', hasExistingConversation);
       
-      if (hasExistingConversation) {
-        console.log('✅ Restaurando conversa completa...');
+      if (hasExistingConversation && currentPage !== '/agendamento') {
+        console.log('✅ Restaurando conversa completa para página:', currentPage);
         const restored = restoreState();
         
         if (restored) {
@@ -161,9 +161,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
       }
       
-      // Apenas iniciar nova conversa se estivermos na página de agendamento
-      if (currentPage === '/agendamento') {
-        console.log('🆕 Iniciando nova conversa na página de agendamento');
+      // Iniciar nova conversa se estivermos na página de agendamento OU se não há conversa existente
+      if (currentPage === '/agendamento' || !hasExistingConversation) {
+        console.log('🆕 Iniciando nova conversa na página:', currentPage);
+        
+        // Limpar completamente o estado anterior
+        ChatStorage.clearConversation();
+        setMessages([]);
+        setCurrentStep('greeting');
+        setShowQuickOptions(false);
+        setIsTyping(false);
         
         const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
         ChatStorage.setUserContext(responsavelData);
@@ -173,11 +180,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
         
         setIsInitialized(true);
-        ChatStorage.saveState({ isInitialized: true });
         
+        // Iniciar conversa com delay
         const timer = setTimeout(() => {
+          console.log('🚀 Iniciando animação de digitação...');
           setIsTyping(true);
-          ChatStorage.updateTyping(true);
           
           setTimeout(() => {
             setIsTyping(false);
@@ -187,15 +194,16 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               sender: 'bot',
               timestamp: new Date()
             };
+            console.log('📨 Enviando mensagem de boas-vindas');
             setMessages([welcomeMessage]);
             setCurrentStep('greeting');
             setShowQuickOptions(true);
             ChatStorage.addMessage(welcomeMessage);
             ChatStorage.updateStep('greeting');
             ChatStorage.updateQuickOptions(true);
-            console.log('💬 Mensagem de boas-vindas enviada');
-          }, 3000);
-        }, 1000);
+            console.log('✅ Chat inicializado com sucesso');
+          }, 2000);
+        }, 500);
 
         return () => clearTimeout(timer);
       } else {

@@ -135,6 +135,9 @@ export default function Agendamento() {
     localStorage.removeItem('chatbotShowPaymentStatus');
     localStorage.removeItem('chatbotPaymentTimer');
     
+    // Garantir que o chat inicie completamente do zero
+    console.log('🔄 Limpando todas as chaves do chat para nova conversa');
+    
     // Marcar que agendamento foi confirmado - chatbot só funciona a partir daqui
     localStorage.setItem('agendamentoConfirmado', 'true');
     
@@ -279,13 +282,16 @@ export default function Agendamento() {
       </div>
 
       {/* Chat Bot */}
-      <ChatBot 
-        isOpen={chatBotOpen} 
-        onClose={() => setChatBotOpen(false)}
-        userCity={getUserCity()}
-        userData={getUserData()}
-        selectedDate={dataSelecionada}
-      />
+      {chatBotOpen && (
+        <ChatBot 
+          key={`chat-${Date.now()}`} // Força reinicialização completa
+          isOpen={chatBotOpen} 
+          onClose={() => setChatBotOpen(false)}
+          userCity={getUserCity()}
+          userData={getUserData()}
+          selectedDate={dataSelecionada}
+        />
+      )}
     </main>
   );
 }
