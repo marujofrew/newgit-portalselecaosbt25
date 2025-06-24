@@ -124,13 +124,25 @@ export default function Agendamento() {
     localStorage.setItem('selectedDate', dataSelecionada);
     localStorage.setItem('selectedTime', horarioSelecionado);
     
-    // Limpar estado anterior do chat bot para reiniciar do zero
-    localStorage.removeItem('chatBotState');
+    // Reset chat bot state para começar conversa do zero
+    localStorage.removeItem('chatbotMessages');
+    localStorage.removeItem('chatbotCurrentStep');
+    localStorage.removeItem('chatbotSelectedTransport');
+    localStorage.removeItem('chatbotSelectedFlightOption');
+    localStorage.removeItem('chatbotHasBaggage');
+    localStorage.removeItem('chatbotShowQuickOptions');
+    localStorage.removeItem('chatbotShowPaymentStatus');
+    localStorage.removeItem('chatbotPaymentTimer');
+    
+    // Marcar que chatbot deve aparecer automaticamente
+    localStorage.setItem('showChatBotGlobal', 'true');
     
     // Abrir o chat bot imediatamente após confirmação
     setTimeout(() => {
       setLoading(false);
       setChatBotOpen(true);
+      // Força reload da página para ativar o chatbot global
+      window.location.reload();
     }, 1000);
   };
 
