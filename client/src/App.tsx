@@ -36,11 +36,12 @@ function App() {
   const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
-    // Verificar se chatbot deve aparecer globalmente
+    // Verificar se chatbot deve aparecer globalmente APENAS após agendamento
     const shouldShowChatBot = localStorage.getItem('showChatBotGlobal');
     const chatBotOpened = localStorage.getItem('chatBotOpened');
+    const agendamentoConfirmado = localStorage.getItem('agendamentoConfirmado');
     
-    if (shouldShowChatBot === 'true' && chatBotOpened === 'true') {
+    if (shouldShowChatBot === 'true' && chatBotOpened === 'true' && agendamentoConfirmado === 'true') {
       setShowGlobalChatBot(true);
       
       // Carregar dados do usuário
