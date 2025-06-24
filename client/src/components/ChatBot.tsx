@@ -39,6 +39,24 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Auto-save state function
+  const saveCurrentState = (currentMessages?: Message[], step?: string, quickOptions?: boolean) => {
+    const stateToSave = {
+      messages: currentMessages || messages,
+      currentStep: step || currentStep,
+      selectedTransport,
+      selectedFlightOption,
+      hasBaggage,
+      showQuickOptions: quickOptions !== undefined ? quickOptions : showQuickOptions,
+      showPaymentStatus,
+      paymentTimer,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem('chatBotState', JSON.stringify(stateToSave));
+    console.log('💾 Estado salvo:', { step: stateToSave.currentStep, messages: stateToSave.messages.length });
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
