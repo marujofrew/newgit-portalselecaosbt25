@@ -41,8 +41,19 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping]);
+    if (!isMinimized) {
+      scrollToBottom();
+    }
+  }, [messages, isTyping, isMinimized]);
+
+  // Scroll para a última mensagem quando o chat é expandido
+  useEffect(() => {
+    if (!isMinimized && messages.length > 0) {
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+  }, [isMinimized]);
 
   // Timer effect for payment countdown
   useEffect(() => {
@@ -105,6 +116,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       }
     }
   }, [isOpen, isInitialized]);
+
+  // Reset initialization when chat is closed
+  useEffect(() => {
+    if (!isOpen) {
+      setIsInitialized(false);
+    }
+  }, [isOpen]);
 
   // Função para salvar estado
   const saveState = () => {
@@ -1514,7 +1532,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
   return (
     <div className={`fixed ${isMinimized ? 'bottom-4 right-4' : 'inset-0'} z-50 ${isMinimized ? '' : 'bg-black bg-opacity-50 flex items-center justify-center p-4'}`}>
-      <div className={`bg-white rounded-lg shadow-2xl ${isMinimized ? 'w-80 h-16 cursor-pointer' : 'w-full max-w-md h-[600px]'} flex flex-col`} onClick={isMinimized ? () => setIsMinimized(false) : undefined}>
+      <div className={`bg-white rounded-lg shadow-2xl ${isMinimized ? 'w-80 h-16 cursor-pointer' : 'w-full max-w-md h-[600px]'} flex flex-col`} onClick={isMinimized ? () => {
+        setIsMinimized(false);
+        // Scroll para a última mensagem após expandir
+        setTimeout(() => {
+          scrollToBottom();
+        }, 100);
+      } : undefined}>
+</div>
+    </div>
         {/* Header */}
         <div className={`flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg ${isMinimized ? '' : 'border-b'}`}>
           <div className="flex items-center space-x-3">
@@ -1562,7 +1588,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
         {/* Messages - só aparece quando não minimizado */}
         {!isMinimized && (
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4" ref={messagesEndRef}>
           {messages.map((message) => (
             <div
               key={message.id}

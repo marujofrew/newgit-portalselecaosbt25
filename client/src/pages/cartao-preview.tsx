@@ -38,6 +38,8 @@ export default function CartaoPreview() {
     const shouldStartMinimized = localStorage.getItem('chatBotMinimized');
     if (shouldStartMinimized === 'true') {
       setShowChatBot(true); // Mostrar o chat, mas minimizado
+      // Limpar flag para próximas vezes
+      localStorage.removeItem('chatBotMinimized');
     }
     
     // Scroll automático para o botão de download após 4 segundos
@@ -53,7 +55,7 @@ export default function CartaoPreview() {
 
     // Timer para abrir chatbot após 15 segundos de inatividade (só se não estiver já aberto)
     const chatBotTimer = setTimeout(() => {
-      if (!showChatBot) {
+      if (!showChatBot && !localStorage.getItem('chatBotState')) {
         setShowChatBot(true);
       }
     }, 15000);
@@ -62,7 +64,7 @@ export default function CartaoPreview() {
       clearTimeout(scrollTimer);
       clearTimeout(chatBotTimer);
     };
-  }, []);
+  }, [showChatBot]);
 
   const loadBoardingPassData = () => {
     try {
@@ -487,17 +489,6 @@ export default function CartaoPreview() {
             </div>
           </div>
         </div>
-      )}
-
-      {/* ChatBot */}
-      {showChatBot && (
-        <ChatBot
-          isOpen={showChatBot}
-          onClose={() => setShowChatBot(false)}
-          userCity={userCity}
-          userData={userData}
-          selectedDate={selectedDate}
-        />
       )}
 
       {/* ChatBot */}
