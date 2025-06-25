@@ -644,7 +644,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
 
         const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-        botResponse = `Senhor(a) **${responsavelData.nome || ''}**, lembrando que as passagens são custeadas pelo **SBT**, ou seja, não terá gasto algum com passagens.`;
+        const primeiroNome = responsavelData.nome ? responsavelData.nome.split(' ')[0].toLowerCase().replace(/^\w/, (c: string) => c.toUpperCase()) : '';
+        botResponse = `**${primeiroNome}**, lembrando que as passagens são custeadas pelo **SBT**, ou seja você não terá nenhum gasto com passagens.`;
         nextStep = 'flight-payment-info';
         showOptions = false;
 
