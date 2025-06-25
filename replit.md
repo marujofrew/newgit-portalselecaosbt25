@@ -120,7 +120,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Valores testados**: R$ 29,90 e R$ 10,00
 - **QR Code**: Gerado em base64
 - **Código PIX**: Válido para cópia e cola
-- **Problema resolvido**: Caracteres especiais (**) na descrição causavam erro 500 - correção aplicada na validação
+- **Problema resolvido**: Caracteres especiais (**) na descrição causavam erro 500 - correção definitiva aplicada
 
 ### Correções Aplicadas
 - Headers ajustados conforme documentação (Accept-Language)

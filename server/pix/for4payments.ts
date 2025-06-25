@@ -84,9 +84,19 @@ export class For4PaymentsAPI {
     if (cpf.length !== 11) {
       throw new Error("CPF deve conter exatamente 11 dígitos");
     }
+    
+    // Limpar descrição de caracteres especiais
+    if (data.description) {
+      data.description = "Kit Bagagem SBT";
+    }
   }
 
   async createPixPayment(data: PaymentRequestData): Promise<PaymentResponse> {
+    // Limpar descrição ANTES da validação
+    if (data.description) {
+      data.description = "Kit Bagagem SBT";
+    }
+    
     this.validatePaymentData(data);
 
     try {
