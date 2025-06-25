@@ -597,36 +597,7 @@ export default function Cadastro() {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Grau de Parentesco com a Criança:
-                    </label>
-                    <select
-                      value={grauParentesco}
-                      onChange={(e) => {
-                        const novoGrau = e.target.value;
-                        setGrauParentesco(novoGrau);
-                        
-                        // Preencher automaticamente os campos da criança baseado no grau de parentesco
-                        if (novoGrau === 'pai' && nome) {
-                          setNomePaiCrianca(nome);
-                        } else if (novoGrau === 'mae' && nome) {
-                          setNomeMaeCrianca(nome);
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="">Selecione o grau de parentesco</option>
-                      <option value="pai">Pai</option>
-                      <option value="mae">Mãe</option>
-                      <option value="avo">Avô</option>
-                      <option value="ava">Avó</option>
-                      <option value="tio">Tio</option>
-                      <option value="tia">Tia</option>
-                      <option value="tutor">Tutor Legal</option>
-                      <option value="responsavel">Responsável Legal</option>
-                    </select>
-                  </div>
+
 
                   {/* Botão para continuar para dados da criança */}
                   <div className="mt-6">
@@ -727,7 +698,7 @@ export default function Cadastro() {
                             if (index === 0) setNomeMaeCrianca(e.target.value);
                           }}
                           placeholder="Digite o nome completo da mãe"
-                          className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'mae' && candidatos[index]?.nomeMae ? 'bg-green-50 border-green-300' : ''}`}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
 
@@ -750,7 +721,7 @@ export default function Cadastro() {
                             if (index === 0) setNomePaiCrianca(e.target.value);
                           }}
                           placeholder="Digite o nome completo do pai"
-                          className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${grauParentesco === 'pai' && candidatos[index]?.nomePai ? 'bg-green-50 border-green-300' : ''}`}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
 
