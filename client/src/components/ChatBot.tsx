@@ -1927,16 +1927,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setTimeout(() => {
                         setIsTyping(false);
                         
-                        // Simular envio de localização como no WhatsApp com fundo de mapa
+                        // Simular envio de localização como no WhatsApp com fundo de mapa realista
                         const locationMessage: Message = {
                           id: Date.now(),
-                          text: `<div style="background: linear-gradient(45deg, #f0f8ff 25%, #e6f3ff 25%, #e6f3ff 50%, #f0f8ff 50%, #f0f8ff 75%, #e6f3ff 75%, #e6f3ff); background-size: 20px 20px; border-radius: 12px; padding: 0; max-width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif; overflow: hidden;">
-                            <div style="background: rgba(255,255,255,0.9); margin: 8px; border-radius: 8px; padding: 12px; backdrop-filter: blur(2px);">
+                          text: `<div style="background: #e8f4f8; border-radius: 12px; max-width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif; overflow: hidden; position: relative;">
+                            <div style="background: linear-gradient(135deg, #b8e6b8 0%, #90c695 25%, #7fb069 50%, #6a9c89 75%, #4a7c59 100%); background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 1px, transparent 1px), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 1px, transparent 1px), radial-gradient(circle at 40% 40%, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 30px 30px, 20px 20px, 25px 25px; height: 120px; position: relative; display: flex; align-items: center; justify-content: center;">
+                              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">📍</div>
+                            </div>
+                            <div style="background: white; padding: 12px;">
                               <div style="color: #333; font-size: 13px; line-height: 1.4;">
-                                <div style="font-weight: 600; margin-bottom: 6px; color: #1a73e8;">Localização atual compartilhada</div>
-                                <div style="color: #555; font-size: 12px; font-family: monospace;">
-                                  Latitude: -23.5505<br/>
-                                  Longitude: -46.6333<br/>
+                                <div style="font-weight: 600; margin-bottom: 6px; color: #1a73e8;">Localização atual</div>
+                                <div style="color: #666; font-size: 12px;">
+                                  Lat: -23.5505, Long: -46.6333<br/>
                                   Precisão: ±3 metros
                                 </div>
                               </div>
