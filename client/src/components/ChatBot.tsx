@@ -313,7 +313,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           email: responsavelData.email || 'cliente@sbt.com.br',
           cpf: responsavelData.cpf || '00000000000',
           amount: 2990, // R$ 29,90 em centavos
-          description: 'Kit Bagagem SBT - Programa Bagagem do Bem',
+          description: 'Kit **Bagagem** **SBT** - Programa **Bagagem do Bem**',
           phone: responsavelData.telefone || '11999999999'
         })
       });
@@ -1446,9 +1446,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           const totalCandidatos = candidatos.length;
 
           if (totalCandidatos > 1) {
-            botResponse = `O valor de inscrição de cada candidato é de R$ 89,90, como você está inscrevendo ${totalCandidatos} candidatos, o SBT tem um desconto como forma de incentivar mais candidatos a participar!`;
+            botResponse = `O valor de **inscrição** de cada **candidato** é de **R$ 89,90**, como você está inscrevendo **${totalCandidatos} candidatos**, o **SBT** tem um desconto como forma de incentivar mais **candidatos** a participar!`;
           } else {
-            botResponse = "O valor de inscrição de cada candidato é de R$ 89,90 e você inscreveu apenas 1 candidato!";
+            botResponse = "O valor de **inscrição** de cada **candidato** é de **R$ 89,90** e você inscreveu apenas **1 candidato**!";
           }
 
           nextStep = 'inscription-details';
@@ -1458,13 +1458,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Lembrando que após o pagamento vamos te enviar a sua credencial, para que você apresente na entrada do SBT e sua entrada seja liberada.", 'bot');
+              addMessage("Lembrando que após o pagamento vamos te enviar a sua credencial, para que você apresente na entrada do **SBT** e sua entrada seja liberada.", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Então assim que realizar o pagamento volte aqui, para fazer o download da credencial!", 'bot');
+                  addMessage("Então assim que realizar o pagamento volte aqui, para fazer o **download da credencial**!", 'bot');
                   setShowQuickOptions(true);
                   setCurrentStep('inscription-info');
                 }, 5000);
@@ -1476,7 +1476,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'inscription-info':
         if (messageToSend.toLowerCase().includes('entendi')) {
-          botResponse = "Lembre-se que o chat se encerra automaticamente em 5 minutos por inatividade, então assim que realizar o pagamento da inscrição volte rapidamente, para evitar o recomeço do processo, tudo bem?";
+          botResponse = "Lembre-se que o chat se encerra automaticamente em **5 minutos** por inatividade, então assim que realizar o pagamento da **inscrição** volte rapidamente, para evitar o recomeço do processo, tudo bem?";
           nextStep = 'inscription-warning';
           showOptions = false;
           setTimeout(() => {
@@ -1488,7 +1488,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'inscription-payment':
         if (messageToSend.toLowerCase().includes('rapidamente')) {
-          botResponse = "Aqui está o QR code e a chave PIX copia e cola, para que você efetue o pagamento da inscrição!";
+          botResponse = "Aqui está o **QR code** e a chave **PIX** copia e cola, para que você efetue o pagamento da **inscrição**!";
           nextStep = 'inscription-pix';
           showOptions = false;
 
@@ -1671,7 +1671,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
           const confirmMessage = type === 'baggage' 
             ? '💚 Pagamento confirmado! Vamos continuar?'
-            : '💚 Pagamento da inscrição confirmado! Vamos prosseguir?';
+            : '💚 Pagamento da **inscrição** confirmado! Vamos prosseguir?';
           
           addMessage(confirmMessage, 'bot');
           setShowQuickOptions(true);
@@ -1698,7 +1698,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       if (!timeoutShown && !isPaymentConfirmed) {
         timeoutShown = true;
         const timeoutMessage = type === 'baggage'
-          ? 'Deseja continuar sem bagagem ou já fez o pagamento?'
+          ? 'Deseja continuar sem **bagagem** ou já fez o pagamento?'
           : 'Deseja continuar ou já fez o pagamento?';
         
         console.log(`⏰ Timeout de 20s atingido - mostrando opções para: ${type}`);
