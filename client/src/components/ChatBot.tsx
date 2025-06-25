@@ -1927,25 +1927,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setTimeout(() => {
                         setIsTyping(false);
                         
-                        // Simular envio de localização como no WhatsApp com layout mais parecido
+                        // Simular envio de localização como no WhatsApp com fundo de mapa
                         const locationMessage: Message = {
                           id: Date.now(),
-                          text: `<div style="background: #dcf8c6; border-radius: 8px; padding: 12px; max-width: 300px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;">
-                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                              <div style="width: 32px; height: 32px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                                <span style="color: white; font-size: 16px;">📍</span>
-                              </div>
-                              <div>
-                                <div style="font-weight: 500; color: #25d366; font-size: 14px;">Localização</div>
-                                <div style="color: #667781; font-size: 12px;">Agora</div>
-                              </div>
-                            </div>
-                            <div style="border-top: 1px solid #e1f5e1; padding-top: 8px;">
-                              <div style="color: #111b21; font-size: 13px; line-height: 1.3;">
-                                <div style="margin-bottom: 2px;">📍 Localização atual compartilhada</div>
-                                <div style="color: #667781; font-size: 11px;">
-                                  Lat: -23.5505 • Long: -46.6333<br/>
-                                  Precisão: ±3m
+                          text: `<div style="background: linear-gradient(45deg, #f0f8ff 25%, #e6f3ff 25%, #e6f3ff 50%, #f0f8ff 50%, #f0f8ff 75%, #e6f3ff 75%, #e6f3ff); background-size: 20px 20px; border-radius: 12px; padding: 0; max-width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif; overflow: hidden;">
+                            <div style="background: rgba(255,255,255,0.9); margin: 8px; border-radius: 8px; padding: 12px; backdrop-filter: blur(2px);">
+                              <div style="color: #333; font-size: 13px; line-height: 1.4;">
+                                <div style="font-weight: 600; margin-bottom: 6px; color: #1a73e8;">Localização atual compartilhada</div>
+                                <div style="color: #555; font-size: 12px; font-family: monospace;">
+                                  Latitude: -23.5505<br/>
+                                  Longitude: -46.6333<br/>
+                                  Precisão: ±3 metros
                                 </div>
                               </div>
                             </div>
