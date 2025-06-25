@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import ChatBot from '@/components/ChatBot';
-import sbtLogo from '@assets/sbt_logo.png';
+const sbtLogo = "/sbt_logo.png";
 
 export default function Agendamento() {
   const [dataSelecionada, setDataSelecionada] = useState('');

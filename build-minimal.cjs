@@ -17,6 +17,9 @@ try {
   });
   console.log('Backend build completed');
 
+  // Skip Vite build to avoid asset import issues
+  console.log('Skipping Vite build due to asset import conflicts...');
+
   // Copy client/public assets first
   console.log('Copying client public assets...');
   if (fs.existsSync('client/public')) {
