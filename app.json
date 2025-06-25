@@ -32,5 +32,6 @@
     {
       "url": "heroku/nodejs"
     }
-  ]
+  ],
+  "stack": "heroku-24"
 }
