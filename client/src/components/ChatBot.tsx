@@ -702,7 +702,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'baggage-offer':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
           setHasBaggage(true);
-          botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
+          botResponse = "Perfeito! Kit bagagem adicionado por **R$ 29,90**.";
           nextStep = 'baggage-payment-info';
           showOptions = false;
 
@@ -710,13 +710,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Vou te enviar a chave PIX copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
+              addMessage("Vou te enviar a chave **PIX** copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Nosso chat irá se encerrar automaticamente em 5 minutos se não houver nenhuma atividade ou retorno. Realize o pagamento e volte antes de 5 minutos para evitar de recomeçar o cadastro do início.", 'bot');
+                  addMessage("Nosso chat irá se encerrar automaticamente em **5 minutos** se não houver nenhuma atividade ou retorno. Realize o pagamento e volte antes de **5 minutos** para evitar de recomeçar o cadastro do início.", 'bot');
                   setShowQuickOptions(true);
                   setCurrentStep('baggage-payment');
                 }, 5000);
@@ -983,13 +983,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Vou te enviar a chave PIX copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
+              addMessage("Vou te enviar a chave **PIX** copia e cola para você fazer o pagamento do adicional de bagagem.", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Nosso chat irá se encerrar automaticamente em 5 minutos se não houver nenhuma atividade ou retorno. Realize o pagamento e volte antes de 5 minutos para evitar de recomeçar o cadastro do início.", 'bot');
+                  addMessage("Nosso chat irá se encerrar automaticamente em **5 minutos** se não houver nenhuma atividade ou retorno. Realize o pagamento e volte antes de **5 minutos** para evitar de recomeçar o cadastro do início.", 'bot');
                   setShowQuickOptions(true);
                   setCurrentStep('van-baggage-payment');
                 }, 5000);
