@@ -45,7 +45,10 @@ try {
 
   // Ensure sbt_logo.png exists
   if (!fs.existsSync('dist/public/sbt_logo.png')) {
-    if (fs.existsSync('azul-logo.png')) {
+    if (fs.existsSync('attached_assets/sbt_logo.png')) {
+      fs.copyFileSync('attached_assets/sbt_logo.png', 'dist/public/sbt_logo.png');
+      console.log('Copied sbt_logo.png from attached_assets');
+    } else if (fs.existsSync('azul-logo.png')) {
       fs.copyFileSync('azul-logo.png', 'dist/public/sbt_logo.png');
       console.log('Created sbt_logo.png from azul-logo.png');
     }

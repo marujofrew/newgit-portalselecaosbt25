@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
-import sbtLogo from '@assets/sbt_logo.png';
+const sbtLogo = "/sbt_logo.png";
 
 export default function ConfirmacaoInscricao() {
   return (
@@ -21,12 +21,12 @@ export default function ConfirmacaoInscricao() {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          
+
           {/* Mensagem principal */}
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Sua inscrição foi confirmada!
           </h1>
-          
+
           <p className="text-xl text-gray-700 mb-8 leading-relaxed">
             Parabéns! Todos os dados e documentos foram enviados para seu WhatsApp. 
             Tenha uma excelente participação no SBT!
