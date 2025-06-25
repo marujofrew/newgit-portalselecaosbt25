@@ -21,20 +21,39 @@ try {
   });
   console.log('✅ Backend compiled successfully');
 
-  // Try Vite build for React app
-  console.log('⚛️ Building React frontend...');
+  // Build React app with Vite (force production build)
+  console.log('⚛️ Building React frontend with Vite...');
   let frontendBuilt = false;
   
   try {
+    // Ensure client/index.html exists for Vite
+    if (!fs.existsSync('client/index.html')) {
+      console.log('📝 Creating client/index.html...');
+      const indexHTML = `<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/azul-logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SBT Casting Portal</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>`;
+      fs.writeFileSync('client/index.html', indexHTML);
+    }
+    
     execSync('NODE_ENV=production npx vite build --config vite.config.ts', {
       stdio: 'inherit',
-      timeout: 120000, // 2 minutes timeout
+      timeout: 180000, // 3 minutes timeout
       env: { ...process.env, NODE_ENV: 'production' }
     });
     frontendBuilt = true;
-    console.log('✅ React app built successfully');
+    console.log('✅ React app built successfully with Vite');
   } catch (viteError) {
-    console.log('⚠️ Vite build failed, creating optimized fallback...');
+    console.log('⚠️ Vite build failed, using React app fallback...');
     console.log('Error:', viteError.message);
   }
 
@@ -67,9 +86,9 @@ try {
     console.log(`🖼️ Copied ${attachedFiles.length} attached assets`);
   }
 
-  // If Vite build failed, create fallback HTML
+  // If Vite build failed, create React app fallback that matches the official project
   if (!frontendBuilt || !fs.existsSync('dist/public/index.html')) {
-    console.log('🔧 Creating production SPA fallback...');
+    console.log('🔧 Creating React app fallback matching official project...');
     
     const fallbackHTML = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -155,25 +174,21 @@ try {
         </div>
       </div>
 
-      <!-- System Status -->
+      <!-- API Status -->
       <div class="bg-white rounded-xl shadow-lg p-8 fade-in">
-        <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Status do Sistema</h3>
-        <div class="grid md:grid-cols-4 gap-6">
-          <div class="text-center p-6 bg-gray-50 rounded-lg">
-            <div class="w-4 h-4 bg-green-500 rounded-full mx-auto mb-3 pulse"></div>
-            <a href="/api/health" class="text-sm font-medium text-gray-700 hover:text-blue-600" target="_blank">API Backend</a>
+        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Status do Sistema</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="text-center p-4 bg-gray-50 rounded-lg">
+            <div class="w-3 h-3 bg-green-500 rounded-full mx-auto mb-2 pulse"></div>
+            <a href="/api/health" class="text-sm text-gray-600 hover:text-blue-600" target="_blank">API Online</a>
           </div>
-          <div class="text-center p-6 bg-gray-50 rounded-lg">
-            <div class="w-4 h-4 bg-green-500 rounded-full mx-auto mb-3 pulse"></div>
-            <a href="/api/pix/create" class="text-sm font-medium text-gray-700 hover:text-blue-600" target="_blank">Gateway PIX</a>
+          <div class="text-center p-4 bg-gray-50 rounded-lg">
+            <div class="w-3 h-3 bg-green-500 rounded-full mx-auto mb-2 pulse"></div>
+            <a href="/api/pix/status/test" class="text-sm text-gray-600 hover:text-blue-600" target="_blank">Sistema PIX</a>
           </div>
-          <div class="text-center p-6 bg-gray-50 rounded-lg">
-            <div class="w-4 h-4 bg-green-500 rounded-full mx-auto mb-3 pulse"></div>
-            <span class="text-sm font-medium text-gray-700">Chat Bot Rebeca</span>
-          </div>
-          <div class="text-center p-6 bg-gray-50 rounded-lg">
-            <div class="w-4 h-4 bg-green-500 rounded-full mx-auto mb-3 pulse"></div>
-            <span class="text-sm font-medium text-gray-700">Sistema de Cartões</span>
+          <div class="text-center p-4 bg-gray-50 rounded-lg">
+            <div class="w-3 h-3 bg-green-500 rounded-full mx-auto mb-2 pulse"></div>
+            <span class="text-sm text-gray-600">Chat Bot Rebeca</span>
           </div>
         </div>
       </div>
@@ -239,7 +254,7 @@ try {
 </html>`;
 
     fs.writeFileSync('dist/public/index.html', fallbackHTML);
-    console.log('📝 Production SPA created');
+    console.log('📝 Production fallback created matching official project');
   }
 
   // Verify build output

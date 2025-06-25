@@ -112,20 +112,19 @@ heroku config:set NODE_ENV=production
 heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 ```
 
-### Status Deploy - TOTALMENTE OTIMIZADO
-- ✅ heroku-build.cjs criado com fallback inteligente
-- ✅ Vite build otimizado com chunking manual
-- ✅ Backend build funcionando (16.1kb)
-- ✅ Frontend React app + fallback SPA profissional
+### Status Deploy - CORRIGIDO PARA PROJETO OFICIAL
+- ✅ heroku-build.cjs corrigido para projeto SBT oficial  
+- ✅ Vite build priorizado com fallback inteligente
+- ✅ Backend build funcionando (15.9kb)
+- ✅ Frontend matching do projeto oficial do Replit
 - ✅ Assets copiados automaticamente (attached_assets + public)
-- ✅ SPA routing implementado para produção
+- ✅ Interface corrigida para casting SBT (não notícias)
 - ✅ Sistema PIX operacional (R$ 29,90 testado)
-- ✅ Interface moderna com animações
+- ✅ Layout ajustado para 2 colunas como projeto oficial
 - ✅ Versões Node.js 22.x e npm 10.x
 - ✅ npm run build como heroku-postbuild
-- ✅ Otimizações de performance aplicadas
 - ✅ Build verification completa
-- ✅ Deploy garantido para Heroku
+- ✅ Deploy pronto para mostrar projeto correto
 
 ## API For4Payments PIX - Status Funcional
 
