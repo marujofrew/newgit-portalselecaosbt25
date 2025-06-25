@@ -408,7 +408,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const getQuickOptions = () => {
     switch (currentStep) {
       case 'greeting':
-        return ['**Avião**', '**Van**'];
+        return ['Avião', 'Van'];
 
       case 'flight-options':
         return ['Opção 1', 'Opção 2'];
@@ -1617,16 +1617,25 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       );
     }
 
-    // Se o texto contém HTML (como imagens, links), renderizar como HTML
-    if (text.includes('<img') || text.includes('<a href') || text.includes('<br')) {
-      return <div dangerouslySetInnerHTML={{ __html: text }} />;
+    // Processar markdown para negrito (**texto**) primeiro
+    const processMarkdown = (text: string) => {
+      // Converter **texto** para <strong>texto</strong>
+      return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    };
+
+    // Processar o texto com markdown
+    const processedText = processMarkdown(text);
+
+    // Se o texto contém HTML (como imagens, links, ou strong), renderizar como HTML
+    if (processedText.includes('<img') || processedText.includes('<a href') || processedText.includes('<br') || processedText.includes('<strong>')) {
+      return <div dangerouslySetInnerHTML={{ __html: processedText }} />;
     }
 
     // Caso contrário, processar quebras de linha normalmente
-    return text.split('\n').map((line, index) => (
+    return processedText.split('\n').map((line, index) => (
       <span key={index}>
         {line}
-        {index < text.split('\n').length - 1 && <br />}
+        {index < processedText.split('\n').length - 1 && <br />}
       </span>
     ));
   };
