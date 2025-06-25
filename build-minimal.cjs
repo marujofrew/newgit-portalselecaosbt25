@@ -14,11 +14,10 @@ try {
   execSync('npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist', {
     stdio: 'inherit'
   });
-
-  // Skip Vite build completely - use optimized fallback
-  console.log('Creating production frontend...');
+  console.log('Backend build completed');
 
   // Copy public assets
+  console.log('Copying assets...');
   if (fs.existsSync('client/public')) {
     const files = fs.readdirSync('client/public');
     files.forEach(file => {
@@ -27,9 +26,11 @@ try {
         path.join('dist/public', file)
       );
     });
+    console.log(`Copied ${files.length} assets`);
   }
 
-  // Create production-ready SPA that works with all functionality
+  // Create production-ready HTML
+  console.log('Creating frontend...');
   const productionHTML = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -144,6 +145,7 @@ try {
 </html>`;
 
   fs.writeFileSync('dist/public/index.html', productionHTML);
+  console.log('Frontend created successfully');
 
   console.log('Build completed successfully!');
 
