@@ -218,7 +218,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setIsTyping(false);
           const welcomeMessage: Message = {
             id: Date.now(),
-            text: "Olá! Sou a Rebeca, assistente da SBT. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de avião ou Van?",
+            text: "Olá! Sou a Rebeca, assistente da **SBT**. Preciso organizar sua viagem para São Paulo. Vamos começar com o transporte - você prefere viajar de **avião** ou **Van**?",
             sender: 'bot',
             timestamp: new Date()
           };
@@ -408,7 +408,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
   const getQuickOptions = () => {
     switch (currentStep) {
       case 'greeting':
-        return ['Avião', 'Van'];
+        return ['**Avião**', '**Van**'];
 
       case 'flight-options':
         return ['Opção 1', 'Opção 2'];
@@ -537,7 +537,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'greeting':
         if (messageToSend.toLowerCase().includes('avião') || messageToSend.toLowerCase().includes('aviao')) {
           setSelectedTransport('aviao');
-          botResponse = "Perfeito! Voo é mais rápido. Vou buscar os melhores voos saindo do aeroporto mais próximo de você para São Paulo.";
+          botResponse = "Perfeito! **Avião** é mais rápido. Vou buscar os melhores voos saindo do aeroporto mais próximo de você para São Paulo.";
           nextStep = 'flight-search';
           showOptions = false;
 
@@ -548,7 +548,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(false);
               const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
               const cidadeInfo = responsavelData.cidade || userCity || 'sua cidade';
-              addMessage(`Identifiquei que você está em ${cidadeInfo}. Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
+              addMessage(`Identifiquei que você está em **${cidadeInfo}**. Isso vai me ajudar a encontrar as melhores opções de viagem.`, 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -606,7 +606,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }, 5000);
         } else if (messageToSend.toLowerCase().includes('van')) {
           setSelectedTransport('van');
-          botResponse = "Ok, vou verificar a rota de nossa Van, para encaixar sua localização!";
+          botResponse = "Ok, vou verificar a rota de nossa **Van**, para encaixar sua localização!";
           nextStep = 'van-search';
           showOptions = false;
 
@@ -629,13 +629,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     vanDate = vanDateObj.toLocaleDateString('pt-BR');
                   }
 
-                  addMessage(`Certo, verifiquei que dia ${vanDate || 'XX/XX'} (3 dias antes do dia da data selecionada para agendamento de teste), a nossa van que busca os candidatos em todo o Brasil, vai estar próxima à localização.`, 'bot');
+                  addMessage(`Certo, verifiquei que dia **${vanDate || 'XX/XX'}** (3 dias antes do dia da data selecionada para agendamento de teste), a nossa **van** que busca os **candidatos** em todo o Brasil, vai estar próxima à localização.`, 'bot');
 
                   setTimeout(() => {
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage(`Então conseguimos agendar para o motorista buscar vocês dia ${vanDate || 'XX/XX'} às 13:40h, posso confirmar?`, 'bot');
+                      addMessage(`Então conseguimos agendar para o motorista buscar vocês dia **${vanDate || 'XX/XX'}** às **13:40h**, posso confirmar?`, 'bot');
                       setShowQuickOptions(true);
                       setCurrentStep('van-confirmation');
                     }, 5000);
@@ -657,7 +657,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         }
 
         const responsavelData = JSON.parse(localStorage.getItem('responsavelData') || '{}');
-        botResponse = `Senhor(a) ${responsavelData.nome || ''}, lembrando que as passagens são custeadas pelo SBT, ou seja, não terá gasto algum com passagens.`;
+        botResponse = `Senhor(a) **${responsavelData.nome || ''}**, lembrando que as passagens são custeadas pelo **SBT**, ou seja, não terá gasto algum com passagens.`;
         nextStep = 'flight-payment-info';
         showOptions = false;
 
@@ -671,7 +671,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage('Na passagem não está incluso bagagem. Caso precise levar uma bagagem temos um programa em parceria com a AZUL, chamado "Bagagem do Bem" que por apenas R$ 29,90 você tem direito ao kit bagagem e todo o valor arrecadado é doado ao TELETON 2025.', 'bot');
+                addMessage('Na passagem não está incluso **bagagem**. Caso precise levar uma **bagagem** temos um programa em parceria com a **AZUL**, chamado "**BAGAGEM DO BEM**" que por apenas **R$ 29,90** você tem direito ao kit **bagagem** e todo o valor arrecadado é **doado** ao **TELETON 2025**.', 'bot');
 
                 // Adicionar imagem promocional após a mensagem sobre bagagem
                 setTimeout(() => {
@@ -687,7 +687,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage('Você gostaria de incluir bagagem por R$ 29,90 ou prefere viajar apenas com bagagem de mão?', 'bot');
+                      addMessage('Você gostaria de incluir **bagagem** por **R$ 29,90** ou prefere viajar apenas com **bagagem** de mão?', 'bot');
                       setShowQuickOptions(true);
                       setCurrentStep('baggage-offer');
                     }, 5000);
@@ -929,7 +929,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             vanDate = vanDateObj.toLocaleDateString('pt-BR');
           }
 
-          botResponse = `Tudo certo, sua viagem já está agendada, e dia ${vanDate || 'XX/XX'} às 13:40h o motorista do SBT junto com a Van estará em sua porta, para te buscar!`;
+          botResponse = `Tudo certo, sua viagem já está agendada, e dia **${vanDate || 'XX/XX'}** às **13:40h** o motorista do **SBT** junto com a **Van** estará em sua porta, para te buscar!`;
           nextStep = 'van-baggage-info';
           showOptions = false;
 
