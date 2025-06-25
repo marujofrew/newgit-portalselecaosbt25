@@ -119,7 +119,8 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - ✅ Diretório client/ incluído no deploy (.slugignore corrigido)
 - ✅ Build backend funcionando (16.1kb)
 - ✅ Frontend SPA profissional (4.8kb HTML)
-- ✅ Assets públicos copiados (logo Azul, etc)
+- ✅ Assets públicos copiados (logo Azul, sbt_logo.png, etc)
+- ✅ Attached assets copiados automaticamente
 - ✅ Interface funcional com navegação
 - ✅ Versões Node.js 22.x e npm 10.x especificadas
 - ✅ Script build-minimal.cjs verificado e testado

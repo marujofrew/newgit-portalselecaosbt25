@@ -26,7 +26,29 @@ try {
         path.join('dist/public', file)
       );
     });
-    console.log(`Copied ${files.length} assets`);
+    console.log(`Copied ${files.length} public assets`);
+  }
+
+  // Copy attached assets to dist/public
+  if (fs.existsSync('attached_assets')) {
+    const attachedFiles = fs.readdirSync('attached_assets');
+    attachedFiles.forEach(file => {
+      if (file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.svg')) {
+        fs.copyFileSync(
+          path.join('attached_assets', file), 
+          path.join('dist/public', file)
+        );
+      }
+    });
+    console.log(`Copied ${attachedFiles.filter(f => f.match(/\.(png|jpg|jpeg|svg)$/)).length} attached assets`);
+  }
+
+  // Ensure sbt_logo.png exists
+  if (!fs.existsSync('dist/public/sbt_logo.png')) {
+    if (fs.existsSync('azul-logo.png')) {
+      fs.copyFileSync('azul-logo.png', 'dist/public/sbt_logo.png');
+      console.log('Created sbt_logo.png from azul-logo.png');
+    }
   }
 
   // Create production-ready HTML
