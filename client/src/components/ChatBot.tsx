@@ -687,7 +687,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                     setIsTyping(true);
                     setTimeout(() => {
                       setIsTyping(false);
-                      addMessage('Você gostaria de incluir **bagagem** por **R$ 29,90** ou prefere viajar apenas com **bagagem** de mão?', 'bot');
+                      addMessage('Você gostaria de incluir bagagem por **R$ 29,90** ou prefere viajar apenas com bagagem de mão?', 'bot');
                       setShowQuickOptions(true);
                       setCurrentStep('baggage-offer');
                     }, 5000);
@@ -943,7 +943,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Como nosso espaço em van é reduzido, precisamos levar outra Van onde fica responsável para transportar apenas bagagens de nossos candidatos. Caso precise levar uma bagagem temos um programa chamado \"Bagagem do Bem\" que por apenas R$ 29,90 você tem direito ao kit bagagem e todo o valor arrecadado é doado ao TELETON 2025.", 'bot');
+                  addMessage("Como nosso espaço em van é reduzido, precisamos levar outra Van onde fica responsável para transportar apenas bagagens de nossos candidatos. Caso precise levar uma bagagem temos um programa chamado \"**BAGAGEM DO BEM**\" que por apenas **R$ 29,90** você tem direito ao kit bagagem e todo o valor arrecadado é **doado** ao **TELETON 2025**.", 'bot');
 
                   // Adicionar imagem promocional da van após a mensagem sobre bagagem
                   setTimeout(() => {
@@ -1583,7 +1583,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             fontWeight: 'bold', 
             marginBottom: '8px' 
           }}>
-            💳 Chave PIX {pixData.type === 'inscription' ? 'Inscrição' : ''} - {pixData.amount}
+            💳 Chave **PIX** {pixData.type === 'inscription' ? 'Inscrição' : ''} - **{pixData.amount}**
           </div>
           <div style={{ 
             background: 'white', 
@@ -1680,7 +1680,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
           const confirmMessage = type === 'baggage' 
             ? '💚 Pagamento confirmado! Vamos continuar?'
-            : '💚 Pagamento da **inscrição** confirmado! Vamos prosseguir?';
+            : '💚 Pagamento da inscrição confirmado! Vamos prosseguir?';
           
           addMessage(confirmMessage, 'bot');
           setShowQuickOptions(true);
