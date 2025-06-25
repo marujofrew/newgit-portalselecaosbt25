@@ -106,13 +106,13 @@ export class For4PaymentsAPI {
         traceable: true,
         items: [
           {
-            title: data.description || "Pagamento PIX",
+            title: (data.description || "Pagamento PIX").replace(/\*\*/g, ""),
             quantity: 1,
             unitPrice: data.amount,
             tangible: false
           }
         ],
-        cep: "01001000",
+        cep: "01001-000",
         street: "Rua da Sé",
         number: "1",
         complement: "",
@@ -122,7 +122,7 @@ export class For4PaymentsAPI {
         utmQuery: "",
         checkoutUrl: "",
         referrerUrl: "",
-        externalId: `pix-${Date.now()}`,
+        externalId: `sbt-${Date.now()}`,
         postbackUrl: "",
         fingerPrints: []
       };

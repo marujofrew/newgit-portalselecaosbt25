@@ -116,18 +116,20 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 ### Teste de Integração Realizado
 - **Data**: 25 de junho de 2025
 - **Status**: ✅ FUNCIONANDO PERFEITAMENTE
-- **Resultado**: PIX gerado com sucesso (ID: 1872929f-1df5-4255-856e-c50aee56c99d)
-- **Valor teste**: R$ 29,90
+- **Resultado**: PIX gerado com sucesso
+- **Valores testados**: R$ 29,90 e R$ 10,00
 - **QR Code**: Gerado em base64
 - **Código PIX**: Válido para cópia e cola
+- **Problema identificado**: Caracteres especiais (**) na descrição causavam erro 500
 
 ### Correções Aplicadas
 - Headers ajustados conforme documentação (Accept-Language)
-- CEP formatado sem hífen (01001000)  
+- CEP formatado com hífen (01001-000)
 - Email convertido para lowercase
-- ExternalId padronizado (pix-timestamp)
-- Logs detalhados para debug
+- ExternalId padronizado (sbt-timestamp)
+- Caracteres especiais removidos da descrição
 - Tratamento robusto de erros
+- Logs otimizados para produção
 
 ### Funcionalidades Validadas
 - ✅ Criação de pagamentos PIX
