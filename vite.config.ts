@@ -25,11 +25,9 @@ export default defineConfig({
   },
   root: process.env.NODE_ENV === "production" ? "." : "client",
   build: {
-    outDir: process.env.NODE_ENV === "production" ? "dist/public" : "../dist/public",
+    outDir: "./dist/public",
     emptyOutDir: true,
-    rollupOptions: {
-      input: process.env.NODE_ENV === "production" ? "client/index.html" : "index.html"
-    }
+    assetsDir: "assets",
   },
   server: {
     fs: {
