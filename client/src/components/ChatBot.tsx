@@ -671,7 +671,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setIsTyping(true);
               setTimeout(() => {
                 setIsTyping(false);
-                addMessage('Na passagem não está incluso **bagagem**. Caso precise levar uma **bagagem** temos um programa em parceria com a **AZUL**, chamado "**BAGAGEM DO BEM**" que por apenas **R$ 29,90** você tem direito ao kit **bagagem** e todo o valor arrecadado é **doado** ao **TELETON 2025**.', 'bot');
+                addMessage('Na passagem não está incluso bagagem. Caso precise levar uma bagagem temos um programa em parceria com a **AZUL**, chamado "**BAGAGEM DO BEM**" que por apenas **R$ 29,90** você tem direito ao kit bagagem e todo o valor arrecadado é **doado** ao **TELETON 2025**.', 'bot');
 
                 // Adicionar imagem promocional após a mensagem sobre bagagem
                 setTimeout(() => {
