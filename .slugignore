@@ -1,0 +1,13 @@
+attached_assets/
+*.md
+.replit
+components.json
+postcss.config.js
+tailwind.config.ts
+tsconfig.json
+vite.config.ts
+drizzle.config.ts
+client/
+boarding-pass-generator/
+shared/
+server/
