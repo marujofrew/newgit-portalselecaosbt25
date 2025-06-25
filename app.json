@@ -43,6 +43,6 @@
     }
   },
   "build": {
-    "timeout": 1200
+    "timeout": 1800
   }
 }
