@@ -7,5 +7,3 @@ tailwind.config.ts
 tsconfig.json
 drizzle.config.ts
 boarding-pass-generator/
-shared/
-server/
