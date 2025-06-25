@@ -181,7 +181,7 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Estado completo do chatbot salvo**: Mensagens, etapa atual, seleções de transporte, bagagem, pagamentos e timers mantidos
 - **Sistema de minimização do chatbot**: Botão "−" para minimizar, balão fixo no canto direito com ícone de chat, clique no balão para expandir
 - **Sistema de backup completo implementado**: Estado total do chatbot salvo no localStorage com timestamp para restauração perfeita da conversa
-- **ChatBot completamente isolado**: Removido do App.tsx global, só aparece em agendamento e cartão-preview após confirmação
+- **Homepage SBT casting portal corrigida**: Removido conteúdo de notícias, implementado portal de casting com navegação funcional
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
