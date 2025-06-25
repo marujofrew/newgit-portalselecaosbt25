@@ -37,6 +37,9 @@
   "scripts": {
     "postdeploy": "npm run db:push"
   },
+  "scripts": {
+    "heroku-postbuild": "./heroku-postbuild.sh"
+  },
   "env": {
     "NODE_ENV": {
       "value": "production"

@@ -117,8 +117,9 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - ✅ Arquivos Python excluídos do build
 - ✅ PIX For4Payments funcionando
 - ✅ Arquivo index.html criado em client/
-- ✅ Script build-heroku.sh para deploy otimizado
+- ✅ Script heroku-postbuild.sh criado com timeout e fallback
 - ✅ Procfile configurado para npm start
+- ✅ Timeout de build aumentado para 30 minutos
 - ✅ Pronto para deploy
 
 ## API For4Payments PIX - Status Funcional
