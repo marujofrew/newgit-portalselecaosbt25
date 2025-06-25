@@ -134,6 +134,13 @@ export function calculateFlightData(selectedDate?: string, userCity?: string, ne
       flightDate.setDate(appointmentDate.getDate() - 1);
       flightTime = '08:30';
     }
+  } else {
+    // Caso não tenha data de agendamento, usar defaults
+    if (selectedFlightOption === '1') {
+      flightTime = '13:20';
+    } else {
+      flightTime = '08:30';
+    }
   }
   
   // Calcular horário de embarque (25 minutos antes do voo)

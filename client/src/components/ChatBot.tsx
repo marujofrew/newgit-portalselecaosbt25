@@ -572,18 +572,18 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       if (selectedDate) {
                         const appointmentDate = new Date(selectedDate);
                         const option1DateObj = new Date(appointmentDate);
-                        option1DateObj.setDate(appointmentDate.getDate() - 1);
+                        option1DateObj.setDate(appointmentDate.getDate() - 2); // Opção 1: 2 dias antes
                         option1Date = option1DateObj.toLocaleDateString('pt-BR');
 
                         const option2DateObj = new Date(appointmentDate);
-                        option2DateObj.setDate(appointmentDate.getDate() - 2);
+                        option2DateObj.setDate(appointmentDate.getDate() - 1); // Opção 2: 1 dia antes
                         option2Date = option2DateObj.toLocaleDateString('pt-BR');
                       }
 
                       const airportCode = nearestAirport?.code || 'GYN';
                       const airportCity = nearestAirport?.city || 'GOIÂNIA';
 
-                      addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: **${option1Date || 'Data flexível'}** | Horário: **08:30** | Duração: **2h15min**`, 'bot');
+                      addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: **${option1Date || 'Data flexível'}** | Horário: **13:20** | Duração: **2h15min**`, 'bot');
 
                       setTimeout(() => {
                         setIsTyping(true);
