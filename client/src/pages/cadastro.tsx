@@ -942,7 +942,6 @@ export default function Cadastro() {
                               dataNascimento,
                               nomeMae,
                               sexo,
-                              grauParentesco,
                               telefone
                             };
                             
