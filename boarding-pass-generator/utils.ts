@@ -117,13 +117,23 @@ export function calculateFlightData(selectedDate?: string, userCity?: string, ne
   let flightDate = new Date();
   let flightTime = '13:20'; // Horário padrão
   
+  // Verificar qual opção de voo foi selecionada no chat
+  const selectedFlightOption = localStorage.getItem('selectedFlightOption') || '1';
+  
   if (selectedDate) {
     const appointmentDate = new Date(selectedDate);
     
-    // Por padrão, voo 2 dias antes do agendamento
-    flightDate = new Date(appointmentDate);
-    flightDate.setDate(appointmentDate.getDate() - 2);
-    flightTime = '13:20';
+    if (selectedFlightOption === '1') {
+      // Opção 1: 2 dias antes do agendamento, 13:20
+      flightDate = new Date(appointmentDate);
+      flightDate.setDate(appointmentDate.getDate() - 2);
+      flightTime = '13:20';
+    } else if (selectedFlightOption === '2') {
+      // Opção 2: 1 dia antes do agendamento, 08:30
+      flightDate = new Date(appointmentDate);
+      flightDate.setDate(appointmentDate.getDate() - 1);
+      flightTime = '08:30';
+    }
   }
   
   // Calcular horário de embarque (25 minutos antes do voo)
