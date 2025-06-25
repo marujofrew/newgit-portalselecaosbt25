@@ -79,10 +79,7 @@ export default function Home() {
               O SBT custeará todos os gastos tanto para o candidato quanto para o responsável legal, garantindo que não haja nenhum custo para as famílias interessadas.
             </p>
             
-            <h3 className="text-lg font-bold mb-3">Benefício Especial:</h3>
-            <p className="mb-4">
-              Após a realização da inscrição, cada candidato receberá <strong>50% dos subsídios antecipados</strong>, no valor de <strong>R$ 1.700,00</strong>, destinados ao transporte de ida e alimentação inicial. O restante será depositado após a conclusão do teste.
-            </p>
+
           </div>
           
           <h2 className="text-xl font-bold mt-6 mb-2">
