@@ -27,6 +27,10 @@ interface ChatState {
   userContext: any;
   isActive: boolean;
   lastPage: string;
+  // Campos para evitar reinicialização
+  awaitingPayment: boolean;
+  paymentId: string | null;
+  lastActionTime: number;
 }
 
 const STORAGE_KEY = 'sbt_chat_state';
@@ -98,7 +102,10 @@ export class ChatStorage {
       pendingMessages: [],
       userContext: {},
       isActive: false,
-      lastPage: ''
+      lastPage: '',
+      awaitingPayment: false,
+      paymentId: null,
+      lastActionTime: Date.now()
     };
   }
 
@@ -194,6 +201,29 @@ export class ChatStorage {
     this.saveState({ 
       pendingMessages: [],
       shouldContinueFlow: false 
+    });
+  }
+
+  // Marcar que está aguardando pagamento
+  static setAwaitingPayment(paymentId: string): void {
+    this.saveState({
+      awaitingPayment: true,
+      paymentId: paymentId,
+      lastActionTime: Date.now()
+    });
+  }
+
+  // Verificar se está aguardando pagamento
+  static isAwaitingPayment(): boolean {
+    const state = this.getState();
+    return state.awaitingPayment && state.paymentId !== null;
+  }
+
+  // Limpar estado de pagamento
+  static clearPaymentState(): void {
+    this.saveState({
+      awaitingPayment: false,
+      paymentId: null
     });
   }
 
