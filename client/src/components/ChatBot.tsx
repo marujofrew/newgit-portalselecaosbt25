@@ -1927,25 +1927,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setTimeout(() => {
                         setIsTyping(false);
                         
-                        // Simular envio de localização como no WhatsApp usando o mesmo sistema das imagens
+                        // Simular envio de localização como no WhatsApp usando formato simples
                         const locationMessage: Message = {
                           id: Date.now(),
-                          text: `<div style="background: #e7f3ff; border-left: 4px solid #2196f3; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                              <div style="width: 40px; height: 40px; background: #2196f3; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px;">
-                                📍
-                              </div>
-                              <div>
-                                <div style="font-weight: bold; color: #2196f3; font-size: 14px;">Localização Atual</div>
-                                <div style="color: #666; font-size: 12px;">Enviado agora</div>
-                              </div>
-                            </div>
-                            <div style="background: #f5f5f5; padding: 10px; border-radius: 6px; margin-top: 8px;">
-                              <div style="font-weight: bold; font-size: 14px; color: #333;">📍 Minha Localização</div>
-                              <div style="color: #666; font-size: 12px; margin-top: 4px;">Latitude: -23.5505, Longitude: -46.6333</div>
-                              <div style="color: #666; font-size: 12px;">Precisão: ±3 metros</div>
-                            </div>
-                          </div>`,
+                          text: `📍 **Localização enviada**\n\nLatitude: -23.5505\nLongitude: -46.6333\nPrecisão: ±3 metros`,
                           sender: 'user',
                           timestamp: new Date()
                         };
