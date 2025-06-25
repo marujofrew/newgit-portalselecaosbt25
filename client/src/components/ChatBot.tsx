@@ -6,6 +6,7 @@ import bagagemDoBemImage from '@assets/assets_task_01jyfgjxwkets8k907ads1nc55_17
 import bagagemDoBemVanImage from '@assets/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
 import hotelRoomImage from '@assets/Leon-Park-157-1024x680_1750729457567.jpg';
 import hotelRoomVanImage from '@assets/Leon-Park-157-1024x680_1750730216204.jpg';
+import credentialImage from '@assets/assets_task_01jygr0p5ceq09zxjdkj0r5a4f_1750761427_img_1_1750812964720.webp';
 import { ChatStorage } from '../utils/chatStorage';
 
 interface Message {
@@ -1667,8 +1668,31 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setTimeout(() => {
                 setIsTyping(false);
                 
-                // Gerar credenciais (similar aos cartões de embarque)
-                generateCredentials();
+                // Enviar imagem da credencial
+                const credencialMessage: Message = {
+                  id: Date.now(),
+                  text: `<div style="text-align: center; margin: 10px 0;">
+                    <img src="${credentialImage}" alt="Credencial SBT" style="max-width: 300px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"/>
+                    <div style="margin-top: 15px;">
+                      <button onclick="downloadCredential()" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                        📄 **Download** da Credencial
+                      </button>
+                    </div>
+                  </div>`,
+                  sender: 'bot',
+                  timestamp: new Date()
+                };
+                setMessages(prev => [...prev, credencialMessage]);
+                
+                // Função global para download da credencial
+                (window as any).downloadCredential = () => {
+                  const link = document.createElement('a');
+                  link.href = credentialImage;
+                  link.download = 'Credencial_SBT_Universal.webp';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                };
                 
                 setTimeout(() => {
                   setIsTyping(true);
