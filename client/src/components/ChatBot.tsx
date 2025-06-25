@@ -610,7 +610,15 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }, 5000);
         } else if (messageToSend.toLowerCase().includes('van')) {
           setSelectedTransport('van');
-          botResponse = `Perfeito! Vou organizar sua viagem de **Van** para São Paulo. Saindo de ${userCity || 'sua cidade'} no ${selectedDateFormatted}. Você vai adorar a paisagem da estrada!`;
+          
+          // Formatar data para van
+          let vanDateFormatted = 'data selecionada';
+          if (selectedDate) {
+            const appointmentDate = new Date(selectedDate);
+            vanDateFormatted = appointmentDate.toLocaleDateString('pt-BR');
+          }
+          
+          botResponse = `Perfeito! Vou organizar sua viagem de **Van** para São Paulo. Saindo de ${userCity || 'sua cidade'} no ${vanDateFormatted}. Você vai adorar a paisagem da estrada!`;
           nextStep = 'van-location-request';
           showOptions = false;
 
