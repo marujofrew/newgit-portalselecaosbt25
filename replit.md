@@ -112,14 +112,14 @@ heroku config:set NODE_ENV=production
 heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 ```
 
-### Status Deploy
+### Status Deploy - CORRIGIDO
 - ✅ Buildpack Node.js configurado
 - ✅ Arquivos Python excluídos do build
 - ✅ PIX For4Payments funcionando
 - ✅ Arquivo index.html criado em client/
-- ✅ Script heroku-postbuild.sh criado com timeout e fallback
+- ✅ Script build-minimal.cjs criado para resolver timeout do Vite
 - ✅ Procfile configurado para npm start
-- ✅ Timeout de build aumentado para 30 minutos
+- ✅ Build com fallback funcional testado localmente
 - ✅ Pronto para deploy
 
 ## API For4Payments PIX - Status Funcional
