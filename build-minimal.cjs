@@ -17,7 +17,6 @@ try {
 
   // Skip Vite build completely - use optimized fallback
   console.log('Creating production frontend...');
-  let frontendSuccess = false;
 
   // Copy public assets
   if (fs.existsSync('client/public')) {
