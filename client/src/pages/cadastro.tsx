@@ -36,7 +36,7 @@ export default function Cadastro() {
   const [sexo, setSexo] = useState("");
   const [loadingCpf, setLoadingCpf] = useState(false);
   const [cpfStep, setCpfStep] = useState(0);
-  const [grauParentesco, setGrauParentesco] = useState("");
+
   const [telefone, setTelefone] = useState("");
   const [showDadosCrianca, setShowDadosCrianca] = useState(false);
   const [nomeCrianca, setNomeCrianca] = useState("");
