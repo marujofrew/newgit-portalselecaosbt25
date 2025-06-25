@@ -579,13 +579,13 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       const airportCode = nearestAirport?.code || 'GYN';
                       const airportCity = nearestAirport?.city || 'GOIÂNIA';
 
-                      addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: ${option1Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+                      addMessage(`🔸 Opção 1: ${airportCity} (${airportCode}) → São Paulo\nData: **${option1Date || 'Data flexível'}** | Horário: **08:30** | Duração: **2h15min**`, 'bot');
 
                       setTimeout(() => {
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          addMessage(`🔸 Opção 2: ${airportCity} (${airportCode}) → São Paulo\nData: ${option2Date || 'Data flexível'} | Horário: 08:30 | Duração: 2h15min`, 'bot');
+                          addMessage(`🔸 Opção 2: ${airportCity} (${airportCode}) → São Paulo\nData: **${option2Date || 'Data flexível'}** | Horário: **08:30** | Duração: **2h15min**`, 'bot');
 
                           setTimeout(() => {
                             setIsTyping(true);
