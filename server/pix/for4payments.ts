@@ -60,7 +60,8 @@ export class For4PaymentsAPI {
       "Authorization": this.secret_key,
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "User-Agent": "For4Payments-NodeJS-SDK/1.0.0"
+      "User-Agent": "For4Payments-NodeJS-SDK/1.0.0",
+      "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7"
     };
   }
 
@@ -97,7 +98,7 @@ export class For4PaymentsAPI {
 
       const paymentData = {
         name: data.name.trim(),
-        email: data.email.trim(),
+        email: data.email.trim().toLowerCase(),
         cpf: cpf,
         phone: phone,
         paymentMethod: "PIX",
@@ -105,13 +106,13 @@ export class For4PaymentsAPI {
         traceable: true,
         items: [
           {
-            title: data.description || "Pagamento SBT",
+            title: data.description || "Pagamento PIX",
             quantity: 1,
             unitPrice: data.amount,
             tangible: false
           }
         ],
-        cep: "01001-000",
+        cep: "01001000",
         street: "Rua da Sé",
         number: "1",
         complement: "",
@@ -121,12 +122,14 @@ export class For4PaymentsAPI {
         utmQuery: "",
         checkoutUrl: "",
         referrerUrl: "",
-        externalId: `sbt-casting-${Date.now()}`,
+        externalId: `pix-${Date.now()}`,
         postbackUrl: "",
         fingerPrints: []
       };
 
       console.log('📤 Enviando request para:', `${this.API_URL}/transaction.purchase`);
+      console.log('📊 Headers da requisição:', JSON.stringify(this.getHeaders(), null, 2));
+      console.log('📋 Payload completo:', JSON.stringify(paymentData, null, 2));
 
       const response = await fetch(`${this.API_URL}/transaction.purchase`, {
         method: 'POST',
@@ -135,15 +138,25 @@ export class For4PaymentsAPI {
       });
 
       console.log('📡 Status da resposta:', response.status);
+      
+      // Log da resposta completa para debug
+      const responseText = await response.text();
+      console.log('📄 Resposta completa da API:', responseText);
 
       if (!response.ok) {
-        const errorMessage = await this.extractErrorMessage(response);
-        console.error('❌ Erro na API For4Payments:', errorMessage);
-        throw new Error(`Erro da API For4Payments: ${errorMessage}`);
+        console.error('❌ Erro na API For4Payments - Status:', response.status);
+        console.error('❌ Response text:', responseText);
+        throw new Error(`Erro da API For4Payments: Status ${response.status} - ${responseText}`);
       }
 
-      const responseData = await response.json();
-      console.log('✅ Resposta da API recebida:', { id: responseData.id, status: responseData.status });
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+        console.log('✅ Resposta da API recebida:', JSON.stringify(responseData, null, 2));
+      } catch (e) {
+        console.error('❌ Erro ao fazer parse da resposta JSON:', e);
+        throw new Error(`Resposta inválida da API: ${responseText}`);
+      }
 
       return this.parsePaymentResponse(responseData);
 
