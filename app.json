@@ -1,0 +1,36 @@
+{
+  "name": "SBT Casting Portal",
+  "description": "Sistema de cadastro para castings infantis do SBT",
+  "repository": "https://github.com/user/sbt-casting-portal",
+  "logo": "https://sbt.com/logo.png",
+  "keywords": ["nodejs", "react", "typescript", "postgresql"],
+  "success_url": "/",
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment",
+      "value": "production"
+    },
+    "DATABASE_URL": {
+      "description": "PostgreSQL database URL",
+      "required": true
+    },
+    "FOR4PAYMENTS_SECRET_KEY": {
+      "description": "Chave secreta da API For4Payments para PIX",
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    "heroku-postgresql:mini"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}

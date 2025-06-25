@@ -90,6 +90,27 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Migrations**: `npm run db:push` using Drizzle Kit
 - **Connection**: Environment variable `DATABASE_URL`
 
+## Heroku Deploy Configuration
+
+### Arquivos Criados
+- **Procfile**: Define comando de inicialização (`web: npm run start`)
+- **app.json**: Configuração da aplicação Heroku com addons PostgreSQL
+- **runtime.txt**: Especifica versão Node.js 18.17.0
+- **.env.example**: Template de variáveis de ambiente
+- **README.md**: Documentação completa de deploy
+
+### Modificações para Produção
+- **package.json**: Adicionado script `heroku-postbuild` e versões específicas de engines
+- **server/index.ts**: Configuração de PORT dinâmica e catch-all para SPA
+- **server/vite.ts**: Condicionais para desenvolvimento vs produção
+- Adicionado suporte para arquivos estáticos em produção
+
+### Variáveis de Ambiente Necessárias
+- `DATABASE_URL`: PostgreSQL (addon automático)
+- `FOR4PAYMENTS_SECRET_KEY`: API de pagamentos PIX
+- `NODE_ENV`: production
+- `PORT`: Configurado automaticamente pelo Heroku
+
 ## Recent Changes
 
 - **Sistema de cartões de embarque separado**: Todo código de geração de cartões extraído para pasta `boarding-pass-generator/` reutilizável
