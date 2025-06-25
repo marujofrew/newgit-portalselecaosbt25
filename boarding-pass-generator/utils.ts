@@ -154,6 +154,11 @@ export function calculateFlightData(selectedDate?: string, userCity?: string, ne
   if (boardingMinute < 0) {
     boardingMinute += 60;
     boardingHour -= 1;
+    
+    // Se a hora ficar negativa, ajustar para 23h do dia anterior
+    if (boardingHour < 0) {
+      boardingHour = 23;
+    }
   }
   
   const boardingTime = `${boardingHour.toString().padStart(2, '0')}:${boardingMinute.toString().padStart(2, '0')}`;
