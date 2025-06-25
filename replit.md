@@ -120,14 +120,14 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Valores testados**: R$ 29,90 e R$ 10,00
 - **QR Code**: Gerado em base64
 - **Código PIX**: Válido para cópia e cola
-- **Problema resolvido**: Caracteres especiais na descrição causavam erro 500 - simplificado para "Kit Bagagem SBT"
+- **Problema resolvido**: Caracteres especiais (**) na descrição causavam erro 500 - correção aplicada na validação
 
 ### Correções Aplicadas
 - Headers ajustados conforme documentação (Accept-Language)
 - CEP formatado com hífen (01001-000)
 - Email convertido para lowercase
 - ExternalId padronizado (sbt-timestamp)
-- Caracteres especiais removidos da descrição
+- Descrição padronizada para "Kit Bagagem SBT" na validação de dados
 - Tratamento robusto de erros
 - Logs otimizados para produção
 
