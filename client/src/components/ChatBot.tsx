@@ -1927,12 +1927,12 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setTimeout(() => {
                         setIsTyping(false);
                         
-                        // Simular envio de localização como no WhatsApp
+                        // Simular envio de localização como no WhatsApp usando o mesmo sistema das imagens
                         const locationMessage: Message = {
                           id: Date.now(),
                           text: `<div style="background: #e7f3ff; border-left: 4px solid #2196f3; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
                             <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                              <div style="width: 40px; height: 40px; background: #2196f3; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                              <div style="width: 40px; height: 40px; background: #2196f3; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px;">
                                 📍
                               </div>
                               <div>
