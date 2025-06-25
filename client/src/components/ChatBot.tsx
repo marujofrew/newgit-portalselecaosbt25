@@ -1918,7 +1918,79 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               {getQuickOptions().map((option, index) => (
                 <button
                   key={index}
-                  onClick={() => handleSendMessage(option)}
+                  onClick={() => {
+                    // Tratamento especial para "Enviar localização"
+                    if (option === 'Enviar localização' && currentStep === 'van-location') {
+                      // Não enviar como mensagem normal, apenas simular localização
+                      setShowQuickOptions(false);
+                      setIsTyping(true);
+                      setTimeout(() => {
+                        setIsTyping(false);
+                        
+                        // Simular envio de localização como no WhatsApp
+                        const locationMessage: Message = {
+                          id: Date.now(),
+                          text: `<div style="background: #e7f3ff; border-left: 4px solid #2196f3; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                              <div style="width: 40px; height: 40px; background: #2196f3; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                📍
+                              </div>
+                              <div>
+                                <div style="font-weight: bold; color: #2196f3; font-size: 14px;">Localização Atual</div>
+                                <div style="color: #666; font-size: 12px;">Enviado agora</div>
+                              </div>
+                            </div>
+                            <div style="background: #f5f5f5; padding: 10px; border-radius: 6px; margin-top: 8px;">
+                              <div style="font-weight: bold; font-size: 14px; color: #333;">📍 Minha Localização</div>
+                              <div style="color: #666; font-size: 12px; margin-top: 4px;">Latitude: -23.5505, Longitude: -46.6333</div>
+                              <div style="color: #666; font-size: 12px;">Precisão: ±3 metros</div>
+                            </div>
+                          </div>`,
+                          sender: 'user',
+                          timestamp: new Date()
+                        };
+                        setMessages(prev => [...prev, locationMessage]);
+
+                        setTimeout(() => {
+                          setIsTyping(true);
+                          setTimeout(() => {
+                            setIsTyping(false);
+                            addMessage("Perfeito! Localização recebida. Nossa **Van** chegará no local indicado no dia do seu agendamento.", 'bot');
+
+                            setTimeout(() => {
+                              setIsTyping(true);
+                              setTimeout(() => {
+                                setIsTyping(false);
+
+                                let vanDate = '';
+                                if (selectedDate) {
+                                  const appointmentDate = new Date(selectedDate);
+                                  const vanDateObj = new Date(appointmentDate);
+                                  vanDateObj.setDate(appointmentDate.getDate() - 3);
+                                  vanDate = vanDateObj.toLocaleDateString('pt-BR');
+                                }
+
+                                addMessage(`Certo, verifiquei que dia **${vanDate || 'XX/XX'}** (3 dias antes do dia da data selecionada para agendamento de teste), a nossa **Van** que busca os **candidatos** em todo o Brasil, vai estar próxima à localização.`, 'bot');
+
+                                setTimeout(() => {
+                                  setIsTyping(true);
+                                  setTimeout(() => {
+                                    setIsTyping(false);
+                                    addMessage(`Então conseguimos agendar para o motorista buscar vocês dia **${vanDate || 'XX/XX'}** às **13:40h**, posso confirmar?`, 'bot');
+                                    setShowQuickOptions(true);
+                                    setCurrentStep('van-confirmation');
+                                  }, 5000);
+                                }, 5000);
+                              }, 5000);
+                            }, 5000);
+                          }, 5000);
+                        }, 3000);
+                      }, 1000);
+                    } else {
+                      // Comportamento normal para outras opções
+                      handleSendMessage(option);
+                    }
+                  }}
                   className="w-full p-3 text-left bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-bold shadow-sm"
                 >
                   {option}
