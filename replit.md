@@ -112,19 +112,18 @@ heroku config:set NODE_ENV=production
 heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 ```
 
-### Status Deploy - CORRIGIDO PARA PROJETO OFICIAL
-- ✅ heroku-build.cjs corrigido para projeto SBT oficial  
-- ✅ Vite build priorizado com fallback inteligente
-- ✅ Backend build funcionando (15.9kb)
-- ✅ Frontend matching do projeto oficial do Replit
-- ✅ Assets copiados automaticamente (attached_assets + public)
-- ✅ Interface corrigida para casting SBT (não notícias)
-- ✅ Sistema PIX operacional (R$ 29,90 testado)
-- ✅ Layout ajustado para 2 colunas como projeto oficial
-- ✅ Versões Node.js 22.x e npm 10.x
-- ✅ npm run build como heroku-postbuild
-- ✅ Build verification completa
-- ✅ Deploy pronto para mostrar projeto correto
+### Status Deploy - PROJETO OFICIAL CORRIGIDO
+- ✅ home.tsx atualizada: Portal de Casting SBT (não notícias)
+- ✅ Layout 2 colunas profissional implementado
+- ✅ Navegação funcional para /cadastro e /cartao-preview
+- ✅ Header oficial SBT com logo azul-logo.png
+- ✅ Footer institucional Sistema Brasileiro de Televisão
+- ✅ Status do sistema com indicadores visuais
+- ✅ heroku-build.cjs otimizado para React oficial
+- ✅ Backend funcionando (15.9kb)
+- ✅ Assets copiados (41 arquivos)
+- ✅ Título correto: "Portal de Seleção SBT"
+- ✅ Build completo pronto para Heroku
 
 ## API For4Payments PIX - Status Funcional
 
