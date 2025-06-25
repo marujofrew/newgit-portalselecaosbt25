@@ -604,7 +604,16 @@ export default function Cadastro() {
                     <button 
                       onClick={() => {
                         setShowDadosCrianca(true);
-                        setTimeout(() => scrollToSection('dados-crianca'), 500);
+                        // Scroll suave até o campo telefone ficar no topo
+                        setTimeout(() => {
+                          const telefoneElement = document.querySelector('input[placeholder="(00) 00000-0000"]');
+                          if (telefoneElement) {
+                            telefoneElement.scrollIntoView({ 
+                              behavior: 'smooth', 
+                              block: 'start' 
+                            });
+                          }
+                        }, 500);
                       }}
                       className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 font-medium"
                     >
