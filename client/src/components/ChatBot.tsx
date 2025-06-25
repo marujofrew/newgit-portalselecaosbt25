@@ -1583,8 +1583,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
     // Processar o texto com markdown
     const processedText = processMarkdown(text);
 
-    // Se o texto contém HTML (como imagens, links, ou strong), renderizar como HTML
-    if (processedText.includes('<img') || processedText.includes('<a href') || processedText.includes('<br') || processedText.includes('<strong>')) {
+    // Se o texto contém HTML (como imagens, links, divs, ou strong), renderizar como HTML
+    if (processedText.includes('<img') || processedText.includes('<a href') || processedText.includes('<br') || processedText.includes('<strong>') || processedText.includes('<div')) {
       return <div dangerouslySetInnerHTML={{ __html: processedText }} />;
     }
 
@@ -1927,10 +1927,29 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setTimeout(() => {
                         setIsTyping(false);
                         
-                        // Simular envio de localização como no WhatsApp usando formato simples
+                        // Simular envio de localização como no WhatsApp com layout mais parecido
                         const locationMessage: Message = {
                           id: Date.now(),
-                          text: `📍 **Localização enviada**\n\nLatitude: -23.5505\nLongitude: -46.6333\nPrecisão: ±3 metros`,
+                          text: `<div style="background: #dcf8c6; border-radius: 8px; padding: 12px; max-width: 300px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                              <div style="width: 32px; height: 32px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                <span style="color: white; font-size: 16px;">📍</span>
+                              </div>
+                              <div>
+                                <div style="font-weight: 500; color: #25d366; font-size: 14px;">Localização</div>
+                                <div style="color: #667781; font-size: 12px;">Agora</div>
+                              </div>
+                            </div>
+                            <div style="border-top: 1px solid #e1f5e1; padding-top: 8px;">
+                              <div style="color: #111b21; font-size: 13px; line-height: 1.3;">
+                                <div style="margin-bottom: 2px;">📍 Localização atual compartilhada</div>
+                                <div style="color: #667781; font-size: 11px;">
+                                  Lat: -23.5505 • Long: -46.6333<br/>
+                                  Precisão: ±3m
+                                </div>
+                              </div>
+                            </div>
+                          </div>`,
                           sender: 'user',
                           timestamp: new Date()
                         };
