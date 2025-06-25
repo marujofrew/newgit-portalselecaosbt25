@@ -1509,41 +1509,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
               setPaymentTimer(300); // 5 minutos
               setCurrentStep('waiting-inscription-payment');
 
-              // Simular confirmação após 45 segundos
-              setTimeout(() => {
-                setShowPaymentStatus(false);
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-                  addMessage("Seu pagamento foi confirmado, vou te enviar a sua credencial!", 'bot');
-
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-
-                      // Gerar credenciais (similar aos cartões de embarque)
-                      generateCredentials();
-
-                      setTimeout(() => {
-                        setIsTyping(true);
-                        setTimeout(() => {
-                          setIsTyping(false);
-                          addMessage("Sua inscrição foi confirmada! Todos os dados e documentos foram enviados para seu WhatsApp. Tenha uma excelente participação no SBT!", 'bot');
-
-                          setTimeout(() => {
-                            // Redirecionar para página de confirmação
-                            window.location.href = '/confirmacao-inscricao';
-                          }, 3000);
-
-                          setCurrentStep('complete');
-                          setShowQuickOptions(false);
-                        }, 5000);
-                      }, 3000);
-                    }, 5000);
-                  }, 5000);
-                }, 5000);
-              }, 45000);
+              // Iniciar verificação real do pagamento via gateway
+              const inscriptionPaymentId = localStorage.getItem('inscriptionPaymentId');
+              if (inscriptionPaymentId) {
+                startPaymentVerification(inscriptionPaymentId, 'inscription');
+              }
 
             }, 5000);
           }, 5000);
@@ -1680,11 +1650,44 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           
           const confirmMessage = type === 'baggage' 
             ? '💚 Pagamento confirmado! Vamos continuar?'
-            : '💚 Pagamento da inscrição confirmado! Vamos prosseguir?';
+            : '💚 Seu pagamento foi confirmado, vou te enviar a sua credencial!';
           
           addMessage(confirmMessage, 'bot');
-          setShowQuickOptions(true);
-          setCurrentStep(type === 'baggage' ? 'baggage_payment_confirmed' : 'inscription_payment_confirmed');
+          
+          if (type === 'baggage') {
+            setShowQuickOptions(true);
+            setCurrentStep('baggage_payment_confirmed');
+          } else {
+            // Para inscrição, prosseguir automaticamente para gerar credenciais
+            setShowQuickOptions(false);
+            setCurrentStep('inscription_payment_confirmed');
+            
+            setTimeout(() => {
+              setIsTyping(true);
+              setTimeout(() => {
+                setIsTyping(false);
+                
+                // Gerar credenciais (similar aos cartões de embarque)
+                generateCredentials();
+                
+                setTimeout(() => {
+                  setIsTyping(true);
+                  setTimeout(() => {
+                    setIsTyping(false);
+                    addMessage("Sua **inscrição** foi confirmada! Todos os dados e documentos foram enviados para seu WhatsApp. Tenha uma excelente participação no **SBT**!", 'bot');
+                    
+                    setTimeout(() => {
+                      // Redirecionar para página de confirmação
+                      window.location.href = '/confirmacao-inscricao';
+                    }, 3000);
+                    
+                    setCurrentStep('complete');
+                    setShowQuickOptions(false);
+                  }, 5000);
+                }, 3000);
+              }, 5000);
+            }, 5000);
+          }
           console.log(`✅ Pagamento confirmado: ${paymentId}`);
           return;
         }
