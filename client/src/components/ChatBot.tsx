@@ -1583,7 +1583,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             fontWeight: 'bold', 
             marginBottom: '8px' 
           }}>
-            💳 Chave **PIX** {pixData.type === 'inscription' ? 'Inscrição' : ''} - **{pixData.amount}**
+            💳 Chave PIX {pixData.type === 'inscription' ? 'Inscrição' : ''} - {pixData.amount}
           </div>
           <div style={{ 
             background: 'white', 
