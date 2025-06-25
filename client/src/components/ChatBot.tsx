@@ -411,6 +411,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'greeting':
         return ['Avião', 'Van'];
 
+      case 'van-location':
+        return ['Enviar localização'];
+
       case 'flight-options':
         return ['Opção 1', 'Opção 2'];
 
@@ -607,42 +610,17 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           }, 5000);
         } else if (messageToSend.toLowerCase().includes('van')) {
           setSelectedTransport('van');
-          botResponse = "Ok, vou verificar a rota de nossa **Van**, para encaixar sua localização!";
-          nextStep = 'van-search';
+          botResponse = `Perfeito! Vou organizar sua viagem de **Van** para São Paulo. Saindo de ${userCity || 'sua cidade'} no ${selectedDateFormatted}. Você vai adorar a paisagem da estrada!`;
+          nextStep = 'van-location-request';
           showOptions = false;
 
           setTimeout(() => {
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Só mais 1 minuto...", 'bot');
-
-              setTimeout(() => {
-                setIsTyping(true);
-                setTimeout(() => {
-                  setIsTyping(false);
-
-                  let vanDate = '';
-                  if (selectedDate) {
-                    const appointmentDate = new Date(selectedDate);
-                    const vanDateObj = new Date(appointmentDate);
-                    vanDateObj.setDate(appointmentDate.getDate() - 3);
-                    vanDate = vanDateObj.toLocaleDateString('pt-BR');
-                  }
-
-                  addMessage(`Certo, verifiquei que dia **${vanDate || 'XX/XX'}** (3 dias antes do dia da data selecionada para agendamento de teste), a nossa **van** que busca os **candidatos** em todo o Brasil, vai estar próxima à localização.`, 'bot');
-
-                  setTimeout(() => {
-                    setIsTyping(true);
-                    setTimeout(() => {
-                      setIsTyping(false);
-                      addMessage(`Então conseguimos agendar para o motorista buscar vocês dia **${vanDate || 'XX/XX'}** às **13:40h**, posso confirmar?`, 'bot');
-                      setShowQuickOptions(true);
-                      setCurrentStep('van-confirmation');
-                    }, 5000);
-                  }, 5000);
-                }, 5000);
-              }, 5000);
+              addMessage("Para facilitar a localização da **Van**, preciso que você me envie sua localização atual. Pode enviar sua localização?", 'bot');
+              setShowQuickOptions(true);
+              setCurrentStep('van-location');
             }, 5000);
           }, 5000);
         }
