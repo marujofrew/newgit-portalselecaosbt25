@@ -123,6 +123,7 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - ✅ Interface funcional com links para API e PIX
 - ✅ Versões Node.js 22.x e npm 10.x especificadas
 - ✅ Script build-minimal.cjs testado e validado
+- ✅ heroku-postbuild configurado no app.json
 - ✅ Sistema pronto para deploy no Heroku
 
 ## API For4Payments PIX - Status Funcional

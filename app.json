@@ -35,7 +35,8 @@
   ],
   "stack": "heroku-24",
   "scripts": {
-    "postdeploy": "npm run db:push"
+    "postdeploy": "npm run db:push",
+    "heroku-postbuild": "node build-minimal.cjs"
   },
   "env": {
     "NODE_ENV": {
