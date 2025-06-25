@@ -111,6 +111,32 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - `NODE_ENV`: production
 - `PORT`: Configurado automaticamente pelo Heroku
 
+## API For4Payments PIX - Status Funcional
+
+### Teste de Integração Realizado
+- **Data**: 25 de junho de 2025
+- **Status**: ✅ FUNCIONANDO PERFEITAMENTE
+- **Resultado**: PIX gerado com sucesso (ID: 1872929f-1df5-4255-856e-c50aee56c99d)
+- **Valor teste**: R$ 29,90
+- **QR Code**: Gerado em base64
+- **Código PIX**: Válido para cópia e cola
+
+### Correções Aplicadas
+- Headers ajustados conforme documentação (Accept-Language)
+- CEP formatado sem hífen (01001000)  
+- Email convertido para lowercase
+- ExternalId padronizado (pix-timestamp)
+- Logs detalhados para debug
+- Tratamento robusto de erros
+
+### Funcionalidades Validadas
+- ✅ Criação de pagamentos PIX
+- ✅ Geração de QR Code em base64
+- ✅ Código PIX para cópia e cola
+- ✅ Formatação de valores monetários
+- ✅ Validação de dados de entrada
+- ✅ Sistema de logs detalhado
+
 ## Recent Changes
 
 - **Sistema de cartões de embarque separado**: Todo código de geração de cartões extraído para pasta `boarding-pass-generator/` reutilizável

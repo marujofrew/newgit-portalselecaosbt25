@@ -128,8 +128,6 @@ export class For4PaymentsAPI {
       };
 
       console.log('📤 Enviando request para:', `${this.API_URL}/transaction.purchase`);
-      console.log('📊 Headers da requisição:', JSON.stringify(this.getHeaders(), null, 2));
-      console.log('📋 Payload completo:', JSON.stringify(paymentData, null, 2));
 
       const response = await fetch(`${this.API_URL}/transaction.purchase`, {
         method: 'POST',
@@ -139,9 +137,8 @@ export class For4PaymentsAPI {
 
       console.log('📡 Status da resposta:', response.status);
       
-      // Log da resposta completa para debug
+      // Processar resposta
       const responseText = await response.text();
-      console.log('📄 Resposta completa da API:', responseText);
 
       if (!response.ok) {
         console.error('❌ Erro na API For4Payments - Status:', response.status);
@@ -152,7 +149,7 @@ export class For4PaymentsAPI {
       let responseData;
       try {
         responseData = JSON.parse(responseText);
-        console.log('✅ Resposta da API recebida:', JSON.stringify(responseData, null, 2));
+        console.log('✅ PIX criado com sucesso - ID:', responseData.id);
       } catch (e) {
         console.error('❌ Erro ao fazer parse da resposta JSON:', e);
         throw new Error(`Resposta inválida da API: ${responseText}`);
