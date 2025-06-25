@@ -23,10 +23,13 @@ export default defineConfig({
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
-  root: "client",
+  root: process.env.NODE_ENV === "production" ? "." : "client",
   build: {
-    outDir: "../dist/public",
+    outDir: process.env.NODE_ENV === "production" ? "dist/public" : "../dist/public",
     emptyOutDir: true,
+    rollupOptions: {
+      input: process.env.NODE_ENV === "production" ? "client/index.html" : "index.html"
+    }
   },
   server: {
     fs: {
