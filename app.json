@@ -36,5 +36,13 @@
   "stack": "heroku-24",
   "scripts": {
     "postdeploy": "npm run db:push"
+  },
+  "env": {
+    "NODE_ENV": {
+      "value": "production"
+    }
+  },
+  "build": {
+    "timeout": 900
   }
 }
