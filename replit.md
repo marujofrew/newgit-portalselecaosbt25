@@ -120,7 +120,7 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Valores testados**: R$ 29,90 e R$ 10,00
 - **QR Code**: Gerado em base64
 - **Código PIX**: Válido para cópia e cola
-- **Problema resolvido**: Caracteres especiais (**) na descrição causavam erro 500 - agora removidos automaticamente
+- **Problema resolvido**: Caracteres especiais na descrição causavam erro 500 - simplificado para "Kit Bagagem SBT"
 
 ### Correções Aplicadas
 - Headers ajustados conforme documentação (Accept-Language)
@@ -138,6 +138,8 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - ✅ Formatação de valores monetários
 - ✅ Validação de dados de entrada
 - ✅ Sistema de logs detalhado
+- ✅ Integração completa com chat bot
+- ✅ Configuração Heroku para produção
 
 ## Recent Changes
 

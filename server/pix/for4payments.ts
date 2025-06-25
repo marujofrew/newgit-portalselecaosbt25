@@ -106,7 +106,7 @@ export class For4PaymentsAPI {
         traceable: true,
         items: [
           {
-            title: (data.description || "Pagamento PIX").replace(/\*\*/g, ""),
+            title: "Kit Bagagem SBT",
             quantity: 1,
             unitPrice: data.amount,
             tangible: false
