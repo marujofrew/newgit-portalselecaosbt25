@@ -332,6 +332,9 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         // Salvar dados do pagamento para verificação posterior
         localStorage.setItem('baggagePaymentId', data.payment.id);
         
+        // Marcar que está aguardando pagamento
+        ChatStorage.setAwaitingPayment(data.payment.id);
+        
         // Iniciar verificação de pagamento com gateway
         startPaymentVerification(data.payment.id, 'baggage');
         console.log('💳 PIX bagagem criado:', data.payment.id);
@@ -848,10 +851,11 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         if (messageToSend.toLowerCase().includes('continuar sem bagagem')) {
           setShowPaymentStatus(false);
           setHasBaggage(false);
+          ChatStorage.clearPaymentState();
           botResponse = "Ok, vou finalizar a compra das suas passagens, aguarde um segundo!";
           nextStep = 'boarding-passes';
           showOptions = false;
-        } else if (messageToSend.toLowerCase().includes('aguardar pagamento')) {
+        } else if (messageToSend.toLowerCase().includes('já fiz o pagamento')) {
           setShowPaymentStatus(false);
           setHasBaggage(true);
           botResponse = "Perfeito! Vou aguardar mais um pouco a confirmação do pagamento da bagagem.";
@@ -859,6 +863,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           // Reativar verificação de pagamento
           const paymentId = localStorage.getItem('baggagePaymentId');
           if (paymentId) {
+            ChatStorage.setAwaitingPayment(paymentId);
             startPaymentVerification(paymentId, 'baggage');
           }
           return;
@@ -1260,7 +1265,8 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'van_baggage_payment_timeout':
         if (messageToSend.toLowerCase().includes('continuar sem bagagem')) {
           setShowPaymentStatus(false);
-          setHasBagagem(false);
+          setHasBaggage(false);
+          ChatStorage.clearPaymentState();
           botResponse = "Agora vou organizar a reserva do hotel que vai te hospedar após sua chegada no SBT.";
           nextStep = 'hotel-step1';
           showOptions = false;
@@ -1272,6 +1278,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           // Reativar verificação de pagamento
           const paymentId = localStorage.getItem('baggagePaymentId');
           if (paymentId) {
+            ChatStorage.setAwaitingPayment(paymentId);
             startPaymentVerification(paymentId, 'baggage');
           }
           return;
@@ -1658,6 +1665,10 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
         
         if (data.is_paid) {
           isPaymentConfirmed = true;
+          
+          // Limpar estado de aguardando pagamento
+          ChatStorage.clearPaymentState();
+          
           const confirmMessage = type === 'baggage' 
             ? '💚 Pagamento confirmado! Vamos continuar?'
             : '💚 Pagamento da inscrição confirmado! Vamos prosseguir?';

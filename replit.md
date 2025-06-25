@@ -218,3 +218,10 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
   - ✅ Limpeza de localStorage, chat storage e timers
   - ✅ Verificação de sistema limpo na home page
   - ✅ Sistema pronto para múltiplas inscrições sequenciais
+- **Sistema de persistência de pagamento implementado**: Continuidade perfeita durante pagamentos
+  - ✅ ChatStorage.setAwaitingPayment() marca estado de pagamento ativo
+  - ✅ ChatStorage.isAwaitingPayment() verifica se usuário estava pagando
+  - ✅ ChatStorage.clearPaymentState() limpa após confirmação/cancelamento
+  - ✅ Estado exato restaurado quando usuário volta do pagamento
+  - ✅ Verificação de pagamento continua automaticamente
+  - ✅ Mensagens não são reenviadas ao retornar
