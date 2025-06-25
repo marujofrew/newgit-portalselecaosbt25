@@ -4,3 +4,27 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Python files that confuse Heroku detection
+*.py
+*.pyc
+__pycache__/
+requirements.txt
+Pipfile*
+poetry.lock
+uv.lock
+runtime.txt
+
+# Build files
+dist-ssr
+*.local
+
+# Editor directories
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

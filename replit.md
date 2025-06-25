@@ -90,26 +90,33 @@ This is a full-stack news portal application built for SBT (Sistema Brasileiro d
 - **Migrations**: `npm run db:push` using Drizzle Kit
 - **Connection**: Environment variable `DATABASE_URL`
 
-## Heroku Deploy Configuration
+## Heroku Deploy Configuration - CORRIGIDO
 
-### Arquivos Criados
-- **Procfile**: Define comando de inicialização (`web: npm run start`)
-- **app.json**: Configuração da aplicação Heroku com addons PostgreSQL
-- **runtime.txt**: Especifica versão Node.js 18.17.0
-- **.env.example**: Template de variáveis de ambiente
-- **README.md**: Documentação completa de deploy
+### Problema Resolvido
+- **Detecção Python**: Heroku estava detectando Python em vez de Node.js devido a arquivo `./node_modules/shell-quote/print.py`
+- **Solução**: Configurado `.gitignore` para excluir arquivos Python e `.slugignore` para build limpo
 
-### Modificações para Produção
-- **package.json**: Adicionado script `heroku-postbuild` e versões específicas de engines
-- **server/index.ts**: Configuração de PORT dinâmica e catch-all para SPA
-- **server/vite.ts**: Condicionais para desenvolvimento vs produção
-- Adicionado suporte para arquivos estáticos em produção
+### Arquivos de Deploy
+- **Procfile**: `web: npm start` (comando simplificado)
+- **app.json**: Configuração completa com buildpack Node.js explícito
+- **.gitignore**: Atualizado para excluir arquivos Python que confundem detecção
+- **.slugignore**: Lista arquivos ignorados no build Heroku
 
-### Variáveis de Ambiente Necessárias
-- `DATABASE_URL`: PostgreSQL (addon automático)
-- `FOR4PAYMENTS_SECRET_KEY`: API de pagamentos PIX
-- `NODE_ENV`: production
-- `PORT`: Configurado automaticamente pelo Heroku
+### Configuração Heroku
+```bash
+# Definir buildpack explicitamente
+heroku buildpacks:set heroku/nodejs
+
+# Variáveis de ambiente
+heroku config:set NODE_ENV=production
+heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
+```
+
+### Status Deploy
+- ✅ Buildpack Node.js configurado
+- ✅ Arquivos Python excluídos do build
+- ✅ PIX For4Payments funcionando
+- ✅ Pronto para deploy
 
 ## API For4Payments PIX - Status Funcional
 
