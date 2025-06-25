@@ -763,7 +763,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'baggage-payment':
         if (messageToSend.toLowerCase().includes('ok') || messageToSend.toLowerCase().includes('rapidamente')) {
-          botResponse = "Tabom, vou te enviar a chave Pix para você efetuar o pagamento!";
+          botResponse = "Tabom, vou te enviar a chave **PIX** para você efetuar o pagamento!";
           nextStep = 'baggage-pix';
           showOptions = false;
 
@@ -975,7 +975,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       case 'van-baggage-offer':
         if (messageToSend.toLowerCase().includes('sim') || messageToSend.toLowerCase().includes('adicionar')) {
           setHasBaggage(true);
-          botResponse = "Perfeito! Kit bagagem adicionado por R$ 29,90.";
+          botResponse = "Perfeito! Kit bagagem adicionado por **R$ 29,90**.";
           nextStep = 'van-baggage-payment-info';
           showOptions = false;
 
@@ -1137,7 +1137,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'van-baggage-payment':
         if (messageToSend.toLowerCase().includes('ok') || messageToSend.toLowerCase().includes('rapidamente')) {
-          botResponse = "Tabom, vou te enviar a chave Pix para você efetuar o pagamento!";
+          botResponse = "Tabom, vou te enviar a chave **PIX** para você efetuar o pagamento!";
           nextStep = 'van-baggage-pix';
           showOptions = false;
 
