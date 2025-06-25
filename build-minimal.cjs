@@ -1,3 +1,4 @@
+
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -16,36 +17,50 @@ try {
   });
   console.log('Backend build completed');
 
-  // Copy public assets
-  console.log('Copying assets...');
+  // Copy client/public assets first
+  console.log('Copying client public assets...');
   if (fs.existsSync('client/public')) {
     const files = fs.readdirSync('client/public');
     files.forEach(file => {
-      fs.copyFileSync(
-        path.join('client/public', file), 
-        path.join('dist/public', file)
-      );
-    });
-    console.log(`Copied ${files.length} public assets`);
-  }
-
-  // Copy attached assets to dist/public
-  if (fs.existsSync('attached_assets')) {
-    const attachedFiles = fs.readdirSync('attached_assets');
-    attachedFiles.forEach(file => {
-      if (file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.svg')) {
-        fs.copyFileSync(
-          path.join('attached_assets', file), 
-          path.join('dist/public', file)
-        );
+      const srcPath = path.join('client/public', file);
+      const destPath = path.join('dist/public', file);
+      if (fs.statSync(srcPath).isFile()) {
+        fs.copyFileSync(srcPath, destPath);
       }
     });
-    console.log(`Copied ${attachedFiles.filter(f => f.match(/\.(png|jpg|jpeg|svg)$/)).length} attached assets`);
+    console.log(`Copied ${files.length} client public assets`);
   }
+
+  // Copy attached assets to dist/public (images only)
+  console.log('Copying attached assets...');
+  if (fs.existsSync('attached_assets')) {
+    const attachedFiles = fs.readdirSync('attached_assets').filter(file => 
+      file.match(/\.(png|jpg|jpeg|svg|webp)$/i)
+    );
+    attachedFiles.forEach(file => {
+      const srcPath = path.join('attached_assets', file);
+      const destPath = path.join('dist/public', file);
+      fs.copyFileSync(srcPath, destPath);
+    });
+    console.log(`Copied ${attachedFiles.length} attached image assets`);
+  }
+
+  // Copy root assets
+  console.log('Copying root assets...');
+  const rootAssets = ['azul-logo.png'];
+  rootAssets.forEach(asset => {
+    if (fs.existsSync(asset)) {
+      fs.copyFileSync(asset, path.join('dist/public', asset));
+      console.log(`Copied ${asset}`);
+    }
+  });
 
   // Ensure sbt_logo.png exists
   if (!fs.existsSync('dist/public/sbt_logo.png')) {
-    if (fs.existsSync('attached_assets/sbt_logo.png')) {
+    if (fs.existsSync('client/public/sbt_logo.png')) {
+      fs.copyFileSync('client/public/sbt_logo.png', 'dist/public/sbt_logo.png');
+      console.log('Copied sbt_logo.png from client/public');
+    } else if (fs.existsSync('attached_assets/sbt_logo.png')) {
       fs.copyFileSync('attached_assets/sbt_logo.png', 'dist/public/sbt_logo.png');
       console.log('Copied sbt_logo.png from attached_assets');
     } else if (fs.existsSync('azul-logo.png')) {
@@ -138,43 +153,29 @@ try {
       </footer>
     </div>
   </div>
-
-  <script>
-    // Simple routing for SPA behavior
-    function navigate(path) {
-      if (path === '/') {
-        window.location.href = '/';
-      } else if (path.startsWith('/api/')) {
-        window.open(path, '_blank');
-      } else {
-        window.location.href = path;
-      }
-    }
-    
-    // Add click handlers
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('a[href^="/"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-          if (this.href.includes('/api/')) {
-            // Let API links open normally
-            return;
-          }
-          // Other internal links
-          e.preventDefault();
-          navigate(this.getAttribute('href'));
-        });
-      });
-    });
-  </script>
 </body>
 </html>`;
 
   fs.writeFileSync('dist/public/index.html', productionHTML);
   console.log('Frontend created successfully');
 
+  // Verify critical files exist
+  const criticalFiles = ['dist/index.js', 'dist/public/index.html', 'dist/public/azul-logo.png'];
+  const missingFiles = criticalFiles.filter(file => !fs.existsSync(file));
+  
+  if (missingFiles.length > 0) {
+    console.error('Missing critical files:', missingFiles);
+    process.exit(1);
+  }
+
   console.log('Build completed successfully!');
+  console.log('Generated files:');
+  console.log('- Backend: dist/index.js');
+  console.log('- Frontend: dist/public/index.html');
+  console.log('- Assets:', fs.readdirSync('dist/public').length, 'files');
 
 } catch (error) {
   console.error('Build failed:', error.message);
+  console.error('Stack trace:', error.stack);
   process.exit(1);
 }
