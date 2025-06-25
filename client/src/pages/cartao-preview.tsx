@@ -128,13 +128,36 @@ export default function CartaoPreview() {
 
       setPassengers(passengersList);
 
-      // Calcular dados do voo usando a função correta
-      if (storedSelectedDate && storedUserCity) {
-        const cidadeInfo = JSON.parse(localStorage.getItem('cidadeInfo') || '{}');
-        const nearestAirport = findNearestAirport(-16.6783, -49.2478); // Coordenadas de Goiânia como padrão
+      // Calcular dados do voo
+      if (storedSelectedDate) {
+        const appointmentDate = new Date(storedSelectedDate);
+        const selectedFlightOption = localStorage.getItem('selectedFlightOption') || '1';
         
-        const calculatedFlightData = calculateFlightData(storedSelectedDate, storedUserCity, nearestAirport);
-        setFlightData(calculatedFlightData);
+        let flightDate = new Date(appointmentDate);
+        let flightTime = '13:20';
+        let boardingTime = '12:55';
+        
+        if (selectedFlightOption === '1') {
+          // Opção 1: 2 dias antes do agendamento, 13:20
+          flightDate.setDate(appointmentDate.getDate() - 2);
+          flightTime = '13:20';
+          boardingTime = '12:55';
+        } else if (selectedFlightOption === '2') {
+          // Opção 2: 1 dia antes do agendamento, 08:30
+          flightDate.setDate(appointmentDate.getDate() - 1);  
+          flightTime = '08:30';
+          boardingTime = '08:05';
+        }
+
+        setFlightData({
+          flightDate,
+          flightTime,
+          boardingTime,
+          originCode: "GYN",
+          originCity: storedUserCity?.toUpperCase() || "GOIÂNIA",
+          destinationCode: "GRU",
+          destinationCity: "SÃO PAULO"
+        });
       }
 
       setLoading(false);
