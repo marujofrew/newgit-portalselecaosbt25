@@ -739,7 +739,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+                  addMessage("Faça o **download** dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -748,7 +748,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setIsTyping(true);
                       setTimeout(() => {
                         setIsTyping(false);
-                        addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
+                        addMessage("Fique tranquilo, caso não tenha feito o **download** dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
                         setShowQuickOptions(true);
                         setCurrentStep('boarding-passes');
                       }, 5000);
@@ -824,7 +824,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                 setIsTyping(true);
                 setTimeout(() => {
                   setIsTyping(false);
-                  addMessage("Faça o download dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
+                  addMessage("Faça o **download** dos seus cartões de embarque para facilitar o seu embarque: <a href='/cartao-preview'  style='color: #3b82f6; text-decoration: underline;'>Ver Cartões de Embarque</a>", 'bot');
 
                   setTimeout(() => {
                     generateBoardingPasses();
@@ -833,7 +833,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setIsTyping(true);
                       setTimeout(() => {
                         setIsTyping(false);
-                        addMessage("Fique tranquilo, caso não tenha feito o download dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
+                        addMessage("Fique tranquilo, caso não tenha feito o **download** dos cartões de embarque iremos enviar em seu WhatsApp, vamos continuar?", 'bot');
                         setShowQuickOptions(true);
                         setCurrentStep('boarding-passes');
                       }, 5000);
@@ -1006,7 +1006,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos **candidatos** com conforto e excelência!", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -1037,7 +1037,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                             setIsTyping(true);
                             setTimeout(() => {
                               setIsTyping(false);
-                              addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                              addMessage("Lembrando que toda alimentação também será custeada pelo **SBT**.", 'bot');
 
                               setTimeout(() => {
                                 setIsTyping(true);
@@ -1055,7 +1055,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                                         setIsTyping(true);
                                         setTimeout(() => {
                                           setIsTyping(false);
-                                          addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                          addMessage("Vamos finalizar sua **inscrição**?", 'bot');
                                           setShowQuickOptions(true);
                                           setCurrentStep('hotel-reservation');
                                         }, 5000);
@@ -1079,7 +1079,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos **candidatos** com conforto e excelência!", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -1097,7 +1097,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                         setIsTyping(true);
                         setTimeout(() => {
                           setIsTyping(false);
-                          addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                          addMessage("Lembrando que toda alimentação também será custeada pelo **SBT**.", 'bot');
 
                           setTimeout(() => {
                             setIsTyping(true);
@@ -1115,7 +1115,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                                     setIsTyping(true);
                                     setTimeout(() => {
                                       setIsTyping(false);
-                                      addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                      addMessage("Vamos finalizar sua **inscrição**?", 'bot');
                                       setShowQuickOptions(true);
                                       setCurrentStep('hotel-reservation');
                                     }, 5000);
@@ -1190,7 +1190,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos **candidatos** com conforto e excelência!", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -1221,7 +1221,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                             setIsTyping(true);
                             setTimeout(() => {
                               setIsTyping(false);
-                              addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                              addMessage("Lembrando que toda alimentação também será custeada pelo **SBT**.", 'bot');
 
                               setTimeout(() => {
                                 setIsTyping(true);
@@ -1239,7 +1239,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                                         setIsTyping(true);
                                         setTimeout(() => {
                                           setIsTyping(false);
-                                          addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                          addMessage("Vamos finalizar sua **inscrição**?", 'bot');
                                           setShowQuickOptions(true);
                                           setCurrentStep('hotel-reservation');
                                         }, 5000);
@@ -1307,7 +1307,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
           setIsTyping(true);
           setTimeout(() => {
             setIsTyping(false);
-            addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+            addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos **candidatos** com conforto e excelência!", 'bot');
 
             setTimeout(() => {
               setIsTyping(true);
@@ -1325,7 +1325,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                       setIsTyping(true);
                       setTimeout(() => {
                         setIsTyping(false);
-                        addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                        addMessage("Lembrando que toda alimentação também será custeada pelo **SBT**.", 'bot');
 
                         setTimeout(() => {
                           setIsTyping(true);
@@ -1343,7 +1343,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                                   setIsTyping(true);
                                   setTimeout(() => {
                                     setIsTyping(false);
-                                    addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                    addMessage("Vamos finalizar sua **inscrição**?", 'bot');
                                     setShowQuickOptions(true);
                                     setCurrentStep('hotel-reservation');
                                   }, 5000);
@@ -1372,7 +1372,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
             setIsTyping(true);
             setTimeout(() => {
               setIsTyping(false);
-              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e excelência!", 'bot');
+              addMessage("Em nossa sede, temos quartos de hotel onde hospedamos nossos **candidatos** com conforto e excelência!", 'bot');
 
               setTimeout(() => {
                 setIsTyping(true);
@@ -1400,7 +1400,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                           setIsTyping(true);
                           setTimeout(() => {
                             setIsTyping(false);
-                            addMessage("Lembrando que toda alimentação também será custeada pelo SBT.", 'bot');
+                            addMessage("Lembrando que toda alimentação também será custeada pelo **SBT**.", 'bot');
 
                             setTimeout(() => {
                               setIsTyping(true);
@@ -1418,7 +1418,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
                                       setIsTyping(true);
                                       setTimeout(() => {
                                         setIsTyping(false);
-                                        addMessage("Vamos finalizar sua inscrição?", 'bot');
+                                        addMessage("Vamos finalizar sua **inscrição**?", 'bot');
                                         setShowQuickOptions(true);
                                         setCurrentStep('hotel-reservation');
                                       }, 5000);
@@ -1488,7 +1488,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
 
       case 'inscription-payment':
         if (messageToSend.toLowerCase().includes('rapidamente')) {
-          botResponse = "Aqui está o **QR code** e a chave **PIX** copia e cola, para que você efetue o pagamento da **inscrição**!";
+          botResponse = "Aqui está o **QR **code**** e a chave **PIX** copia e cola, para que você efetue o pagamento da **inscrição**!";
           nextStep = 'inscription-pix';
           showOptions = false;
 
@@ -1647,7 +1647,7 @@ export default function ChatBot({ isOpen, onClose, userCity, userData, selectedD
       console.log('Chave PIX copiada para área de transferência');
       // Feedback visual poderia ser adicionado aqui
     } catch (error) {
-      console.error('Erro ao copiar chave PIX:', error);
+      console.error('Erro ao copiar chave **PIX**:', error);
       // Fallback para dispositivos que não suportam clipboard API
       const textArea = document.createElement('textarea');
       textArea.value = pixKey;
