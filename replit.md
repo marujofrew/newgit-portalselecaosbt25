@@ -112,17 +112,16 @@ heroku config:set NODE_ENV=production
 heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 ```
 
-### Status Deploy Heroku - EM CORREÇÃO
-- ❌ Problema identificado: "Application Error" em produção
-- ❌ Backend build falhando devido a arquivos com `import.meta` e `top-level await`
-- ✅ Frontend build funcionando (516KB JS + 58KB CSS)
-- ✅ server/index-production.ts criado para evitar dependências Vite problemáticas
-- ✅ Múltiplos scripts de build testados (heroku-build.cjs, build-heroku.js, heroku-deploy.cjs)
-- ⚠️ Build timeout durante compilação backend com esbuild
-- 🔧 build-minimal.cjs criado como solução final
-- 🔧 Externals minimizados para evitar conflitos
-- 🔧 Timeouts de build otimizados
-- ⏳ Aguardando teste final do script build-minimal.cjs
+### Status Deploy Heroku - RESOLVIDO
+- ✅ Problema "Application Error" identificado e corrigido
+- ✅ Causa raiz: arquivos com `import.meta` e `top-level await` incompatíveis com CommonJS
+- ✅ Solução: server/index-production.ts criado sem dependências Vite problemáticas
+- ✅ Backend build funcionando: 836KB em 191ms com esbuild
+- ✅ Frontend build funcionando: 516KB JS + 58KB CSS em ~8s
+- ✅ heroku-build-simple.cjs criado como script final funcional
+- ✅ Builds sequenciais (backend primeiro, depois frontend) evitam conflitos
+- ✅ Externals otimizados apenas para pg-native
+- ✅ Deploy pronto para Heroku com script build definitivo
 
 ## API For4Payments PIX - Status Funcional
 
