@@ -132,8 +132,16 @@ if (fs.existsSync(clientAssetsPath)) {
   }
 }
 
-// Verify the build was successful
+// Move index.html to correct location if needed
 const indexPath = path.join('dist/public', 'index.html');
+const clientIndexPath = path.join('dist/public/client', 'index.html');
+
+if (!fs.existsSync(indexPath) && fs.existsSync(clientIndexPath)) {
+  fs.copyFileSync(clientIndexPath, indexPath);
+  console.log('Moved index.html to correct location');
+}
+
+// Verify the build was successful
 if (!fs.existsSync(indexPath)) {
   throw new Error('Build failed: index.html not found in dist/public');
 }
