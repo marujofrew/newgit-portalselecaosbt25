@@ -80,6 +80,35 @@ if (fs.existsSync('attached_assets')) {
   });
 }
 
+// Create symlink for attached_assets during build (for Vite to resolve)
+const symlinkTarget = path.join('client', 'attached_assets');
+if (!fs.existsSync(symlinkTarget) && fs.existsSync('attached_assets')) {
+  try {
+    if (process.platform === 'win32') {
+      // Windows: use junction
+      execSync(`mklink /J "${symlinkTarget}" "${path.resolve('attached_assets')}"`, { stdio: 'ignore' });
+    } else {
+      // Unix: use symbolic link
+      fs.symlinkSync(path.resolve('attached_assets'), symlinkTarget);
+    }
+    console.log('Created symlink for attached_assets');
+  } catch (error) {
+    console.log('Could not create symlink, copying files instead');
+    // Fallback: copy files
+    if (!fs.existsSync(symlinkTarget)) {
+      fs.mkdirSync(symlinkTarget, { recursive: true });
+    }
+    const files = fs.readdirSync('attached_assets');
+    files.forEach(file => {
+      const srcPath = path.join('attached_assets', file);
+      const destPath = path.join(symlinkTarget, file);
+      if (fs.statSync(srcPath).isFile()) {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    });
+  }
+}
+
 // Verify the build was successful
 const indexPath = path.join('dist/public', 'index.html');
 if (!fs.existsSync(indexPath)) {
