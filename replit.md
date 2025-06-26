@@ -183,7 +183,8 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Sistema de backup completo implementado**: Estado total do chatbot salvo no localStorage com timestamp para restauração perfeita da conversa
 - **Homepage SBT casting portal corrigida**: Removido todo conteúdo de notícias, implementado portal interativo de casting com links funcionais
 - **Deploy Heroku problema identificado**: Aplicação exibindo conteúdo antigo de notícias em produção, corrigido para mostrar portal de casting
-- **Conteúdo home.tsx atualizado**: Substituído artigo de notícias por informações do sistema de casting, botões de navegação funcionais
+- **Conteúdo home.tsx completamente reescrito**: Removido todo conteúdo de notícias, criado portal de casting SBT moderno com navegação funcional
+- **Problema Heroku resolvido**: Site estava exibindo projeto de notícias antigo, agora mostra portal de casting correto
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
