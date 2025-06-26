@@ -26,10 +26,10 @@ export default function Home() {
       <main className="container mx-auto p-4 max-w-4xl">
         <article className="bg-white p-6 mb-4 rounded-lg shadow-md">
           <h1 className="text-xl md:text-2xl font-bold mb-2">
-            SBT Abre Seleção para Atores Mirins para Nova Novela com Salário de R$ 20 Mil
+            Portal Interativo de Casting SBT
           </h1>
           <p className="text-gray-600 mb-4">
-            Emissora oferece contrato de 1 ano e custeia todos os gastos dos candidatos e responsáveis legais
+            Sistema completo para inscrição de talentos infantis do SBT
           </p>
           <div className="mb-4 w-full">
             <div style={{position: 'relative', width: '100%', padding: '56.25% 0 0'}}>
