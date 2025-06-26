@@ -3,9 +3,9 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('Starting Heroku build...');
+console.log('Starting simplified Heroku build...');
 
-// Ensure dist directories exist
+// Create build directories
 if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist', { recursive: true });
 }
@@ -29,40 +29,17 @@ requiredLogos.forEach(logo => {
   }
 });
 
-// Build React app with Vite
-console.log('Building React app with Vite...');
+// Build React app
+console.log('Building React frontend...');
 try {
-  // Make sure we're in the right directory
-  process.chdir(__dirname);
-  
-  // Build the React app using the proper Vite config
-  execSync('NODE_ENV=production npx vite build --config client/vite.config.ts --outDir dist/public', { 
+  execSync('cd client && NODE_ENV=production npx vite build --outDir ../dist/public', { 
     stdio: 'inherit',
-    cwd: process.cwd()
+    timeout: 60000
   });
-  
-  console.log('React app built successfully');
-  
-  // Move index.html to correct position if needed
-  if (fs.existsSync('dist/public/client/index.html') && !fs.existsSync('dist/public/index.html')) {
-    fs.copyFileSync('dist/public/client/index.html', 'dist/public/index.html');
-    console.log('✓ index.html moved to correct position');
-  }
-  
+  console.log('✓ React build successful');
 } catch (error) {
-  console.error('Vite build failed:', error);
-  
-  // Try alternative build method
-  try {
-    console.log('Trying alternative build method...');
-    process.chdir('client');
-    execSync('npx vite build --outDir ../dist/public', { stdio: 'inherit' });
-    process.chdir('..');
-    console.log('Alternative build method succeeded');
-  } catch (altError) {
-    console.error('Alternative build also failed:', altError);
-    throw new Error('Both build methods failed');
-  }
+  console.error('React build failed:', error);
+  process.exit(1);
 }
 
 // Build backend
