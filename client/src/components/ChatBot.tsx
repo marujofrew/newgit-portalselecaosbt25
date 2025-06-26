@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send } from 'lucide-react';
 import { useLocation } from 'wouter';
-import rebecaAvatar from '@assets/telemarketing_reproduz_1750494256177.jpg';
-import bagagemDoBemImage from '@assets/assets_task_01jyfgjxwkets8k907ads1nc55_1750719962_img_1_1750728660025.webp';
-import bagagemDoBemVanImage from '@assets/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
-import hotelRoomImage from '@assets/Leon-Park-157-1024x680_1750729457567.jpg';
-import hotelRoomVanImage from '@assets/Leon-Park-157-1024x680_1750730216204.jpg';
-import credentialImage from '@assets/assets_task_01jygr0p5ceq09zxjdkj0r5a4f_1750761427_img_1_1750812964720.webp';
+const rebecaAvatar = '/telemarketing_reproduz_1750494256177.jpg';
+const bagagemDoBemImage = '/assets_task_01jyfgjxwkets8k907ads1nc55_1750719962_img_1_1750728660025.webp';
+const bagagemDoBemVanImage = '/assets_task_01jyfrshw7fw098r2wem6jjtgt_1750728607_img_1_1750729197124.webp';
+const hotelRoomImage = '/Leon-Park-157-1024x680_1750729457567.jpg';
+const hotelRoomVanImage = '/Leon-Park-157-1024x680_1750730216204.jpg';
+const credentialImage = '/assets_task_01jygr0p5ceq09zxjdkj0r5a4f_1750761427_img_1_1750812964720.webp';
 import { ChatStorage } from '../utils/chatStorage';
 
 interface Message {

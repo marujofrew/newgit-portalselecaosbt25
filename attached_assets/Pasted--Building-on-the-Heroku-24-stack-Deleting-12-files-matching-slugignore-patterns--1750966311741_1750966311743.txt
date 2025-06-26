@@ -1,0 +1,145 @@
+-----> Building on the Heroku-24 stack
+-----> Deleting 12 files matching .slugignore patterns.
+-----> Using buildpack: heroku/nodejs
+-----> Node.js app detected
+       
+-----> Creating runtime environment
+       
+       NPM_CONFIG_PRODUCTION=false
+       NPM_CONFIG_LOGLEVEL=error
+       NODE_VERBOSE=false
+       NODE_ENV=production
+       NODE_MODULES_CACHE=true
+       
+-----> Installing binaries
+       engines.node (package.json):   22.x
+       engines.npm (package.json):    10.x
+       
+       Resolving node version 22.x...
+       Downloading and installing node 22.17.0...
+       Bootstrapping npm 10.x (replacing 10.9.2)...
+npm warn config production Use `--omit=dev` instead.
+       npm 10.9.3 installed
+       
+-----> Restoring cache
+       - npm cache
+       
+-----> Installing dependencies
+       Installing node modules
+       
+       added 1188 packages, and audited 1189 packages in 18s
+       
+       113 packages are looking for funding
+         run `npm fund` for details
+       
+       8 vulnerabilities (1 low, 7 moderate)
+       
+       To address issues that do not require attention, run:
+         npm audit fix
+       
+       To address all issues (including breaking changes), run:
+         npm audit fix --force
+       
+       Run `npm audit` for details.
+       
+-----> Build
+       Running build
+       
+       > rest-express@1.0.0 build
+       > node heroku-build.cjs
+       
+       Starting Heroku build...
+       Ensuring logos are available...
+       ✓ azul-logo-oficial.png ready for build
+       ✓ sbt_logo.png ready for build
+       Building React app with Vite...
+       vite v5.4.14 building for production...
+       transforming...
+       ✓ 1601 modules transformed.
+x Build failed in 1.18s
+error during build:
+[vite:asset] Could not load /tmp/build_58f2ce07/attached_assets/telemarketing_reproduz_1750494256177.jpg (imported by client/src/components/ChatBot.tsx): ENOENT: no such file or directory, open '/tmp/build_58f2ce07/attached_assets/telemarketing_reproduz_1750494256177.jpg'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.readFile (node:internal/fs/promises:1243:14)
+    at async fileToBuiltUrl (file:///tmp/build_58f2ce07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:20428:19)
+    at async Object.load (file:///tmp/build_58f2ce07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:20328:17)
+    at async PluginDriver.hookFirstAndGetPlugin (file:///tmp/build_58f2ce07/node_modules/rollup/dist/es/shared/node-entry.js:20689:28)
+    at async file:///tmp/build_58f2ce07/node_modules/rollup/dist/es/shared/node-entry.js:19809:33
+    at async Queue.work (file:///tmp/build_58f2ce07/node_modules/rollup/dist/es/shared/node-entry.js:20899:32)
+Vite build failed: Error: Command failed: NODE_ENV=production npx vite build --config client/vite.config.ts --outDir dist/public
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:883:11)
+    at execSync (node:child_process:955:15)
+    at Object.<anonymous> (/tmp/build_58f2ce07/heroku-build.cjs:39:3)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 2090,
+  stdout: null,
+  stderr: null
+}
+       Trying alternative build method...
+       vite v5.4.14 building for production...
+       transforming...
+       ✓ 1604 modules transformed.
+x Build failed in 1.10s
+error during build:
+[vite:asset] Could not load /tmp/build_58f2ce07/attached_assets/telemarketing_reproduz_1750494256177.jpg (imported by src/components/ChatBot.tsx): ENOENT: no such file or directory, open '/tmp/build_58f2ce07/attached_assets/telemarketing_reproduz_1750494256177.jpg'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.readFile (node:internal/fs/promises:1243:14)
+    at async fileToBuiltUrl (file:///tmp/build_58f2ce07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:20428:19)
+    at async Object.load (file:///tmp/build_58f2ce07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:20328:17)
+    at async PluginDriver.hookFirstAndGetPlugin (file:///tmp/build_58f2ce07/node_modules/rollup/dist/es/shared/node-entry.js:20689:28)
+    at async file:///tmp/build_58f2ce07/node_modules/rollup/dist/es/shared/node-entry.js:19809:33
+    at async Queue.work (file:///tmp/build_58f2ce07/node_modules/rollup/dist/es/shared/node-entry.js:20899:32)
+Alternative build also failed: Error: Command failed: npx vite build --outDir ../dist/public
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:883:11)
+    at execSync (node:child_process:955:15)
+    at Object.<anonymous> (/tmp/build_58f2ce07/heroku-build.cjs:52:5)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 2176,
+  stdout: null,
+  stderr: null
+}
+/tmp/build_58f2ce07/heroku-build.cjs:57
+    throw new Error('Both build methods failed');
+    ^
+Error: Both build methods failed
+    at Object.<anonymous> (/tmp/build_58f2ce07/heroku-build.cjs:57:11)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+Node.js v22.17.0
+-----> Build failed
+       
+       We're sorry this build is failing! You can troubleshoot common issues here:
+       https://devcenter.heroku.com/articles/troubleshooting-node-deploys
+       
+       If you're stuck, please submit a ticket so we can help:
+       https://help.heroku.com/
+       
+       Love,
+       Heroku
+       
+ !     Push rejected, failed to compile Node.js app.
+ !     Push failed
