@@ -42,6 +42,13 @@ try {
   });
   
   console.log('React app built successfully');
+  
+  // Move index.html to correct position if needed
+  if (fs.existsSync('dist/public/client/index.html') && !fs.existsSync('dist/public/index.html')) {
+    fs.copyFileSync('dist/public/client/index.html', 'dist/public/index.html');
+    console.log('✓ index.html moved to correct position');
+  }
+  
 } catch (error) {
   console.error('Vite build failed:', error);
   
