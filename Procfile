@@ -1,2 +1,2 @@
 
-web: node heroku-deploy-fix.cjs && node dist/index.cjs
+web: node heroku-build-react.cjs && node dist/index.cjs

@@ -13,11 +13,11 @@
     },
     "DATABASE_URL": {
       "description": "PostgreSQL database URL",
-      "required": true
+      "required": false
     },
     "FOR4PAYMENTS_SECRET_KEY": {
       "description": "Chave secreta da API For4Payments para PIX",
-      "required": true
+      "required": false
     }
   },
   "formation": {
@@ -26,9 +26,6 @@
       "size": "basic"
     }
   },
-  "addons": [
-    "heroku-postgresql:mini"
-  ],
   "buildpacks": [
     {
       "url": "heroku/nodejs"
@@ -36,8 +33,7 @@
   ],
   "stack": "heroku-24",
   "scripts": {
-    "postdeploy": "npm run db:push",
-    "prebuild": "node heroku-deploy-fix.cjs"
+    "prebuild": "node heroku-build-production.cjs"
   },
   "build": {
     "timeout": 1800
