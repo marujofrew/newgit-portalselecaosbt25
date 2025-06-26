@@ -186,6 +186,8 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Conteúdo home.tsx atualizado**: Substituído artigo de notícias por informações do sistema de casting, botões de navegação funcionais
 - **Build system corrigido**: Vite agora encontra index.html corretamente, input path especificado em rollupOptions
 - **Deploy preparation finalizado**: Sistema de build totalmente funcional para Heroku
+- **CSS build corrigido**: Tailwind config criado, classe border-border substituída, build funcionando
+- **Sistema pronto para deploy**: Todos os componentes funcionais, projeto oficial preservado
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
