@@ -2,17 +2,25 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('Building for Heroku...');
+console.log('Starting Heroku deployment build...');
 
-// Create directories
+// Create build directories
 if (!fs.existsSync('dist')) fs.mkdirSync('dist', { recursive: true });
 if (!fs.existsSync('dist/public')) fs.mkdirSync('dist/public', { recursive: true });
 
-// Build frontend
-console.log('Building React app...');
-execSync('cd client && NODE_ENV=production npx vite build --outDir ../dist/public', { stdio: 'inherit' });
+// Build frontend first
+console.log('Building frontend...');
+try {
+  process.chdir('client');
+  execSync('npx vite build --outDir ../dist/public', { stdio: 'inherit' });
+  process.chdir('..');
+  console.log('Frontend build completed');
+} catch (error) {
+  console.error('Frontend build failed');
+  process.exit(1);
+}
 
-// Copy static assets
+// Copy static files
 if (fs.existsSync('client/public')) {
   const files = fs.readdirSync('client/public');
   files.forEach(file => {
@@ -24,12 +32,26 @@ if (fs.existsSync('client/public')) {
   });
 }
 
-// Build backend excluding problematic files
+// Build backend
 console.log('Building backend...');
-execSync(`npx esbuild server/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:vite --external:@replit/vite-plugin-cartographer --external:@replit/vite-plugin-runtime-error-modal --external:pg-native --external:sqlite3 --external:mysql2 --external:mysql --external:oracledb --external:tedious --external:pg-query-stream --external:@babel/preset-typescript --external:@babel/core --external:lightningcss`, { 
-  stdio: 'inherit' 
-});
+try {
+  execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:pg-native', { stdio: 'inherit' });
+  console.log('Backend build completed');
+} catch (error) {
+  console.error('Backend build failed');
+  process.exit(1);
+}
 
-console.log('✓ Build complete for Heroku deployment');
-console.log(`✓ Server: dist/index.js (${Math.round(fs.statSync('dist/index.js').size/1024)}KB)`);
-console.log(`✓ Frontend: dist/public/index.html`);
+// Verify files
+const files = ['dist/index.js', 'dist/public/index.html'];
+for (const file of files) {
+  if (fs.existsSync(file)) {
+    const size = Math.round(fs.statSync(file).size / 1024);
+    console.log(`${file}: ${size}KB`);
+  } else {
+    console.error(`Missing ${file}`);
+    process.exit(1);
+  }
+}
+
+console.log('Build completed successfully');

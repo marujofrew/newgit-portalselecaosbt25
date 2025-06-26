@@ -112,20 +112,17 @@ heroku config:set NODE_ENV=production
 heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 ```
 
-### Status Deploy - TOTALMENTE OTIMIZADO
-- ✅ heroku-build.cjs criado com fallback inteligente
-- ✅ Vite build otimizado com chunking manual
-- ✅ Backend build funcionando (16.1kb)
-- ✅ Frontend React app + fallback SPA profissional
-- ✅ Assets copiados automaticamente (attached_assets + public)
-- ✅ SPA routing implementado para produção
-- ✅ Sistema PIX operacional (R$ 29,90 testado)
-- ✅ Interface moderna com animações
-- ✅ Versões Node.js 22.x e npm 10.x
-- ✅ npm run build como heroku-postbuild
-- ✅ Otimizações de performance aplicadas
-- ✅ Build verification completa
-- ✅ Deploy garantido para Heroku
+### Status Deploy Heroku - EM CORREÇÃO
+- ❌ Problema identificado: "Application Error" em produção
+- ❌ Backend build falhando devido a arquivos com `import.meta` e `top-level await`
+- ✅ Frontend build funcionando (516KB JS + 58KB CSS)
+- ✅ server/index-production.ts criado para evitar dependências Vite problemáticas
+- ✅ Múltiplos scripts de build testados (heroku-build.cjs, build-heroku.js, heroku-deploy.cjs)
+- ⚠️ Build timeout durante compilação backend com esbuild
+- 🔧 build-minimal.cjs criado como solução final
+- 🔧 Externals minimizados para evitar conflitos
+- 🔧 Timeouts de build otimizados
+- ⏳ Aguardando teste final do script build-minimal.cjs
 
 ## API For4Payments PIX - Status Funcional
 
