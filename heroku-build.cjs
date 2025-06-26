@@ -12,7 +12,7 @@ try {
   // Build frontend
   console.log('Building frontend...');
   process.chdir('client');
-  execSync('NODE_ENV=production npx vite build', {
+  execSync('NODE_ENV=production npx vite build --config vite.config.ts', {
     stdio: 'inherit'
   });
   process.chdir('..');
