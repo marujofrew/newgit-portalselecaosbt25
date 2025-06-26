@@ -1,27 +1,37 @@
 export default function Home() {
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <header className="bg-[#041e41] text-white p-4">
-        <div className="container mx-auto flex justify-between items-center">
+    <div className="bg-gray-100">
+      <header className="bg-[#041e41] text-white">
+        <div className="p-4 flex justify-between items-center">
+          <i className="fas fa-bars text-xl"></i>
           <img alt="SBT News logo" className="h-8" src="/attached_assets/Thays Souza_1750394417652.png" width="auto"/>
-          <nav className="flex space-x-4">
-            <a className="hover:text-gray-200" href="#">Home</a>
-            <a className="hover:text-gray-200" href="#">Notícias</a>
-            <a className="hover:text-gray-200" href="#">Esportes</a>
-            <a className="hover:text-gray-200" href="#">Entretenimento</a>
-          </nav>
+          <i className="fas fa-search text-xl"></i>
+        </div>
+        
+        <div className="px-4 pb-4">
+          <div className="flex space-x-2 overflow-x-auto">
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap flex items-center" href="#">
+              <i className="fas fa-play mr-2 text-sm"></i>
+              Vídeos
+            </a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Brasil</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Política</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Mundo</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Saúde</a>
+            <a className="text-white px-4 py-2 rounded-full border border-white/30 whitespace-nowrap" href="#">Economia</a>
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto p-4">
-        <article className="bg-white p-4 mb-4">
-          <h1 className="text-3xl font-bold mb-4">
-            SBT abre seleção de atores mirins com salário de R$ 20 mil e custos subsidiados
+      <main className="container mx-auto p-4 max-w-4xl">
+        <article className="bg-white p-6 mb-4 rounded-lg shadow-md">
+          <h1 className="text-xl md:text-2xl font-bold mb-2">
+            Portal Interativo de Casting SBT
           </h1>
-          <div className="mb-4 text-sm text-gray-500">
-            <span className="mr-4">Por Redação SBT</span>
-            <span>26 de junho de 2025</span>
-          </div>
+          <p className="text-gray-600 mb-4">
+            Sistema completo para inscrição de talentos infantis do SBT
+          </p>
+          <div className="mb-4 w-full">
             <div style={{position: 'relative', width: '100%', padding: '56.25% 0 0'}}>
               <img 
                 src="/attached_assets/elenco-caverna-encantada_6687_1750391560158.jpeg" 
@@ -29,10 +39,11 @@ export default function Home() {
                 alt="Elenco da Caverna Encantada"
               />
             </div>
-            <div className="mb-4 text-sm text-gray-500">
-              <span className="mr-4">Redação SBT</span>
-            </div>
-            <div className="flex flex-wrap gap-2 mb-4">
+          </div>
+          <div className="mb-4 text-sm text-gray-500">
+            <span className="mr-4">Redação SBT</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-4">
             <button className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
               <i className="fab fa-facebook-f mr-1"></i>
               Compartilhar

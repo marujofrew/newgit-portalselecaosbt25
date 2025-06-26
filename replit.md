@@ -200,8 +200,6 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Heroku build completely fixed**: heroku-build.cjs reescrito para construir React app real (519KB JS + 58KB CSS)
 - **Vite integration successful**: Build process agora usa Vite corretamente em vez de HTML estático
 - **Deploy ready**: Heroku mostrará projeto oficial após próximo push
-- **Homepage SBT casting portal corrigida**: Removido todo conteúdo de notícias, implementado portal interativo de casting com links funcionais
-- **Deploy Heroku problema identificado**: Aplicação exibindo conteúdo antigo de notícias em produção, corrigido para mostrar portal de casting
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
