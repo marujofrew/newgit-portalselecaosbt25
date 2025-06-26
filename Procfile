@@ -1,2 +1,2 @@
 
-web: node heroku-real-final.cjs && node dist/index.cjs
+web: node heroku-deploy-oficial.cjs && node dist/index.cjs
