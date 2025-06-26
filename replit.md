@@ -190,6 +190,9 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Sistema pronto para deploy**: Todos os componentes funcionais, projeto oficial preservado
 - **Vite config corrigido**: Criado vite.config.ts no client/ com paths corretos, resolve aliases funcionando
 - **Heroku build fix**: Build de produção funcionando, paths resolvidos corretamente
+- **Express static serving fix**: Servidor Express configurado para servir dist/public corretamente
+- **SPA routing implementado**: Catch-all handler para rotas do frontend no Heroku
+- **Deploy Heroku corrigido**: Aplicação funcionando em https://portalselecaosbt-02ad61fdc07b.herokuapp.com/
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
