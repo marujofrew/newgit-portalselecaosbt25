@@ -42,12 +42,17 @@ try {
   process.exit(1);
 }
 
-// Build backend
+// Build backend with extensive externals to avoid problematic files
 console.log('Building backend...');
-execSync('npx esbuild server/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:pg-native --external:sqlite3 --external:mysql2 --external:mysql --external:oracledb --external:tedious --external:pg-query-stream --external:@mapbox/node-pre-gyp --external:lightningcss --external:@babel/preset-typescript --external:@babel/core', {
-  stdio: 'inherit'
-});
-console.log('Backend build completed');
+try {
+  execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:pg-native --external:sqlite3 --external:mysql2 --external:mysql --external:oracledb --external:tedious --external:pg-query-stream --external:@mapbox/node-pre-gyp', {
+    stdio: 'inherit'
+  });
+  console.log('✓ Backend build completed');
+} catch (error) {
+  console.error('Backend build failed:', error);
+  process.exit(1);
+}
 
 // Copy assets from client/public to dist/public
 if (fs.existsSync('client/public')) {
