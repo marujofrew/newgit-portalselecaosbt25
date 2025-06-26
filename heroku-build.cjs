@@ -13,35 +13,56 @@ if (!fs.existsSync('dist/public')) {
   fs.mkdirSync('dist/public', { recursive: true });
 }
 
-// Ensure attached_assets directory exists for Vite @assets alias
+// Copy attached_assets to client directory for Vite build
 console.log('Preparing assets for build...');
+const symlinkTarget = path.join('client', 'attached_assets');
 
-// Create or ensure attached_assets directory in root exists
-if (!fs.existsSync('attached_assets')) {
-  fs.mkdirSync('attached_assets', { recursive: true });
-  console.log('Created attached_assets directory');
+// Always ensure we have a clean target directory
+if (fs.existsSync(symlinkTarget)) {
+  // Remove existing directory/symlink
+  if (fs.lstatSync(symlinkTarget).isSymbolicLink()) {
+    fs.unlinkSync(symlinkTarget);
+  } else {
+    fs.rmSync(symlinkTarget, { recursive: true, force: true });
+  }
 }
 
-// Copy logo from client/public to attached_assets if needed
-const logoSrc = path.join('client', 'public', 'azul-logo-oficial.png');
-const logoDest = path.join('attached_assets', 'azul-logo-02_1750506382633.png');
-
-if (fs.existsSync(logoSrc) && !fs.existsSync(logoDest)) {
-  fs.copyFileSync(logoSrc, logoDest);
-  console.log('Copied azul-logo-oficial.png to attached_assets/azul-logo-02_1750506382633.png');
+if (fs.existsSync('attached_assets')) {
+  // Create directory and copy all files
+  fs.mkdirSync(symlinkTarget, { recursive: true });
+  
+  const files = fs.readdirSync('attached_assets');
+  let copiedCount = 0;
+  
+  files.forEach(file => {
+    const srcPath = path.join('attached_assets', file);
+    const destPath = path.join(symlinkTarget, file);
+    
+    if (fs.statSync(srcPath).isFile()) {
+      fs.copyFileSync(srcPath, destPath);
+      copiedCount++;
+      console.log(`Copied ${file} to client/attached_assets`);
+    }
+  });
+  
+  console.log(`Successfully copied ${copiedCount} asset files for build`);
+} else {
+  console.log('No attached_assets directory found');
 }
 
-// Verify critical assets before build
+// Verify critical assets are available
 const criticalAssets = [
-  { src: 'client/public/azul-logo-oficial.png', name: 'Azul logo in public' },
-  { src: logoDest, name: 'Required logo for Vite build' }
+  'azul-logo-02_1750506382633.png',
+  'sbt_logo.png'
 ];
 
+console.log('Verifying critical assets...');
 criticalAssets.forEach(asset => {
-  if (fs.existsSync(asset.src)) {
-    console.log(`✓ ${asset.name} found at ${asset.src}`);
+  const assetPath = path.join(symlinkTarget, asset);
+  if (fs.existsSync(assetPath)) {
+    console.log(`✓ ${asset} found for build`);
   } else {
-    console.log(`✗ ${asset.name} missing at ${asset.src}`);
+    console.log(`✗ ${asset} missing - this may cause build failure`);
   }
 });
 
