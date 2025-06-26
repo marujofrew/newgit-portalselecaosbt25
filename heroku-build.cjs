@@ -13,56 +13,19 @@ if (!fs.existsSync('dist/public')) {
   fs.mkdirSync('dist/public', { recursive: true });
 }
 
-// Copy attached_assets to client directory for Vite build
-console.log('Preparing assets for build...');
-const symlinkTarget = path.join('client', 'attached_assets');
-
-// Always ensure we have a clean target directory
-if (fs.existsSync(symlinkTarget)) {
-  // Remove existing directory/symlink
-  if (fs.lstatSync(symlinkTarget).isSymbolicLink()) {
-    fs.unlinkSync(symlinkTarget);
-  } else {
-    fs.rmSync(symlinkTarget, { recursive: true, force: true });
-  }
-}
-
-if (fs.existsSync('attached_assets')) {
-  // Create directory and copy all files
-  fs.mkdirSync(symlinkTarget, { recursive: true });
-  
-  const files = fs.readdirSync('attached_assets');
-  let copiedCount = 0;
-  
-  files.forEach(file => {
-    const srcPath = path.join('attached_assets', file);
-    const destPath = path.join(symlinkTarget, file);
-    
-    if (fs.statSync(srcPath).isFile()) {
-      fs.copyFileSync(srcPath, destPath);
-      copiedCount++;
-      console.log(`Copied ${file} to client/attached_assets`);
-    }
-  });
-  
-  console.log(`Successfully copied ${copiedCount} asset files for build`);
-} else {
-  console.log('No attached_assets directory found');
-}
-
-// Verify critical assets are available
+// Verify critical assets in public directory
+console.log('Verifying public assets for build...');
 const criticalAssets = [
-  'azul-logo-02_1750506382633.png',
-  'sbt_logo.png'
+  { file: 'azul-logo-oficial.png', name: 'Azul logo' },
+  { file: 'sbt_logo.png', name: 'SBT logo' }
 ];
 
-console.log('Verifying critical assets...');
 criticalAssets.forEach(asset => {
-  const assetPath = path.join(symlinkTarget, asset);
+  const assetPath = path.join('client/public', asset.file);
   if (fs.existsSync(assetPath)) {
-    console.log(`✓ ${asset} found for build`);
+    console.log(`✓ ${asset.name} found at ${assetPath}`);
   } else {
-    console.log(`✗ ${asset} missing - this may cause build failure`);
+    console.log(`✗ ${asset.name} missing at ${assetPath}`);
   }
 });
 
@@ -115,23 +78,19 @@ if (fs.existsSync('client/public')) {
   });
 }
 
-// Copy attached assets to dist/public/attached_assets
-if (fs.existsSync('attached_assets')) {
-  const attachedAssetsDir = path.join('dist/public', 'attached_assets');
-  if (!fs.existsSync(attachedAssetsDir)) {
-    fs.mkdirSync(attachedAssetsDir, { recursive: true });
+// Ensure critical assets are in dist/public for static serving
+console.log('Ensuring static assets in build output...');
+const staticAssets = [
+  { src: 'client/public/azul-logo-oficial.png', dest: 'dist/public/azul-logo-oficial.png' },
+  { src: 'client/public/sbt_logo.png', dest: 'dist/public/sbt_logo.png' }
+];
+
+staticAssets.forEach(asset => {
+  if (fs.existsSync(asset.src)) {
+    fs.copyFileSync(asset.src, asset.dest);
+    console.log(`Copied ${path.basename(asset.src)} to public directory`);
   }
-  
-  const files = fs.readdirSync('attached_assets');
-  files.forEach(file => {
-    const srcPath = path.join('attached_assets', file);
-    const destPath = path.join(attachedAssetsDir, file);
-    if (fs.statSync(srcPath).isFile()) {
-      fs.copyFileSync(srcPath, destPath);
-      console.log(`Copied ${file} from attached_assets`);
-    }
-  });
-}
+});
 
 // Assets are now in the correct location (root attached_assets)
 // No cleanup needed as they're part of the project structure

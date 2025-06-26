@@ -5,7 +5,7 @@ import ChatBot from '../components/ChatBot';
 import { ChatStorage } from '../utils/chatStorage';
 
 
-import logoAzul from "@assets/azul-logo-02_1750506382633.png";
+const logoAzul = "/azul-logo-oficial.png";
 const sbtLogo = "/sbt_logo.png";
 
 interface Passenger {
