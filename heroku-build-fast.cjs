@@ -58,11 +58,11 @@ staticFiles.forEach(file => {
 });
 
 // Verify build
-const backendExists = fs.existsSync('dist/index.js');
+const backendExists = fs.existsSync('dist/index.cjs');
 const frontendExists = fs.existsSync('dist/public/index.html');
 
 if (backendExists && frontendExists) {
-  const backendSize = Math.round(fs.statSync('dist/index.js').size / 1024);
+  const backendSize = Math.round(fs.statSync('dist/index.cjs').size / 1024);
   console.log(`Build complete: Backend (${backendSize}KB), Frontend ready`);
   console.log('Ready for Heroku deployment!');
 } else {
