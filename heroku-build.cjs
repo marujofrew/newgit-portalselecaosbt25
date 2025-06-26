@@ -13,19 +13,19 @@ if (!fs.existsSync('dist/public')) {
   fs.mkdirSync('dist/public', { recursive: true });
 }
 
-// Verify critical assets in public directory
-console.log('Verifying public assets for build...');
-const criticalAssets = [
-  { file: 'azul-logo-oficial.png', name: 'Azul logo' },
-  { file: 'sbt_logo.png', name: 'SBT logo' }
+// Ensure critical logos are in client/public
+console.log('Ensuring logos are available...');
+const requiredLogos = [
+  { name: 'azul-logo-oficial.png', size: '64KB' },
+  { name: 'sbt_logo.png', size: '2KB' }
 ];
 
-criticalAssets.forEach(asset => {
-  const assetPath = path.join('client/public', asset.file);
-  if (fs.existsSync(assetPath)) {
-    console.log(`✓ ${asset.name} found at ${assetPath}`);
+requiredLogos.forEach(logo => {
+  const logoPath = path.join('client/public', logo.name);
+  if (fs.existsSync(logoPath)) {
+    console.log(`✓ ${logo.name} ready for build`);
   } else {
-    console.log(`✗ ${asset.name} missing at ${assetPath}`);
+    console.log(`✗ ${logo.name} missing - this will cause build failure`);
   }
 });
 
