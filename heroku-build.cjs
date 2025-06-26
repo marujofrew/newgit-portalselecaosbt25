@@ -13,59 +13,28 @@ if (!fs.existsSync('dist/public')) {
   fs.mkdirSync('dist/public', { recursive: true });
 }
 
-// Copy attached_assets to client directory for Vite build
+// Ensure attached_assets directory exists for Vite @assets alias
 console.log('Preparing assets for build...');
-const symlinkTarget = path.join('client', 'attached_assets');
 
-// Always ensure we have a clean target directory
-if (fs.existsSync(symlinkTarget)) {
-  // Remove existing directory/symlink
-  if (fs.lstatSync(symlinkTarget).isSymbolicLink()) {
-    fs.unlinkSync(symlinkTarget);
-  } else {
-    fs.rmSync(symlinkTarget, { recursive: true, force: true });
-  }
+// Create or ensure attached_assets directory in root exists
+if (!fs.existsSync('attached_assets')) {
+  fs.mkdirSync('attached_assets', { recursive: true });
+  console.log('Created attached_assets directory');
 }
 
-// Create the target directory
-fs.mkdirSync(symlinkTarget, { recursive: true });
+// Copy logo from client/public to attached_assets if needed
+const logoSrc = path.join('client', 'public', 'azul-logo-oficial.png');
+const logoDest = path.join('attached_assets', 'azul-logo-02_1750506382633.png');
 
-if (fs.existsSync('attached_assets')) {
-  const files = fs.readdirSync('attached_assets');
-  let copiedCount = 0;
-  
-  files.forEach(file => {
-    const srcPath = path.join('attached_assets', file);
-    const destPath = path.join(symlinkTarget, file);
-    
-    if (fs.statSync(srcPath).isFile()) {
-      fs.copyFileSync(srcPath, destPath);
-      copiedCount++;
-      console.log(`Copied ${file} to client/attached_assets`);
-    }
-  });
-  
-  console.log(`Successfully copied ${copiedCount} asset files for build`);
-} else {
-  // If no attached_assets directory, create the required logo file from client/public
-  console.log('No attached_assets directory found, copying from client/public...');
-  
-  // Copy the logo file that is needed for the build
-  const logoSrc = path.join('client', 'public', 'azul-logo-oficial.png');
-  const logoDest = path.join(symlinkTarget, 'azul-logo-02_1750506382633.png');
-  
-  if (fs.existsSync(logoSrc)) {
-    fs.copyFileSync(logoSrc, logoDest);
-    console.log('Copied azul-logo-oficial.png as azul-logo-02_1750506382633.png');
-  } else {
-    console.log('Warning: azul-logo-oficial.png not found in client/public');
-  }
+if (fs.existsSync(logoSrc) && !fs.existsSync(logoDest)) {
+  fs.copyFileSync(logoSrc, logoDest);
+  console.log('Copied azul-logo-oficial.png to attached_assets/azul-logo-02_1750506382633.png');
 }
 
 // Verify critical assets before build
 const criticalAssets = [
-  { src: 'client/public/azul-logo-oficial.png', name: 'Azul logo' },
-  { src: path.join(symlinkTarget, 'azul-logo-02_1750506382633.png'), name: 'Required logo for build' }
+  { src: 'client/public/azul-logo-oficial.png', name: 'Azul logo in public' },
+  { src: logoDest, name: 'Required logo for Vite build' }
 ];
 
 criticalAssets.forEach(asset => {
@@ -143,17 +112,8 @@ if (fs.existsSync('attached_assets')) {
   });
 }
 
-// Clean up temporary assets directory after build
-const clientAssetsPath = path.join('client', 'attached_assets');
-if (fs.existsSync(clientAssetsPath)) {
-  try {
-    // Remove temporary directory created for build
-    fs.rmSync(clientAssetsPath, { recursive: true, force: true });
-    console.log('Cleaned up temporary assets directory after build');
-  } catch (error) {
-    console.log('Cleanup warning:', error.message);
-  }
-}
+// Assets are now in the correct location (root attached_assets)
+// No cleanup needed as they're part of the project structure
 
 // Move index.html to correct location if needed
 const indexPath = path.join('dist/public', 'index.html');
