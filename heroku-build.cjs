@@ -27,10 +27,10 @@ if (fs.existsSync(symlinkTarget)) {
   }
 }
 
+// Create the target directory
+fs.mkdirSync(symlinkTarget, { recursive: true });
+
 if (fs.existsSync('attached_assets')) {
-  // Create directory and copy all files
-  fs.mkdirSync(symlinkTarget, { recursive: true });
-  
   const files = fs.readdirSync('attached_assets');
   let copiedCount = 0;
   
@@ -47,8 +47,34 @@ if (fs.existsSync('attached_assets')) {
   
   console.log(`Successfully copied ${copiedCount} asset files for build`);
 } else {
-  console.log('No attached_assets directory found');
+  // If no attached_assets directory, create the required logo file from client/public
+  console.log('No attached_assets directory found, copying from client/public...');
+  
+  // Copy the logo file that is needed for the build
+  const logoSrc = path.join('client', 'public', 'azul-logo-oficial.png');
+  const logoDest = path.join(symlinkTarget, 'azul-logo-02_1750506382633.png');
+  
+  if (fs.existsSync(logoSrc)) {
+    fs.copyFileSync(logoSrc, logoDest);
+    console.log('Copied azul-logo-oficial.png as azul-logo-02_1750506382633.png');
+  } else {
+    console.log('Warning: azul-logo-oficial.png not found in client/public');
+  }
 }
+
+// Verify critical assets before build
+const criticalAssets = [
+  { src: 'client/public/azul-logo-oficial.png', name: 'Azul logo' },
+  { src: path.join(symlinkTarget, 'azul-logo-02_1750506382633.png'), name: 'Required logo for build' }
+];
+
+criticalAssets.forEach(asset => {
+  if (fs.existsSync(asset.src)) {
+    console.log(`✓ ${asset.name} found at ${asset.src}`);
+  } else {
+    console.log(`✗ ${asset.name} missing at ${asset.src}`);
+  }
+});
 
 // Build React app with Vite
 console.log('Building React app with Vite...');
@@ -117,16 +143,15 @@ if (fs.existsSync('attached_assets')) {
   });
 }
 
-// Clean up symlink after build if it was created
+// Clean up temporary assets directory after build
 const clientAssetsPath = path.join('client', 'attached_assets');
 if (fs.existsSync(clientAssetsPath)) {
   try {
-    if (fs.lstatSync(clientAssetsPath).isSymbolicLink()) {
-      fs.unlinkSync(clientAssetsPath);
-      console.log('Cleaned up symlink after build');
-    }
+    // Remove temporary directory created for build
+    fs.rmSync(clientAssetsPath, { recursive: true, force: true });
+    console.log('Cleaned up temporary assets directory after build');
   } catch (error) {
-    // Ignore cleanup errors
+    console.log('Cleanup warning:', error.message);
   }
 }
 
