@@ -1,0 +1,150 @@
+-----> Building on the Heroku-24 stack
+-----> Deleting 12 files matching .slugignore patterns.
+-----> Using buildpack: heroku/nodejs
+-----> Node.js app detected
+       
+-----> Creating runtime environment
+       
+       NPM_CONFIG_PRODUCTION=false
+       NPM_CONFIG_LOGLEVEL=error
+       NODE_VERBOSE=false
+       NODE_ENV=production
+       NODE_MODULES_CACHE=true
+       
+-----> Installing binaries
+       engines.node (package.json):   22.x
+       engines.npm (package.json):    10.x
+       
+       Resolving node version 22.x...
+       Downloading and installing node 22.17.0...
+       Bootstrapping npm 10.x (replacing 10.9.2)...
+npm warn config production Use `--omit=dev` instead.
+       npm 10.9.3 installed
+       
+-----> Restoring cache
+       - npm cache
+       
+-----> Installing dependencies
+       Installing node modules
+       
+       added 1188 packages, and audited 1189 packages in 18s
+       
+       113 packages are looking for funding
+         run `npm fund` for details
+       
+       8 vulnerabilities (1 low, 7 moderate)
+       
+       To address issues that do not require attention, run:
+         npm audit fix
+       
+       To address all issues (including breaking changes), run:
+         npm audit fix --force
+       
+       Run `npm audit` for details.
+       
+-----> Build
+       Running build
+       
+       > rest-express@1.0.0 build
+       > node heroku-build.cjs
+       
+       Starting Heroku build...
+       Building React app with Vite...
+       vite v5.4.14 building for production...
+       transforming...
+       ✓ 37 modules transformed.
+x Build failed in 139ms
+error during build:
+[vite]: Rollup failed to resolve import "@assets/azul-logo-02_1750506382633.png" from "/tmp/build_93499c07/client/src/pages/cartao-preview.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`
+    at viteWarn (file:///tmp/build_93499c07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65747:17)
+    at onwarn (file:///tmp/build_93499c07/node_modules/@vitejs/plugin-react/dist/index.mjs:280:9)
+    at onRollupWarning (file:///tmp/build_93499c07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65777:5)
+    at onwarn (file:///tmp/build_93499c07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65442:7)
+    at file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:19452:13
+    at Object.logger [as onLog] (file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:21178:9)
+    at ModuleLoader.handleInvalidResolvedId (file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:20067:26)
+    at file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:20025:26
+Vite build failed: Error: Command failed: NODE_ENV=production npx vite build --config client/vite.config.ts --outDir dist/public
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:883:11)
+    at execSync (node:child_process:955:15)
+    at Object.<anonymous> (/tmp/build_93499c07/heroku-build.cjs:23:3)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 2228,
+  stdout: null,
+  stderr: null
+}
+       Trying alternative build method...
+       vite v5.4.14 building for production...
+       transforming...
+       ✓ 36 modules transformed.
+x Build failed in 130ms
+error during build:
+[vite]: Rollup failed to resolve import "@assets/azul-logo-02_1750506382633.png" from "/tmp/build_93499c07/client/src/pages/cartao-preview.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`
+    at viteWarn (file:///tmp/build_93499c07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65747:17)
+    at onwarn (file:///tmp/build_93499c07/node_modules/@vitejs/plugin-react/dist/index.mjs:280:9)
+    at onRollupWarning (file:///tmp/build_93499c07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65777:5)
+    at onwarn (file:///tmp/build_93499c07/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65442:7)
+    at file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:19452:13
+    at Object.logger [as onLog] (file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:21178:9)
+    at ModuleLoader.handleInvalidResolvedId (file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:20067:26)
+    at file:///tmp/build_93499c07/node_modules/rollup/dist/es/shared/node-entry.js:20025:26
+Alternative build also failed: Error: Command failed: npx vite build --outDir ../dist/public
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:883:11)
+    at execSync (node:child_process:955:15)
+    at Object.<anonymous> (/tmp/build_93499c07/heroku-build.cjs:36:5)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 2282,
+  stdout: null,
+  stderr: null
+}
+/tmp/build_93499c07/heroku-build.cjs:41
+    throw new Error('Both build methods failed');
+    ^
+Error: Both build methods failed
+    at Object.<anonymous> (/tmp/build_93499c07/heroku-build.cjs:41:11)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+Node.js v22.17.0
+-----> Build failed
+       
+       We're sorry this build is failing! You can troubleshoot common issues here:
+       https://devcenter.heroku.com/articles/troubleshooting-node-deploys
+       
+       If you're stuck, please submit a ticket so we can help:
+       https://help.heroku.com/
+       
+       Love,
+       Heroku
+       
+ !     Push rejected, failed to compile Node.js app.
+ !     Push failed
