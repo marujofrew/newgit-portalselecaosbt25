@@ -10,7 +10,7 @@ fs.mkdirSync('dist/public', { recursive: true });
 
 // Build backend only (fast)
 console.log('Building backend...');
-execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:pg-native --minify', { stdio: 'inherit' });
+execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.cjs --format=cjs --external:pg-native --minify', { stdio: 'inherit' });
 
 // Create minimal frontend for testing
 console.log('Creating minimal frontend...');
