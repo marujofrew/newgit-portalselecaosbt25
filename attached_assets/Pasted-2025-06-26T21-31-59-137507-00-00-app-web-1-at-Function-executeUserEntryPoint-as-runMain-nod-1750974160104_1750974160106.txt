@@ -1,0 +1,31 @@
+2025-06-26T21:31:59.137507+00:00 app[web.1]:     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+2025-06-26T21:31:59.137507+00:00 app[web.1]:     at node:internal/main/run_main_module:36:49 {
+2025-06-26T21:31:59.137508+00:00 app[web.1]:   code: 'MODULE_NOT_FOUND',
+2025-06-26T21:31:59.137508+00:00 app[web.1]:   requireStack: []
+2025-06-26T21:31:59.137508+00:00 app[web.1]: }
+2025-06-26T21:31:59.137508+00:00 app[web.1]: 
+2025-06-26T21:31:59.137509+00:00 app[web.1]: Node.js v22.17.0
+2025-06-26T21:31:59.185015+00:00 heroku[web.1]: Process exited with status 1
+2025-06-26T21:31:59.212362+00:00 heroku[web.1]: State changed from starting to crashed
+2025-06-26T21:41:22.670035+00:00 heroku[web.1]: State changed from crashed to starting
+2025-06-26T21:41:32.876652+00:00 heroku[web.1]: Starting process with command `node dist/index.cjs`
+2025-06-26T21:41:33.462182+00:00 heroku[web.1]: Process exited with status 1
+2025-06-26T21:41:33.417380+00:00 app[web.1]: node:internal/modules/cjs/loader:1404
+2025-06-26T21:41:33.417399+00:00 app[web.1]:   throw err;
+2025-06-26T21:41:33.417400+00:00 app[web.1]:   ^
+2025-06-26T21:41:33.417400+00:00 app[web.1]: 
+2025-06-26T21:41:33.417401+00:00 app[web.1]: Error: Cannot find module '/app/dist/index.cjs'
+2025-06-26T21:41:33.417401+00:00 app[web.1]:     at Function._resolveFilename (node:internal/modules/cjs/loader:1401:15)
+2025-06-26T21:41:33.417402+00:00 app[web.1]:     at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+2025-06-26T21:41:33.417402+00:00 app[web.1]:     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+2025-06-26T21:41:33.417403+00:00 app[web.1]:     at Function._load (node:internal/modules/cjs/loader:1211:37)
+2025-06-26T21:41:33.417403+00:00 app[web.1]:     at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+2025-06-26T21:41:33.417403+00:00 app[web.1]:     at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+2025-06-26T21:41:33.417404+00:00 app[web.1]:     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+2025-06-26T21:41:33.417404+00:00 app[web.1]:     at node:internal/main/run_main_module:36:49 {
+2025-06-26T21:41:33.417405+00:00 app[web.1]:   code: 'MODULE_NOT_FOUND',
+2025-06-26T21:41:33.417405+00:00 app[web.1]:   requireStack: []
+2025-06-26T21:41:33.417406+00:00 app[web.1]: }
+2025-06-26T21:41:33.417406+00:00 app[web.1]: 
+2025-06-26T21:41:33.417406+00:00 app[web.1]: Node.js v22.17.0
+2025-06-26T21:41:33.483874+00:00 heroku[web.1]: State changed from starting to crashed
