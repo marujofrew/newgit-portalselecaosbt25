@@ -1,3 +1,4 @@
+
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -15,31 +16,30 @@ if (!fs.existsSync('dist/public')) {
 // Build React app with Vite
 console.log('Building React app with Vite...');
 try {
-  process.chdir('client');
-  execSync('npx vite build --outDir ../dist/public', { stdio: 'inherit' });
-  process.chdir('..');
+  // Make sure we're in the right directory
+  process.chdir(__dirname);
+  
+  // Build the React app using the proper Vite config
+  execSync('NODE_ENV=production npx vite build --config client/vite.config.ts --outDir dist/public', { 
+    stdio: 'inherit',
+    cwd: process.cwd()
+  });
+  
   console.log('React app built successfully');
 } catch (error) {
-  console.log('Vite build failed, creating minimal fallback');
-  process.chdir('..');
+  console.error('Vite build failed:', error);
   
-  const fallbackHTML = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal SBT</title>
-</head>
-<body>
-  <div id="root">
-    <h1>Portal de Casting SBT</h1>
-    <p>Sistema de seleção para talentos infantis</p>
-  </div>
-</body>
-</html>`;
-  
-  fs.writeFileSync('dist/public/index.html', fallbackHTML);
-  console.log('Fallback HTML created');
+  // Try alternative build method
+  try {
+    console.log('Trying alternative build method...');
+    process.chdir('client');
+    execSync('npx vite build --outDir ../dist/public', { stdio: 'inherit' });
+    process.chdir('..');
+    console.log('Alternative build method succeeded');
+  } catch (altError) {
+    console.error('Alternative build also failed:', altError);
+    throw new Error('Both build methods failed');
+  }
 }
 
 // Build backend
@@ -62,12 +62,17 @@ if (fs.existsSync('client/public')) {
   });
 }
 
-// Copy attached assets
+// Copy attached assets to dist/public/attached_assets
 if (fs.existsSync('attached_assets')) {
+  const attachedAssetsDir = path.join('dist/public', 'attached_assets');
+  if (!fs.existsSync(attachedAssetsDir)) {
+    fs.mkdirSync(attachedAssetsDir, { recursive: true });
+  }
+  
   const files = fs.readdirSync('attached_assets');
   files.forEach(file => {
     const srcPath = path.join('attached_assets', file);
-    const destPath = path.join('dist/public', file);
+    const destPath = path.join(attachedAssetsDir, file);
     if (fs.statSync(srcPath).isFile()) {
       fs.copyFileSync(srcPath, destPath);
       console.log(`Copied ${file} from attached_assets`);
@@ -75,13 +80,10 @@ if (fs.existsSync('attached_assets')) {
   });
 }
 
-// Copy main assets to dist/public
-const mainAssets = ['azul-logo.png'];
-mainAssets.forEach(asset => {
-  if (fs.existsSync(asset)) {
-    fs.copyFileSync(asset, path.join('dist/public', asset));
-    console.log(`Copied ${asset}`);
-  }
-});
+// Verify the build was successful
+const indexPath = path.join('dist/public', 'index.html');
+if (!fs.existsSync(indexPath)) {
+  throw new Error('Build failed: index.html not found in dist/public');
+}
 
 console.log('Heroku build completed successfully!');
