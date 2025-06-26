@@ -195,6 +195,8 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Deploy Heroku corrigido**: Aplicação funcionando em https://portalselecaosbt-02ad61fdc07b.herokuapp.com/
 - **index.html path fix**: Build script corrigido para garantir index.html em dist/public no Heroku
 - **Build verification completa**: Sistema de build garantido para deploy
+- **Heroku build fix**: heroku-build.cjs corrigido para construir React app real em vez de HTML estático
+- **Deploy Heroku problem resolved**: Sistema agora constrói o projeto oficial do Replit para produção
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação

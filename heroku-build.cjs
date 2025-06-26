@@ -114,12 +114,12 @@ try {
   if (!fs.existsSync('client/dist')) {
     fs.mkdirSync('client/dist', { recursive: true });
   }
-  fs.writeFileSync('client/dist/index.html', fallbackHTML);
-  console.log('Production frontend created');
-
-  // Ensure index.html is copied to dist/public
-  fs.copyFileSync('client/dist/index.html', 'dist/public/index.html');
-  console.log('index.html copied to dist/public');
+    if (!fs.existsSync('dist/public')) {
+      fs.mkdirSync('dist/public', { recursive: true });
+    }
+    fs.writeFileSync('dist/public/index.html', fallbackHTML);
+    console.log('Fallback HTML created');
+  }
 
   // Build backend
   console.log('Building backend...');
