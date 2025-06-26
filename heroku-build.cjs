@@ -11,7 +11,7 @@ if (!fs.existsSync('dist/public')) fs.mkdirSync('dist/public', { recursive: true
 try {
   // Build frontend with Vite
   console.log('Building frontend...');
-  execSync('NODE_ENV=production npx vite build --config vite.config.ts', {
+  execSync('cd client && NODE_ENV=production npx vite build --outDir ../dist/public', {
     stdio: 'inherit'
   });
   console.log('Frontend build completed');
