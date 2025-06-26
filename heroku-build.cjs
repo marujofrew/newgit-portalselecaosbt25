@@ -117,6 +117,10 @@ try {
   fs.writeFileSync('client/dist/index.html', fallbackHTML);
   console.log('Production frontend created');
 
+  // Ensure index.html is copied to dist/public
+  fs.copyFileSync('client/dist/index.html', 'dist/public/index.html');
+  console.log('index.html copied to dist/public');
+
   // Build backend
   console.log('Building backend...');
   execSync('npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist', {
