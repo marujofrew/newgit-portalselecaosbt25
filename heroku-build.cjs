@@ -10,7 +10,7 @@ fs.mkdirSync('dist/public', { recursive: true });
 
 // Build backend first (836KB in 191ms)
 console.log('Building backend...');
-execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:pg-native --minify', { stdio: 'inherit' });
+execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.mjs --format=esm --external:pg-native --packages=external --minify', { stdio: 'inherit' });
 
 // Build frontend (516KB JS + 58KB CSS in 7.87s)
 console.log('Building frontend...');
@@ -27,11 +27,11 @@ if (fs.existsSync('client/public')) {
 }
 
 // Verify build success
-const backendExists = fs.existsSync('dist/index.js');
+const backendExists = fs.existsSync('dist/index.mjs');
 const frontendExists = fs.existsSync('dist/public/index.html');
 
 if (backendExists && frontendExists) {
-  const backendSize = Math.round(fs.statSync('dist/index.js').size / 1024);
+  const backendSize = Math.round(fs.statSync('dist/index.mjs').size / 1024);
   const frontendSize = Math.round(fs.statSync('dist/public/index.html').size);
   console.log(`Build complete: Backend (${backendSize}KB), Frontend (${frontendSize}B)`);
 } else {
