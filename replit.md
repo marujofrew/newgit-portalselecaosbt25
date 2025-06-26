@@ -211,6 +211,9 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Sistema de imagens do chat funcionando**: Avatar Rebeca, imagens de bagagem e hotel usando paths estáticos
 - **Build Heroku completamente corrigido**: index.html posicionado corretamente, 1641 módulos transformados
 - **Deploy verification finalizada**: Sistema 100% pronto para produção no Heroku
+- **Servidor Express corrigido**: Removido catch-all handler conflitante, ordem de middlewares otimizada
+- **Backend build corrigido**: ESM format com externals apropriados, 6.5MB bundle funcional
+- **Estrutura final de deploy**: dist/index.js (servidor) + dist/public/ (React app + assets)
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
