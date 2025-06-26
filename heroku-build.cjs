@@ -13,6 +13,45 @@ if (!fs.existsSync('dist/public')) {
   fs.mkdirSync('dist/public', { recursive: true });
 }
 
+// Copy attached_assets to make them available during Vite build
+if (fs.existsSync('attached_assets')) {
+  const attachedAssetsDir = path.join('attached_assets');
+  if (!fs.existsSync(attachedAssetsDir)) {
+    fs.mkdirSync(attachedAssetsDir, { recursive: true });
+  }
+  console.log('Attached assets are available for build');
+}
+
+// Ensure attached_assets symlink exists before build
+const symlinkTarget = path.join('client', 'attached_assets');
+if (!fs.existsSync(symlinkTarget) && fs.existsSync('attached_assets')) {
+  try {
+    if (process.platform === 'win32') {
+      // Windows: use junction
+      execSync(`mklink /J "${symlinkTarget}" "${path.resolve('attached_assets')}"`, { stdio: 'ignore' });
+    } else {
+      // Unix: use symbolic link
+      fs.symlinkSync(path.resolve('attached_assets'), symlinkTarget);
+    }
+    console.log('Created symlink for attached_assets before build');
+  } catch (error) {
+    console.log('Could not create symlink, copying files instead');
+    // Fallback: copy files
+    if (!fs.existsSync(symlinkTarget)) {
+      fs.mkdirSync(symlinkTarget, { recursive: true });
+    }
+    const files = fs.readdirSync('attached_assets');
+    files.forEach(file => {
+      const srcPath = path.join('attached_assets', file);
+      const destPath = path.join(symlinkTarget, file);
+      if (fs.statSync(srcPath).isFile()) {
+        fs.copyFileSync(srcPath, destPath);
+        console.log(`Copied ${file} to client/attached_assets for build`);
+      }
+    });
+  }
+}
+
 // Build React app with Vite
 console.log('Building React app with Vite...');
 try {
@@ -80,32 +119,16 @@ if (fs.existsSync('attached_assets')) {
   });
 }
 
-// Create symlink for attached_assets during build (for Vite to resolve)
-const symlinkTarget = path.join('client', 'attached_assets');
-if (!fs.existsSync(symlinkTarget) && fs.existsSync('attached_assets')) {
+// Clean up symlink after build if it was created
+const clientAssetsPath = path.join('client', 'attached_assets');
+if (fs.existsSync(clientAssetsPath)) {
   try {
-    if (process.platform === 'win32') {
-      // Windows: use junction
-      execSync(`mklink /J "${symlinkTarget}" "${path.resolve('attached_assets')}"`, { stdio: 'ignore' });
-    } else {
-      // Unix: use symbolic link
-      fs.symlinkSync(path.resolve('attached_assets'), symlinkTarget);
+    if (fs.lstatSync(clientAssetsPath).isSymbolicLink()) {
+      fs.unlinkSync(clientAssetsPath);
+      console.log('Cleaned up symlink after build');
     }
-    console.log('Created symlink for attached_assets');
   } catch (error) {
-    console.log('Could not create symlink, copying files instead');
-    // Fallback: copy files
-    if (!fs.existsSync(symlinkTarget)) {
-      fs.mkdirSync(symlinkTarget, { recursive: true });
-    }
-    const files = fs.readdirSync('attached_assets');
-    files.forEach(file => {
-      const srcPath = path.join('attached_assets', file);
-      const destPath = path.join(symlinkTarget, file);
-      if (fs.statSync(srcPath).isFile()) {
-        fs.copyFileSync(srcPath, destPath);
-      }
-    });
+    // Ignore cleanup errors
   }
 }
 
