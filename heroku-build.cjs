@@ -67,7 +67,7 @@ try {
 
 // Build backend
 console.log('Building backend...');
-execSync('npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist', {
+execSync('npx esbuild server/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=esm --external:pg-native --external:sqlite3 --external:mysql2 --external:mysql --external:oracledb --external:tedious --external:pg-query-stream --external:@mapbox/node-pre-gyp --external:lightningcss --external:@babel/preset-typescript --external:@babel/core', {
   stdio: 'inherit'
 });
 console.log('Backend build completed');
