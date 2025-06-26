@@ -13,43 +13,41 @@ if (!fs.existsSync('dist/public')) {
   fs.mkdirSync('dist/public', { recursive: true });
 }
 
-// Copy attached_assets to make them available during Vite build
-if (fs.existsSync('attached_assets')) {
-  const attachedAssetsDir = path.join('attached_assets');
-  if (!fs.existsSync(attachedAssetsDir)) {
-    fs.mkdirSync(attachedAssetsDir, { recursive: true });
+// Copy attached_assets to client directory for Vite build
+console.log('Preparing assets for build...');
+const symlinkTarget = path.join('client', 'attached_assets');
+
+// Always ensure we have a clean target directory
+if (fs.existsSync(symlinkTarget)) {
+  // Remove existing directory/symlink
+  if (fs.lstatSync(symlinkTarget).isSymbolicLink()) {
+    fs.unlinkSync(symlinkTarget);
+  } else {
+    fs.rmSync(symlinkTarget, { recursive: true, force: true });
   }
-  console.log('Attached assets are available for build');
 }
 
-// Ensure attached_assets symlink exists before build
-const symlinkTarget = path.join('client', 'attached_assets');
-if (!fs.existsSync(symlinkTarget) && fs.existsSync('attached_assets')) {
-  try {
-    if (process.platform === 'win32') {
-      // Windows: use junction
-      execSync(`mklink /J "${symlinkTarget}" "${path.resolve('attached_assets')}"`, { stdio: 'ignore' });
-    } else {
-      // Unix: use symbolic link
-      fs.symlinkSync(path.resolve('attached_assets'), symlinkTarget);
+if (fs.existsSync('attached_assets')) {
+  // Create directory and copy all files
+  fs.mkdirSync(symlinkTarget, { recursive: true });
+  
+  const files = fs.readdirSync('attached_assets');
+  let copiedCount = 0;
+  
+  files.forEach(file => {
+    const srcPath = path.join('attached_assets', file);
+    const destPath = path.join(symlinkTarget, file);
+    
+    if (fs.statSync(srcPath).isFile()) {
+      fs.copyFileSync(srcPath, destPath);
+      copiedCount++;
+      console.log(`Copied ${file} to client/attached_assets`);
     }
-    console.log('Created symlink for attached_assets before build');
-  } catch (error) {
-    console.log('Could not create symlink, copying files instead');
-    // Fallback: copy files
-    if (!fs.existsSync(symlinkTarget)) {
-      fs.mkdirSync(symlinkTarget, { recursive: true });
-    }
-    const files = fs.readdirSync('attached_assets');
-    files.forEach(file => {
-      const srcPath = path.join('attached_assets', file);
-      const destPath = path.join(symlinkTarget, file);
-      if (fs.statSync(srcPath).isFile()) {
-        fs.copyFileSync(srcPath, destPath);
-        console.log(`Copied ${file} to client/attached_assets for build`);
-      }
-    });
-  }
+  });
+  
+  console.log(`Successfully copied ${copiedCount} asset files for build`);
+} else {
+  console.log('No attached_assets directory found');
 }
 
 // Build React app with Vite

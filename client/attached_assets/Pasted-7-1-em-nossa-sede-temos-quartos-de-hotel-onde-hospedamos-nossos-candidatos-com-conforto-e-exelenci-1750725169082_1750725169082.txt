@@ -1,0 +1,51 @@
+7.1- em nossa sede, temos quartos de hotel onde hospedamos nossos candidatos com conforto e exelencia!
+
+7.2 a unica coisa que preciso fazer e deixar reservado sua estadia, só um minuto que ja estou cuidando disso!
+
+7.3 esse é o quarto que você e os candidatos vão ficar ( foto 2 ).
+
+7.4 lembrando que toda alimentação também será custeada pelo SBT.
+
+7.5 estou finalizando sua reserva!
+
+7.6 pronto sua reserva foi feita, vou te enviar o comprovante em seu WhatsApp, após conclusão da inscrição!
+
+7.7 vamos finalizar sua inscrição? 
+
+Resposta: 1- vamos finalizar
+
+Caso tenha mais de um candidato envie essa mensagem:
+
+ - o valor de inscrição de cada candidato e de 89,90, como voce está inscrevendo x ( quantidade de candidatos) candidatos, o SBT tem um desconto como forma de incentivar mais candidatos a participar!
+
+Caso tenha somente um candidato envie essa mensagem:
+
+- o valor de inscrição de cada candidato e de 89,90 e voce inscreveu apenas 1 candidato!
+
+7.8- lembrando que após o pagamento vamos te enviar a sua credencial, para que voce apresente na entrada do SBT e sua entrada seja liberada.
+
+7.9 - então assim que realizar o pagamento volte aqui, para fazer o download da credencial!
+
+Resposta: ok, eu entendi!
+
+8 - lembre-se que o chat se encerra automaticamente em 5 minutos por inatividade, então assim que realizar o pagamento da inscrição volte rapidamente, para evitar o recomeço do processo tudo bem?
+
+Resposta: ok vou realizar o pagamento e volto rapidamente!
+
+8.1- aqui esta o qr.code, e a chave pix copia e cola, para que você efetue o pagamento da inscrição!
+
+Gere a cobrança equivalente a quantidade de candidatos, caso seja + de 1 adicione 50% de desconto no valor das demais inscrições ou seja: 
+
+1 candidatos = 89,90 
+2 candidatos = 134,85
+3 candidatos = 179,80
+4 candidatos = 224,75
+5 candidatos = 269,70
+
+8.2- qr.code + chave pix copia e cola 
+
+Aparecer uma campo amarelo abaixo do header do chat bot, escrito: aguardando retorno, tempo de inatividade 00:00 (cronometro)
+
+Assim que o pagamento for confirmado, mande uma mensagem: seu pagamento foi confirmado vou te enviar a sua credencial!
+
+8.3 uma mensagem em forma de documento, com os cartoes de credenciais para acesso ao SBT , quando clica no documento abre um modal onde vai mostra a imagem dos cartões de credenciais que foram gerados, os cartões vai aparecer em ordem e vai ser como slide que tem como passar para o próximo, vai ter o botão de fazer download na parte de baixo do modal, e em 30 segundos o modal se fecha automaticamente, e levar para pagina do SBT onde vai mostrar: Sua inscrição foi confirmada! entraremos em contato via sms ou WhatsApp para passar mais informações 

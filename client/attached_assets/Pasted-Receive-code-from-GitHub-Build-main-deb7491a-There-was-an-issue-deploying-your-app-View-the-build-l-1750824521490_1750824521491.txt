@@ -1,0 +1,77 @@
+Receive code from GitHub
+Build main deb7491a
+There was an issue deploying your app. View the build log for details.
+
+-----> Building on the Heroku-24 stack
+-----> Deleting 16 files matching .slugignore patterns.
+-----> Determining which buildpack to use for this app
+-----> Node.js app detected
+       
+-----> Creating runtime environment
+       
+       NPM_CONFIG_LOGLEVEL=error
+       NODE_VERBOSE=false
+       NODE_ENV=production
+       NODE_MODULES_CACHE=true
+       
+-----> Installing binaries
+       engines.node (package.json):   unspecified
+       engines.npm (package.json):    unspecified (use default)
+       
+       Resolving node version 22.x...
+       Downloading and installing node 22.17.0...
+       Using default npm version: 10.9.2
+       
+-----> Installing dependencies
+       Installing node modules
+       
+       added 1188 packages, and audited 1189 packages in 24s
+       
+       113 packages are looking for funding
+         run `npm fund` for details
+       
+       8 vulnerabilities (1 low, 7 moderate)
+       
+       To address issues that do not require attention, run:
+         npm audit fix
+       
+       To address all issues (including breaking changes), run:
+         npm audit fix --force
+       
+       Run `npm audit` for details.
+       npm notice
+       npm notice New major version of npm available! 10.9.2 -> 11.4.2
+       npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+       npm notice To update run: npm install -g npm@11.4.2
+       npm notice
+       
+-----> Build
+       Running build
+       
+       > rest-express@1.0.0 build
+       > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+       
+       vite v5.4.14 building for production...
+       ✓ 0 modules transformed.
+x Build failed in 11ms
+error during build:
+Could not resolve entry module "index.html".
+    at getRollupError (file:///tmp/build_1000b94d/node_modules/rollup/dist/es/shared/parseAst.js:396:41)
+    at error (file:///tmp/build_1000b94d/node_modules/rollup/dist/es/shared/parseAst.js:392:42)
+    at ModuleLoader.loadEntryModule (file:///tmp/build_1000b94d/node_modules/rollup/dist/es/shared/node-entry.js:20086:20)
+    at async Promise.all (index 0)
+-----> Build failed
+       
+       We're sorry this build is failing! You can troubleshoot common issues here:
+       https://devcenter.heroku.com/articles/troubleshooting-node-deploys
+       
+       Some possible problems:
+       
+       - Node version not specified in package.json
+         https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version
+       
+       Love,
+       Heroku
+       
+ !     Push rejected, failed to compile Node.js app.
+ !     Push failed
