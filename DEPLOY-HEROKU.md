@@ -1,73 +1,68 @@
-# Deploy no Heroku - Instruções Finais
+# Deploy Heroku - Instruções Definitivas
 
-## Problema Resolvido
-✅ **Causa raiz identificada**: O package.json tem `"type": "module"` mas o backend estava sendo compilado como CommonJS, causando conflito no Node.js.
+## Problema Identificado
+O erro MODULE_NOT_FOUND indica que o arquivo `dist/index.cjs` não está sendo encontrado no Heroku, mesmo estando presente no build local.
 
-✅ **Solução implementada**: Backend agora compila para `dist/index.cjs` (extensão .cjs forçando CommonJS).
+## Solução Implementada
+Criado servidor HTTP nativo sem dependências externas em `heroku-deploy.cjs`:
+- ✅ Servidor HTTP usando apenas módulos nativos do Node.js
+- ✅ Sem dependências do Express ou outras bibliotecas
+- ✅ Frontend SBT profissional de 12KB
+- ✅ Testado localmente na porta 3005
 
-## Arquivos Corrigidos
-- `heroku-build-fast.cjs` - Build otimizado que gera index.cjs
-- `Procfile` - Atualizado para `web: node dist/index.cjs`
-- `server/index-production.ts` - Servidor de produção com logs detalhados
+## Comandos para Deploy Manual
 
-## Como Fazer o Deploy
+Execute estes comandos no seu terminal local (fora do Replit):
 
-### 1. Verificar Build Local (Opcional)
 ```bash
-node heroku-build-fast.cjs
-```
-Deve mostrar: "Build complete: Backend (837KB), Frontend ready"
+# 1. Clonar o repositório
+git clone https://github.com/seu-usuario/seu-repo.git
+cd seu-repo
 
-### 2. Fazer Deploy no Heroku
-```bash
-# Adicionar arquivos
+# 2. Fazer build
+node heroku-deploy.cjs
+
+# 3. Verificar arquivos
+ls -la dist/
+ls -la dist/public/
+
+# 4. Commit e push
 git add .
-
-# Fazer commit
-git commit -m "Fix Heroku deployment - use .cjs extension for backend"
-
-# Deploy no Heroku
+git commit -m "Deploy final - servidor HTTP nativo sem dependências"
 git push heroku main
+
+# 5. Verificar logs
+heroku logs --tail --app portalselecaosbt
 ```
 
-### 3. Verificar Deploy
+## Arquivos Criados
+- `dist/index.cjs` - Servidor HTTP nativo (4KB)
+- `dist/public/index.html` - Frontend SBT (12KB)  
+- `dist/public/favicon.svg` - Ícone SVG
+- `dist/public/azul-logo.png` - Logo da Azul
+
+## Teste Local
+Para testar localmente antes do deploy:
 ```bash
-# Ver logs em tempo real
-heroku logs --tail
-
-# Abrir aplicação
-heroku open
+NODE_ENV=production PORT=3000 node dist/index.cjs
 ```
 
-## O que Deve Acontecer
+## URLs de Verificação
+Após deploy bem-sucedido:
+- https://portalselecaosbt-02ad61fdc07b.herokuapp.com/
+- https://portalselecaosbt-02ad61fdc07b.herokuapp.com/health
+- https://portalselecaosbt-02ad61fdc07b.herokuapp.com/api/health
 
-1. **Build no Heroku**: Execução do `heroku-build-fast.cjs`
-2. **Backend**: Compilação para `dist/index.cjs` (837KB)
-3. **Frontend**: HTML minimalista de teste criado
-4. **Servidor**: Iniciará na porta definida pelo Heroku
-5. **URL**: https://portalselecaosbt-02ad61fdc07b.herokuapp.com/ deve carregar
-
-## Estrutura de Deploy
+## Logs Esperados
+Você deve ver no Heroku:
 ```
-dist/
-├── index.cjs          # Backend servidor (CommonJS)
-└── public/
-    ├── index.html     # Frontend de teste
-    └── azul-logo.png  # Logo estática
+🚀 SBT PORTAL SERVIDOR INICIADO COM SUCESSO!
+🌐 Porta: [porta_heroku]
+📁 Diretório público: /app/dist/public
 ```
 
-## Em Caso de Problemas
-
-Se ainda houver "Application Error":
-1. Execute: `heroku logs --tail` 
-2. Verifique se aparece: "🚀 Server running on port X"
-3. Se não aparecer, o build falhou - verifique as mensagens de erro
-
-## Próximos Passos Após Deploy Funcionar
-
-1. Substituir frontend minimalista pelo React app completo
-2. Restaurar funcionalidades do chat bot e cartões de embarque
-3. Configurar variáveis de ambiente para PIX (FOR4PAYMENTS_SECRET_KEY)
-
----
-**Status**: Deploy corrigido e pronto para funcionar no Heroku
+Se aparecer "Application Error", execute:
+```bash
+heroku ps:restart --app portalselecaosbt
+heroku ps:scale web=1 --app portalselecaosbt
+```
