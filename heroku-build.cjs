@@ -3,7 +3,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('Starting simplified Heroku build...');
+console.log('🚀 Building for Heroku deployment...');
 
 // Create build directories
 if (!fs.existsSync('dist')) {
