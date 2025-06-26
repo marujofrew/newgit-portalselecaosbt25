@@ -9,11 +9,13 @@ if (!fs.existsSync('dist')) fs.mkdirSync('dist', { recursive: true });
 if (!fs.existsSync('dist/public')) fs.mkdirSync('dist/public', { recursive: true });
 
 try {
-  // Build frontend with Vite
+  // Build frontend
   console.log('Building frontend...');
-  execSync('cd client && NODE_ENV=production npx vite build --outDir ../dist/public', {
+  process.chdir('client');
+  execSync('NODE_ENV=production npx vite build', {
     stdio: 'inherit'
   });
+  process.chdir('..');
   console.log('Frontend build completed');
 
   // Build backend
