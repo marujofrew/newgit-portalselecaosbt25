@@ -6,8 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Serve static files
-app.use(express.static('dist/public'));
+// Serve attached assets
 app.use('/attached_assets', express.static('attached_assets'));
 
 app.use((req, res, next) => {
@@ -43,10 +42,12 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Catch-all handler for SPA routing
-  app.get('*', (req, res) => {
-    res.sendFile('index.html', { root: 'dist/public' });
-  });
+  // Catch-all handler for SPA routing (only in production)
+  if (app.get("env") !== "development") {
+    app.get('*', (req, res) => {
+      res.sendFile('index.html', { root: 'dist/public' });
+    });
+  }
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
