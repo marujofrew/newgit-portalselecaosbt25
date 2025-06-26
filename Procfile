@@ -1,2 +1,2 @@
 
-web: node dist/index.mjs
+web: node dist/index.js

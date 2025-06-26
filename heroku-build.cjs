@@ -1,40 +1,72 @@
+
 const { execSync } = require('child_process');
 const fs = require('fs');
 
-console.log('Building for Heroku deployment...');
+console.log('🚀 Building for Heroku deployment...');
 
 // Clean and create directories
 if (fs.existsSync('dist')) fs.rmSync('dist', { recursive: true });
 fs.mkdirSync('dist', { recursive: true });
 fs.mkdirSync('dist/public', { recursive: true });
 
-// Build backend first (836KB in 191ms)
-console.log('Building backend...');
-execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.mjs --format=esm --external:pg-native --packages=external --minify', { stdio: 'inherit' });
+// Build frontend first
+console.log('⚛️  Building React frontend...');
+try {
+  process.chdir('client');
+  execSync('npx vite build --outDir ../dist/public --mode production', { 
+    stdio: 'inherit',
+    timeout: 60000
+  });
+  process.chdir('..');
+  console.log('✅ Frontend build complete');
+} catch (error) {
+  console.error('❌ Frontend build failed:', error.message);
+  process.exit(1);
+}
 
-// Build frontend (516KB JS + 58KB CSS in 7.87s)
-console.log('Building frontend...');
-execSync('cd client && npx vite build --outDir ../dist/public --minify', { stdio: 'inherit' });
-
-// Copy static assets
+// Copy static files from client/public to dist/public
 if (fs.existsSync('client/public')) {
   const files = fs.readdirSync('client/public');
   files.forEach(file => {
-    if (fs.statSync(`client/public/${file}`).isFile()) {
-      fs.copyFileSync(`client/public/${file}`, `dist/public/${file}`);
+    const src = `client/public/${file}`;
+    const dest = `dist/public/${file}`;
+    if (fs.statSync(src).isFile()) {
+      fs.copyFileSync(src, dest);
+      console.log(`📄 Copied ${file}`);
     }
   });
 }
 
-// Verify build success
-const backendExists = fs.existsSync('dist/index.mjs');
-const frontendExists = fs.existsSync('dist/public/index.html');
-
-if (backendExists && frontendExists) {
-  const backendSize = Math.round(fs.statSync('dist/index.mjs').size / 1024);
-  const frontendSize = Math.round(fs.statSync('dist/public/index.html').size);
-  console.log(`Build complete: Backend (${backendSize}KB), Frontend (${frontendSize}B)`);
-} else {
-  console.error('Build failed - missing files');
+// Build backend with CommonJS format for Heroku compatibility
+console.log('🔧 Building backend...');
+try {
+  execSync('npx esbuild server/index-production.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --format=cjs --external:pg-native --packages=external --minify', { 
+    stdio: 'inherit' 
+  });
+  console.log('✅ Backend build complete');
+} catch (error) {
+  console.error('❌ Backend build failed:', error.message);
   process.exit(1);
 }
+
+// Verify build success
+const requiredFiles = ['dist/index.js', 'dist/public/index.html'];
+let success = true;
+
+for (const file of requiredFiles) {
+  if (!fs.existsSync(file)) {
+    console.error(`❌ Missing: ${file}`);
+    success = false;
+  } else {
+    const size = Math.round(fs.statSync(file).size / 1024);
+    console.log(`✅ ${file} (${size}KB)`);
+  }
+}
+
+if (!success) {
+  console.error('❌ Build verification failed');
+  process.exit(1);
+}
+
+console.log('🎉 Heroku build completed successfully!');
+console.log('📦 Ready for deployment');
