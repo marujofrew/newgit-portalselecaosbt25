@@ -6,7 +6,7 @@ import { ChatStorage } from '../utils/chatStorage';
 
 
 import logoAzul from "@assets/azul-logo-02_1750506382633.png";
-import sbtLogo from '@assets/sbt_logo.png';
+const sbtLogo = "/sbt_logo.png";
 
 interface Passenger {
   name: string;

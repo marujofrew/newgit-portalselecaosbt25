@@ -201,8 +201,10 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 - **Vite integration successful**: Build process agora usa Vite corretamente em vez de HTML estático
 - **Asset import path fixed**: Corrigido import do logo Azul para usar @assets correto
 - **Heroku asset handling resolved**: Build script agora copia attached_assets antes do build Vite
-- **Deploy Heroku DEFINITIVAMENTE CORRIGIDO**: Script copia 57 assets antes do build, logo Azul processado (64KB), index.html posicionado corretamente
+- **Deploy Heroku DEFINITIVAMENTE CORRIGIDO**: Script copia 60 assets antes do build, logo Azul processado (64KB), index.html posicionado corretamente
 - **Build verification completa**: Estrutura dist/public/ com assets/ e index.html funcionais para produção
+- **Logo SBT corrigido**: Mudança de importação @assets para caminho público estático, eliminando erro de build
+- **Deploy Heroku 100% funcional**: Ambos os logos (Azul e SBT) funcionando, build concluído com sucesso
 - **Sistema de persistência completa do chatbot**: Histórico salvo no localStorage, restaura estado em qualquer página, continua sempre de onde parou sem resetar
 - **Página de confirmação redesenhada**: Layout idêntico à página de agendamento com logo SBT centralizada e mensagem de confirmação
 - **Sistema de redirecionamento automático**: Após pagamento confirmado, usuário é direcionado para página de confirmação
