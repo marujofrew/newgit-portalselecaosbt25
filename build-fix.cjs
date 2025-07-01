@@ -28,6 +28,69 @@ try {
     env: { ...process.env, NODE_ENV: 'production' }
   });
   
+  // Copy attached_assets to build output
+  console.log('📁 Copying assets...');
+  const attachedAssetsSource = path.resolve('./attached_assets');
+  const attachedAssetsTarget = path.resolve('./dist/public/attached_assets');
+  
+  if (fs.existsSync(attachedAssetsSource)) {
+    try {
+      // Create target directory if it doesn't exist
+      if (!fs.existsSync(attachedAssetsTarget)) {
+        fs.mkdirSync(attachedAssetsTarget, { recursive: true });
+      }
+      
+      // Copy all files from attached_assets
+      const files = fs.readdirSync(attachedAssetsSource);
+      let copiedCount = 0;
+      
+      files.forEach(file => {
+        try {
+          const sourcePath = path.join(attachedAssetsSource, file);
+          const targetPath = path.join(attachedAssetsTarget, file);
+          
+          if (fs.statSync(sourcePath).isFile()) {
+            fs.copyFileSync(sourcePath, targetPath);
+            copiedCount++;
+          }
+        } catch (fileError) {
+          console.warn(`⚠️ Failed to copy ${file}: ${fileError.message}`);
+        }
+      });
+      console.log(`✓ Copied ${copiedCount} asset files`);
+    } catch (error) {
+      console.warn(`⚠️ Error copying attached_assets: ${error.message}`);
+    }
+  }
+  
+  // Copy client/public assets to build output
+  const clientPublicSource = path.resolve('./client/public');
+  const publicTarget = path.resolve('./dist/public');
+  
+  if (fs.existsSync(clientPublicSource)) {
+    try {
+      const files = fs.readdirSync(clientPublicSource);
+      let copiedCount = 0;
+      
+      files.forEach(file => {
+        try {
+          const sourcePath = path.join(clientPublicSource, file);
+          const targetPath = path.join(publicTarget, file);
+          
+          if (fs.statSync(sourcePath).isFile() && !fs.existsSync(targetPath)) {
+            fs.copyFileSync(sourcePath, targetPath);
+            copiedCount++;
+          }
+        } catch (fileError) {
+          console.warn(`⚠️ Failed to copy ${file}: ${fileError.message}`);
+        }
+      });
+      console.log(`✓ Copied ${copiedCount} public files`);
+    } catch (error) {
+      console.warn(`⚠️ Error copying public files: ${error.message}`);
+    }
+  }
+  
   // Clean up temporary file
   if (fs.existsSync(tempIndexPath)) {
     fs.unlinkSync(tempIndexPath);
