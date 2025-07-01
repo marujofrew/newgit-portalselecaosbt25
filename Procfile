@@ -1,2 +1,2 @@
 
-web: node heroku-fix-final.cjs && node dist/index.cjs
+web: npm run build && node dist/index.js
