@@ -156,6 +156,12 @@ heroku config:set FOR4PAYMENTS_SECRET_KEY=sua_chave_aqui
 
 ## Recent Changes
 
+- **Sistema de build corrigido**: Criado script `build-fix.cjs` que resolve problema do `npm run build` onde Vite não encontrava `index.html`
+  - ✅ Script cria temporariamente `index.html` na raiz com caminhos corretos
+  - ✅ Copia todos os `attached_assets` (66 arquivos) para `dist/public/attached_assets/`
+  - ✅ Copia arquivos de `client/public` (11 arquivos) para `dist/public/`
+  - ✅ Build completo: frontend (1641 módulos) + backend (15.9KB) funcionando
+  - ✅ Comando: `node build-fix.cjs` para build de produção completo
 - **Sistema de cartões de embarque separado**: Todo código de geração de cartões extraído para pasta `boarding-pass-generator/` reutilizável
 - **Rota de passageiros implementada**: API `/api/passengers` criada para recuperar dados reais dos usuários cadastrados
 - **Sistema de nomes reais nos cartões**: Cartões de embarque agora mostram nomes reais do cadastro em vez de "RESPONSÁVEL EXEMPLO"
