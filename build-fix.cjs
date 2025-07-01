@@ -31,7 +31,7 @@ try {
   // Copy attached_assets to build output
   console.log('📁 Copying assets...');
   const attachedAssetsSource = path.resolve('./attached_assets');
-  const attachedAssetsTarget = path.resolve('./dist/public/attached_assets');
+  const attachedAssetsTarget = path.resolve('./dist/attached_assets');
   
   if (fs.existsSync(attachedAssetsSource)) {
     try {
